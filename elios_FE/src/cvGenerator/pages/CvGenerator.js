@@ -1,4 +1,4 @@
-// FRONT-END: cv-generate-module/src/pages/Editor.js
+// FRONT-END: elios_FE/src/cvGenerator/pages/CvGenerator.js
 import React, { useState, useRef } from "react";
 import html2pdf from "html2pdf.js";
 

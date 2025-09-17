@@ -1,6 +1,7 @@
-// FRONT-END: cv-generate-module/src/index.js
+// FRONT-END: elios_FE/src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import "./i18n/i18n";
 import './index.css';
 import App from './App';
 import "bootstrap/dist/css/bootstrap.min.css";
