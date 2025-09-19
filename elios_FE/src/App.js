@@ -2,14 +2,15 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from "./general/Home"
+import UserPage from "./pages/pivotPages/UserPage";
+
 import CvGenerator from "./cvGenerator/pages/CvGenerator";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<UserPage />} />
        <Route path="/editor" element={<CvGenerator />} />
       </Routes>
     </BrowserRouter>

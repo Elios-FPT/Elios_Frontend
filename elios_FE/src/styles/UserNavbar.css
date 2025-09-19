@@ -1,0 +1,75 @@
+/* Frontend/elios_FE/src/styles/UserNavbar.css */
+
+.user-navbar {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 0.5rem 0;
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.user-navbar-navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-navbar-logo-img {
+    height: fit-content;
+    width: fit-content;
+    max-height: 40px;
+}
+
+.user-navbar-logo-text {
+    font-weight: bold;
+    color: #3a2ea8;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+}
+
+.user-navbar-navbar-links .nav-link {
+    color: #222;
+    font-size: 1rem;
+    margin: 0 10px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.user-navbar-navbar-links .nav-link:hover {
+    color: #3a2ea8;
+    text-decoration: underline;
+}
+
+.user-navbar-navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-navbar-flag-icon img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 2px #ccc;
+    background: #fff;
+}
+
+.user-navbar-login-link {
+    color: #3a2ea8;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+    margin-right: 8px;
+}
+
+.user-navbar-login-link:hover {
+    text-decoration: underline;
+}
+
+.user-navbar-register-btn {
+    font-weight: 500;
+    background: #e74c3c;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 4px;
+}

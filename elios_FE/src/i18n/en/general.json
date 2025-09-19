@@ -1,7 +1,23 @@
 {
+  "ELIOS": "ELIOS",
+  "study": "Study",
+  "practice": "Practice",
+  "contest": "Contest",
+  "challenge": "Challenge",
+  "event": "Event",
+  "ranking": "Ranking",
+  "contributor": "Contributor",
+  "share": "Share",
+  "showroom": "Showroom",
+  "login": "Login",
+  "register": "Register",
   "cv_generator": "CV Generator",
   "welcome": "Welcome to the CV Generator application!",
   "generate_now": "Generate a CV now",
   "get_started": "Get Started",
-  "switch_language": "Switch to Vietnamese"
+  "switch_language": "Switch to Vietnamese",
+  "about_me": "About Me",
+  "full_name": "Full Name",
+  "job_title": "Job Title",
+  "download_pdf": "Download PDF"
 }

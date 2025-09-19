@@ -1,7 +1,23 @@
 {
+  "ELIOS": "ELIOS",
+  "study": "Học tập",
+  "practice": "Luyện tập",
+  "contest": "Thi đấu",
+  "challenge": "Thử thách",
+  "event": "Sự kiện",
+  "ranking": "Xếp hạng",
+  "contributor": "Người đóng góp",
+  "share": "Chia sẻ",
+  "showroom": "Phòng trưng bày",
+  "login": "Đăng nhập",
+  "register": "Đăng ký",
   "cv_generator": "Trình tạo CV",
   "welcome": "Chào mừng đến với ứng dụng tạo CV!",
   "generate_now": "Tạo CV ngay",
   "get_started": "Bắt đầu",
-  "switch_language": "Chuyển sang Tiếng Anh"
+  "switch_language": "Chuyển sang Tiếng Anh",
+  "about_me": "Giới thiệu bản thân",
+  "full_name": "Họ và tên",
+  "job_title": "Chức danh công việc",
+  "download_pdf": "Tải xuống PDF"
 }
