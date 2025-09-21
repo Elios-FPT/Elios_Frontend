@@ -1,0 +1,120 @@
+/* Frontend/elios_FE/src/styles/LandingPage.css */
+
+.landing-bg {
+  background: #16395c;
+  min-height: 100vh;
+  color: #fff;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+.landing-row {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+}
+
+.landing-left h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+}
+
+.landing-left .highlight {
+  color: #3ee9d1;
+  text-decoration: underline;
+  font-size: 2.5rem;
+}
+
+.landing-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.landing-features li {
+  background: #1d466e;
+  margin-bottom: 10px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.landing-partners {
+  margin-top: 2rem;
+}
+
+.partner-logos img {
+  height: 40px;
+  margin-right: 18px;
+  vertical-align: middle;
+}
+
+.landing-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background: #fff;
+  color: #222;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card h5 {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #16395c;
+}
+
+.forgot-link {
+  text-align: right;
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.login-social {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.social-icons img {
+  height: 24px;
+}
+
+.register-link {
+  text-align: center;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.terms {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .landing-row {
+    flex-direction: column;
+    padding-top: 20px;
+  }
+  .landing-left, .landing-right {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}

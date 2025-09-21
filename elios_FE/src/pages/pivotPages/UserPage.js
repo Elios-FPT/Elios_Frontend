@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 
 import UserNavbar from "../../components/navbars/UserNavbar";
+import LandingPage from "../../general/LandingPage";
 
 const UserPage = () => {
 
@@ -15,8 +16,11 @@ const UserPage = () => {
             <header>
                 <UserNavbar />
             </header>
-           
 
+            <main>
+
+                <LandingPage />
+            </main>
 
             <footer>
 

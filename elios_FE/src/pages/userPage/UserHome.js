@@ -8,7 +8,7 @@ import e from "express";
 
 const UserHome = () => {
   const { t, i18n } = useTranslation();
-
+  
 }
 
 export default UserHome;
