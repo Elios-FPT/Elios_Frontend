@@ -1,76 +1,97 @@
 // FRONT-END: elios_FE/src/general/LandingPage.js
 import React from "react";
-import { Container, Row, Col, Button, Form, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Button, Navbar, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"; // ✅ add i18n
 import "../styles/LandingPage.css";
 
 const LandingPage = () => {
+  const { t, i18n } = useTranslation();
+
+  // ✅ Toggle between EN and VI
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "vi" : "en";
+    i18n.changeLanguage(newLang);
+  };
+
   return (
-    <div className="landing-bg">
-      <Container fluid>
-        <Row className="landing-row">
-          {/* Left Side */}
-          <Col md={6} className="landing-left">
-            <h1>
-              Nền tảng học lập trình<br />
-              trực tuyến dành riêng<br />
-              <span className="highlight">cho học sinh</span>
-            </h1>
-            <ul className="landing-features">
-              <li>+ Học lập trình từ 0</li>
-              <li>+ Khơi dậy đam mê công nghệ</li>
-              <li>+ Chinh phục thế giới số, khẳng định bản thân</li>
-              <li>+ Mở ra cơ hội việc làm hấp dẫn trong tương lai</li>
-            </ul>
-            <div className="landing-partners">
-              <span>Đối tác của chúng tôi</span>
-              <div className="partner-logos">
-                <img src="/assets/logo/fpt.png" alt="FPT" />
-                <img src="/assets/logo/fpt_poly.png" alt="FPT Polytechnic" />
-                <img src="/assets/logo/edu.png" alt="Edu" />
-                <img src="/assets/logo/funx.png" alt="FunX" />
-              </div>
-            </div>
-          </Col>
-          {/* Right Side */}
-          <Col md={6} className="landing-right">
-            <div className="login-card">
-              <h5>Học lập trình cùng với hàng triệu người với CodeLearn</h5>
-              <Form>
-                <Form.Group className="mb-3">
-                  <Form.Control type="text" placeholder="Tên tài khoản*" />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <InputGroup>
-                    <Form.Control type="password" placeholder="Mật khẩu*" />
-                    <InputGroup.Text>
-                      <i className="bi bi-eye"></i>
-                    </InputGroup.Text>
-                  </InputGroup>
-                  <div className="forgot-link">
-                    <a href="#">Quên mật khẩu?</a>
-                  </div>
-                </Form.Group>
-                <Button variant="primary" className="w-100 mb-3">Đăng nhập</Button>
-                <div className="login-social">
-                  <span>Hoặc tiếp tục với</span>
-                  <div className="social-icons">
-                    <Button variant="light"><img src="/assets/logo/microsoft.png" alt="Microsoft" /></Button>
-                    <Button variant="light"><img src="/assets/logo/google.png" alt="Google" /></Button>
-                    <Button variant="light"><img src="/assets/logo/github.png" alt="GitHub" /></Button>
-                  </div>
-                </div>
-                <div className="register-link">
-                  Nếu bạn chưa có tài khoản, vui lòng <a href="#">Đăng ký</a>
-                </div>
-                <div className="terms">
-                  Trang này được bảo vệ bởi reCAPTCHA và áp dụng <a href="#">Điều khoản sử dụng</a>.
-                </div>
-              </Form>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-      {/* Add more sections below as needed */}
+    <div className="landing-bg-landingPage">
+      {/* Header Section */}
+      <div className="header-section-landingPage">
+        <Navbar expand="lg" className="navbar-custom-landingPage">
+          <Navbar.Brand href="#">
+            <img
+              src="/assets/logo/logo1.png"
+              alt="Logo"
+              className="logo-img"
+            />
+          </Navbar.Brand>
+          <Nav className="ml-auto nav-links-landingPage">
+            <Nav.Link href="#">{t("landingPage.navbar.premium")}</Nav.Link>
+            <Nav.Link href="#">{t("landingPage.navbar.product")}</Nav.Link>
+            <Nav.Link href="#">{t("landingPage.navbar.developer")}</Nav.Link>
+
+            {/* ✅ Language switcher */}
+            <Nav.Link onClick={toggleLanguage} style={{ cursor: "pointer" }}>
+              {t("landingPage.navbar.language")}
+            </Nav.Link>
+
+            <Nav.Link as={Link} to="/accounts/login">
+              {t("landingPage.navbar.login")}
+            </Nav.Link>
+
+          </Nav>
+        </Navbar>
+
+        <Container className="main-content-landingPage">
+          <Row>
+            <Col md={6} className="d-flex align-items-center-landingPage">
+              <img
+                src="assets/general/Laptop1.png"
+                alt="Dashboard"
+                className="dashboard-img"
+              />
+            </Col>
+            <Col md={6} className="text-section-landingPage">
+              <h1 className="main-title-landingPage">
+                {t("landingPage.main_title")}
+              </h1>
+              <p className="main-desc-landingPage">
+                {t("landingPage.main_desc")}
+              </p>
+              <Link to="/accounts/signup">
+                <Button variant="success" className="cta-btn-landingPage">
+                  {t("landingPage.create_account")} &nbsp; &gt;
+                </Button>
+              </Link>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
+      {/* Lower Section */}
+      <div className="lower-section-landingPage">
+        <Container>
+          <Row className="justify-content-center">
+            <Col md={8} className="text-center">
+              <h3 className="explore-title-landingPage">
+                {t("landingPage.explore_title")}
+              </h3>
+              <img
+                src="https://assets.leetcode.com/static_assets/public/images/landing/explore-icon.png"
+                alt="Explore Icon"
+                className="explore-icon-landingPage"
+              />
+              <p className="explore-desc-landingPage">
+                {t("landingPage.explore_desc")}
+              </p>
+              <a href="#" className="get-started-link-landingPage">
+                {t("landingPage.get_started")} &nbsp; &gt;
+              </a>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     </div>
   );
 };

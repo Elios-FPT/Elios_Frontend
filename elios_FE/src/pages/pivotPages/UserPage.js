@@ -19,7 +19,6 @@ const UserPage = () => {
 
             <main>
 
-                <LandingPage />
             </main>
 
             <footer>

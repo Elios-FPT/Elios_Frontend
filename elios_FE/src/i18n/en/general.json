@@ -1,23 +1,31 @@
 {
-  "ELIOS": "ELIOS",
-  "study": "Study",
-  "practice": "Practice",
-  "contest": "Contest",
-  "challenge": "Challenge",
-  "event": "Event",
-  "ranking": "Ranking",
-  "contributor": "Contributor",
-  "share": "Share",
-  "showroom": "Showroom",
-  "login": "Login",
-  "register": "Register",
-  "cv_generator": "CV Generator",
-  "welcome": "Welcome to the CV Generator application!",
-  "generate_now": "Generate a CV now",
-  "get_started": "Get Started",
-  "switch_language": "Switch to Vietnamese",
-  "about_me": "About Me",
-  "full_name": "Full Name",
-  "job_title": "Job Title",
-  "download_pdf": "Download PDF"
+  "landingPage": {
+    "navbar": {
+      "premium": "Premium",
+      "product": "Product",
+      "developer": "Developer",
+      "login": "Sign in",
+      "language": "Language: EN"
+    },
+    "main_title": "A New Cool Way to Learn",
+    "main_desc": "Eliso is the best platform to help you enhance your skills, expand your knowledge and prepare for technical interviews.",
+    "create_account": "Create Account",
+    "explore_title": "Start Exploring",
+    "explore_desc": "Explore is a well-organized tool that helps you get the most out of LeetCode by providing structure to guide your progress towards the next step in your programming career.",
+    "get_started": "Get Started"
+  },
+  "landingSignUp": {
+    "title": "Sign Up",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "email": "E-mail address",
+    "success": "Success!",
+    "signUpBtn": "Sign Up",
+    "haveAccount": "Have an account?",
+    "signIn": "Sign In",
+    "orSignInWith": "or you can sign in with",
+    "footer": "Copyright © 2025 LeetCode | Help Center | Jobs | Bug Bounty | Online Interview | Students | Terms | Privacy Policy",
+    "country": "United States"
+  }
 }
