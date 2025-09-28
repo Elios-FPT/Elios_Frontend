@@ -2,6 +2,7 @@
 
 # dependencies
 elios_FE/node_modules
+elios_FE/.env
 /.pnp
 .pnp.js
 
