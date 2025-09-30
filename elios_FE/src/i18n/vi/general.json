@@ -1,4 +1,21 @@
 {
+  "UserNavbar": {
+    "forum": "Diễn đàn",
+    "practice": "Luyện tập",
+    "contest": "Cuộc thi",
+    "challenge": "Thử thách",
+    "event": "Sự kiện",
+    "ranking": "Xếp hạng",
+    "contributor": "Người đóng góp",
+    "share": "Chia sẻ",
+    "showroom": "Phòng trưng bày",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "switch_language": "Chuyển sang Tiếng Anh",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
+  },
   "landingPage": {
     "navbar": {
       "premium": "Gói Premium",
@@ -26,6 +43,17 @@
     "signIn": "Đăng nhập",
     "orSignInWith": "hoặc bạn có thể đăng nhập bằng",
     "footer": "Bản quyền © 2025 LeetCode | Trung tâm trợ giúp | Việc làm | Chương trình Bug Bounty | Phỏng vấn trực tuyến | Sinh viên | Điều khoản | Chính sách bảo mật",
+    "country": "Việt Nam"
+  },
+  "landingSignIn": {
+    "title": "Đăng nhập",
+    "username": "Tên người dùng",
+    "password": "Mật khẩu",
+    "signInBtn": "Đăng nhập",
+    "noAccount": "Chưa có tài khoản?",
+    "signUp": "Đăng ký",
+    "orSignInWith": "hoặc bạn có thể đăng nhập bằng",
+    "footer": "Bản quyền © 2025 Eliso | Trung tâm trợ giúp | Việc làm | Bug Bounty | Phỏng vấn trực tuyến | Sinh viên | Điều khoản | Chính sách bảo mật",
     "country": "Việt Nam"
   }
 }

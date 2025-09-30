@@ -1,8 +1,7 @@
 /* Frontend/elios_FE/src/styles/UserNavbar.css */
 
 .user-navbar {
-    background: #fff;
-    border-bottom: 1px solid #eee;
+    background: #23272f;
     padding: 0.5rem 0;
     font-family: 'Roboto', Arial, sans-serif;
 }
@@ -27,15 +26,16 @@
 }
 
 .user-navbar-navbar-links .nav-link {
-    color: #222;
-    font-size: 1rem;
-    margin: 0 10px;
+    color: #ffd700;
     font-weight: 500;
+    margin-right: 24px;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Arial, sans-serif;
     transition: color 0.2s;
 }
 
 .user-navbar-navbar-links .nav-link:hover {
-    color: #3a2ea8;
+    color: #f9b302;
     text-decoration: underline;
 }
 
@@ -72,4 +72,29 @@
     border: none;
     padding: 6px 18px;
     border-radius: 4px;
+}
+
+/* Dropdown */
+.user-navbar-navbar-actions .dropdown-toggle {
+    font-weight: 500;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.user-navbar-navbar-actions .dropdown-menu {
+    background: #23272f;
+    border-radius: 6px;
+    min-width: 180px;
+}
+
+.user-navbar-navbar-actions .dropdown-item {
+    color: #ffd700;
+    font-weight: 500;
+}
+
+.user-navbar-navbar-actions .dropdown-item:hover {
+    background: #4f4f4f;
+    color: #fff;
 }
