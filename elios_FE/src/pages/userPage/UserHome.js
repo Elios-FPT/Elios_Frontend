@@ -4,11 +4,28 @@ import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import e from "express";
+import "../../styles/UserHome.css";
+
+import UserNavbar from "../../components/navbars/UserNavbar";
 
 const UserHome = () => {
   const { t, i18n } = useTranslation();
-  
+
+  return (
+    <>
+      <header>
+        <UserNavbar />
+      </header>
+
+      <main>
+
+      </main>
+
+      <footer>
+
+      </footer>
+    </>
+  )
 }
 
 export default UserHome;

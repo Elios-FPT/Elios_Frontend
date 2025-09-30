@@ -36,7 +36,7 @@ const LandingPage = () => {
               {t("landingPage.navbar.language")}
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/accounts/login">
+            <Nav.Link as={Link} to="/accounts/signin">
               {t("landingPage.navbar.login")}
             </Nav.Link>
 

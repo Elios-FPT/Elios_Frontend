@@ -1,10 +1,10 @@
-/* Frontend/elios_FE/src/styles/LandingSignUp.css */
-.signup-bg-landing-signup {
+/* Frontend/elios_FE/src/styles/LandingSignIn.css */
+.signin-bg-landing-signin {
   background: #23272f;
   position: relative;
 }
 
-.signup-card-landing-signup {
+.signin-card-landing-signin {
   border-radius: 12px;
   box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
   background: #fff;
@@ -12,21 +12,21 @@
   margin-bottom: 40px;
 }
 
-.signup-logo-landing-signup {
+.signin-logo-landing-signin {
   height: 48px;
   margin-bottom: 8px;
 }
 
-.signup-title-landing-signup {
+.signin-title-landing-signin {
   font-size: 1.3rem;
   font-weight: 600;
   color: #23272f;
   margin-bottom: 8px;
 }
 
-.signup-btn-landing {
-  background: #05a100 !important; 
-  border: none!important;
+.signin-btn-landing {
+  background: #05a100 !important;
+  border: none !important;
   font-size: 1.1rem;
   border-radius: 6px;
   font-weight: 500;
@@ -34,49 +34,33 @@
   width: 100%;
 }
 
-.signup-btn-landing:hover {
+.signin-btn-landing:hover {
   background: #19c37d !important;
 }
 
-.signin-link-landing-signup {
+.signup-link-landing-signin {
   color: #19c37d;
   font-weight: 500;
   text-decoration: none;
 }
 
-.signin-link-landing-signup:hover {
+.signup-link-landing-signin:hover {
   text-decoration: underline;
 }
 
-.success-card-landing-signup {
-  background: #f6fff7;
-  border: 1px solid #e6f7ea;
-  border-radius: 8px;
-}
-
-.success-icon-landing-signup {
-  color: #19c37d;
-  font-size: 1.5rem;
-  margin-right: 8px;
-}
-
-.cloudflare-logo-landing-signup {
-  height: 24px;
-}
-
-.social-icon-landing-signup {
+.social-icon-landing-signin {
   font-size: 1.5rem;
   color: #bbb;
   margin: 0 8px;
 }
 
-.signup-footer-landing-signup {
+.signin-footer-landing-signin {
   text-align: center;
   font-size: 0.95rem;
   color: #ffb300;
 }
 
-.country-select-landing-signup {
+.country-select-landing-signin {
   margin-top: 8px;
   font-size: 1rem;
   color: #23272f;
@@ -85,5 +69,3 @@
   align-items: center;
   gap: 6px;
 }
-
-

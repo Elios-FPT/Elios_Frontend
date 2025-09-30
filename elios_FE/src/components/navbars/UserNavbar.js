@@ -1,6 +1,6 @@
 // FRONT-END: elios_FE/src/general/UserNavbar.js
 import React from "react";
-import { Container, Row, Col, Nav, Navbar, Button } from "react-bootstrap";
+import { Container, Row, Col, Nav, Navbar, Button, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -12,11 +12,12 @@ const UserNavbar = () => {
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === "en" ? "vi" : "en");
   };
-  
+
   return (
     <nav className="user-navbar">
       <Container fluid>
         <Row className="align-items-center">
+          {/* Logo */}
           <Col xs="auto" className="user-navbar-navbar-logo">
             <Link to="/">
               <img
@@ -25,38 +26,45 @@ const UserNavbar = () => {
                 className="user-navbar-logo-img"
               />
             </Link>
-            <span className="user-navbar-logo-text">{t("ELIOS")}</span>
           </Col>
 
+          {/* Middle Links */}
           <Col>
             <Nav className="user-navbar-navbar-links">
-              <Nav.Link as={Link} to="/study">{t("study")}</Nav.Link>
-              <Nav.Link as={Link} to="/practice">{t("practice")}</Nav.Link>
-              <Nav.Link as={Link} to="/contest">{t("contest")}</Nav.Link>
-              <Nav.Link as={Link} to="/challenge">{t("challenge")}</Nav.Link>
-              <Nav.Link as={Link} to="/event">{t("event")}</Nav.Link>
-              <Nav.Link as={Link} to="/ranking">{t("ranking")}</Nav.Link>
-              <Nav.Link as={Link} to="/contributor">{t("contributor")}</Nav.Link>
-              <Nav.Link as={Link} to="/share">{t("share")}</Nav.Link>
-              <Nav.Link as={Link} to="/showroom">{t("showroom")}</Nav.Link>
+              <Nav.Link as={Link} to="/forum">{t("UserNavbar.forum")}</Nav.Link>
+              <Nav.Link as={Link} to="/practice">{t("UserNavbar.practice")}</Nav.Link>
+              <Nav.Link as={Link} to="/contest">{t("UserNavbar.contest")}</Nav.Link>
+              <Nav.Link as={Link} to="/challenge">{t("UserNavbar.challenge")}</Nav.Link>
+              <Nav.Link as={Link} to="/event">{t("UserNavbar.event")}</Nav.Link>
+              <Nav.Link as={Link} to="/ranking">{t("UserNavbar.ranking")}</Nav.Link>
+              <Nav.Link as={Link} to="/contributor">{t("UserNavbar.contributor")}</Nav.Link>
+              <Nav.Link as={Link} to="/share">{t("UserNavbar.share")}</Nav.Link>
+              <Nav.Link as={Link} to="/showroom">{t("UserNavbar.showroom")}</Nav.Link>
+
             </Nav>
           </Col>
 
+          {/* Right side actions */}
           <Col xs="auto" className="user-navbar-navbar-actions">
-            <Button
-              variant="secondary"
-              size="sm"
-              className="me-2"
-              onClick={toggleLanguage}
-            >
-              {t("switch_language")}
-            </Button>
-            <Link to="/login" className="user-navbar-login-link">
-              {t("login")}
-            </Link>
-            <Button variant="danger" className="user-navbar-register-btn">
-              {t("register")}
-            </Button>
+
+
+            <Dropdown align="end">
+              <Dropdown.Toggle variant="outline-light" size="sm" id="dropdown-basic">
+                ☰ Menu
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/login">{t("UserNavbar.login")}</Dropdown.Item>
+                <Dropdown.Item as={Link} to="/register">{t("UserNavbar.register")}</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={toggleLanguage}>
+                  {t("UserNavbar.switch_language")}
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/profile">{t("UserNavbar.profile")}</Dropdown.Item>
+                <Dropdown.Item as={Link} to="/settings">{t("UserNavbar.settings")}</Dropdown.Item>
+                <Dropdown.Item as={Link} to="/logout">{t("UserNavbar.logout")}</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Col>
         </Row>
       </Container>
