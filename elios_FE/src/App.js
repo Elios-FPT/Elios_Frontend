@@ -9,8 +9,7 @@ import LandingSignIn from "./general/LandingSignIn";
 import UserPage from "./pages/pivotPages/UserPage";
 import UserHome from "./pages/userPage/UserHome";
 import UserForum from "./pages/userPage/UserForum";
-
-import CvGenerator from "./cvGenerator/pages/CvGenerator";
+import CVBuilder from "./cvGenerator/pages/CVBuilder";
 
 function App() {
   return (
@@ -19,9 +18,9 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<UserHome />} />
         <Route path="/forum" element={<UserForum />} />
+        <Route path="/cv-builder" element={<CVBuilder />} />
         <Route path="/accounts/signup" element={<LandingSignUp />} />
         <Route path="/accounts/signin" element={<LandingSignIn />} />
-       <Route path="/editor" element={<CvGenerator />} />
       </Routes>
     </BrowserRouter>
   );
