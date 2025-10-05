@@ -10,6 +10,7 @@ import UserPage from "./pages/pivotPages/UserPage";
 import UserHome from "./pages/userPage/UserHome";
 import UserForum from "./pages/userPage/UserForum";
 import CVBuilder from "./cvGenerator/pages/CVBuilder";
+import CVDesignerPage from "./cvGenerator/CVDesignerPage";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<UserHome />} />
         <Route path="/forum" element={<UserForum />} />
-        <Route path="/cv-builder" element={<CVBuilder />} />
+        <Route path="/cv-builder-test" element={<CVBuilder />} />
+        <Route path="/cv-designer" element={<CVDesignerPage />} />
         <Route path="/accounts/signup" element={<LandingSignUp />} />
         <Route path="/accounts/signin" element={<LandingSignIn />} />
       </Routes>
