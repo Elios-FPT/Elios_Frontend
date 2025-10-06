@@ -1,0 +1,44 @@
+/* Frontend/elios_FE/src/styles/CVDesignerPage.css */
+
+.cv-designer-page-background {
+  background-color: #f0f1f5;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Bootstrap container alignment */
+.cv-designer-container {
+  max-width: 1400px;
+}
+
+/* Canvas styling */
+.cv-canvas-wrapper {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+}
+
+.cv-canvas-col {
+  display: flex;
+  justify-content: center;
+}
+
+/* Right-side panel (Tools + Properties) */
+.cv-right-panel {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+}
+
+/* Canvas editor size */
+.canvas-editor {
+  background-color: white;
+}

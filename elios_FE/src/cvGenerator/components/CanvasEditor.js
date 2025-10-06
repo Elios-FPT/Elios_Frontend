@@ -10,7 +10,7 @@ const CanvasEditor = () => {
 
   return (
     <div className="canvas-editor">
-      <Stage width={800} height={1100}>
+      <Stage width={600} height={750}>
         <Layer>
           {elements.map((el) =>
             el.type === "text" ? (
