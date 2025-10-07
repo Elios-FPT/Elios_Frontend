@@ -53,18 +53,12 @@ const EditorToolbar = ({ stageRef }) => {
           >
             Change Color
           </button>
-          <button
-            onClick={() => {
-              const font = prompt("Enter font (e.g. Arial):");
-              if (font) updateElement(selected.id, { fontFamily: font });
-            }}
-          >
-            Change Font
-          </button>
+
+
           <button onClick={() => removeElement(selected.id)}>Delete</button>
         </>
       )}
-      <button onClick={handleExportPDF}>Export PDF</button>
+      {/* <button onClick={handleExportPDF}>Export PDF</button> */}
     </div>
   );
 };

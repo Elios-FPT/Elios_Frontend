@@ -1,0 +1,32 @@
+/* Frontend/elios_FE/src/cvGenerator/styles/PropertiesPanel.css */
+
+.properties-panel {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.panel-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.properties-empty {
+  padding: 1rem;
+  text-align: center;
+  color: #888;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.color-code-display {
+  width: 100px;
+  text-align: center;
+  font-family: monospace;
+  background-color: #f7f7f7;
+  border-left: none;
+}

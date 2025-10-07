@@ -1,13 +1,18 @@
 // Frontend/elios_FE/src/cvGenerator/components/CanvasEditor.js
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Stage, Layer, Text } from "react-konva";
 import CanvasImage from "./UrlImage";
 import { useDesignerState } from "../state/useDesignerState";
 
 const CanvasEditor = () => {
-  // 👇 add updateElement here
   const { elements, selectElement, updateElement } = useDesignerState();
+  const stageRef = useRef();
 
+  useEffect(() => {
+    window.stage = stageRef.current; // ✅ Makes it accessible globally
+  }, []);
+
+  
   return (
     <div className="canvas-editor">
       <Stage width={600} height={750}>
@@ -15,12 +20,14 @@ const CanvasEditor = () => {
           {elements.map((el) =>
             el.type === "text" ? (
               <Text
+                id={el.id}
                 key={el.id}
                 text={el.text}
                 x={el.x}
                 y={el.y}
                 fontSize={el.fontSize}
                 fill={el.color}
+                fontFamily={el.fontFamily}
                 draggable
                 onClick={() => selectElement(el.id)}
                 onDragEnd={(e) =>
@@ -32,6 +39,7 @@ const CanvasEditor = () => {
               />
             ) : el.type === "image" ? (
               <CanvasImage
+                id={el.id}
                 key={el.id}
                 src={el.src}
                 x={el.x}
