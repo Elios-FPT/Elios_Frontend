@@ -6,7 +6,18 @@ import { FONT_LIST } from "../utils/fonts";
 import "../styles/PropertiesPanel.css";
 
 const PropertiesPanel = () => {
-  const { elements, selectedElementId, updateElement } = useDesignerState();
+  const {
+    pages,
+    currentPageId,
+    updateElement,
+    selectedElementId,
+  } = useDesignerState();
+
+  // 🧩 find the current page safely
+  const currentPage = pages?.find((p) => p.id === currentPageId);
+  const elements = currentPage?.elements || [];
+
+  // ✅ avoid crash even if nothing selected
   const selected = elements.find((el) => el.id === selectedElementId);
 
   const [pendingFont, setPendingFont] = useState(selected?.fontFamily || "");
@@ -16,50 +27,41 @@ const PropertiesPanel = () => {
     if (selected) setPendingFont(selected.fontFamily || "");
   }, [selected]);
 
-  // ✅ The improved font loading logic (only one effect)
-useEffect(() => {
-  if (!selected || !pendingFont) return;
+  useEffect(() => {
+    if (!selected || !pendingFont) return;
+    if (selected.fontFamily === pendingFont) return;
 
-  // 🧠 Only run if the font is actually different
-  if (selected.fontFamily === pendingFont) return;
+    let cancelled = false;
+    const node = window.stage?.findOne(`#${selected.id}`);
 
-  let cancelled = false;
-  const node = window.stage?.findOne(`#${selected.id}`);
+    const applyFont = async () => {
+      try {
+        if (!(await document.fonts.check(`16px "${pendingFont}"`))) {
+          await document.fonts.load(`16px "${pendingFont}"`);
+          await document.fonts.ready;
+        }
 
-  // 🌀 Load the font FIRST (ensure browser has it ready)
-  const applyFont = async () => {
-    try {
-      // Wait until the font is fully ready before applying
-      if (!(await document.fonts.check(`16px "${pendingFont}"`))) {
-        await document.fonts.load(`16px "${pendingFont}"`);
-        await document.fonts.ready;
+        if (cancelled) return;
+
+        updateElement(selected.id, { fontFamily: pendingFont });
+        if (node) {
+          node.fontFamily(pendingFont);
+          node.getLayer()?.batchDraw();
+        }
+      } catch (err) {
+        console.warn("Font load failed:", pendingFont, err);
       }
+    };
 
-      if (cancelled) return;
-
-      // ⚡ Apply immediately after load
-      updateElement(selected.id, { fontFamily: pendingFont });
-      if (node) {
-        node.fontFamily(pendingFont);
-        node.getLayer()?.batchDraw();
-      }
-    } catch (err) {
-      console.warn("Font load failed:", pendingFont, err);
-    }
-  };
-
-  applyFont();
-
-  return () => {
-    cancelled = true;
-  };
-}, [pendingFont, selected?.id]);
-
+    applyFont();
+    return () => {
+      cancelled = true;
+    };
+  }, [pendingFont, selected?.id]);
 
   if (!selected)
     return <div className="properties-empty">No element selected</div>;
 
-  // 🔍 Filter fonts based on search
   const filteredFonts = FONT_LIST.filter((f) =>
     f.toLowerCase().includes(search.toLowerCase())
   );
@@ -70,7 +72,6 @@ useEffect(() => {
 
       {selected.type === "text" && (
         <>
-          {/* ✏️ Text content */}
           <Form.Group className="mb-3">
             <Form.Label>Text</Form.Label>
             <Form.Control
@@ -82,7 +83,6 @@ useEffect(() => {
             />
           </Form.Group>
 
-          {/* 🔠 Font size */}
           <Form.Group className="mb-3">
             <Form.Label>Font Size: {selected.fontSize}px</Form.Label>
             <Form.Range
@@ -95,7 +95,6 @@ useEffect(() => {
             />
           </Form.Group>
 
-          {/* 🎨 Color */}
           <Form.Group className="mb-3">
             <Form.Label>Color</Form.Label>
             <InputGroup>
@@ -115,7 +114,6 @@ useEffect(() => {
             </InputGroup>
           </Form.Group>
 
-          {/* 🖋️ Font Family with Search */}
           <Form.Group className="mb-3">
             <Form.Label>Font Family</Form.Label>
             <Form.Control

@@ -10,12 +10,18 @@ const EditorToolbar = ({ stageRef }) => {
     updateElement,
     selectedElementId,
     removeElement,
-    elements,
+    pages,
+    currentPageId,
   } = useDesignerState();
 
-  const fileInputRef = useRef();
+  // ✅ Get current page & its elements
+  const currentPage = pages.find((p) => p.id === currentPageId);
+  const elements = currentPage?.elements || [];
 
+  // ✅ Find selected element
   const selected = elements.find((el) => el.id === selectedElementId);
+
+  const fileInputRef = useRef();
 
   const handleExportPDF = async () => {
     // If you're using a Konva stage:
@@ -45,16 +51,6 @@ const EditorToolbar = ({ stageRef }) => {
       />
       {selected && (
         <>
-          <button
-            onClick={() => {
-              const color = prompt("Enter color (e.g. #ff0000):");
-              if (color) updateElement(selected.id, { fill: color });
-            }}
-          >
-            Change Color
-          </button>
-
-
           <button onClick={() => removeElement(selected.id)}>Delete</button>
         </>
       )}

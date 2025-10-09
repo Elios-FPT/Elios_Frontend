@@ -1,12 +1,18 @@
 // Frontend/elios_FE/src/cvGenerator/CVDesignerPage.js
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import CanvasEditor from "./components/CanvasEditor";
 import Toolbar from "./components/EditorToolbar";
 import PropertiesPanel from "./components/PropertiesPanel";
+import { loadAllFonts } from "./utils/loadFonts"; // ✅ add this import
 import "../styles/CVDesignerPage.css";
 
 const CVDesignerPage = () => {
+  // ✅ Load all Google Fonts when editor opens
+  useEffect(() => {
+    loadAllFonts();
+  }, []);
+
   return (
     <div className="cv-designer-page-background">
       <Container fluid className="cv-designer-container">
