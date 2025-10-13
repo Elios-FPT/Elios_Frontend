@@ -1,0 +1,45 @@
+/* Frontend/elios_FE/src/codingChallenge/style/CodeIDE.css */
+
+/* Allow normal typing & focus inside Monaco editor */
+.ide-wrapper * {
+  user-select: text !important;
+  outline: none !important;
+}
+
+.ide-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #1e1e1e;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #252526;
+  border-bottom: 1px solid #333;
+}
+
+.lang-select {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.run-btn {
+  background: #0e639c;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.run-btn:hover {
+  background: #1177bb;
+}

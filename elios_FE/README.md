@@ -1,5 +1,5 @@
 ## To download the libraly use
-### `npm i`
+### `npm i`  inside the "elios_FE" folder
 
 ## Available Scripts
 

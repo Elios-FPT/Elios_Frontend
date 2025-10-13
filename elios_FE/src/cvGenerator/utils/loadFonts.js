@@ -8,7 +8,7 @@ export const loadAllFonts = () => {
       families: FONT_LIST,
     },
     timeout: 4000, // fallback if Google Fonts take too long
-    active: () => console.log("✅ All Google fonts loaded"),
+   // active: () => console.log("✅ All Google fonts loaded"),
     inactive: () => console.warn("⚠️ Some fonts failed to load"),
   });
 };

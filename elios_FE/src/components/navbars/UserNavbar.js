@@ -39,7 +39,7 @@ const UserNavbar = () => {
               <Nav.Link as={Link} to="/ranking">{t("UserNavbar.ranking")}</Nav.Link>
               <Nav.Link as={Link} to="/contributor">{t("UserNavbar.contributor")}</Nav.Link>
               <Nav.Link as={Link} to="/share">{t("UserNavbar.share")}</Nav.Link>
-              <Nav.Link as={Link} to="/cv-builder">{t("UserNavbar.buildCV")}</Nav.Link>
+              <Nav.Link as={Link} to="/cv-designer">{t("UserNavbar.buildCV")}</Nav.Link>
 
             </Nav>
           </Col>

@@ -12,6 +12,8 @@ import UserForum from "./pages/userPage/UserForum";
 import CVBuilder from "./cvGenerator/pages/CVBuilder";
 import CVDesignerPage from "./cvGenerator/CVDesignerPage";
 
+import OnlineIDE from "./codingChallenge/pages/OnlineIDE";
+
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +25,7 @@ function App() {
         <Route path="/cv-designer" element={<CVDesignerPage />} />
         <Route path="/accounts/signup" element={<LandingSignUp />} />
         <Route path="/accounts/signin" element={<LandingSignIn />} />
+        <Route path="/online-ide" element={<OnlineIDE />} />
       </Routes>
     </BrowserRouter>
   );
