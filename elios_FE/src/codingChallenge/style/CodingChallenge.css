@@ -1,0 +1,132 @@
+/* === Coding Challenge Page === */
+
+.coding-challenges-container {
+  min-height: 100vh;
+  background-color: #181a1b;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* ✅ this prevents vertical stretching */
+  padding: 60px 60px;
+  gap: 20px;
+}
+
+
+/* === Left Sidebar === */
+.coding-challenge-left,
+.coding-challenge-right {
+  flex: 0 0 200px;
+  background-color: #23272f;
+  border-radius: 10px;
+  padding: 20px;
+  height: fit-content;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.coding-challenge-left h3,
+.coding-challenge-right h3 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #f5f5f5;
+}
+
+.coding-challenge-left p,
+.coding-challenge-right p {
+  font-size: 0.9rem;
+  color: #bbbbbb;
+}
+
+/* === Main Section === */
+.coding-challenge-middle {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* ✅ aligns table to top */
+}
+
+
+.coding-challenges-background {
+  background: #1e1e1e;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+  max-width: 900px;
+  padding: 40px 30px;
+}
+
+.coding-challenges-background h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #f5f5f5;
+}
+
+/* === Table Styles === */
+.coding-challenges-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.coding-challenges-table th,
+.coding-challenges-table td {
+  border-bottom: 1px solid #333;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.coding-challenges-table th {
+  background-color: #2a2a2a;
+  color: #ccc;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.coding-challenges-table tr {
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+}
+
+.coding-challenges-table tr:hover {
+  background-color: #292929;
+  transform: translateY(-1px);
+}
+
+/* === Difficulty Colors === */
+.diff.easy {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.diff.medium {
+  color: #ffb74d;
+  font-weight: 600;
+}
+
+.diff.hard {
+  color: #f44336;
+  font-weight: 600;
+}
+
+/* === Responsive === */
+@media (max-width: 992px) {
+  .coding-challenges-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .coding-challenge-left,
+  .coding-challenge-right {
+    width: 100%;
+  }
+
+  .coding-challenge-middle {
+    order: -1;
+  }
+
+  .coding-challenges-background {
+    padding: 25px 16px;
+  }
+}

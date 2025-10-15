@@ -32,7 +32,7 @@ const UserNavbar = () => {
           <Col>
             <Nav className="user-navbar-navbar-links">
               <Nav.Link as={Link} to="/forum">{t("UserNavbar.forum")}</Nav.Link>
-              <Nav.Link as={Link} to="/practice">{t("UserNavbar.practice")}</Nav.Link>
+              <Nav.Link as={Link} to="/codingChallenge">{t("UserNavbar.codingChallenge")}</Nav.Link>
               <Nav.Link as={Link} to="/contest">{t("UserNavbar.contest")}</Nav.Link>
               <Nav.Link as={Link} to="/challenge">{t("UserNavbar.challenge")}</Nav.Link>
               <Nav.Link as={Link} to="/event">{t("UserNavbar.event")}</Nav.Link>

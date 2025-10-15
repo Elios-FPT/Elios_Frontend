@@ -1,11 +1,22 @@
-// Frontend/elios_FE/src/codingChallenge/pages/OnlineIDE.jsx
-import React, { useState } from "react";
+// file: elios_FE/src/codingChallenge/pages/OnlineIDE.jsx
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import CodeIDE from "../components/CodeIDE";
+import problemsData from "../data/problems.json";
 
 export default function OnlineIDE() {
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [problem, setProblem] = useState(null);
+
+  const [searchParams] = useSearchParams();
+  const problemId = searchParams.get("id");
+
+  useEffect(() => {
+    const found = problemsData.find((p) => p.id.toString() === problemId);
+    setProblem(found || null);
+  }, [problemId]);
 
   const handleRun = async (code, language) => {
     setIsLoading(true);
@@ -31,6 +42,14 @@ export default function OnlineIDE() {
     }
   };
 
+  if (!problem) {
+    return (
+      <div style={{ color: "white", padding: "40px", background: "#1e1e1e" }}>
+        <h2>Problem not found ⚠️</h2>
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: "flex", height: "100vh", background: "#1e1e1e" }}>
       {/* 🧾 Left: Problem description */}
@@ -44,11 +63,12 @@ export default function OnlineIDE() {
           borderRight: "1px solid #333",
         }}
       >
-        <h2 style={{ color: "#50fa7b" }}>1. Two Sum</h2>
-        <p>Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers that add up to target.</p>
+        <h2 style={{ color: "#50fa7b" }}>{problem.title}</h2>
+        <p>{problem.description}</p>
+
         <pre style={{ background: "#1e1e1e", padding: "10px" }}>
-{`Input: [2,7,11,15], target = 9
-Output: [0,1]`}
+          {`Input: ${problem.exampleInput}
+Output: ${problem.exampleOutput}`}
         </pre>
       </div>
 
@@ -56,7 +76,6 @@ Output: [0,1]`}
       <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <CodeIDE onRun={handleRun} />
 
-        {/* Terminal / Output Panel */}
         <div
           style={{
             background: "#0d0d0d",
