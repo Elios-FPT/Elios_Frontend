@@ -37,13 +37,22 @@ const CodeIDE = ({ onRun }) => {
         language={language}
         value={code}
         onChange={(value) => setCode(value || "")}
+        onMount={(editor) => {
+          editor.onKeyDown((event) => {
+            // Fix space key blocked by parent CSS or listeners
+            if (event.code === "Space" && !event.ctrlKey && !event.metaKey) {
+              event.preventDefault();
+              editor.trigger("keyboard", "type", { text: " " });
+            }
+          });
+        }}
         options={{
           fontSize: 14,
           minimap: { enabled: true },
           automaticLayout: true,
           suggestOnTriggerCharacters: true,
           wordWrap: "on",
-          formatOnType: true,
+          formatOnType: false,
           autoClosingBrackets: "always",
         }}
       />

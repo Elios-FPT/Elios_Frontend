@@ -1,0 +1,312 @@
+[
+  {
+    "id": 2,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-14T10:00:00Z",
+    "title": "Challenge of the Week: Binary Search Bonanza! 🏆",
+    "content": "🚀 Eliosers, get ready for our weekly challenge! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! 💻 This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms! This time, we're diving into Binary Search problems. Solve 5 binary search problems by Sunday and share your solutions with #EliosChallenge to win exclusive swag! Let's optimize those algorithms!",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/binary-search-icon.png",
+    "comments": [
+      {
+        "id": 103,
+        "user": {
+          "name": "Alice Brown",
+          "avatar": "https://i.pravatar.cc/100?img=12"
+        },
+        "time": "2025-10-14T11:30:00Z",
+        "text": "Love these challenges! Binary search is my jam! 😎"
+      },
+      {
+        "id": 104,
+        "user": {
+          "name": "Bob Wilson",
+          "avatar": "https://i.pravatar.cc/100?img=15"
+        },
+        "time": "2025-10-14T12:15:00Z",
+        "text": "Any tips for handling edge cases in binary search?"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-14T12:45:00Z",
+    "title": "Elios Premium: New Features Unveiled! 🔓",
+    "content": "🎉 Exciting news for Elios Premium users! We've added mock interview simulations and advanced analytics to track your progress. Upgrade now and take your coding prep to the next level. Share your thoughts below! #EliosPremium",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/premium-icon.png",
+    "comments": [
+      {
+        "id": 105,
+        "user": {
+          "name": "Emma Davis",
+          "avatar": "https://i.pravatar.cc/100?img=20"
+        },
+        "time": "2025-10-14T13:00:00Z",
+        "text": "The mock interviews sound amazing! Trying it tonight!"
+      },
+      {
+        "id": 106,
+        "user": {
+          "name": "Liam Garcia",
+          "avatar": "https://i.pravatar.cc/100?img=22"
+        },
+        "time": "2025-10-14T14:20:00Z",
+        "text": "Analytics are super helpful. Worth the upgrade!"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-14T15:00:00Z",
+    "title": "Ask Elios: Debugging Tips for Dynamic Programming 🛠️",
+    "content": "💡 Struggling with dynamic programming? Ask Elios for tips to debug your DP solutions! Share your toughest DP problem in the comments, and we'll feature the best questions in our next tutorial video! #AskElios",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/dp-icon.png",
+    "comments": [
+      {
+        "id": 107,
+        "user": {
+          "name": "Sophia Martinez",
+          "avatar": "https://i.pravatar.cc/100?img=25"
+        },
+        "time": "2025-10-14T16:10:00Z",
+        "text": "Knapsack problem always gets me! Any tips for memoization?"
+      },
+      {
+        "id": 108,
+        "user": {
+          "name": "Noah Lee",
+          "avatar": "https://i.pravatar.cc/100?img=28"
+        },
+        "time": "2025-10-14T17:00:00Z",
+        "text": "Looking forward to the tutorial! DP is tricky."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-14T18:30:00Z",
+    "title": "New Problem Alert: Graph Traversal Challenge! 🌐",
+    "content": "🔥 Fresh problem drop! Test your skills with our latest graph traversal problem. Can you solve it in O(V+E) time? Share your approach with #EliosGraph and join the discussion! Let's conquer those graphs together! 🚀",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/graph-icon.png",
+    "comments": [
+      {
+        "id": 109,
+        "user": {
+          "name": "Olivia Clark",
+          "avatar": "https://i.pravatar.cc/100?img=30"
+        },
+        "time": "2025-10-14T19:00:00Z",
+        "text": "BFS or DFS? What's the best approach here?"
+      },
+      {
+        "id": 110,
+        "user": {
+          "name": "Ethan Walker",
+          "avatar": "https://i.pravatar.cc/100?img=32"
+        },
+        "time": "2025-10-14T20:15:00Z",
+        "text": "Just solved it with DFS! Loving this problem!"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-15T08:00:00Z",
+    "title": "Elios Meetup: Virtual Coding Jam! 🎮",
+    "content": "📅 Join us for our first Virtual Coding Jam on Oct 20! Team up, solve problems, and compete for prizes. Register now and show off your coding skills with Eliosers worldwide! #EliosJam",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/meetup-icon.png",
+    "comments": [
+      {
+        "id": 111,
+        "user": {
+          "name": "Ava Thompson",
+          "avatar": "https://i.pravatar.cc/100?img=35"
+        },
+        "time": "2025-10-15T09:00:00Z",
+        "text": "Signed up! Can't wait to team up! 😄"
+      },
+      {
+        "id": 112,
+        "user": {
+          "name": "James Harris",
+          "avatar": "https://i.pravatar.cc/100?img=38"
+        },
+        "time": "2025-10-15T10:30:00Z",
+        "text": "Are teams randomly assigned or can we choose?"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-15T09:15:00Z",
+    "title": "Elios Tips: Mastering Sliding Window Problems 🪟",
+    "content": "🧠 Sliding window problems got you stuck? Elios is here to help! Check out our new guide on mastering sliding window techniques and try it with our curated problem set. Share your solutions with #EliosSliding! 💪",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/sliding-window-icon.png",
+    "comments": [
+      {
+        "id": 113,
+        "user": {
+          "name": "Mia Rodriguez",
+          "avatar": "https://i.pravatar.cc/100?img=40"
+        },
+        "time": "2025-10-15T10:00:00Z",
+        "text": "The guide is super clear! Helped me solve two problems already!"
+      },
+      {
+        "id": 114,
+        "user": {
+          "name": "William Young",
+          "avatar": "https://i.pravatar.cc/100?img=42"
+        },
+        "time": "2025-10-15T11:00:00Z",
+        "text": "Can Elios explain variable window sizes? Still confused there."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-15T11:30:00Z",
+    "title": "Elios Stories: How Elios Helped Me Ace My Interview! 🌟",
+    "content": "🎤 Eliosers, we want to hear your success stories! How has Elios helped you in your coding journey? Share your story with #EliosStories for a chance to be featured and win exclusive merch! 🚀",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/success-icon.png",
+    "comments": [
+      {
+        "id": 115,
+        "user": {
+          "name": "Isabella Lopez",
+          "avatar": "https://i.pravatar.cc/100?img=45"
+        },
+        "time": "2025-10-15T12:00:00Z",
+        "text": "Elios helped me debug a tricky array problem just in time for my interview!"
+      },
+      {
+        "id": 116,
+        "user": {
+          "name": "Lucas King",
+          "avatar": "https://i.pravatar.cc/100?img=48"
+        },
+        "time": "2025-10-15T13:15:00Z",
+        "text": "Got my dream job thanks to Elios’s explanations! #EliosStories"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-15T14:00:00Z",
+    "title": "New Feature: Code Playback in Elios! 📽️",
+    "content": "🎥 Introducing Code Playback! Watch your coding process step-by-step to spot mistakes and optimize solutions. Available now for Premium users. Try it out and let us know what you think! #EliosPlayback",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/playback-icon.png",
+    "comments": [
+      {
+        "id": 117,
+        "user": {
+          "name": "Charlotte Adams",
+          "avatar": "https://i.pravatar.cc/100?img=50"
+        },
+        "time": "2025-10-15T14:30:00Z",
+        "text": "This is a game-changer for debugging! Loving it!"
+      },
+      {
+        "id": 118,
+        "user": {
+          "name": "Henry Baker",
+          "avatar": "https://i.pravatar.cc/100?img=52"
+        },
+        "time": "2025-10-15T15:00:00Z",
+        "text": "Any plans to bring this to free users?"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-15T16:00:00Z",
+    "title": "Elios Live: Ask Elios Anything! 🎙️",
+    "content": "📢 Join our live Q&A session with Elios on Oct 18! Ask your burning coding questions, from algorithms to system design. Submit questions early with #AskEliosLive for a chance to be featured! 🚀",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/live-icon.png",
+    "comments": [
+      {
+        "id": 119,
+        "user": {
+          "name": "Evelyn Scott",
+          "avatar": "https://i.pravatar.cc/100?img=55"
+        },
+        "time": "2025-10-15T16:30:00Z",
+        "text": "Excited for this! Will system design be covered?"
+      },
+      {
+        "id": 120,
+        "user": {
+          "name": "Daniel Evans",
+          "avatar": "https://i.pravatar.cc/100?img=58"
+        },
+        "time": "2025-10-15T17:00:00Z",
+        "text": "Hope we get some graph algorithm tips!"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "user": {
+      "name": "Elios",
+      "avatar": "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+    },
+    "time": "2025-10-15T18:00:00Z",
+    "title": "Elios’s Algorithm Bootcamp: Enroll Now! 🥾",
+    "content": "🏋️‍♂️ Ready to level up? Our Algorithm Bootcamp starts Nov 1! Learn key data structures and algorithms with Elios’s guidance. Limited spots, so enroll now and get coding! #EliosBootcamp",
+    "image": "https://assets.leetcode.com/static_assets/public/images/landing/bootcamp-icon.png",
+    "comments": [
+      {
+        "id": 121,
+        "user": {
+          "name": "Amelia Green",
+          "avatar": "https://i.pravatar.cc/100?img=60"
+        },
+        "time": "2025-10-15T18:30:00Z",
+        "text": "Just enrolled! Excited for the hands-on sessions!"
+      },
+      {
+        "id": 122,
+        "user": {
+          "name": "Benjamin Wright",
+          "avatar": "https://i.pravatar.cc/100?img=62"
+        },
+        "time": "2025-10-15T19:00:00Z",
+        "text": "What’s the focus of the bootcamp? Beginner-friendly?"
+      }
+    ]
+  }
+]

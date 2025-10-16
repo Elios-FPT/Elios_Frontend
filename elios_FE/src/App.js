@@ -8,7 +8,7 @@ import LandingSignIn from "./general/LandingSignIn";
 
 import UserPage from "./pages/pivotPages/UserPage";
 import UserHome from "./pages/userPage/UserHome";
-import UserForum from "./pages/userPage/UserForum";
+import Forum from "./forum/pages/Forum";
 import CVBuilder from "./cvGenerator/pages/CVBuilder";
 import CVDesignerPage from "./cvGenerator/CVDesignerPage";
 
@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<UserHome />} />
-        <Route path="/forum" element={<UserForum />} />
+        <Route path="/forum" element={<Forum />} />
         <Route path="/cv-builder-test" element={<CVBuilder />} />
         <Route path="/cv-designer" element={<CVDesignerPage />} />
         <Route path="/accounts/signup" element={<LandingSignUp />} />

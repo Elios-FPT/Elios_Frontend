@@ -33,12 +33,12 @@ const UserNavbar = () => {
             <Nav className="user-navbar-navbar-links">
               <Nav.Link as={Link} to="/forum">{t("UserNavbar.forum")}</Nav.Link>
               <Nav.Link as={Link} to="/codingChallenge">{t("UserNavbar.codingChallenge")}</Nav.Link>
-              <Nav.Link as={Link} to="/contest">{t("UserNavbar.contest")}</Nav.Link>
+              {/* <Nav.Link as={Link} to="/contest">{t("UserNavbar.contest")}</Nav.Link>
               <Nav.Link as={Link} to="/challenge">{t("UserNavbar.challenge")}</Nav.Link>
               <Nav.Link as={Link} to="/event">{t("UserNavbar.event")}</Nav.Link>
               <Nav.Link as={Link} to="/ranking">{t("UserNavbar.ranking")}</Nav.Link>
               <Nav.Link as={Link} to="/contributor">{t("UserNavbar.contributor")}</Nav.Link>
-              <Nav.Link as={Link} to="/share">{t("UserNavbar.share")}</Nav.Link>
+              <Nav.Link as={Link} to="/share">{t("UserNavbar.share")}</Nav.Link> */}
               <Nav.Link as={Link} to="/cv-designer">{t("UserNavbar.buildCV")}</Nav.Link>
 
             </Nav>

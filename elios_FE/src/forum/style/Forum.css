@@ -1,4 +1,4 @@
-/* Frontend/elios_FE/src/styles/UserForum.css */
+/* Frontend/elios_FE/src/styles/Forum.css */
 
 .user-forum-bg {
     background: #181a1b;
@@ -76,6 +76,29 @@
     border-radius: 16px;
     background: #23272f;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+}
+
+.user-forum-forum-content {
+    color: #ddd;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    max-height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.user-forum-view-more {
+    color: #19c37d;
+    cursor: pointer;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.user-forum-view-more:hover {
+    text-decoration: underline;
 }
 
 .user-forum-forum-sidebar {
