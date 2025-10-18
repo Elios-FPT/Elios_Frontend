@@ -1,0 +1,107 @@
+/* elios_FE/src/forum/style/CreatePostModal.css */
+
+
+
+.create-post-modal-editor-wrap {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 180px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: linear-gradient(180deg, #0e1720 0%, #091118 100%);
+}
+
+/* Preview sits behind the textarea */
+.create-post-modal-markdown-preview {
+  position: absolute;
+  inset: 0;
+  padding: 12px 14px;
+  color: rgba(255,255,255,0.85);
+  overflow: auto;
+  z-index: 0;
+  pointer-events: none; /* ensure clicks go to textarea */
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.45;
+}
+
+/* Slightly dim code blocks in preview for readability */
+.create-post-modal-markdown-preview pre {
+  background: rgba(0,0,0,0.35);
+  padding: 10px;
+  border-radius: 6px;
+  overflow: auto;
+  color: #e6eef6;
+}
+
+/* Textarea placed above preview and is transparent */
+.create-post-modaleditor-textarea {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  padding: 12px 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* ensure visible caret on dark background */
+.create-post-modaleditor-textarea::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+/* small aesthetic tweaks */
+.create-post-modal .form-text {
+  color: #6c757d;
+}
+
+/* make scrollbar slim for preview */
+.create-post-modal-markdown-preview::-webkit-scrollbar {
+  width: 8px;
+}
+.create-post-modal-markdown-preview::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 4px;
+}
+
+.create-post-modal-cancel-button {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.create-post-modal-cancel-button:hover {
+  background-color: #7a868d;
+  border-color: #7a868d;
+  color: #fff;
+}
+
+.create-post-modal-create-button {
+  background-color: #0f8a57;
+  border-color: #0f8a57;
+  color: #fff;
+}
+.create-post-modal-create-button:hover {
+  background-color: #14b06f;
+  border-color: #15a96b;
+  color: #fff;
+}
+
+/* responsive adjustments */
+@media (max-width: 576px) {
+  .create-post-modal-editor-wrap {
+    min-height: 140px;
+  }
+  .create-post-modaleditor-textarea,
+  .create-post-modal-markdown-preview {
+    padding: 10px;
+  }
+}
+

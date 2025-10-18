@@ -1,3 +1,5 @@
+@import "highlight.js/styles/github-dark.css";
+
 /* ===== Modal Container ===== */
 .modal-content {
   background-color: #1e1e1e !important;
@@ -31,6 +33,51 @@
   border-radius: 10px;
   border: 1px solid #444;
   background-color: #2e2e2e;
+}
+
+/* ===== Markdown Content ===== */
+.user-forum-markdown-content {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: #eaeaea;
+}
+
+.user-forum-markdown-content h1,
+.user-forum-markdown-content h2,
+.user-forum-markdown-content h3 {
+  color: #fff;
+  margin-top: 1rem;
+}
+
+.user-forum-markdown-content p {
+  margin-bottom: 1rem;
+}
+
+.user-forum-markdown-content code {
+  background-color: #2c2c2c;
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: #ffcc66;
+  font-family: monospace;
+}
+
+.user-forum-markdown-content pre {
+  background-color: #1e1e1e;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.user-forum-markdown-content blockquote {
+  border-left: 4px solid #888;
+  padding-left: 10px;
+  color: #ccc;
+  font-style: italic;
+}
+
+.user-forum-markdown-content ul,
+.user-forum-markdown-content ol {
+  margin-left: 20px;
 }
 
 /* ===== Comments Section ===== */

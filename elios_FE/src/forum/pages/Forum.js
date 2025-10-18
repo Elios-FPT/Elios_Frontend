@@ -1,15 +1,20 @@
 // FRONT-END: elios_FE/src/forum/pages/Forum.js
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button, ListGroup } from "react-bootstrap";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 import "../style/Forum.css";
 import UserNavbar from "../../components/navbars/UserNavbar";
 import PostModal from "../components/PostModal";
+import CreatePostModal from "../components/CreatePostModal";
 import mockPosts from "../data/mockPosts.json";
 import { formatRelativeTime } from "../utils/formatTime";
 
 const Forum = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
   const isContentTooLong = (content) => {
     return content.length > 300;
@@ -68,20 +73,30 @@ const Forum = () => {
                       <Card.Title>
                         <span className="user-forum-forum-link">{post.title}</span>
                       </Card.Title>
-
                       <Card.Text className="user-forum-forum-content">
-                        {truncateContent(post.content)}
-                        {isContentTooLong(post.content) && (
-                          <span
-                            className="user-forum-view-more"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openPost(post);
-                            }}
+                        {/* Wrap ReactMarkdown and the 'view more' span in a single element */}
+                        <span>
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            // Add this components prop to render the paragraph as a span
+                            components={{ p: "span" }}
                           >
-                            ...view more
-                          </span>
-                        )}
+                            {truncateContent(post.content)}
+                          </ReactMarkdown>
+
+                          {/* Conditionally render the 'view more' link */}
+                          {isContentTooLong(post.content) && (
+                            <span
+                              className="user-forum-view-more"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openPost(post);
+                              }}
+                            >
+                              {" ...view more"}
+                            </span>
+                          )}
+                        </span>
                       </Card.Text>
                     </Card.Body>
                   </Card>
@@ -107,7 +122,10 @@ const Forum = () => {
                     </div>
 
                     <div className="user-forum-sidebar-section">
-                      <div className="user-forum-sidebar-title">
+                      <div
+                        className="user-forum-sidebar-title"
+                        onClick={() => setShowCreatePostModal(true)}
+                      >
                         <span role="img" aria-label="chat">
                           💬
                         </span>{" "}
@@ -117,10 +135,12 @@ const Forum = () => {
                         variant="outline-light"
                         size="sm"
                         className="w-100 mb-2 user-forum-btn-outline-light"
+                        onClick={() => setShowCreatePostModal(true)}
                       >
                         Let's Discuss
                       </Button>
                     </div>
+
 
                     <ListGroup variant="flush" className="mt-3">
                       <ListGroup.Item className="user-forum-sidebar-list">
@@ -151,6 +171,10 @@ const Forum = () => {
       </main>
 
       <PostModal show={showModal} handleClose={closeModal} post={selectedPost} />
+      <CreatePostModal
+        show={showCreatePostModal}
+        handleClose={() => setShowCreatePostModal(false)}
+      />
     </>
   );
 };
