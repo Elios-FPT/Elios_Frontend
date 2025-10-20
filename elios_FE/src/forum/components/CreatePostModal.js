@@ -1,108 +1,93 @@
-// elios_FE/src/forum/components/CreatePostModal.js
-import React, { useState, useRef, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
+// file: elios_FE/src/forum/components/CreatePostModal.js
+import React, { useRef, useState } from "react";
+import { Modal, Button } from "react-bootstrap";
+import { FaBold, FaItalic, FaCode, FaFileCode } from "react-icons/fa";
+import TurndownService from "turndown";
+import { marked } from "marked";
 import "../style/CreatePostModal.css";
-import { formatRelativeTime } from "../utils/formatTime";
 
-const CreatePostModal = ({ show, handleClose, handleCreatePost }) => {
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const textareaRef = useRef(null);
-    const previewRef = useRef(null);
+const turndownService = new TurndownService();
 
-    useEffect(() => {
-        if (!show) {
-            setTitle("");
-            setContent("");
-        }
-    }, [show]);
+export default function CreatePostModal({ show, handleClose, onSubmit }) {
+  const editorRef = useRef(null);
+  const [title, setTitle] = useState("");
 
-    // keep preview scroll synced with textarea
-    const handleScroll = (e) => {
-        if (previewRef.current) {
-            previewRef.current.scrollTop = e.target.scrollTop;
-        }
-    };
+  const applyFormat = (command) => {
+    document.execCommand(command, false, null);
+  };
 
-    const handleSubmit = () => {
-        if (!title.trim() && !content.trim()) return;
-        // pass trimmed title & content to parent
-        handleCreatePost &&
-            handleCreatePost({
-                title: title.trim(),
-                content: content.trim(),
-            });
-        setTitle("");
-        setContent("");
-        handleClose && handleClose();
-    };
+  const handleSubmit = () => {
+    // Get the HTML content from the editor
+    const htmlContent = editorRef.current.innerHTML;
 
-    return (
-        <Modal show={show} onHide={handleClose} size="lg" centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Create New Post</Modal.Title>
-            </Modal.Header>
+    // Convert HTML → Markdown
+    const markdown = turndownService.turndown(htmlContent);
 
-            <Modal.Body>
-                <Form>
-                    <Form.Group className="create-post-modal mb-3">
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Post title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-                    </Form.Group>
+    // Send Markdown content to parent
+    onSubmit({ title, content: markdown });
+    handleClose();
+  };
 
-                    <Form.Group className="mb-2 create-post-modal">
+  return (
+    <Modal show={show} onHide={handleClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Create New Post</Modal.Title>
+      </Modal.Header>
 
-                        <div className="create-post-modal-editor-wrap">
-                            {/* Markdown preview rendered behind the textarea */}
-                            <div
-                                className="create-post-modal-markdown-preview"
-                                ref={previewRef}
-                                aria-hidden="true"
-                            >
-                                <ReactMarkdown
-                                    remarkPlugins={[remarkGfm]}
-                                    rehypePlugins={[rehypeHighlight]}
-                                >
-                                </ReactMarkdown>
-                            </div>
+      <Modal.Body>
+        <input
+          className="createpost-title-input"
+          type="text"
+          placeholder="Post title..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-                            {/* Transparent textarea sits above the preview */}
-                            <textarea
-                                ref={textareaRef}
-                                className="create-post-modaleditor-textarea"
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                onScroll={handleScroll}
-                                placeholder=""
-                            />
-                        </div>
+        {/* Toolbar */}
+        <div className="createpost-toolbar">
+          <button onClick={() => applyFormat("bold")} title="Bold">
+            <FaBold />
+          </button>
+          <button onClick={() => applyFormat("italic")} title="Italic">
+            <FaItalic />
+          </button>
+          <button onClick={() => applyFormat("insertHTML", "<code></code>")} title="Inline Code">
+            <FaCode />
+          </button>
+          <button
+            onClick={() => {
+              const selection = window.getSelection();
+              if (!selection.rangeCount) return;
+              const range = selection.getRangeAt(0);
+              const pre = document.createElement("pre");
+              pre.innerHTML = "<code>" + selection.toString() + "</code>";
+              range.deleteContents();
+              range.insertNode(pre);
+            }}
+            title="Code Block"
+          >
+            <FaFileCode />
+          </button>
+        </div>
 
-                    </Form.Group>
-                </Form>
-            </Modal.Body>
+        {/* Rich text editor area */}
+        <div
+          ref={editorRef}
+          className="createpost-editor"
+          contentEditable
+          suppressContentEditableWarning
+          placeholder="Write your post..."
+        ></div>
+      </Modal.Body>
 
-            <Modal.Footer>
-                <Button className="create-post-modal-cancel-button" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button
-                    className="create-post-modal-create-button"
-                    onClick={handleSubmit}
-                    disabled={!title.trim() && !content.trim()}
-                >
-                    Create Post
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-};
-
-export default CreatePostModal;
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          Post
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}

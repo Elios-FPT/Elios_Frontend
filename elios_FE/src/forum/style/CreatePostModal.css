@@ -105,3 +105,50 @@
   }
 }
 
+.createpost-title-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid #555;
+  background: transparent;
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.createpost-toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 6px;
+  background: #222;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.createpost-toolbar button {
+  background: none;
+  border: none;
+  color: #ddd;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.createpost-toolbar button:hover {
+  color: #00bcd4;
+}
+
+.createpost-editor {
+  min-height: 200px;
+  background: #181a1b;
+  color: #eee;
+  border-radius: 5px;
+  padding: 12px;
+  outline: none;
+  overflow-y: auto;
+}
+
+.createpost-editor:empty:before {
+  content: attr(placeholder);
+  color: #666;
+}
