@@ -15,6 +15,8 @@ import CVDesignerPage from "./cvGenerator/CVDesignerPage";
 import CodingChallenge from "./codingChallenge/pages/CodingChallenge";
 import OnlineIDE from "./codingChallenge/pages/OnlineIDE";
 
+
+import TestConnectionToBE from "./components/test/TestConectionToBE";
 function App() {
   return (
     <BrowserRouter>
@@ -27,6 +29,7 @@ function App() {
         <Route path="/accounts/signup" element={<LandingSignUp />} />
         <Route path="/accounts/signin" element={<LandingSignIn />} />
 
+        <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
         
         <Route path="/codingChallenge" element={<CodingChallenge />} />
         <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
