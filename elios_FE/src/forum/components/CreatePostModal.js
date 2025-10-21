@@ -29,7 +29,8 @@ export default function CreatePostModal({ show, handleClose, onSubmit }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    // Add the dialogClassName prop here
+    <Modal show={show} onHide={handleClose} centered dialogClassName="create-post-modal-dialog">
       <Modal.Header closeButton>
         <Modal.Title>Create New Post</Modal.Title>
       </Modal.Header>
@@ -81,12 +82,12 @@ export default function CreatePostModal({ show, handleClose, onSubmit }) {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <button className="create-post-modal-cancel-button" onClick={handleClose}>
           Cancel
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        </button>
+        <button className="create-post-modal-create-button" onClick={handleSubmit}>
           Post
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   );

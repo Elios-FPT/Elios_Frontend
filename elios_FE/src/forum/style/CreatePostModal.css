@@ -1,13 +1,17 @@
 /* elios_FE/src/forum/style/CreatePostModal.css */
 
-
+/* Add this new rule to make the modal wider */
+.create-post-modal-dialog {
+  min-width: 800px;
+  /* Adjust this value as needed */
+}
 
 .create-post-modal-editor-wrap {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
   min-height: 180px;
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   background: linear-gradient(180deg, #0e1720 0%, #091118 100%);
 }
 
@@ -16,10 +20,11 @@
   position: absolute;
   inset: 0;
   padding: 12px 14px;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.85);
   overflow: auto;
   z-index: 0;
-  pointer-events: none; /* ensure clicks go to textarea */
+  pointer-events: none;
+  /* ensure clicks go to textarea */
   white-space: pre-wrap;
   word-break: break-word;
   font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -28,7 +33,7 @@
 
 /* Slightly dim code blocks in preview for readability */
 .create-post-modal-markdown-preview pre {
-  background: rgba(0,0,0,0.35);
+  background: rgba(0, 0, 0, 0.35);
   padding: 10px;
   border-radius: 6px;
   overflow: auto;
@@ -54,7 +59,7 @@
 
 /* ensure visible caret on dark background */
 .create-post-modaleditor-textarea::placeholder {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* small aesthetic tweaks */
@@ -66,12 +71,16 @@
 .create-post-modal-markdown-preview::-webkit-scrollbar {
   width: 8px;
 }
+
 .create-post-modal-markdown-preview::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 4px;
 }
 
 .create-post-modal-cancel-button {
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
   background-color: #6c757d;
   border-color: #6c757d;
   color: #fff;
@@ -84,10 +93,14 @@
 }
 
 .create-post-modal-create-button {
-  background-color: #0f8a57;
-  border-color: #0f8a57;
+  width: 80px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: #0F8A57;
+  border-color: #00ff956e;
   color: #fff;
 }
+
 .create-post-modal-create-button:hover {
   background-color: #14b06f;
   border-color: #15a96b;
@@ -99,6 +112,7 @@
   .create-post-modal-editor-wrap {
     min-height: 140px;
   }
+
   .create-post-modaleditor-textarea,
   .create-post-modal-markdown-preview {
     padding: 10px;
@@ -139,7 +153,9 @@
 }
 
 .createpost-editor {
-  min-height: 200px;
+  /* Increase the min-height here to make the editor taller */
+  min-height: 450px;
+  /* Changed from 200px */
   background: #181a1b;
   color: #eee;
   border-radius: 5px;
