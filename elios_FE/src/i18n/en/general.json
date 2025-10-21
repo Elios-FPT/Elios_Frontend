@@ -1,14 +1,14 @@
 {
   "UserNavbar": {
     "forum": "Forum",
-    "practice": "Practice",
+    "codingChallenge": "Coding Challenge",
     "contest": "Contest",
     "challenge": "Challenge",
     "event": "Event",
     "ranking": "Ranking",
     "contributor": "Contributor",
     "share": "Share",
-    "showroom": "Showroom",
+    "buildCV": "Build CV",
     "login": "Sign in",
     "register": "Sign up",
     "switch_language": "Switch to Vietnamese",
@@ -25,10 +25,10 @@
       "language": "Language: EN"
     },
     "main_title": "A New Cool Way to Learn",
-    "main_desc": "Eliso is the best platform to help you enhance your skills, expand your knowledge and prepare for technical interviews.",
+    "main_desc": "Elios is the best platform to help you enhance your skills, expand your knowledge and prepare for technical interviews.",
     "create_account": "Create Account",
     "explore_title": "Start Exploring",
-    "explore_desc": "Explore is a well-organized tool that helps you get the most out of LeetCode by providing structure to guide your progress towards the next step in your programming career.",
+    "explore_desc": "Explore is a well-organized tool that helps you get the most out of Elios by providing structure to guide your progress towards the next step in your programming career.",
     "get_started": "Get Started"
   },
   "landingSignUp": {

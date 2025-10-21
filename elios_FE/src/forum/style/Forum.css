@@ -1,4 +1,4 @@
-/* Frontend/elios_FE/src/styles/UserForum.css */
+/* Frontend/elios_FE/src/styles/Forum.css */
 
 .user-forum-bg {
     background: #181a1b;
@@ -78,6 +78,29 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
 }
 
+.user-forum-forum-content {
+    color: #ddd;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    max-height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.user-forum-view-more {
+    color: #19c37d;
+    cursor: pointer;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.user-forum-view-more:hover {
+    text-decoration: underline;
+}
+
 .user-forum-forum-sidebar {
     padding-left: 0;
     max-width: 20px;
@@ -125,4 +148,34 @@
     background: #14b06f !important;
     color: #fff !important;
     border-color: #15a96b !important;
+}
+
+/* Markdown preview styling for forum post */
+.user-forum-markdown-preview {
+  color: #ddd;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.user-forum-markdown-preview strong {
+  color: #fff;
+}
+
+.user-forum-markdown-preview em {
+  color: #ffc107;
+}
+
+.user-forum-markdown-preview code {
+  background-color: #2c2c2c;
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: #ffcc66;
+  font-family: monospace;
+}
+
+.user-forum-markdown-preview pre {
+  background-color: #1e1e1e;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
 }

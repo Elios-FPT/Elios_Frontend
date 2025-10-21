@@ -1,8 +1,8 @@
-// FRONT-END: elios_FE/src/cvGenerator/pages/CvGenerator.js
+// FRONT-END: elios_FE/src/cvGenerator/pages/CVBuilder.js
 import React, { useState, useRef } from "react";
 import html2pdf from "html2pdf.js";
 
-const  CvGenerator =  () => {
+const  CVBuilder =  () => {
   const [cvData, setCvData] = useState({
     name: "",
     jobTitle: "",
@@ -77,4 +77,4 @@ const  CvGenerator =  () => {
   );
 }
 
-export default CvGenerator;
+export default CVBuilder;
