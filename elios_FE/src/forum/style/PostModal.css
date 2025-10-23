@@ -2,8 +2,8 @@
 
 /* ===== Modal Container ===== */
 .modal-content {
-  background-color: #1e1e1e !important;
-  color: #eaeaea !important;
+  background-color: #1e1e1e;
+  color: #eaeaea;
   border-radius: 12px;
   border: 1px solid #333;
 }
@@ -113,7 +113,7 @@ h6 {
 }
 
 .text-muted {
-  color: #aaa !important;
+  color: #aaa ;
 }
 
 /* ===== Buttons ===== */

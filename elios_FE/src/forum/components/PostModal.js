@@ -4,7 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import "../style/PostModal.css";
+//import "../style/PostModal.css";
 import { formatRelativeTime } from "../utils/formatTime";
 
 const PostModal = ({ show, handleClose, post }) => {

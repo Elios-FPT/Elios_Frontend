@@ -1,20 +1,41 @@
 // FRONT-END: elios_FE/src/forum/pages/Forum.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import "../style/Forum.css";
 import UserNavbar from "../../components/navbars/UserNavbar";
-import PostModal from "../components/PostModal";
 import CreatePostModal from "../components/CreatePostModal";
-import mockPosts from "../data/mockPosts.json";
 import { formatRelativeTime } from "../utils/formatTime";
+import { API_ENDPOINTS } from "../../api/apiConfig";
+import { FaEye, FaCommentAlt, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import "../style/Forum.css";
+
 
 const Forum = () => {
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const [forumPosts, setForumPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(API_ENDPOINTS.GET_POSTS_FORUM, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        setForumPosts(response.data.responseData);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+    fetchPosts();
+  }, []);
+
 
   const isContentTooLong = (content) => {
     return content.length > 300;
@@ -28,13 +49,7 @@ const Forum = () => {
   };
 
   const openPost = (post) => {
-    setSelectedPost(post);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setSelectedPost(null);
-    setShowModal(false);
+    navigate(`/forum/post/${post.postId}`, { state: { post } });
   };
 
   return (
@@ -48,9 +63,9 @@ const Forum = () => {
           <Container fluid className="user-forum-container">
             <Row className="user-forum-content-center">
               <Col md={9} className="user-forum-forum-main">
-                {mockPosts.map((post) => (
+                {forumPosts.map((post) => (
                   <Card
-                    key={post.id}
+                    key={post.postId}
                     className="user-forum-forum-post mb-3"
                     onClick={() => openPost(post)}
                     style={{ cursor: "pointer" }}
@@ -58,34 +73,32 @@ const Forum = () => {
                     <Card.Body>
                       <div className="user-forum-forum-post-meta">
                         <img
-                          src={post.user.avatar}
+                          src={post.authorAvatarUrl}
                           alt="user"
                           className="user-forum-forum-avatar"
                         />
                         <span className="user-forum-forum-user">
-                          {post.user.name}
+                          {post.authorFullName}
                         </span>
                         <span className="user-forum-forum-time">
-                          {formatRelativeTime(post.time)}
+                          {formatRelativeTime(post.createdAt)}
                         </span>
                       </div>
 
                       <Card.Title>
                         <span className="user-forum-forum-link">{post.title}</span>
                       </Card.Title>
+
                       <Card.Text className="user-forum-forum-content">
-                        {/* Wrap ReactMarkdown and the 'view more' span in a single element */}
                         <span>
                           <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
-                            // Add this components prop to render the paragraph as a span
                             components={{ p: "span" }}
                           >
-                            {truncateContent(post.content)}
+                            {truncateContent(post.summary)}
                           </ReactMarkdown>
 
-                          {/* Conditionally render the 'view more' link */}
-                          {isContentTooLong(post.content) && (
+                          {isContentTooLong(post.summary) && (
                             <span
                               className="user-forum-view-more"
                               onClick={(e) => {
@@ -97,10 +110,28 @@ const Forum = () => {
                             </span>
                           )}
                         </span>
+                        <div className="user-forum-post-stats">
+                          <span className="stat-item up">
+                            <FaThumbsUp /> {post.upvoteCount}
+                          </span>
+
+                          <span className="stat-item down">
+                            <FaThumbsDown /> {post.downvoteCount}
+                          </span>
+
+                          <span className="stat-item comment">
+                            <FaCommentAlt /> {post.commentCount}
+                          </span>
+
+                          <span className="stat-item view">
+                            <FaEye /> {post.viewsCount}
+                          </span>
+                        </div>
                       </Card.Text>
                     </Card.Body>
                   </Card>
                 ))}
+
               </Col>
 
               <Col md={3} className="user-forum-forum-sidebar">
@@ -127,7 +158,7 @@ const Forum = () => {
                         onClick={() => setShowCreatePostModal(true)}
                       >
                         <span role="img" aria-label="chat">
-                          💬
+                          
                         </span>{" "}
                         Discuss Now
                       </div>
@@ -170,7 +201,7 @@ const Forum = () => {
         </div>
       </main>
 
-      <PostModal show={showModal} handleClose={closeModal} post={selectedPost} />
+      {/* <PostModal show={showModal} handleClose={closeModal} post={selectedPost} /> */}
       <CreatePostModal
         show={showCreatePostModal}
         handleClose={() => setShowCreatePostModal(false)}

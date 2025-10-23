@@ -5,6 +5,13 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // ✅ add i18n
 import "../styles/LandingPage.css";
 
+const signinPath =
+  "http://auth.elios.com/realms/elios/protocol/openid-connect/auth?approval_prompt=force&client_id=oauth2-proxy&code_challenge=KLcsdz2A7Nbgoqote-PK4ktiPAlj1f6-jstpLB6aLTU&code_challenge_method=S256&redirect_uri=http%3A%2F%2Foauth2.elios.com%2Foauth2%2Fcallback&response_type=code&scope=openid+email+profile&state=ojKLDCysCfByomPSc4iCLdyt9FzAfcabybWFgYJG4iA%3A%2F";
+
+
+const signinPath2 = "http://oauth2.elios.com/oauth2/start";
+const signoutPath = "http://oauth2.elios.com/oauth2/sign_out";
+
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
 
@@ -36,9 +43,13 @@ const LandingPage = () => {
               {t("landingPage.navbar.language")}
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/accounts/signin">
+            <Nav.Link
+              onClick={() => (window.location.href = signinPath2)}
+              style={{ cursor: "pointer" }}
+            >
               {t("landingPage.navbar.login")}
             </Nav.Link>
+
 
           </Nav>
         </Navbar>
