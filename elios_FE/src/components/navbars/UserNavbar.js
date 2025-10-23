@@ -6,6 +6,9 @@ import { useTranslation } from "react-i18next";
 
 import "../../styles/UserNavbar.css";
 
+const signinPath = "http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com";
+const logoutPath = "http://oauth2.elios.com/oauth2/sign_out?rd=http%3A%2F%2Fwww.elios.com"
+
 const UserNavbar = () => {
   const { t, i18n } = useTranslation();
 
@@ -54,7 +57,7 @@ const UserNavbar = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/login">{t("UserNavbar.login")}</Dropdown.Item>
+                <Dropdown.Item as={Link} to={signinPath}>{t("UserNavbar.login")}</Dropdown.Item>
                 <Dropdown.Item as={Link} to="/register">{t("UserNavbar.register")}</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={toggleLanguage}>
@@ -62,7 +65,7 @@ const UserNavbar = () => {
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/profile">{t("UserNavbar.profile")}</Dropdown.Item>
                 <Dropdown.Item as={Link} to="/settings">{t("UserNavbar.settings")}</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/logout">{t("UserNavbar.logout")}</Dropdown.Item>
+                <Dropdown.Item as={Link} to={logoutPath}>{t("UserNavbar.logout")}</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Col>
