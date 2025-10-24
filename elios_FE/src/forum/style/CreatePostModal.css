@@ -1,10 +1,42 @@
 /* elios_FE/src/forum/style/CreatePostModal.css */
 
-/* Add this new rule to make the modal wider */
-.create-post-modal-dialog {
+.create-post-modal {
   min-width: 800px;
-  /* Adjust this value as needed */
 }
+/* Scope all styles under your unique class */
+.create-post-modal .modal-content {
+  background-color: #444444 !important;
+  color: #f0f0f0 !important;
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+.create-post-modal .modal-header {
+  border-bottom: 1px solid #2c2c2c;
+  background-color: #424242;
+  color: #f0f0f0;
+}
+
+.create-post-modal .modal-title {
+  color: #ffffff;
+}
+
+.create-post-modal .modal-body {
+  background-color: #202020;
+  color: #e0e0e0;
+}
+
+.create-post-modal .modal-footer {
+  border-top: 1px solid #2c2c2c;
+  background-color: #1a1a1a;
+}
+
+.create-post-modal .btn-close {
+  filter: invert(1);
+}
+
+
+
 
 .create-post-modal-editor-wrap {
   position: relative;
@@ -167,4 +199,98 @@
 .createpost-editor:empty:before {
   content: attr(placeholder);
   color: #666;
+}
+
+/* Styles for Image Previews */
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #222;
+  border-radius: 5px;
+}
+
+.image-preview-item {
+  position: relative;
+  /* Needed to position the delete button */
+}
+
+.preview-image {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+.delete-image-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: rgba(211, 47, 47, 0.9);
+  /* Red background */
+  color: white;
+  border: 2px solid #181a1b;
+  /* Match editor background */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  transition: all 0.2s ease-in-out;
+}
+
+.delete-image-btn:hover {
+  background-color: rgba(239, 83, 80, 1);
+  /* Lighter red on hover */
+  transform: scale(1.1);
+}
+
+
+
+/* Styles for Drag and Drop Zone */
+.drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 15px;
+  padding: 25px;
+  border: 2px dashed #555;
+  border-radius: 8px;
+  color: #aaa;
+  background-color: #222;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.drop-zone:hover {
+  border-color: #00bcd4;
+  color: #00bcd4;
+}
+
+/* Style for when a file is being dragged over the zone */
+.drop-zone.drag-active {
+  border-color: #0F8A57;
+  color: #0F8A57;
+  background-color: #2a3a33;
+}
+
+.drop-zone-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.drop-zone-prompt p {
+  margin: 0;
+  font-size: 0.95em;
 }

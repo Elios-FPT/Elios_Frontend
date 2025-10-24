@@ -95,10 +95,10 @@ const Forum = () => {
                             remarkPlugins={[remarkGfm]}
                             components={{ p: "span" }}
                           >
-                            {truncateContent(post.summary)}
+                            {truncateContent(post.content)}
                           </ReactMarkdown>
 
-                          {isContentTooLong(post.summary) && (
+                          {isContentTooLong(post.content) && (
                             <span
                               className="user-forum-view-more"
                               onClick={(e) => {
