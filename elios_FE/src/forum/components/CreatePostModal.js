@@ -18,7 +18,7 @@ const CreatePostModal = ({ show, handleClose }) => {
   const [isDragging, setIsDragging] = useState(false); // State for drag-over effect
 
   // Hardcoded values
-  const CATEGORY_ID = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+  const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
   const POST_TYPE = "normal";
 
   const applyFormat = (command) => {
