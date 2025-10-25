@@ -4,7 +4,7 @@ import Editor from "@monaco-editor/react";
 import "../style/CodeIDE.css";
 
 const CodeIDE = ({ onRun }) => {
-  const [language, setLanguage] = useState("javascript");
+  const [language, setLanguage] = useState("JAVA");
   const [code, setCode] = useState("// Write your code here...");
 
   const handleRun = () => {
@@ -20,9 +20,9 @@ const CodeIDE = ({ onRun }) => {
           onChange={(e) => setLanguage(e.target.value)}
           className="lang-select"
         >
-          <option value="javascript">JavaScript</option>
-          <option value="java">Java</option>
-          <option value="csharp">C#</option>
+          <option value="JAVA">Java</option>
+          <option value="JAVASCRIPT">JavaScript</option>
+          <option value="CSHARP">C#</option>
         </select>
 
         <button onClick={handleRun} className="run-btn">
@@ -47,7 +47,7 @@ const CodeIDE = ({ onRun }) => {
           });
         }}
         options={{
-          fontSize: 14,
+          fontSize: 13,
           minimap: { enabled: true },
           automaticLayout: true,
           suggestOnTriggerCharacters: true,

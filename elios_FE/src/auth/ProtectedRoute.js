@@ -5,8 +5,6 @@ import axios from "axios";
 import { API_ENDPOINTS } from "../api/apiConfig";
 
 
-const signinPath2 = "http://oauth2.elios.com/oauth2/start";
-
 const ProtectedRoute = () => {
   const [status, setStatus] = useState("checking");
 
@@ -26,7 +24,6 @@ const ProtectedRoute = () => {
         });
 
         if (isMounted) {
-          console.log("✅ Authenticated user:", response.data);
           setStatus("authorized");
         }
       } catch (err) {
