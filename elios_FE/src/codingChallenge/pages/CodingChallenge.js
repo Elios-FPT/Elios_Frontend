@@ -19,8 +19,25 @@ const CodingChallenge = () => {
             "Content-Type": "application/json",
           },
         });
-        setProblems(response.data.data.content);
-        console.log("Fetched problems:", response.data.data.content);
+
+        // --- START: Sorting Logic ---
+        const fetchedProblems = response.data.data.content;
+        
+        // Define the desired order for difficulties
+        const difficultyOrder = {
+          EASY: 1,
+          MEDIUM: 2,
+          HARD: 3,
+        };
+
+        // Sort the problems array based on the defined order
+        const sortedProblems = fetchedProblems.sort((a, b) => {
+          return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+        });
+        
+        setProblems(sortedProblems);
+        console.log("Fetched and sorted problems:", sortedProblems);
+        // --- END: Sorting Logic ---
 
       } catch (error) {
         console.error("Error fetching coding challenges:", error);
