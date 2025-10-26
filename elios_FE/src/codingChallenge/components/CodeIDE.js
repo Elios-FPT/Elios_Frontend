@@ -1,4 +1,4 @@
-// file: elios_FE/src/codingChallenge/components/CodeIDE.jsx
+// file: elios_FE/src/codingChallenge/components/CodeIDE.js
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import "../style/CodeIDE.css";
