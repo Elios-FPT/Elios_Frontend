@@ -12,13 +12,15 @@ import { formatRelativeTime } from "../utils/formatTime";
 import UserNavbar from "../../components/navbars/UserNavbar";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import { FaEye, FaCommentAlt, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import CommentForm from "../components/CommentForm";
+import { log } from "handlebars";
 
 const PostDetail = () => {
     const { id } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
-
     const [post, setPost] = useState(null);
+    const [replyingTo, setReplyingTo] = useState(null);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -40,6 +42,83 @@ const PostDetail = () => {
 
         fetchPost();
     }, [id]);
+
+const handleCommentSubmit = async (content, parentCommentId) => {
+        if (!content.trim()) return;
+
+        try {
+            const body = {
+                postId: id,
+                parentCommentId: parentCommentId || null,
+                content,
+            };
+
+            const response = await axios.post(API_ENDPOINTS.CREATE_COMMENT, body, {
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const updated = response.data.responseData;
+            updated.comments = updated.comments || [];
+            setPost(updated);
+
+            // Cancel the reply state after successfully posting
+            setReplyingTo(null);
+            console.log("✅ Comment created successfully");
+        } catch (error) {
+            console.error("❌ Error creating comment:", error);
+        }
+    };
+
+    // --- NEW function to set the reply state ---
+    const handleSetReply = (comment) => {
+        setReplyingTo({
+            id: comment.commentId,
+            author: comment.authorFullName,
+        });
+    };
+
+    // --- NEW function to cancel the reply ---
+    const handleCancelReply = () => {
+        setReplyingTo(null);
+    };
+
+    // Helper function to render comments and their replies recursively
+    const renderComments = (comments) => {
+        return comments.map((comment) => (
+            <div key={comment.commentId} className="comment-thread">
+                <div className="d-flex align-items-start comment mb-3">
+                    <img
+                        src={comment.authorAvatarUrl || "/default-avatar.png"}
+                        alt="user"
+                        className="comment-avatar me-3"
+                    />
+                    <div className="comment-body">
+                        <strong className="comment-author">{comment.authorFullName}</strong>{" "}
+                        <small className="text-muted">{formatRelativeTime(comment.createdAt)}</small>
+                        <p className="mb-0">{comment.content}</p>
+                        <Button
+                            variant="link"
+                            size="sm"
+                            className="p-0 mt-1 reply-button"
+                            onClick={() => handleSetReply(comment)}
+                        >
+                            Reply
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Render replies recursively */}
+                {comment.replies && comment.replies.length > 0 && (
+                    <div className="comment-replies">
+                        {renderComments(comment.replies)}
+                    </div>
+                )}
+            </div>
+        ));
+    };
+
+
 
     if (!post) {
         return (
@@ -101,92 +180,19 @@ const PostDetail = () => {
                         )}
                         <hr />
                         <h5 className="comments-section-title">Comments</h5>
-                        {Array.isArray(post.comments) && post.comments.map((c) => (
-                            <div key={c.commentId} className="d-flex align-items-start comment mb-3">
-                                <img
-                                    src={c.authorAvatarUrl || "/default-avatar.png"}
-                                    alt="user"
-                                    className="comment-avatar me-3"
-                                />
-                                <div className="comment-body">
-                                    <strong className="comment-author">
-                                        {c.authorFullName || "Anonymous"}
-                                    </strong>{" "}
-                                    <small className="text-muted">
-                                        {formatRelativeTime(c.createdAt)}
-                                    </small>
-                                    <p className="mb-0">{c.content}</p>
+                       
+                        {renderComments(post.comments || [])}
 
-                                    <Button
-                                        variant="link"
-                                        size="sm"
-                                        className="p-0 mt-1 reply-button"
-                                        onClick={() => console.log("Reply to:", c.commentId)}
-                                    >
-                                        Reply
-                                    </Button>
-
-
-                                    {/* Replies check (nested comments) */}
-                                    {c.replies && c.replies.length > 0 && (
-                                        <div className="comment-replies">
-                                            {c.replies.map((r) => (
-                                                <div key={r.commentId} className="reply d-flex align-items-start mt-2">
-                                                    <img
-                                                        src={r.authorAvatarUrl || "/default-avatar.png"}
-                                                        alt="reply-avatar"
-                                                        className="reply-avatar me-2"
-                                                    />
-                                                    <div>
-                                                        <strong>{r.authorFullName || "Anonymous"}</strong>{" "}
-                                                        <small className="text-muted">
-                                                            {formatRelativeTime(r.createdAt)}
-                                                        </small>
-                                                        <p className="mb-0">{r.content}</p>
-
-                                                        <Button
-                                                            variant="link"
-                                                            size="sm"
-                                                            className="p-0 mt-1 reply-button"
-                                                            onClick={() => console.log("Reply to reply:", r.commentId)}
-                                                        >
-                                                            Reply
-                                                        </Button>
-
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-
-                        <Form className="post-detail-comment-form">
-                            <div className="user-forum-post-stats">
-                                <span className="stat-item up">
-                                    <FaThumbsUp /> {post.upvoteCount}
-                                </span>
-
-                                <span className="stat-item down">
-                                    <FaThumbsDown /> {post.downvoteCount}
-                                </span>
-
-                                <span className="stat-item comment">
-                                    <FaCommentAlt /> {post.commentCount}
-                                </span>
-                            </div>
-                            <Form.Group>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    placeholder="Write a comment..."
-                                />
-                            </Form.Group>
-                            <Button variant="primary" size="sm" className="mt-2">
-                                Post Comment
-                            </Button>
-                        </Form>
+                       <CommentForm
+                            postStats={{
+                                upvoteCount: post.upvoteCount,
+                                downvoteCount: post.downvoteCount,
+                                commentCount: post.commentCount,
+                            }}
+                            onSubmit={handleCommentSubmit}
+                            replyingTo={replyingTo}
+                            onCancelReply={handleCancelReply}
+                        />
                     </Card.Body>
                 </Container>
             </div>

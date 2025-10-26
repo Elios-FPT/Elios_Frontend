@@ -1,16 +1,33 @@
 // File: elios_FE/src/codingChallenge/pages/CodingChallenge.js
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import problemsData from "../data/problems.json";
 import "../style/CodingChallenge.css";
 import UserNavbar from "../../components/navbars/UserNavbar";
+import { API_ENDPOINTS } from "../../api/apiConfig";
 
 const CodingChallenge = () => {
   const [problems, setProblems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setProblems(problemsData);
+    const fetchProblems = async () => {
+      try {
+        const response = await axios.get(API_ENDPOINTS.GET_CODE_CHALLENGES_LIST, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        setProblems(response.data.data.content);
+        console.log("Fetched problems:", response.data.data.content);
+
+      } catch (error) {
+        console.error("Error fetching coding challenges:", error);
+      }
+    };
+
+    fetchProblems();
   }, []);
 
   const handleSelect = (problemId) => {

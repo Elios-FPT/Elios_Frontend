@@ -2,12 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
+import { API_ENDPOINTS } from "../api/apiConfig";
 
-const signinPath =
-  "http://auth.elios.com/realms/elios/protocol/openid-connect/auth?approval_prompt=force&client_id=oauth2-proxy&code_challenge=KLcsdz2A7Nbgoqote-PK4ktiPAlj1f6-jstpLB6aLTU&code_challenge_method=S256&redirect_uri=http%3A%2F%2Foauth2.elios.com%2Foauth2%2Fcallback&response_type=code&scope=openid+email+profile&state=ojKLDCysCfByomPSc4iCLdyt9FzAfcabybWFgYJG4iA%3A%2F";
-
-
-const signinPath2 = "http://oauth2.elios.com/oauth2/start";
 
 const ProtectedRoute = () => {
   const [status, setStatus] = useState("checking");
@@ -28,7 +24,6 @@ const ProtectedRoute = () => {
         });
 
         if (isMounted) {
-          console.log("✅ Authenticated user:", response.data);
           setStatus("authorized");
         }
       } catch (err) {
@@ -67,8 +62,8 @@ const ProtectedRoute = () => {
     // 🕒 Delay redirect slightly to ensure alert shows and cleanup is done
     setTimeout(() => {
       alert("Your session has expired or you are not logged in. Redirecting...");
-      window.location.href = signinPath2;
-    }, 3000);
+      window.location.href = API_ENDPOINTS.LOGIN_PATH;
+    }, 1000);
     return null;
   }
 

@@ -3,6 +3,7 @@ import React from "react";
 import { Container, Row, Col, Nav, Navbar, Button, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { API_ENDPOINTS } from "../../api/apiConfig";
 
 import "../../styles/UserNavbar.css";
 
@@ -57,7 +58,7 @@ const UserNavbar = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item as={Link} to={signinPath}>{t("UserNavbar.login")}</Dropdown.Item>
+                <Dropdown.Item as={Link} to={API_ENDPOINTS.LOGIN_PATH}>{t("UserNavbar.login")}</Dropdown.Item>
                 <Dropdown.Item as={Link} to="/register">{t("UserNavbar.register")}</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={toggleLanguage}>
@@ -65,7 +66,7 @@ const UserNavbar = () => {
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/profile">{t("UserNavbar.profile")}</Dropdown.Item>
                 <Dropdown.Item as={Link} to="/settings">{t("UserNavbar.settings")}</Dropdown.Item>
-                <Dropdown.Item as={Link} to={logoutPath}>{t("UserNavbar.logout")}</Dropdown.Item>
+                <Dropdown.Item as={Link} to={API_ENDPOINTS.LOGOUT_PATH}>{t("UserNavbar.logout")}</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Col>

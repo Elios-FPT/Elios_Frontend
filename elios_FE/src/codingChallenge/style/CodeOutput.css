@@ -1,0 +1,26 @@
+#code-output-container {
+  background: #0d0d0d;
+  color: #0f0;
+  padding: 10px;
+  height: 50vh;
+  border-top: 1px solid #333;
+  overflow-y: auto;
+  font-family: monospace;
+}
+
+.code-output-title {
+  color: #50fa7b;
+  margin-bottom: 5px;
+}
+
+.code-output-loading {
+  color: #ccc;
+}
+
+.code-output-error {
+  color: red;
+}
+
+.code-output-result {
+  color: #0f0;
+}

@@ -1,0 +1,33 @@
+#problem-description-container {
+  min-width: 400px;
+  background: #252526;
+  color: #ccc;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #333;
+}
+
+#problem-title {
+  color: #50fa7b;
+}
+
+.code-block {
+  background: #1e1e1e;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.inline-code {
+  background: #1e1e1e;
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #ffb86c;
+}
+
+.example-block {
+  background: #1e1e1e;
+  padding: 1px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
