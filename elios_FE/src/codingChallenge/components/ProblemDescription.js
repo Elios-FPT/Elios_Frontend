@@ -45,19 +45,9 @@ const ProblemDescription = ({ problemId }) => {
   if (!problem) return null;
 
   return (
-    <div
-      style={{
-        width: "35%",
-        background: "#252526",
-        color: "#ccc",
-        padding: "20px",
-        overflowY: "auto",
-        borderRight: "1px solid #333",
-      }}
-    >
-      <h2 style={{ color: "#50fa7b" }}>{problem.title}</h2>
+    <div id="problem-description-container">
+      <h2 id="problem-title">{problem.title}</h2>
 
-      {/* Markdown-rendered description */}
       <ReactMarkdown
         children={problem.description}
         remarkPlugins={[remarkGfm]}
@@ -65,28 +55,13 @@ const ProblemDescription = ({ problemId }) => {
         components={{
           code({ inline, className, children, ...props }) {
             return !inline ? (
-              <pre
-                style={{
-                  background: "#1e1e1e",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  overflowX: "auto",
-                }}
-              >
+              <pre className="code-block">
                 <code className={className} {...props}>
                   {children}
                 </code>
               </pre>
             ) : (
-              <code
-                style={{
-                  background: "#1e1e1e",
-                  padding: "2px 4px",
-                  borderRadius: "3px",
-                  color: "#ffb86c",
-                }}
-                {...props}
-              >
+              <code className="inline-code" {...props}>
                 {children}
               </code>
             );
@@ -94,21 +69,14 @@ const ProblemDescription = ({ problemId }) => {
         }}
       />
 
-      {/* Optional example section */}
       {problem.exampleInput && problem.exampleOutput && (
-        <pre
-          style={{
-            background: "#1e1e1e",
-            padding: "10px",
-            borderRadius: "5px",
-            marginTop: "15px",
-          }}
-        >
+        <pre className="example-block">
           {`Input: ${problem.exampleInput}\nOutput: ${problem.exampleOutput}`}
         </pre>
       )}
     </div>
   );
+
 };
 
 export default ProblemDescription;

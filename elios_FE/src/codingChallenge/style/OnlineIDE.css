@@ -1,0 +1,153 @@
+#online-ide-container {
+  height: 100vh;
+  overflow: hidden;
+  padding: 0;
+  background: #1e1e1e;
+}
+
+/* --- Split Pane Styles --- */
+#split-wrapper, .split-vertical {
+  display: flex;
+  height: 100%;
+}
+#split-wrapper { flex-direction: row; }
+.split-vertical { flex-direction: column; }
+
+/* --- Gutter (Draggable Divider) Styles --- */
+.gutter {
+  background-color: #2d2d2d;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transition: background-color 0.2s;
+}
+.gutter:hover { background-color: #404040; }
+.gutter.gutter-horizontal { cursor: col-resize; width: 8px; }
+.gutter.gutter-vertical { cursor: row-resize; height: 8px; }
+
+
+/* --- Panel Styles --- */
+#problem-panel, #right-section, #code-editor-wrapper, #code-output-wrapper {
+  min-width: 35px;
+  position: relative;
+  height: 100%;
+  overflow: hidden; /* Hide content when size is 0 */
+}
+
+#problem-panel-content, #code-output-wrapper {
+  height: 100%;
+  overflow: auto;
+  padding: 15px;
+}
+#code-output-wrapper { background: #1a1a1a; }
+
+/* Wrapper for the CodeIDE component to fill space */
+#code-editor-wrapper > div {
+  height: 100%;
+  width: 100%;
+}
+
+
+/* --- Toggle Button Styles --- */
+#problem-toggle-btn, #editor-toggle-btn {
+  position: absolute;
+  z-index: 10;
+  background: #333;
+  border: 1px solid #444;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+#problem-toggle-btn:hover, #editor-toggle-btn:hover { background: #4a4a4a; }
+
+/* Problem (Left/Right) Toggle Button */
+#problem-toggle-btn {
+  top: 40px;
+  right: -1px; /* Overlap the gutter slightly */
+  width: 20px;
+  height: 40px;
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+}
+
+/* Editor (Up/Down) Toggle Button */
+#editor-toggle-btn {
+  bottom: -1px; /* Overlap the gutter slightly */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 20px;
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+}
+
+/* Collapsed States (remains class for dynamic state) */
+.collapsed {
+  flex: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.collapsed #problem-panel-content,
+.collapsed #editor-container {
+  display: none;
+}
+
+/* Main Layout Sections */
+#right-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+#code-section {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+#code-editor {
+  flex: 2;
+  min-height: 60%;
+  overflow: auto;
+}
+
+#code-output {
+  flex: 1;
+  min-height: 20%;
+  max-height: 40%;
+  background: #1a1a1a;
+  border-top: 2px solid #333;
+  overflow: auto;
+  padding: 12px;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}

@@ -9,6 +9,8 @@ export const API_ENDPOINTS = {
     GET_POSTS_FORUM: `${baseUrl}/api/v1/posts`,
     GET_POST_CONTENT: (postId) => `${baseUrl}/api/v1/posts/${postId}`,
     CREATE_POST: `${baseUrl}/api/v1/posts`,
+    CREATE_COMMENT: `${baseUrl}/api/v1/Comment`,
+
 
     // Codeing Challenge API Endpoints
     GET_CODE_CHALLENGES_LIST: `${baseUrl}/api/code-practices`,
