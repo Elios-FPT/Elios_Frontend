@@ -18,6 +18,35 @@ export const API_ENDPOINTS = {
     SUBMIT_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY_DETAIL: (submissionId) => `${baseUrl}/api/code-practices/submissions/${submissionId}`,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Mock Interview API Endpoints
+
+
+
+
+
+
+    
+
+
+
+
 };
 
 export const NAME_CONFIG = {

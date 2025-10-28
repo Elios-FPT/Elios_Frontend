@@ -3,8 +3,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./general/LandingPage";
-import LandingSignUp from "./general/LandingSignUp";
-import LandingSignIn from "./general/LandingSignIn";
 
 import UserHome from "./pages/userPage/UserHome";
 import Forum from "./forum/pages/Forum";
@@ -18,6 +16,9 @@ import ProtectedRoute from "./auth/ProtectedRoute"; // ✅
 
 import ResumeBuilder from "./resumeBuilder/pages/ResumeBuilder";
 
+import AdminScreenLayout from "./admin/pages/AdminScreenLayout";
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -26,9 +27,10 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/forum/post/:id" element={<PostDetail />} />
-
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
-          <Route path="/resumebuilder" element={<ResumeBuilder />} />
+        <Route path="/resumebuilder" element={<ResumeBuilder />} />
+
+        <Route path="/admin" element={<AdminScreenLayout />} />
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
