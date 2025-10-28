@@ -1,0 +1,140 @@
+/* file: elios_FE/src/resumeBuilder/styles/PreviewPanel.css */
+
+.resume-paper {
+    background: #ffffff;
+    width: 210mm; /* A4 width */
+    min-height: 297mm; /* A4 height */
+    padding: 2.54cm; /* 1-inch margins */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    margin-top: 24px; /* Add some top margin for spacing */
+}
+
+#resume-preview .preview-header {
+    text-align: center;
+    border-bottom: 1px solid #000;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+#resume-preview h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#resume-preview .preview-job-title,
+#resume-preview .preview-contact-info {
+    font-size: 14px;
+    color: #333;
+    margin: 4px 0 0 0;
+}
+
+.preview-section {
+    margin-top: 24px;
+}
+
+.preview-section h2 {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+}
+
+.preview-item {
+    margin-top: 16px;
+}
+/* Ensure last item in a section doesn't have extra margin */
+.preview-section .preview-item:last-child {
+    margin-bottom: 0;
+}
+
+
+.preview-item h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+}
+
+.preview-item em {
+    font-style: italic;
+    color: #555;
+    font-size: 14px;
+}
+
+.preview-item p {
+    margin: 8px 0 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* --- Project Specific Styles --- */
+.project-role {
+    font-weight: normal;
+    font-style: italic;
+}
+
+.project-description {
+    font-style: italic;
+    color: #444;
+}
+
+.project-tech-stack {
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.project-tech-stack strong {
+    font-weight: 600;
+}
+
+.project-achievements ul {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+.project-achievements li {
+    margin-bottom: 4px;
+}
+
+.project-links {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.project-links a {
+    color: #2e8555;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.project-links a:hover {
+    text-decoration: underline;
+}
+
+/* --- Skillset Specific Styles --- */
+.skill-grid {
+    margin-top: 12px;
+}
+
+.skill-subset {
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.skill-subset strong {
+    font-weight: 600;
+    min-width: 180px; /* Adjust as needed for alignment */
+    flex-shrink: 0;
+}
+
+.skill-subset span {
+    line-height: 1.5;
+}
