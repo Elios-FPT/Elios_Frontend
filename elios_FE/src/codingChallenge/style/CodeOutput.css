@@ -1,26 +1,64 @@
 #code-output-container {
   background: #0d0d0d;
-  color: #0f0;
-  padding: 10px;
-  height: 50vh;
+  padding: 15px;
+  min-height: 200px;
+  height: 40vh; /* Match example */
   border-top: 1px solid #333;
   overflow-y: auto;
   font-family: monospace;
-}
-
-.code-output-title {
-  color: #50fa7b;
-  margin-bottom: 5px;
-}
-
-.code-output-loading {
   color: #ccc;
 }
 
-.code-output-error {
-  color: red;
+#code-output-title {
+  color: #50fa7b;
+  margin-bottom: 10px;
+  font-size: 18px;
 }
 
-.code-output-result {
-  color: #0f0;
+#code-output-loading,
+#code-output-error,
+#code-output-result {
+  margin: 0;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+#code-output-loading { color: #ccc; }
+#code-output-error { color: #ff5555; }
+#code-output-result { color: #0f0; }
+
+/* --- Test Results Table --- */
+#output-status-message {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+#output-results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+#output-results-table th,
+#output-results-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+#output-results-table th {
+  background: #252526;
+  color: #50fa7b;
+}
+
+/* --- Status Indicators --- */
+.status-passed {
+  color: #50fa7b;
+  font-weight: bold;
+}
+
+.status-failed {
+  color: #ff5555;
+  font-weight: bold;
 }

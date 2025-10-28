@@ -10,13 +10,13 @@ import UserHome from "./pages/userPage/UserHome";
 import Forum from "./forum/pages/Forum";
 import PostDetail from "./forum/pages/PostDetail";
 
-import CVBuilder from "./cvGenerator/pages/CVBuilder";
-import CVDesignerPage from "./cvGenerator/CVDesignerPage";
 import CodingChallenge from "./codingChallenge/pages/CodingChallenge";
 import OnlineIDE from "./codingChallenge/pages/OnlineIDE";
 import TestConnectionToBE from "./components/test/TestConectionToBE";
 
 import ProtectedRoute from "./auth/ProtectedRoute"; // ✅
+
+import ResumeBuilder from "./resumeBuilder/pages/ResumeBuilder";
 
 function App() {
   return (
@@ -28,12 +28,11 @@ function App() {
         <Route path="/forum/post/:id" element={<PostDetail />} />
 
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
+          <Route path="/resumebuilder" element={<ResumeBuilder />} />
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<UserHome />} />
-          <Route path="/cv-builder-test" element={<CVBuilder />} />
-          <Route path="/cv-designer" element={<CVDesignerPage />} />
           <Route path="/codingChallenge" element={<CodingChallenge />} />
           <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
         </Route>

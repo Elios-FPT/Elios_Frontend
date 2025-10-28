@@ -4,13 +4,9 @@ import { Container, Row, Col, Button, Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // ✅ add i18n
 import "../styles/LandingPage.css";
-
-const signinPath =
-  "http://auth.elios.com/realms/elios/protocol/openid-connect/auth?approval_prompt=force&client_id=oauth2-proxy&code_challenge=KLcsdz2A7Nbgoqote-PK4ktiPAlj1f6-jstpLB6aLTU&code_challenge_method=S256&redirect_uri=http%3A%2F%2Foauth2.elios.com%2Foauth2%2Fcallback&response_type=code&scope=openid+email+profile&state=ojKLDCysCfByomPSc4iCLdyt9FzAfcabybWFgYJG4iA%3A%2F";
+import { API_ENDPOINTS } from "../api/apiConfig";
 
 
-const signinPath2 = "http://oauth2.elios.com/oauth2/start";
-const signoutPath = "http://oauth2.elios.com/oauth2/sign_out";
 
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
@@ -44,7 +40,7 @@ const LandingPage = () => {
             </Nav.Link>
 
             <Nav.Link
-              onClick={() => (window.location.href = signinPath2)}
+              onClick={() => (window.location.href = API_ENDPOINTS.LOGIN_PATH)}
               style={{ cursor: "pointer" }}
             >
               {t("landingPage.navbar.login")}

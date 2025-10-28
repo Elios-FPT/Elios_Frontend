@@ -1,3 +1,5 @@
+/* file: elios_FE/src/codingChallenge/style/ProblemDescription.css */
+/* --- General Container & Content --- */
 #problem-description-container {
   min-width: 400px;
   background: #252526;
@@ -5,17 +7,37 @@
   padding: 20px;
   overflow-y: auto;
   border-right: 1px solid #333;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#tab-content {
+  flex: 1;
+  overflow-y: auto;
 }
 
 #problem-title {
   color: #50fa7b;
+  font-size: 24px;
+  margin-bottom: 15px;
 }
 
+#loading-message {
+  color: #ccc;
+}
+
+#error-message {
+  color: #ff5555;
+}
+
+/* --- Markdown & Code Blocks --- */
 .code-block {
   background: #1e1e1e;
   padding: 10px;
   border-radius: 5px;
   overflow-x: auto;
+  margin: 10px 0;
 }
 
 .inline-code {
@@ -25,9 +47,151 @@
   color: #ffb86c;
 }
 
-.example-block {
+#example-block {
   background: #1e1e1e;
-  padding: 1px;
+  padding: 15px;
   border-radius: 5px;
   margin-top: 15px;
+  white-space: pre-wrap;
+}
+
+/* --- Tab Navigation --- */
+#tabs-container {
+  display: flex;
+  border-bottom: 1px solid #333;
+  margin-bottom: 15px;
+}
+
+#tab-button,
+#tab-button-active {
+  background: none;
+  border: 1px solid transparent;
+  border-bottom: none;
+  color: #ccc;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 5px;
+  border-radius: 4px 4px 0 0;
+}
+
+#tab-button:hover {
+  background: #3a3a3d;
+}
+
+#tab-button-active {
+  background: #1e1e1e;
+  color: #50fa7b;
+  font-weight: bold;
+  border-color: #333;
+}
+
+/* --- Submissions Table --- */
+#submission-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#submission-table th,
+#submission-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+#submission-table th {
+  background: #252526;
+  color: #50fa7b;
+}
+
+#submission-table tbody tr {
+  cursor: pointer;
+}
+
+#submission-table tbody tr:hover {
+  background-color: #3a3a3d;
+}
+
+/* --- Status Indicators --- */
+.status-passed { color: #50fa7b; }
+.status-failed { color: #ff5555; }
+.status-pending { color: #ffb86c; }
+
+/* --- Modal --- */
+#modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#modal-content {
+  background: #252526;
+  padding: 20px;
+  border-radius: 4px;
+  width: 80%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: #ccc;
+  border: 1px solid #333;
+}
+
+#modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#modal-title {
+  color: #50fa7b;
+  font-size: 20px;
+}
+
+#modal-close-button {
+  background: none;
+  border: none;
+  color: #ff5555;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#modal-section {
+  margin-bottom: 20px;
+}
+
+#modal-section h4 {
+  color: #50fa7b;
+  margin-bottom: 10px;
+}
+
+#modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#modal-table th,
+#modal-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+#modal-table th {
+  background: #1e1e1e;
+}
+
+#modal-table td pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
 }

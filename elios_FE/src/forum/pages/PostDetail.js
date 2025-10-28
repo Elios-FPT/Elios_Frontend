@@ -13,7 +13,6 @@ import UserNavbar from "../../components/navbars/UserNavbar";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import { FaEye, FaCommentAlt, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import CommentForm from "../components/CommentForm";
-import { log } from "handlebars";
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -43,7 +42,7 @@ const PostDetail = () => {
         fetchPost();
     }, [id]);
 
-const handleCommentSubmit = async (content, parentCommentId) => {
+    const handleCommentSubmit = async (content, parentCommentId) => {
         if (!content.trim()) return;
 
         try {
@@ -180,10 +179,10 @@ const handleCommentSubmit = async (content, parentCommentId) => {
                         )}
                         <hr />
                         <h5 className="comments-section-title">Comments</h5>
-                       
+
                         {renderComments(post.comments || [])}
 
-                       <CommentForm
+                        <CommentForm
                             postStats={{
                                 upvoteCount: post.upvoteCount,
                                 downvoteCount: post.downvoteCount,

@@ -31,6 +31,7 @@ const Forum = () => {
         setForumPosts(response.data.responseData);
       } catch (error) {
         console.error('Error fetching posts:', error);
+
       }
     };
     fetchPosts();

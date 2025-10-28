@@ -7,9 +7,6 @@ import { API_ENDPOINTS } from "../../api/apiConfig";
 
 import "../../styles/UserNavbar.css";
 
-const signinPath = "http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com";
-const logoutPath = "http://oauth2.elios.com/oauth2/sign_out?rd=http%3A%2F%2Fwww.elios.com"
-
 const UserNavbar = () => {
   const { t, i18n } = useTranslation();
 
@@ -43,7 +40,7 @@ const UserNavbar = () => {
               <Nav.Link as={Link} to="/ranking">{t("UserNavbar.ranking")}</Nav.Link>
               <Nav.Link as={Link} to="/contributor">{t("UserNavbar.contributor")}</Nav.Link>
               <Nav.Link as={Link} to="/share">{t("UserNavbar.share")}</Nav.Link> */}
-              <Nav.Link as={Link} to="/cv-designer">{t("UserNavbar.buildCV")}</Nav.Link>
+              <Nav.Link as={Link} to="/resumebuilder">{t("UserNavbar.buildCV")}</Nav.Link>
 
             </Nav>
           </Col>
