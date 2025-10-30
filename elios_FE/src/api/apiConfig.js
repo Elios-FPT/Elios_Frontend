@@ -11,6 +11,16 @@ export const API_ENDPOINTS = {
     CREATE_POST: `${baseUrl}/api/v1/posts`,
     CREATE_COMMENT: `${baseUrl}/api/v1/Comment`,
 
+    //Admin forum API Endpoints
+    GET_PENDING_POSTS: `${baseUrl}/api/v1/moderator/posts/pending`,
+    APPROVE_PENDING_POST: (postId) => `${baseUrl}/api/v1/moderator/posts/${postId}/approve`,
+    REJECT_PENDING_POST: (postId) => `${baseUrl}/api/v1/moderator/posts/${postId}/reject`,
+
+
+
+
+
+
 
     // Codeing Challenge API Endpoints
     GET_CODE_CHALLENGES_LIST: `${baseUrl}/api/code-practices`,
@@ -35,7 +45,12 @@ export const API_ENDPOINTS = {
 
 
 
+
+
+
     // Mock Interview API Endpoints
+
+
 
 
 

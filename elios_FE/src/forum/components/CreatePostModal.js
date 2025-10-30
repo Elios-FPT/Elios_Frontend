@@ -19,7 +19,7 @@ const CreatePostModal = ({ show, handleClose }) => {
 
   // Hardcoded values
   const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
-  const POST_TYPE = "normal";
+  const POST_TYPE = "Post";
 
   const applyFormat = (command) => {
     document.execCommand(command, false, null);

@@ -1,6 +1,7 @@
 // file: elios_FE/src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ForumContextProvider } from "./forum/context/ForumContext";
 
 import LandingPage from "./general/LandingPage";
 
@@ -17,7 +18,11 @@ import ProtectedRoute from "./auth/ProtectedRoute"; // ✅
 import ResumeBuilder from "./resumeBuilder/pages/ResumeBuilder";
 
 import AdminScreenLayout from "./admin/pages/AdminScreenLayout";
+import AdminDashboard from "./admin/pages/AdminDashboard";
+import PendingPosts from "./admin/pages/PendingPosts";
+import ReportedPosts from "./admin/pages/ReportedPosts";
 
+import LoadingCircle1 from "./components/loading/LoadingCircle1";
 
 function App() {
   return (
@@ -25,12 +30,31 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/forum" element={<Forum />} />
-        <Route path="/forum/post/:id" element={<PostDetail />} />
+        {/* Forum Routes with Context */}
+        <Route
+          path="/forum/*"
+          element={
+            <ForumContextProvider>
+              <Routes>
+                <Route path="" element={<Forum />} />
+                <Route path="post/:id" element={<PostDetail />} />
+              </Routes>
+            </ForumContextProvider>
+          }
+        />
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
         <Route path="/resumebuilder" element={<ResumeBuilder />} />
 
-        <Route path="/admin" element={<AdminScreenLayout />} />
+        <Route path="/loading" element={<LoadingCircle1 />} />
+
+        <Route path="/admin" element={<AdminScreenLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="forum/pending" element={<PendingPosts />} />
+          <Route path="forum/reported" element={<ReportedPosts />} />
+          {/* Add new admin routes here to automatically use the layout */}
+        </Route>
+
+
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>

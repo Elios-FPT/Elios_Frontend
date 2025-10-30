@@ -5,7 +5,7 @@ import '../styles/AdminSidebar.css';
 
 const AdminSidebar = () => {
     // State to manage the collapsible section, default to open
-    const [isForumOpen, setIsForumOpen] = useState(true);
+    const [isForumOpen, setIsForumOpen] = useState(false);
 
     return (
         <nav id="admin-sidebar-nav">
