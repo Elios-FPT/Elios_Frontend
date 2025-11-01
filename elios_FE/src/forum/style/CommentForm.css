@@ -1,65 +1,96 @@
 /* file: src/forum/style/PostDetail.css */
-/* --- Comment Form --- */
-.post-detail-comment-form .form-control {
+#post-detail-comment-form .form-control {
   background-color: #2b2b2b;
   color: white;
   border: 1px solid #444;
   padding: 0.75rem 1rem;
 }
 
-.post-detail-comment-form .form-control::placeholder {
+#post-detail-comment-form .form-control::placeholder {
   color: #888;
 }
 
-.post-detail-comment-form .form-control {
+#post-detail-comment-form .form-control {
   margin-bottom: 0.6rem;
   margin-top: 1rem;
 }
-.post-detail-comment-form .form-control:focus {
+
+#post-detail-comment-form .form-control:focus {
   background-color: #2b2b2b;
   color: white;
-  border-color: #28a745; /* Green focus color */
+  border-color: #28a745;
+  /* Green focus color */
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
-.post-detail-comment-form .btn-primary {
+#post-detail-comment-form .btn-primary {
   background-color: #28a745;
   border-color: #28a745;
   font-weight: 600;
 }
-.post-detail-comment-form .btn-primary:hover {
+
+#post-detail-comment-form .btn-primary:hover {
   background-color: #218838;
   border-color: #1e7e34;
 }
 
-
-/* ... add this to your existing CSS file ... */
-
-.replying-to-banner {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* small gap between author text and cancel button */
-    padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
-    font-size: 0.9em;
-    border-radius: 6px;
+/* Changed to an ID selector */
+#replying-to-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* small gap between author text and cancel button */
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9em;
+  border-radius: 6px;
 }
 
-.cancel-reply-btn {
-    color: #6c757d; /* Bootstrap's secondary text color */
-    padding: 0;
-    line-height: 1;
-    font-size: 1.2em;
-    text-decoration: none;
+/* Changed to a unique ID selector */
+#comment-form-cancel-reply-btn {
+  color: #6c757d;
+  /* Bootstrap's secondary text color */
+  padding: 0;
+  line-height: 1;
+  font-size: 1.2em;
+  text-decoration: none;
 }
 
-.cancel-reply-btn:hover {
-    color: #343a40; /* Darker text on hover */
+#comment-form-cancel-reply-btn:hover {
+  color: #343a40;
+  /* Darker text on hover */
 }
 
-/* Style for nested replies */
+/* Style for nested replies (Left as-is, not used in this component) */
 .comment-replies {
-    margin-left: 30px; /* Indent replies */
-    padding-left: 15px;
-    border-left: 2px solid #3e3e3e;
+  margin-left: 30px;
+  /* Indent replies */
+  padding-left: 15px;
+  border-left: 2px solid #3e3e3e;
 }
+
+
+/* This is the container for all three stat items */
+.user-forum-post-stats {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+  color: #888;
+}
+
+.user-forum-post-stats .upvote-stat-item,
+.user-forum-post-stats .downvote-stat-item {
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease-in-out;
+}
+
+.user-forum-post-stats .upvote-stat-item:hover {
+  color: #28a745;
+  transform: scale(1.1);
+}
+
+.user-forum-post-stats .downvote-stat-item:hover {
+  color: #5a5a5a;
+  transform: scale(1.1);
+}
+

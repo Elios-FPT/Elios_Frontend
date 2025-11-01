@@ -43,9 +43,8 @@ function App() {
           }
         />
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
-        <Route path="/resumebuilder" element={<ResumeBuilder />} />
+        <Route path="/resume-builder" element={<ResumeBuilder />} />
 
-        <Route path="/loading" element={<LoadingCircle1 />} />
 
         <Route path="/admin" element={<AdminScreenLayout />}>
           <Route index element={<AdminDashboard />} />
@@ -56,11 +55,11 @@ function App() {
 
 
 
+        <Route path="/codingChallenge" element={<CodingChallenge />} />
+        <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
+
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/home" element={<UserHome />} />
-          <Route path="/codingChallenge" element={<CodingChallenge />} />
-          <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
         </Route>
       </Routes>
     </BrowserRouter>

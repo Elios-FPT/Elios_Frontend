@@ -68,7 +68,6 @@ const PostDetail = () => {
     const handleCommentSubmit = async (content, parentCommentId) => {
         if (!content.trim()) return;
 
-        // **MODIFICATION START**: Get current user's info from localStorage
         let currentUserName = "You";
         let currentUserAvatar = "/default-avatar.png";
 
@@ -84,14 +83,12 @@ const PostDetail = () => {
         } catch (e) {
             console.error("Could not parse user data from localStorage for optimistic comment.", e);
         }
-        // **MODIFICATION END**
 
         const tempId = `temp-${Date.now()}`;
         const tempComment = {
             commentId: tempId,
             content: content,
             createdAt: new Date().toISOString(),
-            // **MODIFICATION**: Use the retrieved user data instead of placeholders
             authorFullName: currentUserName,
             authorAvatarUrl: currentUserAvatar,
             replies: [],
@@ -106,21 +103,56 @@ const PostDetail = () => {
                 withCredentials: true,
                 headers: { "Content-Type": "application/json" },
             });
-            
+
             const updatedPostFromServer = response.data.responseData;
             updatedPostFromServer.comments = updatedPostFromServer.comments || [];
             setPost(updatedPostFromServer);
 
         } catch (error) {
-            // console.error("❌ Error creating comment:", error);
-            // setPost(currentPost => {
-            //     const removeComment = (comments) => comments
-            //         .filter(c => c.commentId !== tempId)
-            //         .map(c => ({ ...c, replies: c.replies ? removeComment(c.replies) : [] }));
-                
-            //     return { ...currentPost, comments: removeComment(currentPost.comments) };
-            // });
-            // alert("Sorry, your comment could not be posted. Please try again.");
+        }
+    };
+
+    const handleUpvote = async () => {
+        const originalPost = { ...post };
+        // Optimistic update
+        setPost((current) => ({
+            ...current,
+            upvoteCount: current.upvoteCount + 1,
+        }));
+
+        try {
+            const response = await axios.post(
+                API_ENDPOINTS.UPVOTE_POST(id),
+                {},
+                { withCredentials: true }
+            );
+            // Update with server's source of truth
+            setPost(response.data.responseData);
+        } catch (error) {
+            console.error("Error upvoting post:", error);
+            setPost(originalPost); // Rollback on error
+        }
+    };
+
+    const handleDownvote = async () => {
+        const originalPost = { ...post };
+        // Optimistic update
+        setPost((current) => ({
+            ...current,
+            downvoteCount: current.downvoteCount + 1,
+        }));
+
+        try {
+            const response = await axios.post(
+                API_ENDPOINTS.DOWNVOTE_POST(id),
+                {},
+                { withCredentials: true }
+            );
+            // Update with server's source of truth
+            setPost(response.data.responseData);
+        } catch (error) {
+            console.error("Error downvoting post:", error);
+            setPost(originalPost); // Rollback on error
         }
     };
 
@@ -215,6 +247,8 @@ const PostDetail = () => {
                             onSubmit={handleCommentSubmit}
                             replyingTo={replyingTo}
                             onCancelReply={handleCancelReply}
+                            onUpvote={handleUpvote}
+                            onDownvote={handleDownvote}
                         />
                     </Card.Body>
                 </Container>

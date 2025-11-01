@@ -18,18 +18,29 @@
   },
   "landingPage": {
     "navbar": {
-      "premium": "Premium",
-      "product": "Product",
-      "developer": "Developer",
+      "forum": "Forum",
+      "codingChallenge": "Coding Challenge",
+      "buildCV": "Build CV",
       "login": "Sign in",
       "language": "Language: EN"
     },
     "main_title": "A New Cool Way to Learn",
     "main_desc": "Elios is the best platform to help you enhance your skills, expand your knowledge and prepare for technical interviews.",
-    "create_account": "Create Account",
+    "get_started": "Get Started",
     "explore_title": "Start Exploring",
     "explore_desc": "Explore is a well-organized tool that helps you get the most out of Elios by providing structure to guide your progress towards the next step in your programming career.",
-    "get_started": "Get Started"
+    "explore": {
+      "forum_title": "Forum",
+      "forum_desc": "Where developers connect, share experience, ask questions, and learn daily from a thriving community.",
+      "forum_link": "Visit the Forum Now",
+      "challenge_title": "Coding Challenge",
+      "challenge_desc": "Hundreds of real-world problems — from beginner to advanced — to sharpen your algorithmic thinking and ace any interview.",
+      "challenge_link": "Challenge Yourself",
+      "cv_title": "Build CV",
+      "cv_desc": "Create a professional, ATS-friendly CV in minutes with stunning templates that highlight your coding skills.",
+      "cv_link": "Create Your CV"
+    }, 
+    "creator": "Creators of Elios"
   },
   "landingSignUp": {
     "title": "Sign Up",

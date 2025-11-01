@@ -9,14 +9,13 @@ const ProtectedRoute = () => {
   const [status, setStatus] = useState("checking");
 
   useEffect(() => {
-    let isMounted = true; // prevent state update on unmounted component
+    let isMounted = true; 
 
     const verifySession = async () => {
       try {
-        // Delay a little to make sure cookies are attached properly
-        await new Promise((res) => setTimeout(res, 300)); // 👈 small delay helps stabilize flow
+        await new Promise((res) => setTimeout(res, 350)); 
 
-        const response = await axios.get("http://www.elios.com/api/users", {
+        const response = await axios.get("http://www.elios.com/api/users/me/profile", {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
@@ -63,7 +62,7 @@ const ProtectedRoute = () => {
     setTimeout(() => {
       alert("Your session has expired or you are not logged in. Redirecting...");
       window.location.href = API_ENDPOINTS.LOGIN_PATH;
-    }, 1000);
+    }, 700);
     return null;
   }
 

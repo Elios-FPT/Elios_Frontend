@@ -18,18 +18,29 @@
   },
   "landingPage": {
     "navbar": {
-      "premium": "Gói Premium",
-      "product": "Sản phẩm",
-      "developer": "Nhà phát triển",
+      "forum": "Diễn đàn",
+      "codingChallenge": "Thử thách lập trình",
+      "buildCV": "Tạo CV",
       "login": "Đăng nhập",
       "language": "Ngôn ngữ: VI"
     },
     "main_title": "Một cách học hoàn toàn mới",
     "main_desc": "Eliso là nền tảng tốt nhất giúp bạn nâng cao kỹ năng, mở rộng kiến thức và chuẩn bị cho các buổi phỏng vấn kỹ thuật.",
-    "create_account": "Tạo tài khoản",
+    "get_started": "Bắt đầu ngay",
     "explore_title": "Khám phá ngay",
     "explore_desc": "Khám phá là công cụ được tổ chức tốt giúp bạn tận dụng tối đa Elios bằng cách cung cấp cấu trúc để định hướng tiến trình sự nghiệp lập trình.",
-    "get_started": "Bắt đầu ngay"
+    "explore": {
+      "forum_title": "Diễn đàn",
+      "forum_desc": "Nơi lập trình viên kết nối, chia sẻ kinh nghiệm, đặt câu hỏi và học hỏi từ cộng đồng mạnh mẽ hàng ngày.",
+      "forum_link": "Xem trang diễn đàn ngay",
+      "challenge_title": "Thử thách lập trình",
+      "challenge_desc": "Hàng trăm bài tập thực tế, từ cơ bản đến nâng cao, giúp bạn rèn luyện tư duy thuật toán và sẵn sàng cho mọi buổi phỏng vấn.",
+      "challenge_link": "Thử thách bản thân",
+      "cv_title": "Tạo CV",
+      "cv_desc": "Tạo CV chuyên nghiệp chỉ trong vài phút với mẫu thiết kế đẹp, tối ưu ATS và nổi bật kỹ năng lập trình của bạn.",
+      "cv_link": "Tạo CV của bạn"
+    },
+    "creator": "Những người tạo ra Elios"
   },
   "landingSignUp": {
     "title": "Đăng ký",
