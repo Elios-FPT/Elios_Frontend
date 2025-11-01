@@ -16,13 +16,13 @@ import TestConnectionToBE from "./components/test/TestConectionToBE";
 import ProtectedRoute from "./auth/ProtectedRoute"; // ✅
 
 import ResumeBuilder from "./resumeBuilder/pages/ResumeBuilder";
+import UserResume from "./resumeBuilder/pages/UserResume";
 
 import AdminScreenLayout from "./admin/pages/AdminScreenLayout";
 import AdminDashboard from "./admin/pages/AdminDashboard";
 import PendingPosts from "./admin/pages/PendingPosts";
 import ReportedPosts from "./admin/pages/ReportedPosts";
 
-import LoadingCircle1 from "./components/loading/LoadingCircle1";
 
 function App() {
   return (
@@ -43,7 +43,8 @@ function App() {
           }
         />
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
-        <Route path="/resume-builder" element={<ResumeBuilder />} />
+        <Route path="/resume-builder" element={<UserResume />} />
+        <Route path="/resume-builder/:id" element={<ResumeBuilder />} />
 
 
         <Route path="/admin" element={<AdminScreenLayout />}>

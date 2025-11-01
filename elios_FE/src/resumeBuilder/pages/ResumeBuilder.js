@@ -39,7 +39,7 @@ const initialResumeState = {
     id: 'skillsets',
     title: 'Skillsets',
     languages: { id: 'languages', title: 'Languages', items: [] },
-    frameworks: { id: 'frameworks', title: 'Libraries / Frameworks', items: [] },
+    frameworks: { id: 'frameworks', title: 'Libraries / Frameworks', items: [] }, 
     tools: { id: 'tools', title: 'Tools / Platforms', items: [] },
     databases: { id: 'databases', title: 'Databases', items: [] },
   },

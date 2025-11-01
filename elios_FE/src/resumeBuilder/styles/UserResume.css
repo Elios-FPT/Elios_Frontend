@@ -1,0 +1,137 @@
+/* file: elios_FE/src/resumeBuilder/styles/UserResume.css */
+
+/* -------------------------------------------------
+   1. GLOBAL DARK BACKGROUND (never any white flash)
+   ------------------------------------------------- */
+
+#user-resume-background {
+    margin: 0;
+    padding: 0;
+    background-color: #121212 !important;   /* Deep dark */
+    color: #e0e0e0;                         /* Light text */
+    min-height: 100vh;
+}
+
+/* -------------------------------------------------
+   2. MAIN DASHBOARD WRAPPER
+   ------------------------------------------------- */
+#user-resume-dashboard {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #1e1e1e;   /* Slightly lighter card-area */
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* -------------------------------------------------
+   3. HEADER
+   ------------------------------------------------- */
+#dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+}
+
+#dashboard-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #ffffff;
+}
+
+#create-resume-btn {
+    background-color: #2e8555;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+#create-resume-btn:hover {
+    background-color: #3aa06b;
+}
+
+/* -------------------------------------------------
+   4. RESUME CARD GRID
+   ------------------------------------------------- */
+#resume-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* -------------------------------------------------
+   5. CARD STYLES
+   ------------------------------------------------- */
+.resume-card {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.resume-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    transform: translateY(-5px);
+}
+
+.resume-card-title {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: #ffffff;
+}
+.resume-card-updated {
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #aaaaaa;
+}
+
+/* -------------------------------------------------
+   6. CARD ACTIONS
+   ------------------------------------------------- */
+.resume-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.resume-action-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+/* Edit button – green */
+.resume-action-btn.edit {
+    background-color: #2e8555;
+    color: #fff;
+}
+.resume-action-btn.edit:hover {
+    background-color: #3aa06b;
+}
+
+/* Delete button – red outline */
+.resume-action-btn.delete {
+    background-color: transparent;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+}
+.resume-action-btn.delete:hover {
+    background-color: #c0392b;
+    color: #fff;
+}

@@ -88,10 +88,10 @@ const CreatePostModal = ({ show, handleClose }) => {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      console.log("✅ Post created successfully:", res.data);
+      console.log("Status report:", res.data);
       handleClose();
     } catch (err) {
-      console.error("❌ Failed to create post:", err);
+      console.error("Error creating post:", err);
     }
   };
 
