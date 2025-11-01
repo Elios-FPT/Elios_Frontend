@@ -10,7 +10,7 @@ const TestConnectionToBE = () => {
     const handleTestConnection = async () => {
         try {
             // Await the response from the GET request
-            const response = await axios.get(API_ENDPOINTS.GET_POSTS_FORUM, {
+            const response = await axios.get("http://www.elios.com/api/users/me/profile", {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",

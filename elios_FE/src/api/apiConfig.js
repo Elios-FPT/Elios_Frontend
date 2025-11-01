@@ -6,10 +6,22 @@ export const API_ENDPOINTS = {
     LOGOUT_PATH: 'http://oauth2.elios.com/oauth2/sign_out?rd=http%3A%2F%2Fwww.elios.com',
 
     // Forum API Endpoints
-    GET_POSTS_FORUM: `${baseUrl}/api/v1/posts`,
-    GET_POST_CONTENT: (postId) => `${baseUrl}/api/v1/posts/${postId}`,
-    CREATE_POST: `${baseUrl}/api/v1/posts`,
-    CREATE_COMMENT: `${baseUrl}/api/v1/Comment`,
+    GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
+    GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
+    CREATE_POST: `${baseUrl}/api/forum/posts`,
+    CREATE_COMMENT: `${baseUrl}/api/forum/Comment`,
+    UPVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/upvote`,
+    DOWNVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/downvote`,
+
+    //Admin forum API Endpoints
+    GET_PENDING_POSTS: `${baseUrl}/api/v1/moderator/posts/pending`,
+    APPROVE_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/approve`,
+    REJECT_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/reject`,
+
+
+
+
+
 
 
     // Codeing Challenge API Endpoints
@@ -18,6 +30,40 @@ export const API_ENDPOINTS = {
     SUBMIT_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY_DETAIL: (submissionId) => `${baseUrl}/api/code-practices/submissions/${submissionId}`,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Mock Interview API Endpoints
+
+
+
+
+
+
+
+
+    
+
+
+
+
 };
 
 export const NAME_CONFIG = {

@@ -1,53 +1,54 @@
 /* Frontend/elios_FE/src/styles/LandingPage.css */
-.landing-bg-landingPage {
+#landing-bg-landingPage {
   min-height: 100vh;
   background: #fff;
   font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-.header-section-landingPage {
+#header-section-landingPage {
   background: linear-gradient(120deg, #23272f 100%, #fff 0%);
   padding-bottom: 280px;
   position: relative;
   clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
 
-.navbar-custom-landingPage {
+#navbar-custom-landingPage {
   background: transparent !important;
   padding-top: 24px;
   padding-bottom: 24px;
 }
 
-.logo-img {
+#logo-img {
   height: 36px;
 }
 
-.nav-links-landingPage .nav-link {
+/* This selector targets .nav-link elements inside the element with id="nav-links-landingPage" */
+#nav-links-landingPage .nav-link {
   color: #ffd700 !important;
   font-weight: 500;
   margin-right: 24px;
   font-size: 1rem;
 }
 
-.nav-links-landingPage .nav-link:last-child {
+#nav-links-landingPage .nav-link:last-child {
   color: #fff !important;
   margin-right: 0;
 }
 
-.main-content-landingPage {
+#main-content-landingPage {
   margin-top: 40px;
 }
 
-.dashboard-img {
+#dashboard-img {
   width: 90%;
   max-width: 420px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   border-radius: 24px;
   transform: rotate(-10deg);
   background: #fff;
 }
 
-.text-section-landingPage {
+#text-section-landingPage {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -55,52 +56,139 @@
   padding-left: 32px;
 }
 
-.main-title-landingPage {
+#main-title-landingPage {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 18px;
 }
 
-.main-desc-landingPage {
+#main-desc-landingPage {
   font-size: 1.15rem;
   margin-bottom: 28px;
   color: #d1d5db;
 }
 
-.cta-btn {
-  background: #19c37d;
+/* Note: I updated this selector from .cta-btn to #landingPage_signin_button 
+  to match the ID used in the LandingPage.js file.
+*/
+#landingPage_signin_button {
+  background: #04985a;
   border: none;
   font-size: 1.1rem;
   padding: 12px 32px;
   border-radius: 24px;
   font-weight: 600;
-  box-shadow: 0 4px 16px rgba(25,195,125,0.15);
+  box-shadow: 0 4px 16px rgba(25, 195, 125, 0.15);
 }
 
-.lower-section-landingPage {
+#landingPage_signin_button:hover {
+  background: #06b463;
+  box-shadow: 0 4px 16px rgba(25, 195, 125, 0.2);
+}
+
+/* --- UPDATED EXPLORE SECTION --- */
+
+#lower-section-landingPage {
+  background: #f8f9fa;
+  /* Light grey background to set section apart */
+  padding: 80px 0;
+}
+
+#explore-title-landingPage {
+  color: #23272f;
+  /* Darker text */
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 48px;
+  /* More space for the title */
+  text-align: center;
+}
+
+#feature-card-row {
+  row-gap: 24px;
+  /* Adds spacing between rows on mobile */
+}
+
+/* Base style for all 3 feature cards */
+#feature-card-forum,
+#feature-card-challenge,
+#feature-card-cv {
   background: #fff;
-  padding: 80px 0 40px 0;
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  /* Makes cards in the same row equal height */
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.explore-title-landingPage {
-  color: #19c37d;
+/* Hover effect for all 3 cards */
+#feature-card-forum:hover,
+#feature-card-challenge:hover,
+#feature-card-cv:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Style for all 3 card icons */
+#forum-icon,
+#challenge-icon,
+#cv-icon {
+  height: 60px;
+  /* Adjust as needed */
+  margin-bottom: 24px;
+}
+
+/* Style for all 3 card titles */
+#forum-title,
+#challenge-title,
+#cv-title {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 12px;
+  color: #23272f;
+  margin-bottom: 16px;
 }
 
-.explore-icon-landingPage {
-  width: 48px;
-  margin-bottom: 18px;
-}
-
-.explore-desc-landingPage {
+/* Style for all 3 card descriptions */
+#forum-desc,
+#challenge-desc,
+#cv-desc {
+  font-size: 1rem;
   color: #555;
-  font-size: 1.1rem;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
+  min-height: 50px;
+  /* Helps align text */
 }
 
-.get-started-link-landingPage {
+/* Style for all 3 card links */
+#forum-link,
+#challenge-link,
+#cv-link {
+  color: #19c37d;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+
+#forum-link:hover,
+#challenge-link:hover,
+#cv-link:hover {
+  text-decoration: underline;
+}
+
+#forum-icon,
+#challenge-icon,
+#cv-icon {
+  font-size: 60px; /* Changed from height to font-size */
+  margin-bottom: 24px;
+  color: #19c37d; /* Added theme color */
+}
+
+/* --- END OF EXPLORE SECTION --- */
+
+#get-started-link-landingPage {
   color: #19c37d;
   font-weight: 500;
   font-size: 1.1rem;
@@ -108,6 +196,15 @@
   transition: text-decoration 0.2s;
 }
 
-.get-started-link-landingPage:hover {
+#get-started-link-landingPage:hover {
   text-decoration: underline;
 }
+
+/* Note: The following IDs were created from classNames 
+  in the .js file but had no corresponding CSS rules.
+  You can add styles for them here if needed.
+*/
+
+/* #align-items-center-landingPage {} */
+/* #creator-section-landingPage {} */
+/* #creator-title-landingPage {} */

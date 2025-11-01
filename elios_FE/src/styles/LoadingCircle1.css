@@ -1,0 +1,29 @@
+/* file: elios_FE/src/styles/LoadingCircle1.css */
+
+#loading-circle1-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+#loading-circle1-spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+
+  border: 5px solid #4a4a61; 
+
+  border-top-color: #28a745;
+
+  /* The animation that makes it spin */
+  animation: spin 1s linear infinite;
+}
+
+/* @keyframes defines the animation behavior */
+@keyframes spin {
+  to {
+    /* Rotates the element a full 360 degrees */
+    transform: rotate(360deg);
+  }
+}

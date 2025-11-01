@@ -4,7 +4,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { FaThumbsUp, FaThumbsDown, FaCommentAlt, FaTimes } from 'react-icons/fa';
 import "../style/CommentForm.css";
 
-const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply }) => {
+const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote, onDownvote, }) => {
     const [content, setContent] = useState('');
     const textareaRef = useRef(null);
 
@@ -25,13 +25,13 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply }) => {
     };
 
     return (
-        <Form className="post-detail-comment-form" onSubmit={handleSubmit}>
+        <Form id="post-detail-comment-form" onSubmit={handleSubmit}>
             {replyingTo && (
-                <div className="replying-to-banner">
+                <div id="replying-to-banner">
                     Replying to : <strong>{replyingTo.author}</strong>
                     <Button
                         variant="link"
-                        className="cancel-reply-btn"
+                        id="comment-form-cancel-reply-btn"
                         onClick={onCancelReply}
                         title="Cancel reply"
                     >
@@ -40,10 +40,25 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply }) => {
                 </div>
             )}
 
+            {/* These classNames are left as-is because they are repeating or have no CSS */}
             <div className="user-forum-post-stats">
-                <span className="stat-item up"><FaThumbsUp /> {postStats.upvoteCount}</span>
-                <span className="stat-item down"><FaThumbsDown /> {postStats.downvoteCount}</span>
-                <span className="stat-item comment"><FaCommentAlt /> {postStats.commentCount}</span>
+                <span
+                    className="upvote-stat-item up"
+                    onClick={onUpvote}
+                    title="Upvote"
+                >
+                    <FaThumbsUp /> {postStats.upvoteCount}
+                </span>
+                <span
+                    className="downvote-stat-item down"
+                    onClick={onDownvote}
+                    title="Downvote"
+                >
+                    <FaThumbsDown /> {postStats.downvoteCount}
+                </span>
+                <span className="stat-item comment">
+                    <FaCommentAlt /> {postStats.commentCount}
+                </span>
             </div>
 
             <Form.Group>

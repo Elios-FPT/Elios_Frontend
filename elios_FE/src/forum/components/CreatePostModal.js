@@ -19,7 +19,7 @@ const CreatePostModal = ({ show, handleClose }) => {
 
   // Hardcoded values
   const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
-  const POST_TYPE = "normal";
+  const POST_TYPE = "Post";
 
   const applyFormat = (command) => {
     document.execCommand(command, false, null);
@@ -88,10 +88,10 @@ const CreatePostModal = ({ show, handleClose }) => {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      console.log("✅ Post created successfully:", res.data);
+      console.log("Status report:", res.data);
       handleClose();
     } catch (err) {
-      console.error("❌ Failed to create post:", err);
+      console.error("Error creating post:", err);
     }
   };
 

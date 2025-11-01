@@ -1,0 +1,17 @@
+/* file: elios_FE/src/admin/styles/AdminScreenLayout.css */
+
+/* src/admin/styles/AdminLayout.css */
+#admin-layout-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f7fa;
+}
+
+#admin-main-content {
+    /* flex-grow: 1 allows this element to take up all available space */
+    flex-grow: 1;
+    /* This padding accounts for the fixed sidebar's width */
+    padding: 2rem;
+    margin-left: 250px; 
+    overflow-y: auto;
+}
