@@ -1,8 +1,8 @@
 // file: elios_FE/src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ForumContextProvider } from "./forum/context/ForumContext";
 
+// No more provider imports here!
 import LandingPage from "./general/LandingPage";
 
 import UserHome from "./pages/userPage/UserHome";
@@ -30,37 +30,28 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
-        {/* Forum Routes with Context */}
-        <Route
-          path="/forum/*"
-          element={
-            <ForumContextProvider>
-              <Routes>
-                <Route path="" element={<Forum />} />
-                <Route path="post/:id" element={<PostDetail />} />
-              </Routes>
-            </ForumContextProvider>
-          }
-        />
+        
+        {/* Forum Routes are now flat */}
+        <Route path="/forum" element={<Forum />} />
+        <Route path="/forum/post/:id" element={<PostDetail />} />
+
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
         <Route path="/resume-builder" element={<UserResume />} />
-        <Route path="/resume-builder/:id" element={<ResumeBuilder />} />
+        <Route path="/resume/edit/:id" element={<ResumeBuilder />} />
 
 
         <Route path="/admin" element={<AdminScreenLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="forum/pending" element={<PendingPosts />} />
           <Route path="forum/reported" element={<ReportedPosts />} />
-          {/* Add new admin routes here to automatically use the layout */}
         </Route>
-
-
 
         <Route path="/codingChallenge" element={<CodingChallenge />} />
         <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
+          {/* <Route path="/user/home" element={<UserHome />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

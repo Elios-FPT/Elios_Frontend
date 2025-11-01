@@ -7,7 +7,7 @@ import exportToPdf from '../utils/exportPdf';
 const Toolbar = ({ resumeData, onReset }) => {
   const resumeName = resumeData?.personalInfo?.firstName 
     ? `${resumeData.personalInfo.firstName}'s Resume` 
-    : "Pham's Resume";
+    : "Untitled Resume";
 
   return (
     <div id="resume-builder-toolbar">
