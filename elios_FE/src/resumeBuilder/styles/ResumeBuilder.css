@@ -1,10 +1,7 @@
 /* file: elios_FE/src/resumeBuilder/styles/ResumeBuilder.css */
 
 /* --- Global & Layout --- */
-body {
-    background-color: #f4f5f7;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
+
 
 #rb-app-container {
     display: flex;
@@ -31,69 +28,6 @@ body {
     align-items: flex-start;
     height: calc(100vh - 120px);
     overflow-y: auto;
-}
-
-/* --- Toolbar --- */
-#resume-builder-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 32px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #d9d9d9;
-}
-
-.toolbar-left {
-    display: flex;
-    flex-direction: column;
-}
-
-.breadcrumbs {
-    color: #555;
-    font-size: 14px;
-}
-
-.resume-title-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 4px;
-}
-
-.resume-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0;
-}
-
-.update-status {
-    font-size: 12px;
-    color: #4CAF50;
-}
-
-.toolbar-right {
-    display: flex;
-    gap: 12px;
-}
-
-.toolbar-btn-secondary, .toolbar-btn-download {
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.toolbar-btn-secondary {
-    border: 1px solid #ccc;
-    background-color: #fff;
-    color: #333;
-}
-
-.toolbar-btn-download {
-    border: 1px solid #2e8555;
-    background-color: #2e8555;
-    color: white;
 }
 
 /* --- Editor Tabs --- */

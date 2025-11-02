@@ -72,20 +72,32 @@ const CreatePostModal = ({ show, handleClose }) => {
     };
   }, [imagePreviews]);
 
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(",")[1]); // remove the "data:image/png;base64," prefix
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleSubmit = async () => {
     const htmlContent = editorRef.current.innerHTML;
     const markdown = turndownService.turndown(htmlContent);
 
-    const formData = new FormData();
-    formData.append("CategoryId", CATEGORY_ID);
-    formData.append("Title", title);
-    formData.append("Content", markdown);
-    formData.append("PostType", POST_TYPE);
-    images.forEach((file) => formData.append("files", file));
+    // Convert images to base64 strings
+    const base64Images = await Promise.all(images.map(file => convertToBase64(file)));
+
+    const postData = {
+      CategoryId: CATEGORY_ID,
+      Title: title,
+      Content: markdown,
+      PostType: POST_TYPE,
+      files: base64Images, // send array<string>
+    };
 
     try {
-      const res = await axios.post(API_ENDPOINTS.CREATE_POST, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await axios.post(API_ENDPOINTS.CREATE_POST, postData, {
         withCredentials: true,
       });
       console.log("Status report:", res.data);
@@ -94,6 +106,7 @@ const CreatePostModal = ({ show, handleClose }) => {
       console.error("Error creating post:", err);
     }
   };
+
 
   return (
     <Modal show={show} onHide={handleClose} centered dialogClassName="create-post-modal">

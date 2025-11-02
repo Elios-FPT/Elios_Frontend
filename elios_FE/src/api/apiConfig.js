@@ -5,6 +5,9 @@ export const API_ENDPOINTS = {
     LOGIN_PATH: 'http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com%2Fforum',
     LOGOUT_PATH: 'http://oauth2.elios.com/oauth2/sign_out?rd=http%3A%2F%2Fwww.elios.com',
 
+    // User API Endpoints
+    GET_USER_PROFILE: `${baseUrl}/api/users/me/profile`,
+
     // Forum API Endpoints
     GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
     GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,

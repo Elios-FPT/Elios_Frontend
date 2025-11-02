@@ -2,17 +2,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import exportToPdf from '../utils/exportPdf';
+import '../styles/Toolbar.css';
+import { useNavigate } from 'react-router-dom';
 
 // Add the onReset prop back to the component's arguments
 const Toolbar = ({ resumeData, onReset }) => {
-  const resumeName = resumeData?.personalInfo?.firstName 
-    ? `${resumeData.personalInfo.firstName}'s Resume` 
+  const navigate = useNavigate();
+  const resumeName = resumeData?.personalInfo?.firstName
+    ? `${resumeData.personalInfo.firstName}'s Resume`
     : "Untitled Resume";
 
   return (
     <div id="resume-builder-toolbar">
       <div className="toolbar-left">
-        <span className="breadcrumbs">Dashboard / Resume Builder</span>
+        <button
+          type="button"
+          className="breadcrumbs-btn"
+          onClick={() => navigate(-1)} // acts as a return/back button
+          aria-label="Go back to previous page"
+        >
+           Resumes / Resume Builder
+        </button>
         <div className="resume-title-container">
           <h2 className="resume-title">{resumeName}</h2>
           <span className="update-status">✓ Updated 3 mins ago</span>
