@@ -43,7 +43,7 @@ const PreviewPanel = ({ resumeData }) => {
               <div key={item.id} className="preview-item">
                 <h4>{item.degreeType} in {item.fieldOfStudy}</h4>
                 <em>{item.institution} | {item.location}</em>
-                <p>{item.start} - {item.grad} | GPA: {item.scores}</p>
+                <p>{item.start} - {item.grad} | GPA: {item.gpa}</p>
               </div>
             ))}
           </section>

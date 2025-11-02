@@ -1,55 +1,36 @@
 // File: elios_FE/src/codingChallenge/pages/CodingChallenge.js
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useContext } from "react"; // Import useContext
 import { useNavigate } from "react-router-dom";
 import "../style/CodingChallenge.css";
 import UserNavbar from "../../components/navbars/UserNavbar";
-import { API_ENDPOINTS } from "../../api/apiConfig";
+import LoadingCircle1 from "../../components/loading/LoadingCircle1";
+
+// Import your context
+import { CodingChallengeContext } from "../context/CodingChallengeContext";
 
 const CodingChallenge = () => {
-  const [problems, setProblems] = useState([]);
+  // Get state from the context instead of component state
+  const { challenges, loading } = useContext(CodingChallengeContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchProblems = async () => {
-      try {
-        const response = await axios.get(API_ENDPOINTS.GET_CODE_CHALLENGES_LIST, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        // --- START: Sorting Logic ---
-        const fetchedProblems = response.data.data.content;
-        
-        // Define the desired order for difficulties
-        const difficultyOrder = {
-          EASY: 1,
-          MEDIUM: 2,
-          HARD: 3,
-        };
-
-        // Sort the problems array based on the defined order
-        const sortedProblems = fetchedProblems.sort((a, b) => {
-          return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-        });
-        
-        setProblems(sortedProblems);
-        console.log("Fetched and sorted problems:", sortedProblems);
-        // --- END: Sorting Logic ---
-
-      } catch (error) {
-        console.error("Error fetching coding challenges:", error);
-      }
-    };
-
-    fetchProblems();
-  }, []);
 
   const handleSelect = (problemId) => {
     navigate(`/codingChallenge/online-ide?id=${problemId}`);
   };
+
+  // Handle the initial loading state (this will only show on first app load)
+  if (loading) {
+    return (
+      <>
+        <header>
+          <UserNavbar />
+        </header>
+        {/* We use an ID for the main container AND a "loading" class for centering */}
+        <main id="coding-challenges-container" className="loading">
+          <LoadingCircle1 />
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
@@ -57,15 +38,16 @@ const CodingChallenge = () => {
         <UserNavbar />
       </header>
 
-      <main className="coding-challenges-container">
-        {/* Left Sidebar */}
-        <aside className="coding-challenge-left">
+      {/* Main container ID */}
+      <main id="coding-challenges-container">
+        {/* Left Sidebar ID */}
+        <aside id="coding-challenge-left">
           <h3>Categories</h3>
           <p>Placeholder for future filters or tags.</p>
         </aside>
 
-        {/* Main Content */}
-        <section className="coding-challenge-middle">
+        {/* Main Content ID */}
+        <section id="coding-challenge-middle">
           <div className="coding-challenges-background">
             <h1>Coding Challenges</h1>
             <table className="coding-challenges-table">
@@ -77,7 +59,8 @@ const CodingChallenge = () => {
                 </tr>
               </thead>
               <tbody>
-                {problems.map((p) => (
+                {/* 'problems.map' changed to 'challenges.map' */}
+                {challenges.map((p) => (
                   <tr key={p.id} onClick={() => handleSelect(p.id)}>
                     <td>{p.title}</td>
                     <td className={`diff ${p.difficulty.toLowerCase()}`}>
@@ -91,8 +74,8 @@ const CodingChallenge = () => {
           </div>
         </section>
 
-        {/* Right Sidebar */}
-        <aside className="coding-challenge-right">
+        {/* Right Sidebar ID */}
+        <aside id="coding-challenge-right">
           <h3>Tips</h3>
           <p>Placeholder for future leaderboard or announcements.</p>
         </aside>

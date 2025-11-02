@@ -1,5 +1,6 @@
 // file: elios_FE/src/forum/pages/PostDetail.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Card, Button } from "react-bootstrap";
@@ -14,9 +15,11 @@ import { API_ENDPOINTS } from "../../api/apiConfig";
 import CommentForm from "../components/CommentForm";
 import LoadingCircle1 from "../../components/loading/LoadingCircle1";
 
+
 const PostDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useContext(AppContext);
     const [post, setPost] = useState(null);
     const [replyingTo, setReplyingTo] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -72,13 +75,9 @@ const PostDetail = () => {
         let currentUserAvatar = "/default-avatar.png";
 
         try {
-            // Assumes user info is stored under the key 'user' in localStorage.
-            const storedUser = localStorage.getItem('user');
-            if (storedUser) {
-                const userData = JSON.parse(storedUser);
-                // NOTE: Adjust 'fullName' and 'avatarUrl' if your stored object uses different keys.
-                currentUserName = userData.fullName || "You";
-                currentUserAvatar = userData.avatarUrl || "/default-avatar.png";
+            if (user) {
+                currentUserName = `${user.firstName} ${user.lastName}`.trim() || "You";
+                currentUserAvatar = user.avatarUrl || "/default-avatar.png";
             }
         } catch (e) {
             console.error("Could not parse user data from localStorage for optimistic comment.", e);
@@ -112,6 +111,8 @@ const PostDetail = () => {
         }
     };
 
+    // file: elios_FE/src/forum/pages/PostDetail.js
+
     const handleUpvote = async () => {
         const originalPost = { ...post };
         // Optimistic update
@@ -126,13 +127,23 @@ const PostDetail = () => {
                 {},
                 { withCredentials: true }
             );
-            // Update with server's source of truth
-            setPost(response.data.responseData);
+
+            // **THE FIX:**
+            // Merge the server's response with the current state,
+            // don't just replace it.
+            const updatedData = response.data.responseData;
+            setPost((current) => ({
+                ...current,     // <-- Keeps title, content, comments, etc.
+                ...updatedData, // <-- Updates with the new counts from the server
+            }));
+
         } catch (error) {
             console.error("Error upvoting post:", error);
             setPost(originalPost); // Rollback on error
         }
     };
+
+    // file: elios_FE/src/forum/pages/PostDetail.js
 
     const handleDownvote = async () => {
         const originalPost = { ...post };
@@ -148,11 +159,16 @@ const PostDetail = () => {
                 {},
                 { withCredentials: true }
             );
-            // Update with server's source of truth
-            setPost(response.data.responseData);
+
+            const updatedData = response.data.responseData;
+            setPost((current) => ({
+                ...current,     // <-- Keeps title, content, comments, etc.
+                ...updatedData, // <-- Updates with the new counts from the server
+            }));
+
         } catch (error) {
             console.error("Error downvoting post:", error);
-            setPost(originalPost); // Rollback on error
+            setPost(originalPost);
         }
     };
 
