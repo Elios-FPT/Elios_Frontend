@@ -1,0 +1,186 @@
+/* file: elios_FE/src/forum/style/UserPostStorageCard.css */
+
+/* --- Main Card Container (MODIFIED) --- */
+#user-post-card {
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  justify-content: space-between; /* Push controls to the bottom */
+  background: #23272f;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #3a3f4c;
+  color: #eee;
+  /* aspect-ratio: 1 / 1;  <-- REMOVED THIS LINE */
+  overflow: hidden; /* Hide any content that overflows */
+}
+
+/* --- Left Side: Details (MODIFIED) --- */
+#user-post-card-details {
+  flex-grow: 1; /* Allow this section to grow */
+  margin-right: 0; /* Remove old margin */
+  min-height: 0; /* Fix for flex overflow */
+}
+
+#user-post-card-title {
+  color: #19c37d;
+  font-size: 1.2rem; /* Slightly smaller for the square */
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* MODIFIED: Ensure snippet truncates visually */
+#user-post-card-snippet {
+  color: #bbb;
+  font-size: 0.9rem; /* Slightly smaller */
+  line-height: 1.4;
+  margin-bottom: 12px;
+  max-height: 4.2em; /* 1.4em * 3 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Clamp to 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* --- Stats Bar (MODIFIED) --- */
+#user-post-card-stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Allow stats to wrap if needed */
+  gap: 16px; /* Adjust gap */
+  font-size: 0.85rem; /* Slightly smaller */
+  color: #888;
+  margin-top: auto; /* Push stats to bottom of its container */
+}
+
+.user-post-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.user-post-stat-item svg {
+  vertical-align: middle;
+}
+
+#user-post-card-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+/* Example status styling */
+#user-post-card-status.draft {
+  background-color: #4a4a4a;
+  color: #eee;
+}
+#user-post-card-status.published {
+  background-color: #19c37d;
+  color: #181a1b;
+}
+
+
+/* --- Right Side: Controls (MODIFIED) --- */
+#user-post-card-controls {
+  display: flex;
+  align-items: center; /* Align items horizontally */
+  justify-content: space-between; /* Space out buttons and menu */
+  gap: 15px;
+  flex-shrink: 0;
+  padding-top: 16px; /* Add space above controls */
+  border-top: 1px solid #3a3f4c; /* Separator line */
+  margin-top: 16px;
+}
+
+#user-post-card-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#user-post-card-btn-edit,
+#user-post-card-btn-submit {
+  border: none;
+  padding: 8px 14px; /* Slightly smaller buttons */
+  border-radius: 6px;
+  font-size: 0.85rem; /* Slightly smaller font */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#user-post-card-btn-edit {
+  background-color: #3a3f4c;
+  color: #eee;
+}
+
+#user-post-card-btn-edit:hover {
+  background-color: #4a4f5c;
+}
+
+#user-post-card-btn-submit {
+  background: #0f8a57;
+  color: #fff;
+}
+
+#user-post-card-btn-submit:hover {
+  background: #14b06f;
+}
+
+/* --- Three-Dot Menu --- */
+#user-post-card-menu-container {
+  position: relative;
+}
+
+#user-post-card-menu-btn {
+  background: transparent;
+  border: none;
+  color: #bbb;
+  font-size: 1.1rem; /* Slightly smaller */
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#user-post-card-menu-btn:hover {
+  background-color: #3a3f4c;
+  color: #fff;
+}
+
+#user-post-card-menu-dropdown {
+  position: absolute;
+  /* MODIFIED: Reposition to open above if card is at the bottom */
+  bottom: 40px; 
+  right: 0;
+  background: #3a3f4c;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 8px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 140px;
+}
+
+.user-post-card-menu-item {
+  background: none;
+  border: none;
+  color: #eee;
+  text-align: left;
+  cursor: pointer;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.user-post-card-menu-item:hover {
+  background: #4a4f5c;
+  color: #fff;
+}

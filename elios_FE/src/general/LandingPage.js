@@ -35,7 +35,7 @@ const LandingPage = () => {
           <Nav className="ml-auto" id="nav-links-landingPage">
             {/* Updated navbar items */}
             <Nav.Link href="/forum">{t("landingPage.navbar.forum")}</Nav.Link>
-            <Nav.Link href="/coding-challenge">{t("landingPage.navbar.codingChallenge")}</Nav.Link>
+            <Nav.Link href="/codingchallenge">{t("landingPage.navbar.codingChallenge")}</Nav.Link>
             <Nav.Link href="/resume-builder">{t("landingPage.navbar.buildCV")}</Nav.Link>
 
             {/* Language switcher */}

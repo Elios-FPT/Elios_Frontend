@@ -1,5 +1,5 @@
 // FRONT-END: elios_FE/src/forum/pages/Forum.js
-import React, { useContext, useEffect, useState } from "react"; // Import useContext
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
@@ -40,10 +40,10 @@ const Forum = () => {
       </header>
 
       <main>
-        <div className="user-forum-bg">
-          <Container fluid className="user-forum-container">
-            <Row className="user-forum-content-center">
-              <Col md={9} className="user-forum-forum-main">
+        <div id="user-forum-bg">
+          <Container fluid id="user-forum-container">
+            <Row id="user-forum-content-center">
+              <Col md={9} id="user-forum-forum-main">
                 {loading ? (
                   <LoadingCircle1 />
                 ) : (
@@ -51,31 +51,32 @@ const Forum = () => {
                   posts.map((post) => (
                     <Card
                       key={post.postId}
-                      className="user-forum-forum-post mb-3"
+                      id="user-forum-forum-post"
+                      className="mb-3" /* Kept utility class */
                       onClick={() => openPost(post)}
                       style={{ cursor: "pointer" }}
                     >
                       {/* ... Card content remains the same ... */}
                       <Card.Body>
-                        <div className="user-forum-forum-post-meta">
+                        <div id="user-forum-forum-post-meta">
                           <img
                             src={post.authorAvatarUrl}
                             alt="user"
-                            className="user-forum-forum-avatar"
+                            id="user-forum-forum-avatar"
                           />
-                          <span className="user-forum-forum-user">
+                          <span id="user-forum-forum-user">
                             {post.authorFullName}
                           </span>
-                          <span className="user-forum-forum-time">
+                          <span id="user-forum-forum-time">
                             {formatRelativeTime(post.createdAt)}
                           </span>
                         </div>
 
                         <Card.Title>
-                          <span className="user-forum-forum-link">{post.title}</span>
+                          <span id="user-forum-forum-link">{post.title}</span>
                         </Card.Title>
 
-                        <Card.Text as="div" className="user-forum-forum-content">
+                        <Card.Text as="div" id="user-forum-forum-content">
                           <div>
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
@@ -86,7 +87,7 @@ const Forum = () => {
 
                             {isContentTooLong(post.content) && (
                               <span
-                                className="user-forum-view-more"
+                                id="user-forum-view-more"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   openPost(post);
@@ -96,7 +97,8 @@ const Forum = () => {
                               </span>
                             )}
                           </div>
-                          <div className="user-forum-post-stats">
+                          <div id="user-forum-post-stats">
+                            {/* Kept as className: repeated utility classes */}
                             <span className="stat-item up">
                               <FaThumbsUp /> {post.upvoteCount}
                             </span>
@@ -117,27 +119,24 @@ const Forum = () => {
                 )}
               </Col>
 
-              <Col md={3} className="user-forum-forum-sidebar">
-                 <Card className="user-forum-sidebar-card">
+              <Col md={3} id="user-forum-forum-sidebar">
+                 <Card id="user-forum-sidebar-card">
                   <Card.Body>
-                    <div className="user-forum-sidebar-banner mb-3">
-                      <img
-                        src="https://leetcode.com/static/images/crash-course-banner.png"
-                        alt="Crash Course"
-                        className="user-forum-sidebar-banner-img"
-                      />
+                    <div className="user-forum-sidebar-banner mb-3"> {/* Utility class, not in CSS file */}
+                      
                       <Button
                         variant="outline-light"
                         size="sm"
-                        className="w-100 mb-2 user-forum-btn-outline-light"
+                        className="w-100 mb-2" /* Kept utility classes */
+                        id="user-forum-btn-outline-light"
                       >
-                        Start Learning
+                        Your Notification
                       </Button>
                     </div>
 
-                    <div className="user-forum-sidebar-section">
+                    <div id="user-forum-sidebar-section">
                       <div
-                        className="user-forum-sidebar-title"
+                        id="user-forum-sidebar-title"
                         onClick={() => setShowCreatePostModal(true)}
                       >
                         <span role="img" aria-label="chat">
@@ -148,15 +147,17 @@ const Forum = () => {
                       <Button
                         variant="outline-light"
                         size="sm"
-                        className="w-100 mb-2 user-forum-btn-outline-light"
-                        onClick={() => setShowCreatePostModal(true)}
+                        className="w-100 mb-2" /* Kept utility classes */
+                        id="user-forum-btn-outline-light"
+                        onClick={() => navigate("/forum/user-posts")}
                       >
-                        Let's Discuss
+                        Your Post Storage 
                       </Button>
                     </div>
 
 
                     <ListGroup variant="flush" className="mt-3">
+                      {/* --- EXCEPTION: Kept as className per request --- */}
                       <ListGroup.Item className="user-forum-sidebar-list">
                         OO Design
                       </ListGroup.Item>

@@ -5,9 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // No more provider imports here!
 import LandingPage from "./general/LandingPage";
 
-import UserHome from "./pages/userPage/UserHome";
 import Forum from "./forum/pages/Forum";
 import PostDetail from "./forum/pages/PostDetail";
+import UserPostStorage from "./forum/pages/UserPostStorage";
+import EditPostForForum from "./forum/pages/EditPostForForum";
 
 import CodingChallenge from "./codingChallenge/pages/CodingChallenge";
 import OnlineIDE from "./codingChallenge/pages/OnlineIDE";
@@ -30,10 +31,12 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
-        
+
         {/* Forum Routes are now flat */}
         <Route path="/forum" element={<Forum />} />
         <Route path="/forum/post/:id" element={<PostDetail />} />
+        <Route path="/forum/user-posts" element={<UserPostStorage />} />
+        <Route path="/forum/my-posts/edit/:postId" element={<EditPostForForum />} />
 
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
         <Route path="/resume-builder" element={<UserResume />} />

@@ -11,10 +11,15 @@ export const API_ENDPOINTS = {
     // Forum API Endpoints
     GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
     GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
-    CREATE_POST: `${baseUrl}/api/forum/posts`,
+    CREATE_POST: `${baseUrl}/api/forum/posts/submit`,
+    DRAFT_POST: `${baseUrl}/api/forum/posts`,
     CREATE_COMMENT: `${baseUrl}/api/forum/Comment`,
     UPVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/upvote`,
     DOWNVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/downvote`,
+    GET_MY_POSTS: `${baseUrl}/api/forum/posts/my-posts`,
+    GET_MY_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/my-posts/${postId}`,
+    DELETE_MY_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
+
 
     //Admin forum API Endpoints
     GET_PENDING_POSTS: `${baseUrl}/api/v1/moderator/posts/pending`,

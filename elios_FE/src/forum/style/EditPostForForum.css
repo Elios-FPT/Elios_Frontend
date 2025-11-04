@@ -1,0 +1,87 @@
+/* file: elios_FE/src/forum/style/EditPostForForum.css */
+.edit-post-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.edit-post-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.edit-post-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.edit-post-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.edit-post-form input[type="text"],
+.edit-post-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.edit-post-form textarea {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 200px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.form-actions button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-actions .btn-save {
+    background-color: #007bff;
+    color: white;
+}
+
+.form-actions .btn-save:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-actions .btn-cancel {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.form-actions .btn-cancel:hover {
+    background-color: #e0e0e0;
+}
+
+.edit-post-error {
+    color: #d9534f; /* Red color for errors */
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}

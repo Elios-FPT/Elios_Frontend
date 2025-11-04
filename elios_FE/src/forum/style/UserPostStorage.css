@@ -1,0 +1,66 @@
+/* file: elios_FE/src/forum/style/UserPostStorage.css */
+
+/* --- NEW --- */
+/* This new wrapper ensures the background color 
+   covers the full viewport height, including the navbar area */
+#user-post-storage-page {
+    background-color: #1e1e1e; /* Dark background */
+    min-height: 100vh; /* Ensures it fills the screen */
+    box-sizing: border-box; 
+}
+
+/* --- MODIFIED --- */
+#user-post-storage-background {
+    /* background-color: #1e1e1e; */ /* This is NOW handled by -page */
+    padding: 20px;
+    /* We don't need min-height here anymore */
+}
+
+#user-post-storage-container {
+  /* This centers the content and matches the padding from your Forum.js example */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: #eee;
+}
+
+#user-post-storage-title {
+  color: #eee; /* Bright white/light grey for the main title */
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #3a3f4c; /* Subtle separator */
+}
+
+#user-post-storage-list {
+  display: grid;
+  /* This creates a responsive grid. Cards will be at least 300px wide,
+     grow to fill space (1fr), and wrap automatically. */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px; /* Controls spacing between cards (rows and columns) */
+  
+  /* --- NEW --- */
+  /* Give the list a minimum height so the loading 
+     spinner has room to be vertically centered. */
+  min-height: 40vh;
+}
+
+
+/* --- MODIFIED --- */
+#user-post-storage-loading {
+  color: #bbb;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 40px;
+  
+  /* Span all columns (this was already in your file) */
+  grid-column: 1 / -1;
+
+  /* --- NEW --- */
+  /* Use flexbox to center the spinner (its child) 
+     both vertically and horizontally. */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
