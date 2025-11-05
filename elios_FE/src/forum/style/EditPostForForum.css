@@ -1,55 +1,49 @@
 /* file: elios_FE/src/forum/style/EditPostForForum.css */
-.edit-post-container {
-    width: 90%;
-    max-width: 900px;
+
+/* Make the container wider to accommodate the sidebar */
+#edit-post-for-forum-container {
     margin: 2rem auto;
-    padding: 2rem;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.edit-post-container h1 {
+/* This new wrapper holds the form */
+#edit-post-for-forum-form-wrapper h1 {
     text-align: center;
     margin-bottom: 2rem;
     color: #333;
 }
 
-.edit-post-form .form-group {
+#edit-post-for-forum-form .edit-post-for-forum-form-group {
     margin-bottom: 1.5rem;
 }
 
-.edit-post-form label {
+#edit-post-for-forum-form label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
     color: #555;
 }
 
-.edit-post-form input[type="text"],
-.edit-post-form textarea {
+#edit-post-for-forum-form input[type="text"] {
     width: 100%;
     padding: 0.75rem;
     font-size: 1rem;
     font-family: inherit;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    box-sizing: border-box; 
 }
 
-.edit-post-form textarea {
-    resize: vertical; /* Allow vertical resizing */
-    min-height: 200px;
-}
-
-.form-actions {
+.edit-post-for-forum-form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
 }
 
-.form-actions button {
+.edit-post-for-forum-form-actions button {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     font-weight: 600;
@@ -59,29 +53,106 @@
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-actions .btn-save {
+.edit-post-for-forum-form-actions .edit-post-for-forum-btn-save {
     background-color: #007bff;
     color: white;
 }
 
-.form-actions .btn-save:hover {
+.edit-post-for-forum-form-actions .edit-post-for-forum-btn-save:hover {
     background-color: #0056b3;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.form-actions .btn-cancel {
+.edit-post-for-forum-form-actions .edit-post-for-forum-btn-cancel {
     background-color: #f1f1f1;
     color: #333;
     border: 1px solid #ccc;
 }
 
-.form-actions .btn-cancel:hover {
+.edit-post-for-forum-form-actions .edit-post-for-forum-btn-cancel:hover {
     background-color: #e0e0e0;
 }
 
-.edit-post-error {
-    color: #d9534f; /* Red color for errors */
+#edit-post-for-forum-error {
+    color: #d9534f; 
     text-align: center;
     font-size: 1.1rem;
     margin-bottom: 1rem;
+}
+
+/* --- Image Pool Styles --- */
+
+#edit-post-for-forum-image-pool {
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    height: 100%; /* Make it fill the column height */
+}
+
+#edit-post-for-forum-image-pool h3 {
+    text-align: center;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+#image-pool-list-container {
+    /* Height calculation: 600px (editor height) + form elements, minus padding */
+    /* Let's set a fixed max-height that works well with the editor */
+    max-height: 650px; 
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.image-pool-item {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.image-pool-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: grab;
+    transition: transform 0.2s ease;
+}
+
+.image-pool-item img:hover {
+    transform: scale(1.03);
+}
+
+.image-pool-error {
+    color: #d9534f;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* --- Full-screen Drag Overlay Styles --- */
+
+#edit-post-for-forum-drag-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 123, 255, 0.2); /* Semi-transparent blue */
+    border: 3px dashed #007bff;
+    z-index: 9998; /* Below modals but above content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Allows 'dragleave' to fire properly */
+}
+
+#edit-post-for-forum-drag-overlay p {
+    color: #007bff;
+    font-size: 2rem;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 1rem 2rem;
+    border-radius: 8px;
 }

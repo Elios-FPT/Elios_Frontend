@@ -12,13 +12,17 @@ export const API_ENDPOINTS = {
     GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
     GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     CREATE_POST: `${baseUrl}/api/forum/posts/submit`,
-    DRAFT_POST: `${baseUrl}/api/forum/posts`,
+    DRAFT_POST: `${baseUrl}/api/forum/posts/draft`,
     CREATE_COMMENT: `${baseUrl}/api/forum/Comment`,
     UPVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/upvote`,
     DOWNVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/downvote`,
     GET_MY_POSTS: `${baseUrl}/api/forum/posts/my-posts`,
     GET_MY_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/my-posts/${postId}`,
     DELETE_MY_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
+    UPLOAD_IMAGE: `${baseUrl}/api/forum/upload`,
+    GET_MY_IMAGE_POOL: `${baseUrl}/api/forum/upload/images`,
+    //DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/images/${imageId}`,
+    
 
 
     //Admin forum API Endpoints
