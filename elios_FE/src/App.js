@@ -23,6 +23,8 @@ import AdminDashboard from "./admin/pages/AdminDashboard";
 import PendingPosts from "./admin/pages/PendingPosts";
 import ReportedPosts from "./admin/pages/ReportedPosts";
 
+import MockProjects from "./mockProject/pages/MockProjects";
+import ProjectDetailPage from './mockProject/pages/ProjectDetailPage';
 
 function App() {
   return (
@@ -48,6 +50,9 @@ function App() {
 
         <Route path="/codingChallenge" element={<CodingChallenge />} />
         <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
+
+        <Route path="/mock-projects" element={<MockProjects />} />
+        <Route path="/mock-projects/:projectId" element={<ProjectDetailPage />} />
 
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>

@@ -1,5 +1,5 @@
 // elios_FE/src/api/apiConfig.js
-const baseUrl = process.env.REACT_APP_DEVELOPMENT_API_URL;
+const baseUrl = process.env.REACT_APP_DEVELOPMENT_LOCAL_API_URL;
 
 export const API_ENDPOINTS = {
     LOGIN_PATH: 'http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com%2Fforum',
@@ -21,12 +21,6 @@ export const API_ENDPOINTS = {
     APPROVE_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/approve`,
     REJECT_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/reject`,
 
-
-
-
-
-
-
     // Codeing Challenge API Endpoints
     GET_CODE_CHALLENGES_LIST: `${baseUrl}/api/code-practices`,
     GET_CODE_CHALLENGE_DETAIL: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}`,
@@ -34,38 +28,47 @@ export const API_ENDPOINTS = {
     GET_SUBMISSION_HISTORY: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY_DETAIL: (submissionId) => `${baseUrl}/api/code-practices/submissions/${submissionId}`,
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Mock Interview API Endpoints
 
+    // MOCK PROJECT API ENDPOINTS
+    GET_MOCK_PROJECTS_LIST: `${baseUrl}/api/mockproject/mock-projects`,
+    GET_MOCK_PROJECT_DETAIL: (projectId) => `${baseUrl}/api/mockproject/mock-projects/${projectId}`,
+    CREATE_MOCK_PROJECT: `${baseUrl}/api/mockproject/mock-projects`,
+    UPDATE_MOCK_PROJECT: (projectId) => `${baseUrl}/api/mockproject/mock-projects/${projectId}`,
+    DELETE_MOCK_PROJECT: (projectId) => `${baseUrl}/api/mockproject/mock-projects/${projectId}`,
 
+    GET_MOCK_PROJECT_PROCESSES: (projectId) => `${baseUrl}/api/mockproject/mock-projects/${projectId}/processes`,
+    ADD_MOCK_PROJECT_PROCESS: (projectId) => `${baseUrl}/api/mockproject/mock-projects/${projectId}/processes`,
 
+    GET_MOCK_PROJECTS_STATISTICS: `${baseUrl}/api/mockproject/mock-projects/statistics`,
+    GET_TOP_SUBMISSIONS: (projectId, top = 10) => `${baseUrl}/api/mockproject/mock-projects/${projectId}/top-submissions?top=${top}`,
+    AUTO_EVALUATE_SUBMISSION: (projectId) => `${baseUrl}/api/mockproject/mock-projects/${projectId}/auto-evaluate`,
 
+    // PROCESS API ENDPOINTS
+    GET_PROCESS_DETAIL: (processId) => `${baseUrl}/api/mockproject/processes/${processId}`,
+    UPDATE_PROCESS: (processId) => `${baseUrl}/api/mockproject/processes/${processId}`,
+    DELETE_PROCESS: (processId) => `${baseUrl}/api/mockproject/processes/${processId}`,
 
+    // SUBMISSION API ENDPOINTS
+    GET_SUBMISSIONS_LIST: `${baseUrl}/api/mockproject/submissions`,
+    GET_SUBMISSIONS_LIST_CURRENT_USER: `${baseUrl}/api/mockproject/submissions/current`,
+    GET_SUBMISSION_DETAIL: (submissionId) => `${baseUrl}/api/mockproject/submissions/${submissionId}`,
+    CREATE_SUBMISSION: `${baseUrl}/api/mockproject/submissions`,
+    UPDATE_SUBMISSION: (submissionId) => `${baseUrl}/api/mockproject/submissions/${submissionId}`,
+    RESUBMIT_SUBMISSION: (submissionId) => `${baseUrl}/api/mockproject/submissions/${submissionId}/resubmit`,
+    EVALUATE_SUBMISSION: (submissionId) => `${baseUrl}/api/mockproject/submissions/${submissionId}/evaluate`,
+    SAVE_FEEDBACK: (submissionId) => `${baseUrl}/api/mockproject/submissions/${submissionId}/feedback`,
+    GET_SUBMISSION_SCORE: (submissionId) => `${baseUrl}/api/mockproject/submissions/${submissionId}/score`,
+    GET_SUBMISSIONS_STATISTICS: `${baseUrl}/api/mockproject/submissions/statistics`,
+    GET_SUBMISSIONS_STATISTICS_CURRENT: `${baseUrl}/api/mockproject/submissions/statistics/current`,
 
-
-
-    
-
-
-
+    // Submission Classes
+    GET_SUBMISSIONS_CLASSES: `${baseUrl}/api/mockproject/submissions/classes`,
+    GET_SUBMISSIONS_CLASSES_BY_SUBMISSION: (submissionId) => `${baseUrl}/api/mockproject/submissions/${submissionId}/classes`,
+    GET_SUBMISSIONS_CLASS_DETAIL: (classId) => `${baseUrl}/api/mockproject/submissions/classes/${classId}`,
+    CREATE_SUBMISSIONS_CLASS: `${baseUrl}/api/mockproject/submissions/classes`,
+    UPDATE_SUBMISSIONS_CLASS: (classId) => `${baseUrl}/api/mockproject/submissions/classes/${classId}`,
+    DELETE_SUBMISSIONS_CLASS: (classId) => `${baseUrl}/api/mockproject/submissions/classes/${classId}`,
 
 };
 
