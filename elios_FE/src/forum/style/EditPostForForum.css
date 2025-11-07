@@ -88,6 +88,13 @@
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     height: 100%; /* Make it fill the column height */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Style for when dragging a file over the image pool */
+#edit-post-for-forum-image-pool.drag-over {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
 #edit-post-for-forum-image-pool h3 {
@@ -129,30 +136,4 @@
     color: #d9534f;
     font-size: 0.9rem;
     text-align: center;
-}
-
-/* --- Full-screen Drag Overlay Styles --- */
-
-#edit-post-for-forum-drag-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 123, 255, 0.2); /* Semi-transparent blue */
-    border: 3px dashed #007bff;
-    z-index: 9998; /* Below modals but above content */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none; /* Allows 'dragleave' to fire properly */
-}
-
-#edit-post-for-forum-drag-overlay p {
-    color: #007bff;
-    font-size: 2rem;
-    font-weight: 600;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 1rem 2rem;
-    border-radius: 8px;
 }

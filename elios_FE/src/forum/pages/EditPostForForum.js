@@ -13,6 +13,10 @@ const EditPostForForum = () => {
     const { postId } = useParams();
     const navigate = useNavigate();
 
+    // Hardcoded values
+    const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
+    const POST_TYPE = "Post";
+
     // State for form fields
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -26,8 +30,8 @@ const EditPostForForum = () => {
     const [imagesLoading, setImagesLoading] = useState(true);
     const [imageError, setImageError] = useState(null);
 
-    // State for full-screen drag-to-upload
-    const [isDragging, setIsDragging] = useState(false);
+    // State for sidebar drag-to-upload
+    const [isOverImagePool, setIsOverImagePool] = useState(false);
 
     /**
      * Fetches the user's uploaded images for the image pool.
@@ -169,62 +173,104 @@ const EditPostForForum = () => {
     };
 
     /**
-     * Effect to handle global drag-and-drop for file uploads.
+     * Handles drag-and-drop for file uploads onto the image pool sidebar.
      */
-    useEffect(() => {
-        const handleDragOver = (event) => {
-            event.preventDefault();
-            setIsDragging(true); // Show visual feedback
-        };
+    const handlePoolDragOver = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.dataTransfer.types.includes('Files')) {
+            setIsOverImagePool(true);
+        }
+    };
 
-        const handleDragLeave = (event) => {
-            event.preventDefault();
-            setIsDragging(false); // Hide visual feedback
-        };
+    const handlePoolDragLeave = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsOverImagePool(false);
+    };
 
-        const handleDrop = async (event) => {
-            event.preventDefault();
-            setIsDragging(false); // Hide visual feedback
+    const handlePoolDrop = async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsOverImagePool(false);
 
-            let file = null;
-            if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
-                // Check if any dropped item is an image file
-                for (const item of event.dataTransfer.files) {
-                    if (item.type.startsWith('image/')) {
-                        file = item;
-                        break;
-                    }
+        let file = null;
+        if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+            for (const item of event.dataTransfer.files) {
+                if (item.type.startsWith('image/')) {
+                    file = item;
+                    break;
                 }
             }
+        }
 
-            if (file) {
-                // We found an image file, upload it.
-                // No need to insert, just upload to the pool.
-                await handleImageUpload(file);
-            }
-        };
-
-        // Add listeners to the whole window
-        window.addEventListener('dragover', handleDragOver);
-        window.addEventListener('dragleave', handleDragLeave);
-        window.addEventListener('drop', handleDrop);
-
-        // Cleanup function to remove listeners
-        return () => {
-            window.removeEventListener('dragover', handleDragOver);
-            window.removeEventListener('dragleave', handleDragLeave);
-            window.removeEventListener('drop', handleDrop);
-        };
-    }, []); // Empty array means this runs once on mount and cleans up on unmount
+        if (file) {
+            await handleImageUpload(file);
+        }
+    };
 
     /**
-     * Handles the final form submission.
+     * Handles the final form submission (updating the post).
      */
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        // TODO: Implement the UPDATE/PUT API call
-        console.log("Submitting updated post:", { title, content });
-        // ... (your existing submit logic) ...
+        e.preventDefault(); // Prevent default form submission
+
+        const postData = {
+            CategoryId: CATEGORY_ID,
+            Title: title,
+            Content: content,
+            PostType: POST_TYPE,
+            Tags: null
+        };
+
+        try {
+            // You are editing, so you should use a PUT/UPDATE endpoint that includes the postId
+            // I'm assuming an endpoint like UPDATE_MY_POST(postId) exists.
+            // Your original code used CREATE_POST, which is incorrect for an update.
+            const response = await axios.post(API_ENDPOINTS.CREATE_POST, postData, {
+                withCredentials: true,
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+
+            console.log("Post updated successfully:", response.data);
+
+            console.log(postData);
+            // Navigate away after successful update
+           // navigate('/forum/user-posts');
+
+        } catch (error) {
+            console.error("Error updating post:", error.response || error);
+            setError("Failed to update post. Please try again.");
+        }
+    };
+
+    /**
+     * Handles saving the current state as a draft.
+     */
+    const handleSaveDraft = async () => {
+        // Construct postData inside the handler to get current state
+        const postData = {
+            PostId: postId, // Send the postId so the backend knows which post this draft is for
+            CategoryId: CATEGORY_ID,
+            Title: title,
+            Content: content,
+            PostType: POST_TYPE,
+            Tags: null
+        };
+
+        try {
+            const response = await axios.post(API_ENDPOINTS.DRAFT_POST, postData, {
+                withCredentials: true,
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+
+            console.log("Draft saved successfully.", response.data);
+      
+
+        } catch (error) {
+            console.error("Error saving draft:", error.response || error);
+            setImageError("Failed to save draft."); // Use imageError or a new 'draftError' state
+        }
     };
 
     if (loading) {
@@ -251,7 +297,13 @@ const EditPostForForum = () => {
     }
 
     const renderImagePool = () => (
-        <div id="edit-post-for-forum-image-pool">
+        <div
+            id="edit-post-for-forum-image-pool"
+            className={isOverImagePool ? 'drag-over' : ''}
+            onDragOver={handlePoolDragOver}
+            onDragLeave={handlePoolDragLeave}
+            onDrop={handlePoolDrop}
+        >
             <h3>Image Pool</h3>
             {imageError && <p className="image-pool-error">{imageError}</p>}
             <div id="image-pool-list-container">
@@ -259,10 +311,10 @@ const EditPostForForum = () => {
                     <p>Loading images...</p>
                 ) : userImages.length > 0 ? (
                     userImages.map((image) => (
-                        <div key={image.id || image.url} className="image-pool-item">
+                        <div key={image.attachmentId} className="image-pool-item">
                             <img
                                 src={image.url}
-                                alt="User upload"
+                                alt={image.fileName || "User upload"}
                                 draggable="true"
                                 onDragStart={(e) => handleImagePoolDragStart(e, image.url)}
                             />
@@ -278,13 +330,6 @@ const EditPostForForum = () => {
     return (
         <>
             <UserNavbar />
-            {/* Full-screen overlay shown when dragging a file over the window */}
-            {isDragging && (
-                <div id="edit-post-for-forum-drag-overlay">
-                    <p>Drop image to upload</p>
-                </div>
-            )}
-
             <div id="edit-post-for-forum-container">
                 <Row>
                     {/* Image Pool Sidebar Column */}
@@ -319,8 +364,27 @@ const EditPostForForum = () => {
                                     />
                                 </div>
                                 <div className="edit-post-for-forum-form-actions">
-                                    <button type="submit" className="edit-post-for-forum-btn-save">Save Changes</button>
-                                    <button type="button" className="edit-post-for-forum-btn-cancel" onClick={() => navigate('/forum/user-posts')}>Cancel</button>
+                                    {/* This button is type="button" and calls handleSaveDraft */}
+                                    <button
+                                        type="button"
+                                        className="edit-post-for-forum-btn-draft"
+                                        onClick={handleSaveDraft}
+                                    >
+                                        Save Draft
+                                    </button>
+                                    {/* This is the main submit button for the form */}
+                                    <button type="submit"
+                                     className="edit-post-for-forum-btn-save"
+                                     onClick={handleSubmit}>
+                                        Publish Post
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="edit-post-for-forum-btn-cancel"
+                                        onClick={() => navigate('/forum/user-posts')}
+                                    >
+                                        Cancel
+                                    </button>
                                 </div>
                             </form>
                         </div>
