@@ -21,8 +21,8 @@ import UserResume from "./resumeBuilder/pages/UserResume";
 
 import AdminScreenLayout from "./admin/pages/AdminScreenLayout";
 import AdminDashboard from "./admin/pages/AdminDashboard";
-import PendingPosts from "./admin/pages/PendingPosts";
-import ReportedPosts from "./admin/pages/ReportedPosts";
+import PendingPosts from "./admin/pages/forum/PendingPosts";
+import ReportedPosts from "./admin/pages/forum/ReportedPosts";
 
 
 function App() {

@@ -33,9 +33,10 @@ export const API_ENDPOINTS = {
 
 
     //Admin forum API Endpoints
-    GET_PENDING_POSTS: `${baseUrl}/api/v1/moderator/posts/pending`,
+    GET_PENDING_POSTS: `${baseUrl}/api/forum/moderator/posts/pending`,
     APPROVE_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/approve`,
     REJECT_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/reject`,
+    MODERATOR_DELETE_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}`,
 
 
 
