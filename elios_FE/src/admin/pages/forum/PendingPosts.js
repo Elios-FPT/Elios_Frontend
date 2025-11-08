@@ -1,9 +1,9 @@
 // src/admin/pages/PendingPosts.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../api/apiConfig';
-import PostPreviewModal from '../components/PostPreviewModal';
-import '../styles/PendingPosts.css';
+import { API_ENDPOINTS } from '../../../api/apiConfig';
+import PostPreviewModal from '../../components/PostPreviewModal';
+import '../../styles/PendingPosts.css';
 
 const PendingPosts = () => {
     const [posts, setPosts] = useState([]);
@@ -47,18 +47,38 @@ const PendingPosts = () => {
     }, [fetchPendingPosts]);
 
     const handleAction = async (postId, action) => {
-        // Optimistically update UI
+        let endpoint;
+        let method;
+        let requestBody = {}; // Body for 'put'
+        let requestConfig = { withCredentials: true }; // Base config
+
+        if (action === 'approve') {
+            endpoint = API_ENDPOINTS.APPROVE_PENDING_POST(postId); // Assuming this exists
+            method = 'put';
+        } else if (action === 'reject') {
+            const reason = window.prompt("Please enter a reason for rejection (required):");
+
+            if (reason === null) {
+                return; 
+            }
+            if (reason.trim() === "") {
+                alert("A reason is required to reject a post.");
+                return;
+            }
+            endpoint = API_ENDPOINTS.REJECT_PENDING_POST(postId); // Assuming this exists
+            method = 'put';
+            
+            requestConfig.data = { reason: reason };
+          
+        } else {
+            return; // Should not happen
+        }
+
+        // Optimistically update UI (now done after validation)
         setPosts(prevPosts => prevPosts.filter(p => p.postId !== postId));
 
         try {
-            const endpoint = action === 'approve' 
-                ? API_ENDPOINTS.APPROVE_PENDING_POST(postId) // Assuming this exists in your apiConfig
-                : API_ENDPOINTS.REJECT_PENDING_POST(postId);  // Assuming this exists
-
-            // Use 'put' for approve and 'delete' for reject, or 'post' as needed
-            const method = action === 'approve' ? 'put' : 'delete'; 
-
-            await axios[method](endpoint, {}, { withCredentials: true });
+            await axios[method](endpoint, requestBody, requestConfig);
 
         } catch (err) {
             console.error(`Error ${action === 'approve' ? 'approving' : 'rejecting'} post:`, err);

@@ -5,9 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // No more provider imports here!
 import LandingPage from "./general/LandingPage";
 
-import UserHome from "./pages/userPage/UserHome";
 import Forum from "./forum/pages/Forum";
 import PostDetail from "./forum/pages/PostDetail";
+import UserPostStorage from "./forum/pages/UserPostStorage";
+import EditPostForForum from "./forum/pages/EditPostForForum";
 
 import CodingChallenge from "./codingChallenge/pages/CodingChallenge";
 import OnlineIDE from "./codingChallenge/pages/OnlineIDE";
@@ -20,8 +21,8 @@ import UserResume from "./resumeBuilder/pages/UserResume";
 
 import AdminScreenLayout from "./admin/pages/AdminScreenLayout";
 import AdminDashboard from "./admin/pages/AdminDashboard";
-import PendingPosts from "./admin/pages/PendingPosts";
-import ReportedPosts from "./admin/pages/ReportedPosts";
+import PendingPosts from "./admin/pages/forum/PendingPosts";
+import ReportedPosts from "./admin/pages/forum/ReportedPosts";
 
 import MockProjects from "./mockProject/pages/MockProjects";
 import ProjectDetailPage from './mockProject/pages/ProjectDetailPage';
@@ -32,10 +33,12 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
-        
+
         {/* Forum Routes are now flat */}
         <Route path="/forum" element={<Forum />} />
         <Route path="/forum/post/:id" element={<PostDetail />} />
+        <Route path="/forum/user-posts" element={<UserPostStorage />} />
+        <Route path="/forum/my-posts/edit/:postId" element={<EditPostForForum />} />
 
         <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
         <Route path="/resume-builder" element={<UserResume />} />

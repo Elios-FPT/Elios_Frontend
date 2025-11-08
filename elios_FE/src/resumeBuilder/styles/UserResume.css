@@ -135,3 +135,92 @@
     background-color: #c0392b;
     color: #fff;
 }
+
+
+/* -------------------------------------------------
+   7. CREATE MODAL
+   ------------------------------------------------- */
+#create-resume-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+#create-resume-modal-content {
+    background-color: #2c2c2c;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 450px;
+    border: 1px solid #444;
+}
+
+#create-resume-modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+#create-resume-modal-content p {
+    margin-bottom: 20px;
+    color: #aaaaaa;
+}
+
+#resume-title-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #1e1e1e;
+    border: 1px solid #555;
+    color: #e0e0e0;
+    border-radius: 5px;
+    box-sizing: border-box; /* Important */
+    margin-bottom: 25px;
+}
+
+#resume-title-input:focus {
+    outline: none;
+    border-color: #2e8555;
+    box-shadow: 0 0 0 2px rgba(46, 133, 85, 0.5);
+}
+
+#modal-action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+#modal-cancel-btn,
+#modal-create-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+#modal-create-btn {
+    background-color: #2e8555; /* Green */
+    color: #fff;
+}
+#modal-create-btn:hover {
+    background-color: #3aa06b;
+}
+
+#modal-cancel-btn {
+    background-color: #555; /* Grey */
+    color: #fff;
+}
+#modal-cancel-btn:hover {
+    background-color: #777;
+}
