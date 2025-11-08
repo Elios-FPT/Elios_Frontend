@@ -1,42 +1,90 @@
 // file: elios_FE/src/resumeBuilder/pages/UserResume.js
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_ENDPOINTS } from "../../api/apiConfig";
 import { useNavigate } from "react-router-dom";
 import UserNavbar from "../../components/navbars/UserNavbar";
 import '../styles/UserResume.css';
 
-const mockResume = () => [
-  {
-    "_id": "60dc4a3a4d4d4d4d4d4d4d4a",
-    "resumeTitle": "Software Engineer Resume",
-    "updatedAt": "2023-10-28T10:30:00Z"
-  },
-  {
-    "_id": "60dc4a3a4d4d4d4d4d4d4d4b",
-    "resumeTitle": "Product Manager CV",
-    "updatedAt": "2023-10-26T14:15:00Z"
-  },
-  {
-    "_id": "60dc4a3a4d4d4d4d4d4d4d4c",
-    "resumeTitle": "Full-Stack Dev (Internal)",
-    "updatedAt": "2023-10-22T08:00:00Z"
-  }
-];
-
 const UserResume = () => {
-  const resumes = mockResume();
+  const [resumes, setResumes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [cvTitle, setCvTitle] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+
   const navigate = useNavigate();
 
-  // Handler for creating a new resume
+  useEffect(() => {
+    const fetchResumes = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await axios.get(API_ENDPOINTS.GET_USER_CV, {
+          withCredentials: true,
+        });
+
+        const data = response.data.responseData;
+        setResumes(data);
+      } catch (error) {
+        console.error("Error fetching resumes:", error);
+        setError("Failed to load resumes. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResumes();
+  }, []);
+
+
+  // Opens the "create new" modal
   const handleCreateNew = () => {
-    // In a real app, you would POST to /api/resumes
-    // and then navigate to the new ID.
-    console.log("Creating new resume...");
-    // For this mock, we'll just navigate to a placeholder
-    // In your real app, you'd get the ID from the backend:
-    // const newResume = await api.post('/api/resumes', { title: 'Untitled' });
-    // navigate(`/resume/edit/${newResume._id}`);
-    alert("Creating new CV... (See backend requirements)");
+    setCvTitle(""); // Reset title field
+    setIsModalOpen(true);
   };
+
+  // Closes the "create new" modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // Handles the submission from the modal
+  const handleSubmitNewResume = async () => {
+    const ResumeTitle = cvTitle.trim() || "Untitled Resume"; // Use title from state
+    
+    try {
+      
+      const url = `${API_ENDPOINTS.CREATE_USER_CV}`;
+
+      const response = await axios.post(
+        url,
+        {
+          resumeTitle: ResumeTitle,
+        },
+        { withCredentials: true }
+      );
+
+      console.log("response from server:", response.data);
+
+      const newResumeId = response.data?.responseData?.id;
+      if (!newResumeId) {
+        console.error("No resume ID returned from server.");
+        alert("Error: Could not get new resume ID from server.");
+        setIsModalOpen(false); // Close modal on error
+        return;
+      }
+
+      // No need to set modal false, navigation will unmount component
+      navigate(`/resume/edit/${newResumeId}`);
+    } catch (error) {
+      console.error("Error creating resume:", error);
+      console.log("API Endpoint used: POST", API_ENDPOINTS.CREATE_USER_CV);
+      alert("Failed to create resume. Please try again.");
+      setIsModalOpen(false); // Close modal on error
+    }
+  };
+
 
   // Handler for editing an existing resume
   const handleEdit = (id) => {
@@ -44,55 +92,123 @@ const UserResume = () => {
   };
 
   // Handler for deleting a resume
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this resume?")) {
-      // In a real app, you would DELETE /api/resumes/:id
-      console.log(`Deleting resume ${id}`);
+      try {
+        await axios.delete(`${API_ENDPOINTS.DELETE_USER_CV(id)}`, {
+          withCredentials: true,
+        });
+
+        console.log("Deleted resume with ID:", id);
+        setResumes(resumes.filter((resume) => resume.id !== id));
+      } catch (error) {
+        console.error("Error deleting resume:", error);
+        alert("Failed to delete resume. Please try again.");
+      }
     }
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div id="user-resume-background">
+        <UserNavbar />
+        <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px" }}>
+          <p>Loading your resumes...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div id="user-resume-background">
+        <UserNavbar />
+        <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px", color: "red" }}>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>Retry</button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-    <div id="user-resume-background">
-    <UserNavbar />
-    <div id="user-resume-dashboard">
-      <div id="dashboard-header">
-        <h1>My Resumes</h1>
-        <button id="create-resume-btn" onClick={handleCreateNew}>
-          + Create New CV
-        </button>
+      <div id="user-resume-background">
+        <UserNavbar />
+        <div id="user-resume-dashboard">
+          <div id="dashboard-header">
+            <h1>My Resumes</h1>
+            <button id="create-resume-btn" onClick={handleCreateNew}>
+              + Create New CV
+            </button>
+          </div>
+
+          <div id="resume-list-container">
+            {resumes.length > 0 ? (
+              resumes.map((resume) => (
+                <div className="resume-card" key={resume.id}>
+                  <div className="card-content">
+                    <h3 className="resume-card-title">
+                      {resume.resumeTitle || "Untitled Resume"}
+                    </h3>
+                    <p className="resume-card-updated">
+                      Last updated: {new Date(resume.updatedAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="resume-card-actions">
+                    <button
+                      className="resume-action-btn edit"
+                      onClick={() => handleEdit(resume.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="resume-action-btn delete"
+                      onClick={() => handleDelete(resume.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
+                <p>No resumes yet. Create your first one!</p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div id="resume-list-container">
-        {resumes.map((resume) => (
-          <div className="resume-card" key={resume._id}>
-            <div className="card-content">
-              <h3 className="resume-card-title">{resume.resumeTitle}</h3>
-              <p className="resume-card-updated">
-                Last updated: {new Date(resume.updatedAt).toLocaleDateString()}
-              </p>
-            </div>
-            <div className="resume-card-actions">
-              <button 
-                className="resume-action-btn edit" 
-                onClick={() => handleEdit(resume._id)}
-              >
-                Edit
+      {/* --- Create New Resume Modal --- */}
+      {isModalOpen && (
+        <div id="create-resume-modal-backdrop" onClick={handleCloseModal}>
+          <div id="create-resume-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Create New Resume</h2>
+            <p>Please enter a title for your new resume.</p>
+            <input
+              type="text"
+              id="resume-title-input"
+              value={cvTitle}
+              onChange={(e) => setCvTitle(e.target.value)}
+              placeholder="eg. Khanh Dep Trai Resume"
+              autoFocus
+            />
+            <div id="modal-action-buttons">
+              <button id="modal-cancel-btn" onClick={handleCloseModal}>
+                Cancel
               </button>
-              <button 
-                className="resume-action-btn delete"
-                onClick={() => handleDelete(resume._id)}
-              >
-                Delete
+              <button id="modal-create-btn" onClick={handleSubmitNewResume}>
+                Create
               </button>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-    </div>
+        </div>
+      )}
     </>
   );
-}
+};
 
 export default UserResume;

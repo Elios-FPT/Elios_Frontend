@@ -1,12 +1,15 @@
 // file: elios_FE/src/resumeBuilder/pages/ResumeBuilder.js
 import React, { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../../api/apiConfig';
 import { Container, Row, Col } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import '../styles/ResumeBuilder.css';
 import Toolbar from '../components/Toolbar';
 import SectionEditor from '../components/SectionEditor';
 import PreviewPanel from '../components/PreviewPanel';
-import { loadFromLocalStorage, saveToLocalStorage } from '../utils/storage';
+import { loadFromLocalStorage, saveToLocalStorage, saveToServer } from '../utils/storage';
 
 const initialResumeState = {
   personalInfo: {
@@ -67,6 +70,7 @@ const createNewItem = (sectionId) => {
 };
 
 const ResumeBuilder = () => {
+  const { id } = useParams();
   const [resumeData, setResumeData] = useState(loadFromLocalStorage() || initialResumeState);
 
   // This array defines the exact order for rendering the editor sections.
@@ -75,9 +79,26 @@ const ResumeBuilder = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       saveToLocalStorage(resumeData);
-    }, 5000);
+      saveToServer(resumeData, id);
+    }, 10000);
     return () => clearTimeout(timer);
   }, [resumeData]);
+
+  useEffect(() => {
+    const fetchResume = async () => {
+      try {
+        const response = await axios.get(API_ENDPOINTS.GET_USER_CV_DETAIL(id), {
+          withCredentials: true,
+        });
+        setResumeData(response.data.responseData);
+        console.log("Fetched resume data:", response.data.responseData);
+      } catch (error) {
+        console.error('Error fetching resume:', error);
+      }
+    };
+    fetchResume();
+  }, [id]);
+  
 
   const handleFieldChange = useCallback((sectionId, field, value, itemId = null) => {
     setResumeData(prevData => {

@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 
+// const TESTAPI = "http://www.elios.com/api/users/me/profile";
+const TESTAPI = "http://www.elios.com/api/cvbuilder/UserCvs/0be7d2a8-cc77-4ffb-aa06-ba34ab0a4a0a";
+
 const TestConnectionToBE = () => {
     // Initialize state with a helpful message
     const [result, setResult] = useState("Click the button to test the connection.");
@@ -10,7 +13,7 @@ const TestConnectionToBE = () => {
     const handleTestConnection = async () => {
         try {
             // Await the response from the GET request
-            const response = await axios.get("http://www.elios.com/api/users/me/profile", {
+            const response = await axios.get(TESTAPI, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",

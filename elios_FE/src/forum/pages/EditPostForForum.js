@@ -250,7 +250,7 @@ const EditPostForForum = () => {
     const handleSaveDraft = async () => {
         // Construct postData inside the handler to get current state
         const postData = {
-            PostId: postId, // Send the postId so the backend knows which post this draft is for
+            PostId: postId, 
             CategoryId: CATEGORY_ID,
             Title: title,
             Content: content,

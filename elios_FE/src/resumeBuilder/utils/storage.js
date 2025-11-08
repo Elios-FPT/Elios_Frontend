@@ -1,4 +1,10 @@
 // file: elios_FE/src/resumeBuilder/utils/storage.js
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../../api/apiConfig';
+
+
 /**
  * Saves the resume data to the browser's localStorage.
  * @param {object} data - The resume data object to save.
@@ -9,6 +15,20 @@ export const saveToLocalStorage = (data) => {
     localStorage.setItem('resumeData', serializedData);
   } catch (error) {
     console.error("Could not save resume data to localStorage", error);
+  }
+};
+
+export const saveToServer = (data, resumeId) => {
+  try {
+    axios.put(API_ENDPOINTS.SAVE_DRAFT_USER_CV(resumeId), data, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Resume data saved to server successfully");
+  } catch (error) {
+    console.error("Could not save resume data to server", error);
   }
 };
 
