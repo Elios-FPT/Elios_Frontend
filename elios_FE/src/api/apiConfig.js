@@ -18,8 +18,9 @@ export const API_ENDPOINTS = {
     // Forum API Endpoints
     GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
     GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
-    CREATE_POST: `${baseUrl}/api/forum/posts/submit`,
-    DRAFT_POST: `${baseUrl}/api/forum/posts/draft`,
+    CREATE_POST:`${baseUrl}/api/forum/posts`,
+    DRAFT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
+    SUBMIT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/submit`,
     CREATE_COMMENT: `${baseUrl}/api/forum/Comment`,
     UPVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/upvote`,
     DOWNVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/downvote`,
@@ -45,6 +46,7 @@ export const API_ENDPOINTS = {
     SUBMIT_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY_DETAIL: (submissionId) => `${baseUrl}/api/code-practices/submissions/${submissionId}`,
+    GET_SOLUTION_FORUM: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/forum`,
 
     // Mock Interview API Endpoints
 

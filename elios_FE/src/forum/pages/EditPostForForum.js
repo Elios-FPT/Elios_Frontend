@@ -163,18 +163,12 @@ const EditPostForForum = () => {
         }
     };
 
-    /**
-     * Handles starting a drag operation from the image pool.
-     * We set the data to the Markdown string of the image.
-     */
     const handleImagePoolDragStart = (event, imageUrl) => {
         const markdownToInsert = `![Image](${imageUrl})`;
         event.dataTransfer.setData("text/plain", markdownToInsert);
     };
 
-    /**
-     * Handles drag-and-drop for file uploads onto the image pool sidebar.
-     */
+    
     const handlePoolDragOver = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -213,30 +207,25 @@ const EditPostForForum = () => {
      * Handles the final form submission (updating the post).
      */
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault(); 
 
         const postData = {
-            CategoryId: CATEGORY_ID,
-            Title: title,
-            Content: content,
-            PostType: POST_TYPE,
-            Tags: null
+            categoryId: CATEGORY_ID,
+            title: title,
+            content: content,
+            postType: POST_TYPE,
+            referenceId: null,
+            tags: null,
+            submitForReview: true
         };
 
         try {
-            // You are editing, so you should use a PUT/UPDATE endpoint that includes the postId
-            // I'm assuming an endpoint like UPDATE_MY_POST(postId) exists.
-            // Your original code used CREATE_POST, which is incorrect for an update.
-            const response = await axios.post(API_ENDPOINTS.CREATE_POST, postData, {
+            const response = await axios.put(API_ENDPOINTS.SUBMIT_POST(postId), postData, {
                 withCredentials: true,
-                headers: { "Content-Type": "multipart/form-data" },
             });
 
-            console.log("Post updated successfully:", response.data);
-
-            console.log(postData);
-            // Navigate away after successful update
-           // navigate('/forum/user-posts');
+            console.log("Post published successfully:", response.data);
+            navigate('/forum/user-posts');
 
         } catch (error) {
             console.error("Error updating post:", error.response || error);
@@ -244,32 +233,26 @@ const EditPostForForum = () => {
         }
     };
 
-    /**
-     * Handles saving the current state as a draft.
-     */
     const handleSaveDraft = async () => {
-        // Construct postData inside the handler to get current state
         const postData = {
-            PostId: postId, 
-            CategoryId: CATEGORY_ID,
-            Title: title,
-            Content: content,
-            PostType: POST_TYPE,
-            Tags: null
+            postId: postId, 
+            categoryId: CATEGORY_ID,
+            title: title,
+            content: content,
+            postType: POST_TYPE,
+            tags: null
         };
 
         try {
-            const response = await axios.post(API_ENDPOINTS.DRAFT_POST, postData, {
+            const response = await axios.put(API_ENDPOINTS.DRAFT_POST(postId), postData, {
                 withCredentials: true,
-                headers: { "Content-Type": "multipart/form-data" },
             });
 
             console.log("Draft saved successfully.", response.data);
       
-
         } catch (error) {
             console.error("Error saving draft:", error.response || error);
-            setImageError("Failed to save draft."); // Use imageError or a new 'draftError' state
+            setImageError("Failed to save draft."); 
         }
     };
 

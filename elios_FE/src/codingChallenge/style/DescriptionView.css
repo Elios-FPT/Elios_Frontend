@@ -1,0 +1,15 @@
+/* file: elios_FE/src/codingChallenge/style/DescriptionView.css */
+
+#problem-title {
+  color: #50fa7b;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+#example-block {
+  background: #1e1e1e;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 15px;
+  white-space: pre-wrap;
+}
