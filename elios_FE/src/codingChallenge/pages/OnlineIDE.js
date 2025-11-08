@@ -70,6 +70,49 @@ const OnlineIDE = () => {
     try {
       const payload = { code, language };
       const response = await axios.post(
+        API_ENDPOINTS.RUN_CODE_SOLUTION(problemId),
+        payload,
+        { withCredentials: true, headers: { "Content-Type": "application/json" } }
+      );
+      const resultData = response.data.data || response.data;
+      const { summary, evaluationResults } = resultData;
+
+      let displayText = "";
+      displayText += "================ RESULT ================\n";
+      displayText += `Status    : ${summary?.overallStatus || "UNKNOWN"}\n`;
+      displayText += `Passed    : ${summary?.passedTestCases || 0}/${summary?.totalTestCases || 0}\n`;
+      displayText += "=======================================\n";
+
+      if (evaluationResults?.length) {
+        displayText += "\nTest Case Results\n";
+        displayText += "---------------------------------------\n";
+        evaluationResults.forEach((res, idx) => {
+          displayText += `#${idx + 1}  ${res.status}\n`;
+          if (res.input) displayText += `  Input  : ${res.input}\n`;
+        //  if (res.expectedOutput) displayText += `  Expected: ${res.expectedOutput}\n`;
+          if (res.actualOutput) displayText += `  Output : ${res.actualOutput}\n`;
+          if (res.errorMessage) displayText += `  Error  : ${res.errorMessage}\n`;
+          displayText += "---------------------------------------\n";
+        });
+      }
+      setTestResults(resultData);
+      setOutput(displayText.trim());
+    } catch (err) {
+      console.error("❌ Error running code:", err);
+      setError(err.response?.data?.message || "❌ Error submitting code");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (code, language) => {
+    setIsLoading(true);
+    setError("");
+    setOutput("");
+    setTestResults(null);
+    try {
+      const payload = { code, language };
+      const response = await axios.post(
         API_ENDPOINTS.SUBMIT_CODE_SOLUTION(problemId),
         payload,
         { withCredentials: true, headers: { "Content-Type": "application/json" } }
@@ -104,6 +147,9 @@ const OnlineIDE = () => {
       setIsLoading(false);
     }
   };
+
+
+
 
   const isProblemCollapsed = mainSizes[0] === 0;
   const isEditorCollapsed = verticalSizes[0] === 0;
@@ -145,7 +191,9 @@ const OnlineIDE = () => {
               {/* <button id="editor-toggle-btn" onClick={toggleEditorPanel} title={isEditorCollapsed ? "Show Editor" : "Hide Editor"}>
                   {isEditorCollapsed ? <FaChevronDown /> : <FaChevronUp />}
               </button> */}
-              {!isEditorCollapsed && <CodeIDE onRun={handleRun} />}
+              {!isEditorCollapsed && (
+                <CodeIDE onRun={handleRun} onSubmit={handleSubmit} />
+              )}
             </div>
 
             {/* Output Panel (Bottom) */}

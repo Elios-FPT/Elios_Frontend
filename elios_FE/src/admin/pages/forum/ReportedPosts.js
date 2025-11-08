@@ -8,16 +8,16 @@ const ReportedPosts = () => {
 
     const [reportedPosts, setReportedPosts] = useState([]);
 
-    useEffect(() => {
-        // Fetch reported posts from the backend
-        axios.get(API_ENDPOINTS.REPORTED_POSTS)
-            .then(response => {
-                setReportedPosts(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching reported posts:', error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     // Fetch reported posts from the backend
+    //     axios.get(API_ENDPOINTS.REPORTED_POSTS)
+    //         .then(response => {
+    //             setReportedPosts(response.data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching reported posts:', error);
+    //         });
+    // }, []);
 
 
 
