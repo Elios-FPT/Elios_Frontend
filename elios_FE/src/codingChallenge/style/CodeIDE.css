@@ -42,3 +42,20 @@
 .run-btn:hover {
   background: #14b06f;
 }
+
+
+/* --- NEW: Submit button styles --- */
+.submit-btn {
+  background: #3771c8; /* Blue color */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background: #4a8ee8;
+}

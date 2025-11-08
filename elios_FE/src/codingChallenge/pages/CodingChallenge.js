@@ -9,16 +9,31 @@ import LoadingCircle1 from "../../components/loading/LoadingCircle1";
 import { CodingChallengeContext } from "../context/CodingChallengeContext";
 
 const CodingChallenge = () => {
-  // Get state from the context instead of component state
-  const { challenges, loading } = useContext(CodingChallengeContext);
+  // --- Destructure all new state and setters from context ---
+  const {
+    challenges,
+    loading,
+    difficulty, // Current difficulty value
+    setDifficulty, // Setter for difficulty
+    page, // Current page number
+    setPage, // Setter for page
+    totalPages, // Total pages from API
+  } = useContext(CodingChallengeContext);
+  
   const navigate = useNavigate();
 
   const handleSelect = (problemId) => {
     navigate(`/codingChallenge/online-ide?id=${problemId}`);
   };
 
+  // --- New Handler for Difficulty Change ---
+  const handleDifficultyChange = (e) => {
+    setDifficulty(e.target.value);
+    setPage(0); // Reset to first page when filter changes
+  };
+
   // Handle the initial loading state (this will only show on first app load)
-  if (loading) {
+  if (loading && challenges.length === 0) { // Only show full page load if challenges are empty
     return (
       <>
         <header>
@@ -43,14 +58,34 @@ const CodingChallenge = () => {
         {/* Left Sidebar ID */}
         <aside id="coding-challenge-left">
           <h3>Categories</h3>
-          <p>Placeholder for future filters or tags.</p>
+          {/* --- START: Difficulty Filter --- */}
+          <label htmlFor="difficulty-select" style={{ fontSize: '0.9rem', color: '#bbbbbb' }}>Difficulty:</label>
+          <select
+            id="difficulty-select"
+            value={difficulty}
+            onChange={handleDifficultyChange}
+            className="difficulty-filter-dropdown" // Added class for styling
+          >
+            <option value="">All</option>
+            <option value="EASY">Easy</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HARD">Hard</option>
+          </select>
+          {/* --- END: Difficulty Filter --- */}
+          <p style={{ marginTop: '20px' }}>More filters coming soon.</p>
         </aside>
 
         {/* Main Content ID */}
         <section id="coding-challenge-middle">
           <div className="coding-challenges-background">
             <h1>Coding Challenges</h1>
-            <table className="coding-challenges-table">
+            
+            {/* Show loading spinner over table if fetching new page/filter */}
+            {loading && <LoadingCircle1 />}
+
+            {/* --- START: Table --- */}
+            {/* Hide table if loading to prevent interaction */}
+            <table className="coding-challenges-table" style={{ display: loading ? 'none' : 'table' }}>
               <thead>
                 <tr>
                   <th>Title</th>
@@ -71,6 +106,27 @@ const CodingChallenge = () => {
                 ))}
               </tbody>
             </table>
+            {/* --- END: Table --- */}
+
+            {/* --- START: Pagination Controls --- */}
+            <div className="pagination-controls">
+              <button
+                onClick={() => setPage((p) => p - 1)}
+                disabled={page === 0 || loading}
+              >
+                Previous
+              </button>
+              <span>
+                Page {page + 1} of {totalPages}
+              </span>
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page >= totalPages - 1 || loading}
+              >
+                Next
+              </button>
+            </div>
+            {/* --- END: Pagination Controls --- */}
           </div>
         </section>
 

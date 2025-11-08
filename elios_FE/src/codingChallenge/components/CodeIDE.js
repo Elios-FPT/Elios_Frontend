@@ -3,12 +3,19 @@ import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import "../style/CodeIDE.css";
 
-const CodeIDE = ({ onRun }) => {
+// Accept the new 'onSubmit' prop
+const CodeIDE = ({ onRun, onSubmit }) => {
   const [language, setLanguage] = useState("JAVA");
   const [code, setCode] = useState("// Write your code here...");
 
   const handleRun = () => {
     onRun(code, language); // send code & language to backend
+  };
+
+  // --- NEW: Handler for the submit button ---
+  const handleSubmitClick = () => {
+    // Call the new prop
+    onSubmit(code, language); 
   };
 
   return (
@@ -25,9 +32,17 @@ const CodeIDE = ({ onRun }) => {
           <option value="CSHARP">C#</option>
         </select>
 
-        <button onClick={handleRun} className="run-btn">
-          ▶ Run
-        </button>
+        {/* --- NEW: Button group wrapper --- */}
+        <div className="button-group">
+          <button onClick={handleRun} className="run-btn">
+            ▶ Run
+          </button>
+          
+          {/* --- NEW: Submit button --- */}
+          <button onClick={handleSubmitClick} className="submit-btn">
+            Submit
+          </button>
+        </div>
       </div>
 
       {/* Code Editor */}

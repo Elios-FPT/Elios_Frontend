@@ -4,7 +4,8 @@ import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 
 // const TESTAPI = "http://www.elios.com/api/users/me/profile";
-const TESTAPI = "http://www.elios.com/api/cvbuilder/UserCvs/0be7d2a8-cc77-4ffb-aa06-ba34ab0a4a0a";
+ const TESTAPI = "http://www.elios.com/api/code-practices";
+//const TESTAPI = "http://www.elios.com/api/cvbuilder/UserCvs/0be7d2a8-cc77-4ffb-aa06-ba34ab0a4a0a";
 
 const TestConnectionToBE = () => {
     // Initialize state with a helpful message
@@ -20,9 +21,7 @@ const TestConnectionToBE = () => {
                 },
             });
 
-            // On success, update the state with the data from the response
-            // Axios puts the response body in the `data` property
-            // JSON.stringify formats the object nicely for display
+  
             setResult(JSON.stringify(response.data, null, 2));
             console.log("✅ Backend connection successful:", response.data);
 

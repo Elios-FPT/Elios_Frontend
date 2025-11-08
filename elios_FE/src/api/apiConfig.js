@@ -1,5 +1,5 @@
 // elios_FE/src/api/apiConfig.js
-const baseUrl = process.env.REACT_APP_DEVELOPMENT_LOCAL_API_URL;
+const baseUrl = process.env.REACT_APP_DEVELOPMENT_API_URL;
 
 export const API_ENDPOINTS = {
     LOGIN_PATH: 'http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com%2Fforum',
@@ -41,6 +41,7 @@ export const API_ENDPOINTS = {
     // Codeing Challenge API Endpoints
     GET_CODE_CHALLENGES_LIST: `${baseUrl}/api/code-practices`,
     GET_CODE_CHALLENGE_DETAIL: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}`,
+    RUN_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/run`,
     SUBMIT_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY_DETAIL: (submissionId) => `${baseUrl}/api/code-practices/submissions/${submissionId}`,

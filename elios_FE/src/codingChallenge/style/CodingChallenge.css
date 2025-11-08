@@ -145,3 +145,61 @@
   justify-content: center;
   align-items: center;
 }
+
+
+/* === NEW: Filter Dropdown (in Left Sidebar) === */
+.difficulty-filter-dropdown {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+  border: 1px solid #333;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.difficulty-filter-dropdown:focus {
+  outline: none;
+  border-color: #4a90e2; /* Example focus color */
+}
+
+
+/* === NEW: Pagination Controls (in Middle Section) === */
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  padding: 0 10px;
+  color: #ccc;
+}
+
+.pagination-controls button {
+  background-color: #333;
+  color: #f5f5f5;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.pagination-controls button:hover {
+  background-color: #444;
+}
+
+.pagination-controls button:disabled {
+  background-color: #2a2a2a;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
