@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 
 // const TESTAPI = "http://www.elios.com/api/users/me/profile";
- const TESTAPI = "http://www.elios.com/api/code-practices";
+ //const TESTAPI = "http://www.elios.com/api/code-practices";
 //const TESTAPI = "http://www.elios.com/api/cvbuilder/UserCvs/0be7d2a8-cc77-4ffb-aa06-ba34ab0a4a0a";
 
 const TestConnectionToBE = () => {
@@ -14,7 +14,7 @@ const TestConnectionToBE = () => {
     const handleTestConnection = async () => {
         try {
             // Await the response from the GET request
-            const response = await axios.get(TESTAPI, {
+            const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",

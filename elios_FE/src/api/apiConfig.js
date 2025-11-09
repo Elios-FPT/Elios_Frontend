@@ -29,7 +29,7 @@ export const API_ENDPOINTS = {
     DELETE_MY_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     UPLOAD_IMAGE: `${baseUrl}/api/forum/upload`,
     GET_MY_IMAGE_POOL: `${baseUrl}/api/forum/upload/images`,
-    //DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/images/${imageId}`,
+    DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/upload/${imageId}`,
     
 
 
@@ -38,6 +38,10 @@ export const API_ENDPOINTS = {
     APPROVE_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/approve`,
     REJECT_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/reject`,
     MODERATOR_DELETE_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}`,
+    GET_CATEGORIES: `${baseUrl}/api/forum/Category`,
+    CREATE_CATEGORY: `${baseUrl}/api/forum/Category`,
+    UPDATE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
+    DELETE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
 
     // Codeing Challenge API Endpoints
     GET_CODE_CHALLENGES_LIST: `${baseUrl}/api/code-practices`,

@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 import { API_ENDPOINTS } from "../../api/apiConfig";
-import "../style/DescriptionView.css"; // <-- NEW CSS FILE
+import "../style/DescriptionView.css"; 
 
 const DescriptionView = ({ problemId }) => {
   const [problem, setProblem] = useState(null);
