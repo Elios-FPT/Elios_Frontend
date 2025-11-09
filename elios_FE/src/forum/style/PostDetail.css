@@ -30,18 +30,18 @@
   padding: 1rem 1.5rem;
 }
 
-.post-avatar {
+#post-detail-avatar {
   width: 45px;
   height: 45px;
   border-radius: 50%;
 }
 
-.post-author {
+#post-detail-author {
   color: #ffffff;
   font-weight: 500;
 }
 
-.post-time {
+#post-detail-time {
   color: #888;
   font-size: 0.85rem;
 }
@@ -50,20 +50,20 @@
   padding: 1.5rem;
 }
 
-.post-title {
+#post-detail-title {
   color: #28a745; /* Vibrant Green Title */
   font-weight: bold;
   margin-bottom: 1.5rem;
 }
 
 /* --- Markdown Content Styling --- */
-.markdown-content {
+#post-detail-markdown-content {
   line-height: 1.7;
   color: #dcdcdc;
 }
 
 /* Inline code */
-.markdown-content code {
+#post-detail-markdown-content code {
   background-color: rgba(240, 98, 146, 0.15);
   color: #f06292; /* Pink tone for inline code */
   padding: 0.2em 0.4em;
@@ -74,7 +74,7 @@
 }
 
 /* Code blocks */
-.markdown-content pre {
+#post-detail-markdown-content pre {
   background-color: #161b22; /* Darker background for code blocks */
   padding: 1rem;
   border-radius: 8px;
@@ -82,7 +82,7 @@
   border: 1px solid #333;
 }
 
-.markdown-content pre code {
+#post-detail-markdown-content pre code {
   background-color: transparent;
   color: inherit;
   padding: 0;
@@ -94,7 +94,7 @@
   border-top: 1px solid #333;
 }
 
-.comments-section-title {
+#post-detail-comments-title {
   color: #ffffff;
   font-weight: 600;
   margin-bottom: 1.5rem;
@@ -120,4 +120,8 @@
 .comment-body p {
   color: #dcdcdc;
   margin-bottom: 0.25rem;
+}
+
+.comment .text-muted {
+  color: #888 !important;
 }
