@@ -1,0 +1,94 @@
+/* file: elios_FE/src/admin/styles/AdminManageCategory.css */
+
+#admin-manage-category-page {
+    padding: 24px;
+    color: #eee;
+}
+
+#admin-manage-category-page h1 {
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+#admin-manage-category-page h2 {
+    color: #19c37d; /* Green accent */
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+/* --- Create Form --- */
+#create-category-form {
+    background: #23272f;
+    border: 1px solid #3a3f4c;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 10px;
+    color: #eee;
+    font-size: 1rem;
+}
+
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.btn-create {
+    background-color: #0f8a57;
+    color: #fff;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-self: flex-start; /* Don't stretch */
+}
+
+.btn-create:hover {
+    background-color: #14b06f;
+}
+
+/* --- Category List --- */
+#category-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* --- Error Styling --- */
+.form-error,
+.page-error {
+    color: #e57373;
+    background: rgba(229, 115, 115, 0.1);
+    border: 1px solid #e57373;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}

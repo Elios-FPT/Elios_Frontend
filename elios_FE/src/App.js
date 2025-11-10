@@ -23,6 +23,7 @@ import AdminScreenLayout from "./admin/pages/AdminScreenLayout";
 import AdminDashboard from "./admin/pages/AdminDashboard";
 import PendingPosts from "./admin/pages/forum/PendingPosts";
 import ReportedPosts from "./admin/pages/forum/ReportedPosts";
+import AdminManageCategory from "./admin/pages/forum/AdminManageCategory";
 
 import MockProjects from "./mockProject/pages/MockProjects";
 import ProjectDetailPage from './mockProject/pages/ProjectDetailPage';
@@ -49,6 +50,7 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="forum/pending" element={<PendingPosts />} />
           <Route path="forum/reported" element={<ReportedPosts />} />
+          <Route path="forum/manage-categories" element={<AdminManageCategory />} />
         </Route>
 
         <Route path="/codingChallenge" element={<CodingChallenge />} />

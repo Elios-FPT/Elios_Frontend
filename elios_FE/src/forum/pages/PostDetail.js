@@ -108,10 +108,9 @@ const PostDetail = () => {
             setPost(updatedPostFromServer);
 
         } catch (error) {
+            console.error("Error posting comment:", error);
         }
     };
-
-    // file: elios_FE/src/forum/pages/PostDetail.js
 
     const handleUpvote = async () => {
         const originalPost = { ...post };
@@ -127,14 +126,10 @@ const PostDetail = () => {
                 {},
                 { withCredentials: true }
             );
-
-            // **THE FIX:**
-            // Merge the server's response with the current state,
-            // don't just replace it.
             const updatedData = response.data.responseData;
             setPost((current) => ({
-                ...current,     // <-- Keeps title, content, comments, etc.
-                ...updatedData, // <-- Updates with the new counts from the server
+                ...current,
+                ...updatedData,
             }));
 
         } catch (error) {
@@ -142,8 +137,6 @@ const PostDetail = () => {
             setPost(originalPost); // Rollback on error
         }
     };
-
-    // file: elios_FE/src/forum/pages/PostDetail.js
 
     const handleDownvote = async () => {
         const originalPost = { ...post };
@@ -162,13 +155,41 @@ const PostDetail = () => {
 
             const updatedData = response.data.responseData;
             setPost((current) => ({
-                ...current,     // <-- Keeps title, content, comments, etc.
-                ...updatedData, // <-- Updates with the new counts from the server
+                ...current,
+                ...updatedData,
             }));
 
         } catch (error) {
             console.error("Error downvoting post:", error);
             setPost(originalPost);
+        }
+    };
+
+    // --- UPDATED FUNCTION ---
+    const handleReportPost = async (reason, details) => {
+        if (!reason) {
+            console.error("Report reason is required.");
+            return;
+        }
+
+        try {
+            await axios.post(
+                API_ENDPOINTS.REPORT_POST, 
+                {
+                    targetType: "Post",
+                    targetId: id,
+                    reason: reason,
+                    details: details ? details.trim() : ""
+                },
+                { 
+                    withCredentials: true,
+                    headers: { "Content-Type": "application/json" }
+                }
+            );
+            alert("Post reported successfully!");
+        } catch (error) {
+            console.error("Error reporting post:", error);
+            alert("There was an error submitting your report. Please try again.");
         }
     };
 
@@ -233,26 +254,22 @@ const PostDetail = () => {
                         <Button variant="outline-light" onClick={() => navigate("/forum")}>← Back to Forum</Button>
                     </div>
                     <Card.Header id="post-detail-card-header">
-                        <img src={post.authorAvatarUrl} alt="user" className="post-avatar" />
+                        <img src={post.authorAvatarUrl} alt="user" id="post-detail-avatar" />
                         <div>
-                            <h5 className="mb-0 post-author">{post.authorFullName}</h5>
-                            <small className="post-time">{formatRelativeTime(post.createdAt)}</small>
+                            <h5 className="mb-0" id="post-detail-author">{post.authorFullName}</h5>
+                            <small id="post-detail-time">{formatRelativeTime(post.createdAt)}</small>
                         </div>
                     </Card.Header>
                     <Card.Body>
-                        <h3 className="post-title">{post.title}</h3>
-                        <div className="markdown-content mb-4">
+                        <h3 id="post-detail-title">{post.title}</h3>
+                        <div className="mb-4" id="post-detail-markdown-content">
                             <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
                                 {post.content}
                             </ReactMarkdown>
                         </div>
-                        {post.url && post.url.length > 0 && (
-                            <div className="text-center my-3">
-                                {post.url.map((img, index) => <img key={index} src={img} alt="post media" className="img-fluid rounded mb-2" />)}
-                            </div>
-                        )}
+                        {/* Image rendering block removed as requested */}
                         <hr />
-                        <h5 className="comments-section-title">Comments</h5>
+                        <h5 id="post-detail-comments-title">Comments</h5>
                         {renderComments(post.comments || [])}
                         <CommentForm
                             postStats={{
@@ -265,6 +282,7 @@ const PostDetail = () => {
                             onCancelReply={handleCancelReply}
                             onUpvote={handleUpvote}
                             onDownvote={handleDownvote}
+                            onReport={handleReportPost}
                         />
                     </Card.Body>
                 </Container>

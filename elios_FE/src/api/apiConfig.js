@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
 
     // CV API Endpoints
     GET_USER_CV: `${baseUrl}/api/cvbuilder/UserCvs`,
-    CREATE_USER_CV: `/api/cvbuilder/UserCvs`,
+    CREATE_USER_CV: `${baseUrl}/api/cvbuilder/UserCvs`,
     GET_USER_CV_DETAIL: (cvId) => `${baseUrl}/api/cvbuilder/UserCvs/${cvId}`,
     SAVE_DRAFT_USER_CV: (cvId) => `${baseUrl}/api/cvbuilder/UserCvs/${cvId}`,
     DELETE_USER_CV: (cvId) => `${baseUrl}/api/cvbuilder/UserCvs/${cvId}`,
@@ -22,6 +22,8 @@ export const API_ENDPOINTS = {
     DRAFT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     SUBMIT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/submit`,
     CREATE_COMMENT: `${baseUrl}/api/forum/Comment`,
+    EDIT_COMMENT: (commentId) => `${baseUrl}/api/forum/Comment/${commentId}`,
+    DELETE_COMMENT: (commentId) => `${baseUrl}/api/forum/Comment/${commentId}`,
     UPVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/upvote`,
     DOWNVOTE_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/downvote`,
     GET_MY_POSTS: `${baseUrl}/api/forum/posts/my-posts`,
@@ -29,8 +31,8 @@ export const API_ENDPOINTS = {
     DELETE_MY_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     UPLOAD_IMAGE: `${baseUrl}/api/forum/upload`,
     GET_MY_IMAGE_POOL: `${baseUrl}/api/forum/upload/images`,
-    //DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/images/${imageId}`,
-    
+    DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/upload/${imageId}`,
+    REPORT_POST: `${baseUrl}/api/forum/reports`,
 
 
     //Admin forum API Endpoints
@@ -38,6 +40,10 @@ export const API_ENDPOINTS = {
     APPROVE_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/approve`,
     REJECT_PENDING_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}/reject`,
     MODERATOR_DELETE_POST: (postId) => `${baseUrl}/api/forum/moderator/posts/${postId}`,
+    GET_CATEGORIES: `${baseUrl}/api/forum/Category`,
+    CREATE_CATEGORY: `${baseUrl}/api/forum/Category`,
+    UPDATE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
+    DELETE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
 
     // Codeing Challenge API Endpoints
     GET_CODE_CHALLENGES_LIST: `${baseUrl}/api/code-practices`,

@@ -71,7 +71,7 @@ const UserResume = () => {
       if (!newResumeId) {
         console.error("No resume ID returned from server.");
         alert("Error: Could not get new resume ID from server.");
-        setIsModalOpen(false); // Close modal on error
+        setIsModalOpen(false); 
         return;
       }
 
@@ -81,7 +81,7 @@ const UserResume = () => {
       console.error("Error creating resume:", error);
       console.log("API Endpoint used: POST", API_ENDPOINTS.CREATE_USER_CV);
       alert("Failed to create resume. Please try again.");
-      setIsModalOpen(false); // Close modal on error
+      setIsModalOpen(false);
     }
   };
 

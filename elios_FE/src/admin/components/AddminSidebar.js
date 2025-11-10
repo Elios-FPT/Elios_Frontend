@@ -32,6 +32,11 @@ const AdminSidebar = () => {
                     {isForumOpen && (
                         <ul id="forum-submenu" className="submenu">
                             <li>
+                                <NavLink to="/admin/forum/manage-categories">
+                                    Manage Categories
+                                </NavLink>
+                            </li>
+                            <li>
                                 <NavLink to="/admin/forum/pending">
                                     Pending Posts
                                 </NavLink>
