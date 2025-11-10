@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FaThumbsUp, FaThumbsDown, FaCommentAlt, FaTimes, FaFlag } from 'react-icons/fa';
 import "../style/CommentForm.css";
-import ReportModal from './ReportModal'; // Import the new modal
+import ReportPostModal from './ReportPostModal';
 
 const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote, onDownvote, onReport }) => {
     const [content, setContent] = useState('');
@@ -99,7 +99,7 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
             </Form>
 
             {/* Render the modal */}
-            <ReportModal
+            <ReportPostModal
                 show={showReportModal}
                 handleClose={handleCloseReportModal}
                 handleSubmit={handleReportSubmit}

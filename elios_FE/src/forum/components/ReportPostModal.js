@@ -1,8 +1,10 @@
 // file: elios_FE/src/forum/components/ReportModal.js
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+// ** MODIFICATION: Corrected import path **
+import '../style/ReportPostModal.css';
 
-const ReportModal = ({ show, handleClose, handleSubmit }) => {
+const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
     const [reason, setReason] = useState('');
     const [details, setDetails] = useState('');
 
@@ -29,7 +31,14 @@ const ReportModal = ({ show, handleClose, handleSubmit }) => {
     }
 
     return (
-        <Modal show={show} onHide={onCancel} centered>
+        <Modal 
+            show={show} 
+            onHide={onCancel} 
+            centered
+            // ** MODIFICATION: Added ID and backdropClassName for dark theme styling **
+            id="Report-Post-Modal"
+            backdropClassName="dark-theme-backdrop"
+        >
             <Modal.Header closeButton>
                 <Modal.Title>Report Content</Modal.Title>
             </Modal.Header>
@@ -76,4 +85,4 @@ const ReportModal = ({ show, handleClose, handleSubmit }) => {
     );
 };
 
-export default ReportModal;
+export default ReportPostModal;

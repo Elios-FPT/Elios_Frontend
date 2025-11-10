@@ -1,0 +1,93 @@
+/* file: elios_FE/src/forum/style/ReportPostModal.css */
+
+/* --- Modal Backdrop --- */
+/* Applies to the dark overlay behind the modal */
+.dark-theme-backdrop {
+  background-color: #0f0f0f;
+  opacity: 0.8;
+}
+
+/* --- Modal Container --- */
+/* This is the main card for the modal */
+#Report-Post-Modal .modal-content {
+  background-color: #2a2a2a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+/* --- Modal Header --- */
+#Report-Post-Modal .modal-header {
+  background-color: transparent;
+  border-bottom: 1px solid #333;
+}
+
+#Report-Post-Modal .modal-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Styles the 'X' close button for the dark background */
+#Report-Post-Modal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* --- Modal Body --- */
+#Report-Post-Modal .modal-body {
+  padding: 1.5rem;
+}
+
+#Report-Post-Modal .form-label {
+  color: #dcdcdc;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Form Inputs (Select & Textarea) --- */
+#Report-Post-Modal .form-control,
+#Report-Post-Modal .form-select {
+  background-color: #161b22; /* Matches code block bg */
+  color: #dcdcdc;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+
+#Report-Post-Modal .form-control::placeholder {
+  color: #888;
+}
+
+/* --- Input Focus Styling --- */
+/* Uses the theme's green accent color */
+#Report-Post-Modal .form-control:focus,
+#Report-Post-Modal .form-select:focus {
+  background-color: #161b22;
+  color: #dcdcdc;
+  border-color: #28a745; /* Green accent from PostDetail */
+  box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+/* --- Modal Footer --- */
+#Report-Post-Modal .modal-footer {
+  border-top: 1px solid #333;
+  background-color: transparent;
+}
+
+/* --- Button Styling --- */
+/* Cancel Button */
+#Report-Post-Modal .btn-secondary {
+  background-color: #444;
+  border-color: #555;
+  color: #ffffff;
+}
+
+#Report-Post-Modal .btn-secondary:hover {
+  background-color: #555;
+  border-color: #666;
+}
+
+/* Submit Report Button (uses default 'danger' colors which fit well) */
+#Report-Post-Modal .btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+}

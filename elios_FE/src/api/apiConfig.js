@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
 
     // CV API Endpoints
     GET_USER_CV: `${baseUrl}/api/cvbuilder/UserCvs`,
-    CREATE_USER_CV: `/api/cvbuilder/UserCvs`,
+    CREATE_USER_CV: `${baseUrl}/api/cvbuilder/UserCvs`,
     GET_USER_CV_DETAIL: (cvId) => `${baseUrl}/api/cvbuilder/UserCvs/${cvId}`,
     SAVE_DRAFT_USER_CV: (cvId) => `${baseUrl}/api/cvbuilder/UserCvs/${cvId}`,
     DELETE_USER_CV: (cvId) => `${baseUrl}/api/cvbuilder/UserCvs/${cvId}`,
