@@ -1,14 +1,11 @@
 /* file: elios_FE/src/forum/style/ReportPostModal.css */
 
-/* --- Modal Backdrop --- */
-/* Applies to the dark overlay behind the modal */
+
 .dark-theme-backdrop {
   background-color: #0f0f0f;
   opacity: 0.8;
 }
 
-/* --- Modal Container --- */
-/* This is the main card for the modal */
 #Report-Post-Modal .modal-content {
   background-color: #2a2a2a;
   border: 1px solid #333;
