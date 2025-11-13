@@ -1,0 +1,195 @@
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.feedback-modal {
+  background: white;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h2 {
+  font-size: 24px;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  padding: 30px;
+}
+
+.score-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.overall-score {
+  display: inline-block;
+}
+
+.score-number {
+  font-size: 48px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+.score-label {
+  font-size: 16px;
+  color: #666;
+}
+
+.score-sublabel {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.categories-section {
+  margin-bottom: 30px;
+}
+
+.categories-section h3 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.category-card {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+  border-left: 4px solid #007bff;
+}
+
+.category-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.category-score {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 8px;
+}
+
+.category-feedback {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.strengths-section,
+.improvement-section,
+.next-steps-section {
+  margin-bottom: 25px;
+}
+
+.strengths-section h3,
+.improvement-section h3,
+.next-steps-section h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.strengths-list,
+.improvement-list,
+.next-steps-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.strength-item,
+.improvement-item,
+.next-step-item {
+  padding: 8px 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.strength-item {
+  color: #4caf50;
+}
+
+.improvement-item {
+  color: #ff9800;
+}
+
+.next-step-item {
+  color: #2196f3;
+}
+
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.close-feedback-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.close-feedback-button:hover {
+  background: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

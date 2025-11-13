@@ -1,0 +1,90 @@
+/* Tab Controls Styles */
+.control-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  border-radius: 35px;
+  padding: 10px 10px;
+  max-width: fit-content;
+  margin: 30px auto 20px auto;
+}
+
+.control-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Active prominent buttons (with text) */
+.active-prominent {
+  padding: 12px 24px;
+  background: #2c2c2c;
+  color: white;
+}
+
+.active-prominent .mic-icon,
+.active-prominent .write-icon {
+  font-size: 18px;
+}
+
+.active-prominent .button-text {
+  font-size: 16px;
+}
+
+/* Icon-only buttons (inactive state) */
+.mic-button-icon,
+.write-button-icon {
+  padding: 12px;
+  background: white;
+  color: #333;
+  width: 48px;
+  height: 48px;
+  justify-content: center;
+}
+
+.mic-button-icon .mic-icon,
+.write-button-icon .write-icon {
+  font-size: 20px;
+}
+
+/* End session button */
+.end-button {
+  padding: 12px 24px;
+  background: white;
+  color: #333;
+}
+
+/* Hover effects */
+.control-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.active-prominent:hover {
+  background: #1a1a1a;
+}
+
+.mic-button-icon:hover,
+.write-button-icon:hover,
+.end-button:hover {
+  background: #f8f9fa;
+  border-color: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tab-controls {
+    padding: 10px 20px;
+  }
+}
+

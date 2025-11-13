@@ -1,0 +1,179 @@
+/* Text Chat Styles */
+.text-chat {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 30px;
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Input Area */
+.input-area {
+  padding: 20px 30px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8f9fa;
+  border-radius: 25px;
+  padding: 8px 15px;
+}
+
+.message-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+}
+
+.message-input::placeholder {
+  color: #999;
+}
+
+.send-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+
+.send-button:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.send-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Connection Status Banner */
+.connection-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.connection-banner .material-icons {
+  font-size: 20px;
+  color: #ff9800;
+}
+
+.connection-planning {
+  background: #e3f2fd;
+  border-left-color: #2196f3;
+}
+
+.connection-planning .material-icons {
+  color: #2196f3;
+}
+
+.connection-connecting {
+  background: #e8f5e9;
+  border-left-color: #4caf50;
+}
+
+.connection-connecting .material-icons {
+  color: #4caf50;
+}
+
+.connection-reconnecting {
+  background: #ffebee;
+  border-left-color: #f44336;
+}
+
+.connection-reconnecting .material-icons {
+  color: #f44336;
+}
+
+.connection-banner .reconnect-button {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.connection-banner .reconnect-button:hover {
+  background: #1976d2;
+}
+
+.connection-banner .reconnect-button:active {
+  background: #1565c0;
+}
+
+.connection-banner .reconnect-button .material-icons {
+  font-size: 18px;
+  color: white;
+}
+
+.connection-banner .reconnect-spinner {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.connection-banner .reconnect-spinner .material-icons {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .messages-container {
+    padding: 15px 20px;
+  }
+
+  .input-area {
+    padding: 15px 20px;
+  }
+}
+
