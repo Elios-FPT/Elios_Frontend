@@ -60,7 +60,7 @@ function InterviewPage() {
     if (interviewId) return null;
 
     return (
-      <div className="start-interview-container">
+      <div id="interview-start-container">
         <div className="start-interview-card">
           <h2>Ready to Begin?</h2>
           <p>Click below to start your mock interview session</p>
@@ -77,8 +77,8 @@ function InterviewPage() {
   };
 
   return (
-    <div className="interview-page">
-      <div className="interview-container">
+    <div id="interview-page">
+      <div id="interview-container">
         {/* Header */}
         <div className="header">
           <div className="header-left">

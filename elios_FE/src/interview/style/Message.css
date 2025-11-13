@@ -1,55 +1,55 @@
 /* Message Styles */
-.message-wrapper {
+#interview-text-chat .message-wrapper {
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
-.user-message {
+#interview-text-chat .user-message {
   align-items: flex-end;
 }
 
-.ai-message {
+#interview-text-chat .ai-message {
   align-items: flex-start;
 }
 
-.message-bubble {
+#interview-text-chat .message-bubble {
   max-width: 70%;
   padding: 12px 16px;
   border-radius: 18px;
   position: relative;
 }
 
-.user-bubble {
+#interview-text-chat .user-bubble {
   background: #007bff;
   color: white;
   border-bottom-right-radius: 4px;
 }
 
-.ai-bubble {
+#interview-text-chat .ai-bubble {
   background: #f1f3f4;
   color: #333;
   border-bottom-left-radius: 4px;
 }
 
-.message-text {
+#interview-text-chat .message-text {
   font-size: 14px;
   line-height: 1.4;
   margin-bottom: 4px;
 }
 
-.message-timestamp {
+#interview-text-chat .message-timestamp {
   font-size: 11px;
   opacity: 0.7;
 }
 
-.message-actions {
+#interview-text-chat .message-actions {
   display: flex;
   gap: 8px;
   margin-top: 5px;
 }
 
-.action-icon {
+#interview-text-chat .action-icon {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -62,11 +62,10 @@
   cursor: pointer;
 }
 
-.ai-indicator {
+#interview-text-chat .ai-indicator {
   position: absolute;
   top: -5px;
   left: 10px;
   font-size: 18px;
   color: #ff9800;
 }
-

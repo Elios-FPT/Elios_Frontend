@@ -3,7 +3,7 @@ import '../style/TabControls.css';
 
 function TabControls({ activeTab, onTabSwitch, onEndSession }) {
   return (
-      <div className="control-buttons">
+      <div id="interview-tab-controls" className="control-buttons">
         {/* Microphone button - changes based on active tab */}
         {activeTab === 'voice' ? (
           <button

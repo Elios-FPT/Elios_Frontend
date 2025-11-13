@@ -48,7 +48,7 @@ function VoiceChat() {
   }, []);
 
   return (
-    <div className="voice-chat">
+    <div id="interview-voice-chat">
       {/* Background decorations */}
       <div className="voice-background">
         <div className="decoration decoration-top-left">

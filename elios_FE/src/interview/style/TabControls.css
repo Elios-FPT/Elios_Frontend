@@ -1,5 +1,5 @@
 /* Tab Controls Styles */
-.control-buttons {
+#interview-tab-controls {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -13,7 +13,7 @@
   margin: 30px auto 20px auto;
 }
 
-.control-button {
+#interview-tab-controls .control-button {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -26,24 +26,24 @@
 }
 
 /* Active prominent buttons (with text) */
-.active-prominent {
+#interview-tab-controls .active-prominent {
   padding: 12px 24px;
   background: #2c2c2c;
   color: white;
 }
 
-.active-prominent .mic-icon,
-.active-prominent .write-icon {
+#interview-tab-controls .active-prominent .mic-icon,
+#interview-tab-controls .active-prominent .write-icon {
   font-size: 18px;
 }
 
-.active-prominent .button-text {
+#interview-tab-controls .active-prominent .button-text {
   font-size: 16px;
 }
 
 /* Icon-only buttons (inactive state) */
-.mic-button-icon,
-.write-button-icon {
+#interview-tab-controls .mic-button-icon,
+#interview-tab-controls .write-button-icon {
   padding: 12px;
   background: white;
   color: #333;
@@ -52,39 +52,38 @@
   justify-content: center;
 }
 
-.mic-button-icon .mic-icon,
-.write-button-icon .write-icon {
+#interview-tab-controls .mic-button-icon .mic-icon,
+#interview-tab-controls .write-button-icon .write-icon {
   font-size: 20px;
 }
 
 /* End session button */
-.end-button {
+#interview-tab-controls .end-button {
   padding: 12px 24px;
   background: white;
   color: #333;
 }
 
 /* Hover effects */
-.control-button:hover {
+#interview-tab-controls .control-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.active-prominent:hover {
+#interview-tab-controls .active-prominent:hover {
   background: #1a1a1a;
 }
 
-.mic-button-icon:hover,
-.write-button-icon:hover,
-.end-button:hover {
+#interview-tab-controls .mic-button-icon:hover,
+#interview-tab-controls .write-button-icon:hover,
+#interview-tab-controls .end-button:hover {
   background: #f8f9fa;
   border-color: #ccc;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .tab-controls {
+  #interview-tab-controls {
     padding: 10px 20px;
   }
 }
-

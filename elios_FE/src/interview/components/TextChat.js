@@ -248,7 +248,7 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
   };
 
   return (
-    <div className="text-chat">
+    <div id="interview-text-chat">
       {renderConnectionStatus()}
 
       {/* Messages Area */}

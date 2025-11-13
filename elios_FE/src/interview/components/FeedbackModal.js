@@ -67,7 +67,7 @@ function FeedbackModal({ evaluations = [], onClose }) {
   }, [evaluations]);
 
   return (
-    <div className="modal-overlay">
+    <div id="interview-feedback-modal" className="modal-overlay">
       <div className="feedback-modal">
         <div className="modal-header">
           <h2>Session Feedback</h2>
