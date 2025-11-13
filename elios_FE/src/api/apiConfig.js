@@ -34,8 +34,9 @@ export const API_ENDPOINTS = {
     DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/upload/${imageId}`,
     REPORT_POST: `${baseUrl}/api/forum/reports`,
     REPORT_COMMENT: `${baseUrl}/api/forum/reports`,
-    DELETE_COMMENT: (commentId) => `${baseUrl}/api/forum/Comment/${commentId}`,
-
+    CREATE_SOLUTION:`${baseUrl}/api/forum/posts`,
+    GET_SOLUTION:`${baseUrl}/api/forum/posts`,
+    
 
     //Admin forum API Endpoints
     GET_PENDING_POSTS: `${baseUrl}/api/forum/moderator/posts/pending`,

@@ -8,28 +8,33 @@ import { API_ENDPOINTS } from "../../api/apiConfig";
 //const TESTAPI = "http://www.elios.com/api/cvbuilder/UserCvs/0be7d2a8-cc77-4ffb-aa06-ba34ab0a4a0a";
 
 const TestConnectionToBE = () => {
-    // Initialize state with a helpful message
     const [result, setResult] = useState("Click the button to test the connection.");
+    
+    
+    const challengeId = "a1b2c3d4-5678-90ab-cdef-1234567890ab";
+    const postType = "Solution";
+    const apiUrl = API_ENDPOINTS.GET_SOLUTION; 
 
     const handleTestConnection = async () => {
         try {
-            // Await the response from the GET request
-            const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES, {
+            const response = await axios.get(apiUrl, {
+                params: {
+                    PostType: postType,
+                    ReferenceId: challengeId,
+                },
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
 
-  
             setResult(JSON.stringify(response.data, null, 2));
             console.log("✅ Backend connection successful:", response.data);
 
         } catch (error) {
-            // If axios throws an error (e.g., 404, 500), it will be caught here
-            const errorMessage = `❌ API ${API_ENDPOINTS.GET_POSTS_FORUM}  Error connecting to backend: ${error.message}`;
+            const errorMessage = `❌ API ${apiUrl} Error connecting to backend: ${error.message}`;
             setResult(errorMessage);
-            console.error(errorMessage, error.response?.data); // Log more details if available
+            console.error(errorMessage, error.response?.data);
         }
     };
 
@@ -37,7 +42,6 @@ const TestConnectionToBE = () => {
         <div >
             <h2>Test Connection to Backend</h2>
             <button onClick={handleTestConnection}>Test Connection</button>
-            {/* Use a <pre> tag to preserve the formatting of the JSON string */}
             <pre style={{ marginTop: "1rem", border: "1px solid #555", padding: "10px", borderRadius: "5px" }}>
                 {result}
             </pre>
