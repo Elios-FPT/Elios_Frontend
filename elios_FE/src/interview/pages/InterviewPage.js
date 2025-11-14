@@ -16,9 +16,13 @@ function InterviewPage() {
     wsUrl,
     evaluations,
     isStarting,
+    cvAnalysisId,
+    candidateId,
     setInterviewId,
     setWsUrl,
     setShowFeedback,
+    setCvAnalysisId,
+    setCandidateId,
     handleTabSwitch,
     handleEndSession,
     handleCloseFeedback,
@@ -66,6 +70,15 @@ function InterviewPage() {
 
     try {
       const response = await apiService.uploadCV(selectedFile);
+
+      // Extract id (CV analysis ID) and candidate_id from response
+      if (response.id) {
+        setCvAnalysisId(response.id);
+      }
+      if (response.candidate_id) {
+        setCandidateId(response.candidate_id);
+      }
+
       setCvFile(selectedFile);
       setCvUploaded(true);
       setStep1Completed(true);
@@ -76,6 +89,8 @@ function InterviewPage() {
       setCvFile(null);
       setCvUploaded(false);
       setStep1Completed(false);
+      setCvAnalysisId(null);
+      setCandidateId(null);
     } finally {
       setIsUploadingCV(false);
     }
@@ -90,6 +105,8 @@ function InterviewPage() {
     setCvUploaded(false);
     setCvFile(null);
     setStep1Completed(false);
+    setCvAnalysisId(null);
+    setCandidateId(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -106,13 +123,19 @@ function InterviewPage() {
   };
 
   const handleStartInterview = async () => {
+    // Validate that CV analysis and candidate IDs exist
+    if (!cvAnalysisId || !candidateId) {
+      toast.error('Please upload your CV first before starting the interview.');
+      return;
+    }
+
     setIsStarting(true);
     setStep2Status('in-progress');
 
     try {
       // Sub-step: Planning interview
       setInterviewSubStep('planning');
-      const planResponse = await apiService.planInterview();
+      const planResponse = await apiService.planInterview(cvAnalysisId, candidateId);
       const interviewId = planResponse.interview_id;
       setInterviewId(interviewId);
 
@@ -185,15 +208,17 @@ function InterviewPage() {
             style={{ display: 'none' }}
           />
 
-          <div className="cv-file-selection">
-            <button
-              className="cv-choose-button"
-              onClick={handleFileInputClick}
-              disabled={isUploadingCV || step1Completed}
-            >
-              <span className="material-icons">folder_open</span>
-              Choose File
-            </button>
+          <div className="cv-upload-row">
+            {!selectedFile && !cvUploaded && (
+              <button
+                className="cv-choose-button"
+                onClick={handleFileInputClick}
+                disabled={isUploadingCV || step1Completed}
+              >
+                <span className="material-icons">folder_open</span>
+                Choose File
+              </button>
+            )}
 
             {selectedFile && !cvUploaded && (
               <div className="cv-selected-file">
@@ -209,45 +234,51 @@ function InterviewPage() {
                 </button>
               </div>
             )}
-          </div>
 
-          {selectedFile && !cvUploaded && (
-            <button
-              className="cv-upload-button"
-              onClick={handleCVUpload}
-              disabled={isUploadingCV}
-            >
-              {isUploadingCV ? (
-                <>
-                  <span className="material-icons spin">sync</span>
-                  Uploading...
-                </>
-              ) : (
-                <>
-                  <span className="material-icons">upload_file</span>
-                  Upload CV
-                </>
-              )}
-            </button>
-          )}
+            {cvUploaded && cvFile && (
+              <div className="cv-upload-status">
+                <span className="material-icons">check_circle</span>
+                <span>CV uploaded: {cvFile.name}</span>
+                <button
+                  className="cv-change-file-button"
+                  onClick={handleChangeFile}
+                  title="Change file"
+                >
+                  <span className="material-icons">close</span>
+                </button>
+              </div>
+            )}
 
-          {cvUploaded && cvFile && (
-            <div className="cv-upload-status">
-              <span className="material-icons">check_circle</span>
-              <span>CV uploaded: {cvFile.name}</span>
+            {!cvUploaded && (
               <button
-                className="cv-change-file-button"
-                onClick={handleChangeFile}
-                title="Change file"
+                className="cv-upload-button"
+                onClick={handleCVUpload}
+                disabled={isUploadingCV || !selectedFile}
               >
-                <span className="material-icons">close</span>
+                {isUploadingCV ? (
+                  <>
+                    <span className="material-icons spin">sync</span>
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <span className="material-icons">upload_file</span>
+                    Upload CV
+                  </>
+                )}
               </button>
-            </div>
-          )}
+            )}
 
-          {!selectedFile && !cvUploaded && (
-            <p className="cv-upload-hint">Please upload your CV before starting the interview</p>
-          )}
+            {cvUploaded && (
+              <button
+                className="cv-upload-button"
+                disabled={true}
+              >
+                <span className="material-icons">upload_file</span>
+                Upload CV
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="page-navigation">
@@ -267,35 +298,39 @@ function InterviewPage() {
   const renderPage2 = () => {
     return (
       <div className="page-content page-2">
-        {(step2Status === 'in-progress' || step2Status === 'completed') && (
-          <div className="interview-substeps">
-            <div className={`substep ${interviewSubStep === 'planning' ? 'active' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
-              <span className="material-icons">
-                {interviewSubStep === 'planning' ? 'sync' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
-              </span>
-              <span>Planning interview...</span>
+        <div className="cv-upload-section">
+          {(step2Status === 'in-progress' || step2Status === 'completed') && (
+            <div className="interview-substeps">
+              <div className={`substep ${interviewSubStep === 'planning' ? 'active' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
+                <span className="material-icons">
+                  {interviewSubStep === 'planning' ? 'sync' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
+                </span>
+                <span>Planning interview...</span>
+              </div>
+              <div className={`substep ${interviewSubStep === 'polling' ? 'active' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
+                <span className="material-icons">
+                  {interviewSubStep === 'polling' ? 'sync' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
+                </span>
+                <span>Polling status...</span>
+              </div>
+              <div className={`substep ${interviewSubStep === 'starting' ? 'active' : step2Status === 'completed' ? 'completed' : ''}`}>
+                <span className="material-icons">
+                  {interviewSubStep === 'starting' ? 'sync' : step2Status === 'completed' ? 'check' : ''}
+                </span>
+                <span>Starting interview...</span>
+              </div>
             </div>
-            <div className={`substep ${interviewSubStep === 'polling' ? 'active' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
-              <span className="material-icons">
-                {interviewSubStep === 'polling' ? 'sync' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
-              </span>
-              <span>Polling status...</span>
-            </div>
-            <div className={`substep ${interviewSubStep === 'starting' ? 'active' : step2Status === 'completed' ? 'completed' : ''}`}>
-              <span className="material-icons">
-                {interviewSubStep === 'starting' ? 'sync' : step2Status === 'completed' ? 'check' : ''}
-              </span>
-              <span>Starting interview...</span>
-            </div>
-          </div>
-        )}
-        <button
-          className="start-interview-button"
-          onClick={handleStartInterview}
-          disabled={isStarting || !step1Completed}
-        >
-          {isStarting ? 'Starting...' : 'Start Interview'}
-        </button>
+          )}
+          {step2Status === 'pending' && !isStarting && (
+            <button
+              className="start-interview-button"
+              onClick={handleStartInterview}
+              disabled={!step1Completed}
+            >
+              Start Interview
+            </button>
+          )}
+        </div>
 
         <div className="page-navigation">
           <button
@@ -317,11 +352,11 @@ function InterviewPage() {
     return (
       <div id="interview-start-container">
         <div className="start-interview-card">
-          {/* Step Header */}
-          {renderStepHeader()}
-
           {/* Step Indicator */}
           {renderStepIndicator()}
+
+          {/* Step Header */}
+          {renderStepHeader()}
 
           {/* Page Content */}
           {currentPage === 1 ? renderPage1() : renderPage2()}

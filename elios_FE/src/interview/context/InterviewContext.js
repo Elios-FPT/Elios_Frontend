@@ -9,6 +9,8 @@ export function InterviewProvider({ children }) {
   const [wsUrl, setWsUrl] = useState(null);
   const [evaluations, setEvaluations] = useState([]);
   const [isStarting, setIsStarting] = useState(false);
+  const [cvAnalysisId, setCvAnalysisId] = useState(null);
+  const [candidateId, setCandidateId] = useState(null);
 
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
@@ -34,6 +36,8 @@ export function InterviewProvider({ children }) {
     wsUrl,
     evaluations,
     isStarting,
+    cvAnalysisId,
+    candidateId,
     // Setters
     setActiveTab,
     setShowFeedback,
@@ -41,6 +45,8 @@ export function InterviewProvider({ children }) {
     setWsUrl,
     setEvaluations,
     setIsStarting,
+    setCvAnalysisId,
+    setCandidateId,
     // Handlers
     handleTabSwitch,
     handleEndSession,

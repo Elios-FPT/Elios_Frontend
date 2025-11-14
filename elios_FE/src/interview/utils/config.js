@@ -1,10 +1,6 @@
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-// Hardcoded UUIDs for development
-export const DEV_CV_ANALYSIS_ID = '860e8400-e29b-41d4-a716-446655440001';
-export const DEV_CANDIDATE_ID = '660e8400-e29b-41d4-a716-446655440001';
-
 // API Endpoints
 export const API_ENDPOINTS = {
   PLAN_INTERVIEW: `${API_BASE_URL}/api/interviews/plan`,

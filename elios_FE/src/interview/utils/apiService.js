@@ -1,14 +1,14 @@
-import { API_ENDPOINTS, TIMEOUTS, DEV_CV_ANALYSIS_ID, DEV_CANDIDATE_ID } from './config';
+import { API_ENDPOINTS, TIMEOUTS } from './config';
 
 class ApiService {
-  async planInterview() {
+  async planInterview(cvAnalysisId, candidateId) {
     try {
       const response = await fetch(API_ENDPOINTS.PLAN_INTERVIEW, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          cv_analysis_id: DEV_CV_ANALYSIS_ID,
-          candidate_id: DEV_CANDIDATE_ID,
+          cv_analysis_id: cvAnalysisId,
+          candidate_id: candidateId,
         }),
       });
 
