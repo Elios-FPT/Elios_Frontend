@@ -30,6 +30,10 @@ function InterviewPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [cvUploaded, setCvUploaded] = useState(false);
   const [isUploadingCV, setIsUploadingCV] = useState(false);
+  const [step1Completed, setStep1Completed] = useState(false);
+  const [step2Status, setStep2Status] = useState('pending');
+  const [interviewSubStep, setInterviewSubStep] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = (event) => {
@@ -49,6 +53,7 @@ function InterviewPage() {
 
     setSelectedFile(file);
     setCvUploaded(false); // Reset upload status if file is changed
+    setStep1Completed(false); // Reset step 1 completion if file is changed
   };
 
   const handleCVUpload = async () => {
@@ -63,12 +68,14 @@ function InterviewPage() {
       const response = await apiService.uploadCV(selectedFile);
       setCvFile(selectedFile);
       setCvUploaded(true);
+      setStep1Completed(true);
       toast.success(`CV uploaded successfully: ${selectedFile.name}`);
     } catch (error) {
       console.error('Failed to upload CV:', error);
       toast.error('Failed to upload CV. Please try again.');
       setCvFile(null);
       setCvUploaded(false);
+      setStep1Completed(false);
     } finally {
       setIsUploadingCV(false);
     }
@@ -82,39 +89,210 @@ function InterviewPage() {
     setSelectedFile(null);
     setCvUploaded(false);
     setCvFile(null);
+    setStep1Completed(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
+  const handleNext = () => {
+    if (step1Completed) {
+      setCurrentPage(2);
+    }
+  };
+
+  const handleBack = () => {
+    setCurrentPage(1);
+  };
+
   const handleStartInterview = async () => {
     setIsStarting(true);
+    setStep2Status('in-progress');
 
     try {
-      // Step 1: Plan interview
+      // Sub-step: Planning interview
+      setInterviewSubStep('planning');
       const planResponse = await apiService.planInterview();
       const interviewId = planResponse.interview_id;
       setInterviewId(interviewId);
 
       toast.info('Planning your interview...');
 
-      // Step 2: Poll planning status
+      // Sub-step: Polling planning status
+      setInterviewSubStep('polling');
       await apiService.pollPlanningStatus(interviewId, (status) => {
         console.log('Planning status:', status.status);
       });
 
       toast.success('Interview ready!');
 
-      // Step 3: Start interview
+      // Sub-step: Starting interview
+      setInterviewSubStep('starting');
       const startResponse = await apiService.startInterview(interviewId);
       setWsUrl(startResponse.ws_url);
+      setStep2Status('completed');
 
     } catch (error) {
       console.error('Failed to start interview:', error);
       toast.error('Failed to start interview. Please try again.');
+      setStep2Status('pending');
+      setInterviewSubStep(null);
     } finally {
       setIsStarting(false);
     }
+  };
+
+  const renderStepIndicator = () => {
+    const step2IsActive = step2Status === 'in-progress' || step2Status === 'completed';
+    const step2IsCompleted = step2Status === 'completed';
+    const step1IsActive = currentPage === 1 && !step1Completed;
+
+    return (
+      <ul className="progressbar">
+        <li className={step1Completed ? 'complete' : step1IsActive ? 'active' : ''}>Step 1</li>
+        <li className={step2IsCompleted ? 'complete' : step2IsActive ? 'active' : ''}>Step 2</li>
+      </ul>
+    );
+  };
+
+  const renderPage1 = () => {
+    return (
+      <div className="page-content page-1">
+        <h3>Step 1: Upload CV</h3>
+        <div className="cv-upload-section">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf"
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+          />
+
+          <div className="cv-file-selection">
+            <button
+              className="cv-choose-button"
+              onClick={handleFileInputClick}
+              disabled={isUploadingCV || step1Completed}
+            >
+              <span className="material-icons">folder_open</span>
+              Choose File
+            </button>
+
+            {selectedFile && !cvUploaded && (
+              <div className="cv-selected-file">
+                <span className="material-icons">description</span>
+                <span className="file-name">{selectedFile.name}</span>
+                <button
+                  className="cv-change-file-button"
+                  onClick={handleChangeFile}
+                  disabled={isUploadingCV}
+                  title="Change file"
+                >
+                  <span className="material-icons">close</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {selectedFile && !cvUploaded && (
+            <button
+              className="cv-upload-button"
+              onClick={handleCVUpload}
+              disabled={isUploadingCV}
+            >
+              {isUploadingCV ? (
+                <>
+                  <span className="material-icons spin">sync</span>
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <span className="material-icons">upload_file</span>
+                  Upload CV
+                </>
+              )}
+            </button>
+          )}
+
+          {cvUploaded && cvFile && (
+            <div className="cv-upload-status">
+              <span className="material-icons">check_circle</span>
+              <span>CV uploaded: {cvFile.name}</span>
+              <button
+                className="cv-change-file-button"
+                onClick={handleChangeFile}
+                title="Change file"
+              >
+                <span className="material-icons">close</span>
+              </button>
+            </div>
+          )}
+
+          {!selectedFile && !cvUploaded && (
+            <p className="cv-upload-hint">Please upload your CV before starting the interview</p>
+          )}
+        </div>
+
+        <div className="page-navigation">
+          <button
+            className="next-button"
+            onClick={handleNext}
+            disabled={!step1Completed}
+          >
+            Next
+            <span className="material-icons">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderPage2 = () => {
+    return (
+      <div className="page-content page-2">
+        <h3>Step 2: Start Interview</h3>
+        {(step2Status === 'in-progress' || step2Status === 'completed') && (
+          <div className="interview-substeps">
+            <div className={`substep ${interviewSubStep === 'planning' ? 'active' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
+              <span className="material-icons">
+                {interviewSubStep === 'planning' ? 'sync' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
+              </span>
+              <span>Planning interview...</span>
+            </div>
+            <div className={`substep ${interviewSubStep === 'polling' ? 'active' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
+              <span className="material-icons">
+                {interviewSubStep === 'polling' ? 'sync' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
+              </span>
+              <span>Polling status...</span>
+            </div>
+            <div className={`substep ${interviewSubStep === 'starting' ? 'active' : step2Status === 'completed' ? 'completed' : ''}`}>
+              <span className="material-icons">
+                {interviewSubStep === 'starting' ? 'sync' : step2Status === 'completed' ? 'check' : ''}
+              </span>
+              <span>Starting interview...</span>
+            </div>
+          </div>
+        )}
+        <button
+          className="start-interview-button"
+          onClick={handleStartInterview}
+          disabled={isStarting || !step1Completed}
+        >
+          {isStarting ? 'Starting...' : 'Start Interview'}
+        </button>
+
+        <div className="page-navigation">
+          <button
+            className="back-button"
+            onClick={handleBack}
+            disabled={isStarting}
+          >
+            <span className="material-icons">arrow_back</span>
+            Back
+          </button>
+        </div>
+      </div>
+    );
   };
 
   const renderStartButton = () => {
@@ -126,88 +304,11 @@ function InterviewPage() {
           <h2>Ready to Begin?</h2>
           <p>Click below to start your mock interview session</p>
 
-          {/* CV Upload Section */}
-          <div className="cv-upload-section">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf"
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
-            />
+          {/* Step Indicator */}
+          {renderStepIndicator()}
 
-            <div className="cv-file-selection">
-              <button
-                className="cv-choose-button"
-                onClick={handleFileInputClick}
-                disabled={isUploadingCV}
-              >
-                <span className="material-icons">folder_open</span>
-                Choose File
-              </button>
-
-              {selectedFile && !cvUploaded && (
-                <div className="cv-selected-file">
-                  <span className="material-icons">description</span>
-                  <span className="file-name">{selectedFile.name}</span>
-                  <button
-                    className="cv-change-file-button"
-                    onClick={handleChangeFile}
-                    disabled={isUploadingCV}
-                    title="Change file"
-                  >
-                    <span className="material-icons">close</span>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {selectedFile && !cvUploaded && (
-              <button
-                className="cv-upload-button"
-                onClick={handleCVUpload}
-                disabled={isUploadingCV}
-              >
-                {isUploadingCV ? (
-                  <>
-                    <span className="material-icons spin">sync</span>
-                    Uploading...
-                  </>
-                ) : (
-                  <>
-                    <span className="material-icons">upload_file</span>
-                    Upload CV
-                  </>
-                )}
-              </button>
-            )}
-
-            {cvUploaded && cvFile && (
-              <div className="cv-upload-status">
-                <span className="material-icons">check_circle</span>
-                <span>CV uploaded: {cvFile.name}</span>
-                <button
-                  className="cv-change-file-button"
-                  onClick={handleChangeFile}
-                  title="Change file"
-                >
-                  <span className="material-icons">close</span>
-                </button>
-              </div>
-            )}
-
-            {!selectedFile && !cvUploaded && (
-              <p className="cv-upload-hint">Please upload your CV before starting the interview</p>
-            )}
-          </div>
-
-          <button
-            className="start-interview-button"
-            onClick={handleStartInterview}
-            disabled={isStarting || !cvUploaded}
-          >
-            {isStarting ? 'Starting...' : 'Start Interview'}
-          </button>
+          {/* Page Content */}
+          {currentPage === 1 ? renderPage1() : renderPage2()}
         </div>
       </div>
     );
