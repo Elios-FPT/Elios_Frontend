@@ -155,10 +155,27 @@ function InterviewPage() {
     );
   };
 
+  const renderStepHeader = () => {
+    if (currentPage === 1) {
+      return (
+        <div className="step-header">
+          <h3 className="step-title">Upload Your CV</h3>
+          <p className="step-guide">Please upload your CV in PDF format. This will help us personalize your interview experience.</p>
+        </div>
+      );
+    } else {
+      return (
+        <div className="step-header">
+          <h3 className="step-title">Start Your Interview</h3>
+          <p className="step-guide">Click the button below to begin your mock interview session. We'll prepare everything for you.</p>
+        </div>
+      );
+    }
+  };
+
   const renderPage1 = () => {
     return (
       <div className="page-content page-1">
-        <h3>Step 1: Upload CV</h3>
         <div className="cv-upload-section">
           <input
             ref={fileInputRef}
@@ -250,7 +267,6 @@ function InterviewPage() {
   const renderPage2 = () => {
     return (
       <div className="page-content page-2">
-        <h3>Step 2: Start Interview</h3>
         {(step2Status === 'in-progress' || step2Status === 'completed') && (
           <div className="interview-substeps">
             <div className={`substep ${interviewSubStep === 'planning' ? 'active' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
@@ -301,8 +317,8 @@ function InterviewPage() {
     return (
       <div id="interview-start-container">
         <div className="start-interview-card">
-          <h2>Ready to Begin?</h2>
-          <p>Click below to start your mock interview session</p>
+          {/* Step Header */}
+          {renderStepHeader()}
 
           {/* Step Indicator */}
           {renderStepIndicator()}
