@@ -99,6 +99,27 @@ class ApiService {
       }, TIMEOUTS.POLLING_INTERVAL);
     });
   }
+
+  async uploadCV(file) {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(API_ENDPOINTS.UPLOAD_CV, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`CV upload failed: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('uploadCV error:', error);
+      throw error;
+    }
+  }
 }
 
 const apiService = new ApiService();

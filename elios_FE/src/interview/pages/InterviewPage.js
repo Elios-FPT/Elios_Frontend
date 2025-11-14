@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import TextChat from '../components/TextChat';
 import VoiceChat from '../components/VoiceChat';
 import TabControls from '../components/TabControls';
@@ -25,6 +25,67 @@ function InterviewPage() {
     handleEvaluationReceived,
     setIsStarting,
   } = useInterview();
+
+  const [cvFile, setCvFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [cvUploaded, setCvUploaded] = useState(false);
+  const [isUploadingCV, setIsUploadingCV] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    // Validate file type
+    if (file.type !== 'application/pdf') {
+      toast.error('Please upload a PDF file');
+      event.target.value = ''; // Reset file input
+      setSelectedFile(null);
+      return;
+    }
+
+    setSelectedFile(file);
+    setCvUploaded(false); // Reset upload status if file is changed
+  };
+
+  const handleCVUpload = async () => {
+    if (!selectedFile) {
+      toast.warning('Please select a file first');
+      return;
+    }
+
+    setIsUploadingCV(true);
+
+    try {
+      const response = await apiService.uploadCV(selectedFile);
+      setCvFile(selectedFile);
+      setCvUploaded(true);
+      toast.success(`CV uploaded successfully: ${selectedFile.name}`);
+    } catch (error) {
+      console.error('Failed to upload CV:', error);
+      toast.error('Failed to upload CV. Please try again.');
+      setCvFile(null);
+      setCvUploaded(false);
+    } finally {
+      setIsUploadingCV(false);
+    }
+  };
+
+  const handleFileInputClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleChangeFile = () => {
+    setSelectedFile(null);
+    setCvUploaded(false);
+    setCvFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleStartInterview = async () => {
     setIsStarting(true);
@@ -64,10 +125,86 @@ function InterviewPage() {
         <div className="start-interview-card">
           <h2>Ready to Begin?</h2>
           <p>Click below to start your mock interview session</p>
+
+          {/* CV Upload Section */}
+          <div className="cv-upload-section">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf"
+              onChange={handleFileSelect}
+              style={{ display: 'none' }}
+            />
+
+            <div className="cv-file-selection">
+              <button
+                className="cv-choose-button"
+                onClick={handleFileInputClick}
+                disabled={isUploadingCV}
+              >
+                <span className="material-icons">folder_open</span>
+                Choose File
+              </button>
+
+              {selectedFile && !cvUploaded && (
+                <div className="cv-selected-file">
+                  <span className="material-icons">description</span>
+                  <span className="file-name">{selectedFile.name}</span>
+                  <button
+                    className="cv-change-file-button"
+                    onClick={handleChangeFile}
+                    disabled={isUploadingCV}
+                    title="Change file"
+                  >
+                    <span className="material-icons">close</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {selectedFile && !cvUploaded && (
+              <button
+                className="cv-upload-button"
+                onClick={handleCVUpload}
+                disabled={isUploadingCV}
+              >
+                {isUploadingCV ? (
+                  <>
+                    <span className="material-icons spin">sync</span>
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <span className="material-icons">upload_file</span>
+                    Upload CV
+                  </>
+                )}
+              </button>
+            )}
+
+            {cvUploaded && cvFile && (
+              <div className="cv-upload-status">
+                <span className="material-icons">check_circle</span>
+                <span>CV uploaded: {cvFile.name}</span>
+                <button
+                  className="cv-change-file-button"
+                  onClick={handleChangeFile}
+                  title="Change file"
+                >
+                  <span className="material-icons">close</span>
+                </button>
+              </div>
+            )}
+
+            {!selectedFile && !cvUploaded && (
+              <p className="cv-upload-hint">Please upload your CV before starting the interview</p>
+            )}
+          </div>
+
           <button
             className="start-interview-button"
             onClick={handleStartInterview}
-            disabled={isStarting}
+            disabled={isStarting || !cvUploaded}
           >
             {isStarting ? 'Starting...' : 'Start Interview'}
           </button>

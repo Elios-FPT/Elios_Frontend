@@ -151,6 +151,186 @@
   cursor: not-allowed;
 }
 
+/* CV Upload Section */
+#interview-start-container .cv-upload-section {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#interview-start-container .cv-file-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+#interview-start-container .cv-choose-button {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#interview-start-container .cv-choose-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+#interview-start-container .cv-choose-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#interview-start-container .cv-choose-button .material-icons {
+  font-size: 20px;
+}
+
+#interview-start-container .cv-selected-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  justify-content: space-between;
+}
+
+#interview-start-container .cv-selected-file .file-name {
+  flex: 1;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#interview-start-container .cv-selected-file .material-icons {
+  font-size: 18px;
+  color: #666;
+  flex-shrink: 0;
+}
+
+#interview-start-container .cv-change-file-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+#interview-start-container .cv-change-file-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#interview-start-container .cv-change-file-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#interview-start-container .cv-change-file-button .material-icons {
+  font-size: 18px;
+  color: #666;
+}
+
+#interview-start-container .cv-upload-button {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#interview-start-container .cv-upload-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+#interview-start-container .cv-upload-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#interview-start-container .cv-upload-button .material-icons {
+  font-size: 20px;
+}
+
+#interview-start-container .cv-upload-button .material-icons.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#interview-start-container .cv-upload-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4caf50;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+  padding: 8px 16px;
+  background: #f1f8f4;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  justify-content: space-between;
+}
+
+#interview-start-container .cv-upload-status span:not(.material-icons) {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#interview-start-container .cv-upload-status .material-icons {
+  font-size: 18px;
+  color: #4caf50;
+  flex-shrink: 0;
+}
+
+#interview-start-container .cv-upload-hint {
+  font-size: 14px;
+  color: #ff9800;
+  margin: 0;
+  font-style: italic;
+}
+
 #interview-container .header-progress {
   font-size: 14px;
   font-weight: 600;
