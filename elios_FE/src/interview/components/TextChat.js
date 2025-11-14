@@ -41,6 +41,13 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
 
   const initializeWebSocket = () => {
     try {
+      // Check if already connected before attempting to connect
+      const currentStatus = websocketService.getConnectionStatus();
+      if (currentStatus === CONNECTION_STATUS.CONNECTED) {
+        console.log('WebSocket already connected, skipping initialization');
+        return;
+      }
+
       // Register message handlers (they persist in Map, but ensure they're set)
       websocketService.onMessage('question', handleQuestionMessage);
       websocketService.onMessage('follow_up_question', handleFollowUpQuestionMessage);
@@ -240,7 +247,7 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
         )}
         {connectionStatus === CONNECTION_STATUS.RECONNECTING && reconnectAttempt > 0 && (
           <span className="reconnect-spinner">
-            <span className="material-icons spin">sync</span>
+            <span className="material-icons spin">app_badging</span>
           </span>
         )}
       </div>

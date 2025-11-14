@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, TIMEOUTS } from './config';
+import { API_ENDPOINTS, TIMEOUTS, INTERVIEW_STATUS } from './config';
 
 class ApiService {
   async planInterview(cvAnalysisId, candidateId) {
@@ -87,8 +87,8 @@ class ApiService {
             onStatusUpdate(statusResponse);
           }
 
-          // Check if ready
-          if (statusResponse.status.toUpperCase() === 'READY') {
+          // Check if planning is complete (transitioned to IDLE)
+          if (statusResponse.status.toUpperCase() === INTERVIEW_STATUS.IDLE) {
             cleanup();
             resolve(statusResponse);
           }

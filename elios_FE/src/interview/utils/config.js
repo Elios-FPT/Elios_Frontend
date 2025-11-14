@@ -12,13 +12,24 @@ export const API_ENDPOINTS = {
 // WebSocket configuration
 export const WS_CONFIG = {
   RECONNECT_ATTEMPTS: 5,
-  RECONNECT_DELAYS: [1000, 2000, 4000, 8000, 16000], // Exponential backoff
+  RECONNECT_DELAYS: [3000, 5000, 10000, 20000, 30000], // Exponential backoff (3s, 5s, 10s, 20s, 30s)
 };
 
 // Timing constants
 export const TIMEOUTS = {
   PLANNING: 30000, // 30 seconds
   POLLING_INTERVAL: 2000, // 2 seconds
+};
+
+// Interview status states (matches backend InterviewStatus enum)
+export const INTERVIEW_STATUS = {
+  PLANNING: 'PLANNING',
+  IDLE: 'IDLE',
+  QUESTIONING: 'QUESTIONING',
+  EVALUATING: 'EVALUATING',
+  FOLLOW_UP: 'FOLLOW_UP',
+  COMPLETE: 'COMPLETE',
+  CANCELLED: 'CANCELLED',
 };
 
 // Connection states

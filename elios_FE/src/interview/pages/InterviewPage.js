@@ -5,6 +5,7 @@ import TabControls from '../components/TabControls';
 import FeedbackModal from '../components/FeedbackModal';
 import { useInterview } from '../context/InterviewContext';
 import apiService from '../utils/apiService';
+import { INTERVIEW_STATUS } from '../utils/config';
 import toast from '../utils/toast';
 import '../style/InterviewPage.css';
 
@@ -133,27 +134,24 @@ function InterviewPage() {
     setStep2Status('in-progress');
 
     try {
-      // Sub-step: Planning interview
+      // Planning interview - returns interview_id, status, and ws_url when ready
       setInterviewSubStep('planning');
+      toast.info('Planning your interview...');
+
       const planResponse = await apiService.planInterview(cvAnalysisId, candidateId);
       const interviewId = planResponse.interview_id;
       setInterviewId(interviewId);
 
-      toast.info('Planning your interview...');
-
-      // Sub-step: Polling planning status
-      setInterviewSubStep('polling');
-      await apiService.pollPlanningStatus(interviewId, (status) => {
-        console.log('Planning status:', status.status);
-      });
-
-      toast.success('Interview ready!');
-
-      // Sub-step: Starting interview
-      setInterviewSubStep('starting');
-      const startResponse = await apiService.startInterview(interviewId);
-      setWsUrl(startResponse.ws_url);
-      setStep2Status('completed');
+      // Check if planning is complete (status is IDLE) and ws_url is available
+      if (planResponse.status && planResponse.status.toUpperCase() === INTERVIEW_STATUS.IDLE && planResponse.ws_url) {
+        setWsUrl(planResponse.ws_url);
+        setStep2Status('completed');
+        setInterviewSubStep(null);
+        toast.success('Interview ready!');
+      } else {
+        // If not ready yet, this shouldn't happen but handle gracefully
+        throw new Error('Interview planning not complete. Please try again.');
+      }
 
     } catch (error) {
       console.error('Failed to start interview:', error);
@@ -257,7 +255,7 @@ function InterviewPage() {
               >
                 {isUploadingCV ? (
                   <>
-                    <span className="material-icons spin">sync</span>
+                    <span className="material-icons spin">app_badging</span>
                     Uploading...
                   </>
                 ) : (
@@ -301,23 +299,11 @@ function InterviewPage() {
         <div className="cv-upload-section">
           {(step2Status === 'in-progress' || step2Status === 'completed') && (
             <div className="interview-substeps">
-              <div className={`substep ${interviewSubStep === 'planning' ? 'active' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
+              <div className={`substep ${interviewSubStep === 'planning' ? 'active' : step2Status === 'completed' ? 'completed' : ''}`}>
                 <span className="material-icons">
-                  {interviewSubStep === 'planning' ? 'sync' : (interviewSubStep === 'polling' || interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
+                  {interviewSubStep === 'planning' ? 'app_badging' : step2Status === 'completed' ? 'check' : ''}
                 </span>
                 <span>Planning interview...</span>
-              </div>
-              <div className={`substep ${interviewSubStep === 'polling' ? 'active' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'completed' : ''}`}>
-                <span className="material-icons">
-                  {interviewSubStep === 'polling' ? 'sync' : (interviewSubStep === 'starting' || step2Status === 'completed') ? 'check' : ''}
-                </span>
-                <span>Polling status...</span>
-              </div>
-              <div className={`substep ${interviewSubStep === 'starting' ? 'active' : step2Status === 'completed' ? 'completed' : ''}`}>
-                <span className="material-icons">
-                  {interviewSubStep === 'starting' ? 'sync' : step2Status === 'completed' ? 'check' : ''}
-                </span>
-                <span>Starting interview...</span>
               </div>
             </div>
           )}

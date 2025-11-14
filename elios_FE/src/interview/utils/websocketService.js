@@ -9,12 +9,20 @@ class WebSocketService {
     this.messageHandlers = new Map();
     this.statusChangeHandler = null;
     this.shouldReconnect = true;
+    this.isConnected = false;
+    this.connectedAt = null;
   }
 
   connect(wsUrl, isReconnect = false) {
     // Validate WebSocket URL
     if (!wsUrl || (!wsUrl.startsWith('ws://') && !wsUrl.startsWith('wss://'))) {
       throw new Error('Invalid WebSocket URL');
+    }
+
+    // Check if already connected to the same URL
+    if (this.ws && this.ws.readyState === WebSocket.OPEN && this.wsUrl === wsUrl) {
+      console.log('WebSocket already connected to', wsUrl, '- skipping connection');
+      return;
     }
 
     // Clear any pending reconnection timeout
@@ -33,10 +41,12 @@ class WebSocketService {
     try {
       // Close existing connection if any
       if (this.ws) {
+        console.log('Closing existing WebSocket connection before creating new one');
         this.ws.close();
         this.ws = null;
       }
 
+      console.log(`Connecting to WebSocket: ${wsUrl}${isReconnect ? ' (reconnect)' : ''}`);
       this.ws = new WebSocket(wsUrl);
 
       this.ws.onopen = this.handleOpen.bind(this);
@@ -52,8 +62,21 @@ class WebSocketService {
   }
 
   handleOpen() {
-    console.log('WebSocket connected');
+    console.log('WebSocket connected successfully');
+
+    // Clear any pending reconnection timeouts
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+      console.log('Cleared pending reconnection timeout');
+    }
+
+    // Reset reconnection state
     this.reconnectAttempt = 0;
+    this.isConnected = true;
+    this.connectedAt = Date.now();
+
+    console.log(`Connection established at ${new Date(this.connectedAt).toISOString()}`);
     this.updateStatus(CONNECTION_STATUS.CONNECTED);
   }
 
@@ -78,12 +101,53 @@ class WebSocketService {
   }
 
   handleClose(event) {
-    console.log('WebSocket closed:', event.code, event.reason);
+    const closeCode = event.code;
+    const closeReason = event.reason || 'No reason provided';
 
+    // Update connection state
+    const wasConnected = this.isConnected;
+    const connectionDuration = this.connectedAt ? Date.now() - this.connectedAt : 0;
+    this.isConnected = false;
+    this.connectedAt = null;
+
+    console.log(`WebSocket closed: code=${closeCode}, reason="${closeReason}", wasConnected=${wasConnected}, duration=${connectionDuration}ms`);
+
+    // Close codes that indicate intentional closure - don't reconnect
+    const noReconnectCodes = [
+      1000, // Normal Closure
+      1001, // Going Away
+      1002, // Protocol Error
+      1003, // Unsupported Data
+      1008, // Policy Violation
+    ];
+
+    // Check if this is an intentional closure that shouldn't trigger reconnection
+    if (noReconnectCodes.includes(closeCode)) {
+      console.log(`WebSocket closed intentionally (code ${closeCode}), not reconnecting`);
+      this.shouldReconnect = false;
+      this.updateStatus(CONNECTION_STATUS.DISCONNECTED);
+      return;
+    }
+
+    // If connection was just established and closed immediately (within 1 second),
+    // it might be a server-side issue - wait a bit before reconnecting
+    const IMMEDIATE_CLOSE_THRESHOLD = 1000; // 1 second
+    if (wasConnected && connectionDuration < IMMEDIATE_CLOSE_THRESHOLD) {
+      console.log(`Connection closed immediately after opening (${connectionDuration}ms) - possible server-side issue`);
+    }
+
+    // For other close codes (network errors, timeouts, unexpected closures), attempt reconnection
     if (this.shouldReconnect && this.reconnectAttempt < WS_CONFIG.RECONNECT_ATTEMPTS) {
+      console.log(`Attempting to reconnect (close code: ${closeCode}, wasConnected: ${wasConnected}, attempt: ${this.reconnectAttempt + 1}/${WS_CONFIG.RECONNECT_ATTEMPTS})`);
       this.updateStatus(CONNECTION_STATUS.RECONNECTING);
       this.attemptReconnect();
     } else {
+      if (this.reconnectAttempt >= WS_CONFIG.RECONNECT_ATTEMPTS) {
+        console.log(`Max reconnection attempts (${WS_CONFIG.RECONNECT_ATTEMPTS}) reached, giving up`);
+      }
+      if (!this.shouldReconnect) {
+        console.log('Reconnection disabled, not attempting to reconnect');
+      }
       this.updateStatus(CONNECTION_STATUS.DISCONNECTED);
     }
   }
@@ -94,23 +158,27 @@ class WebSocketService {
       this.ws.close();
       this.ws = null;
     }
+    this.isConnected = false;
+    this.connectedAt = null;
     this.updateStatus(CONNECTION_STATUS.DISCONNECTED);
     throw error;
   }
 
   attemptReconnect() {
-    const delay = WS_CONFIG.RECONNECT_DELAYS[this.reconnectAttempt] || 16000;
+    const delay = WS_CONFIG.RECONNECT_DELAYS[this.reconnectAttempt] || 30000;
 
     // Increment attempt count before scheduling reconnect
     this.reconnectAttempt++;
     const currentAttempt = this.reconnectAttempt;
 
-    console.log(`Reconnecting in ${delay}ms (attempt ${currentAttempt}/${WS_CONFIG.RECONNECT_ATTEMPTS})`);
+    const delaySeconds = (delay / 1000).toFixed(1);
+    console.log(`Reconnecting in ${delaySeconds}s (attempt ${currentAttempt}/${WS_CONFIG.RECONNECT_ATTEMPTS})`);
 
     // Update status with current attempt info
     this.updateStatus(CONNECTION_STATUS.RECONNECTING);
 
     this.reconnectTimeout = setTimeout(() => {
+      console.log(`Reconnection attempt ${currentAttempt} starting...`);
       // Pass isReconnect=true to preserve shouldReconnect flag
       this.connect(this.wsUrl, true);
     }, delay);
@@ -148,6 +216,7 @@ class WebSocketService {
   }
 
   disconnect() {
+    console.log('Disconnecting WebSocket (manual disconnect)');
     this.shouldReconnect = false;
 
     if (this.reconnectTimeout) {
@@ -160,6 +229,8 @@ class WebSocketService {
       this.ws = null;
     }
 
+    this.isConnected = false;
+    this.connectedAt = null;
     this.updateStatus(CONNECTION_STATUS.DISCONNECTED);
   }
 
