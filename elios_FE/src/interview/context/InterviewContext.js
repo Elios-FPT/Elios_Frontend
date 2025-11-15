@@ -7,10 +7,11 @@ export function InterviewProvider({ children }) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [interviewId, setInterviewId] = useState(null);
   const [wsUrl, setWsUrl] = useState(null);
-  const [evaluations, setEvaluations] = useState([]);
+  const [detailedFeedback, setDetailedFeedback] = useState(null);
   const [isStarting, setIsStarting] = useState(false);
   const [cvAnalysisId, setCvAnalysisId] = useState(null);
   const [candidateId, setCandidateId] = useState(null);
+  const [messages, setMessages] = useState([]); // Shared messages across TextChat and VoiceChat
 
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
@@ -24,8 +25,9 @@ export function InterviewProvider({ children }) {
     setShowFeedback(false);
   };
 
-  const handleEvaluationReceived = (evaluation) => {
-    setEvaluations(prev => [...prev, evaluation]);
+  const handleDetailedFeedbackReceived = (feedback) => {
+    setDetailedFeedback(feedback);
+    setShowFeedback(true); // Automatically open modal when feedback is received
   };
 
   const value = {
@@ -34,24 +36,26 @@ export function InterviewProvider({ children }) {
     showFeedback,
     interviewId,
     wsUrl,
-    evaluations,
+    detailedFeedback,
     isStarting,
     cvAnalysisId,
     candidateId,
+    messages,
     // Setters
     setActiveTab,
     setShowFeedback,
     setInterviewId,
     setWsUrl,
-    setEvaluations,
+    setDetailedFeedback,
     setIsStarting,
     setCvAnalysisId,
     setCandidateId,
+    setMessages,
     // Handlers
     handleTabSwitch,
     handleEndSession,
     handleCloseFeedback,
-    handleEvaluationReceived,
+    handleDetailedFeedbackReceived,
   };
 
   return (

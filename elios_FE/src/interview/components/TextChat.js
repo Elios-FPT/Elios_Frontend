@@ -1,19 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Message from './Message';
 import websocketService from '../utils/websocketService';
+import audioService from '../utils/audioService';
+import { useInterview } from '../context/InterviewContext';
 import { CONNECTION_STATUS } from '../utils/config';
 import toast from '../utils/toast';
 import '../style/TextChat.css';
 
-function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
-  const [messages, setMessages] = useState([]);
+function TextChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
+  const { messages, setMessages } = useInterview();
   const [inputText, setInputText] = useState('');
-  const [connectionStatus, setConnectionStatus] = useState(CONNECTION_STATUS.DISCONNECTED);
-  const [currentQuestionId, setCurrentQuestionId] = useState(null);
-  const [reconnectAttempt, setReconnectAttempt] = useState(0);
+  const [connectionStatus, setConnectionStatus] = useState(websocketService.getConnectionStatus());
   const messagesEndRef = useRef(null);
   const isInitialized = useRef(false);
   const wsUrlRef = useRef(null);
+  const statusChangeHandlerRef = useRef(null);
+
+  // Cleanup audio on component unmount
+  useEffect(() => {
+    return () => {
+      audioService.cleanup();
+    };
+  }, []);
 
   // Initialize WebSocket connection
   useEffect(() => {
@@ -28,11 +36,17 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
       initializeWebSocket();
     }
 
-    // Only disconnect on actual unmount, not on dependency changes
+    // Don't disconnect on unmount - connection is shared with VoiceChat
+    // Only unregister handlers to prevent memory leaks
     return () => {
-      // This cleanup only runs on unmount
       if (isInitialized.current) {
-        websocketService.disconnect();
+        // Unregister status change handler
+        if (statusChangeHandlerRef.current) {
+          websocketService.offStatusChange(statusChangeHandlerRef.current);
+          statusChangeHandlerRef.current = null;
+        }
+        // Unregister handlers but keep connection alive for other component
+        // The connection will be disconnected when interview ends (in InterviewPage)
         isInitialized.current = false;
       }
     };
@@ -41,31 +55,25 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
 
   const initializeWebSocket = () => {
     try {
+      // Always register message handlers (they persist in Map)
+      websocketService.onMessage('question', handleQuestionMessage);
+      websocketService.onMessage('follow_up_question', handleFollowUpQuestionMessage);
+      websocketService.onMessage('interview_complete', handleInterviewCompleteMessage);
+
+      // Enhanced status change handler
+      const handleStatusChange = (status) => {
+        setConnectionStatus(status);
+      };
+      websocketService.onStatusChange(handleStatusChange);
+      statusChangeHandlerRef.current = handleStatusChange;
+
       // Check if already connected before attempting to connect
       const currentStatus = websocketService.getConnectionStatus();
       if (currentStatus === CONNECTION_STATUS.CONNECTED) {
-        console.log('WebSocket already connected, skipping initialization');
+        console.log('WebSocket already connected, using existing connection');
+        setConnectionStatus(CONNECTION_STATUS.CONNECTED);
         return;
       }
-
-      // Register message handlers (they persist in Map, but ensure they're set)
-      websocketService.onMessage('question', handleQuestionMessage);
-      websocketService.onMessage('follow_up_question', handleFollowUpQuestionMessage);
-      websocketService.onMessage('evaluation', handleEvaluationMessage);
-
-      // Enhanced status change handler that also tracks reconnection attempts
-      const handleStatusChange = (status) => {
-        setConnectionStatus(status);
-        // Update reconnection attempt count when status changes
-        if (status === CONNECTION_STATUS.RECONNECTING) {
-          const attempt = websocketService.getReconnectAttempt();
-          setReconnectAttempt(attempt);
-        } else if (status === CONNECTION_STATUS.CONNECTED) {
-          // Reset attempt count when connected
-          setReconnectAttempt(0);
-        }
-      };
-      websocketService.onStatusChange(handleStatusChange);
 
       // Connect
       websocketService.connect(wsUrl);
@@ -81,7 +89,7 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
       // Ensure handlers are registered after reconnection
       websocketService.onMessage('question', handleQuestionMessage);
       websocketService.onMessage('follow_up_question', handleFollowUpQuestionMessage);
-      websocketService.onMessage('evaluation', handleEvaluationMessage);
+      websocketService.onMessage('interview_complete', handleInterviewCompleteMessage);
     }
   }, [connectionStatus]);
 
@@ -96,7 +104,7 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
       // Re-register handlers
       websocketService.onMessage('question', handleQuestionMessage);
       websocketService.onMessage('follow_up_question', handleFollowUpQuestionMessage);
-      websocketService.onMessage('evaluation', handleEvaluationMessage);
+      websocketService.onMessage('interview_complete', handleInterviewCompleteMessage);
       // Connect
       websocketService.connect(wsUrl);
     } catch (error) {
@@ -116,13 +124,22 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
         questionId: message.question_id,
         questionType: message.question_type,
         difficulty: message.difficulty,
+        audioData: message.audio_data,
       },
     };
 
     setMessages(prev => [...prev, aiMessage]);
 
-    // Track current question ID
-    setCurrentQuestionId(message.question_id);
+    // Track current question ID in shared service
+    websocketService.setCurrentQuestionId(message.question_id);
+
+    // Play audio if available
+    if (message.audio_data) {
+      audioService.playBase64Audio(message.audio_data).catch((error) => {
+        // Silent fail - audio playback errors shouldn't break the UI
+        console.error('Failed to play question audio:', error);
+      });
+    }
   };
 
   const handleFollowUpQuestionMessage = (message) => {
@@ -144,13 +161,28 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
 
     setMessages(prev => [...prev, aiMessage]);
 
-    // Update current question ID to the follow-up question
-    setCurrentQuestionId(message.question_id);
+    // Update current question ID to the follow-up question in shared service
+    websocketService.setCurrentQuestionId(message.question_id);
+
+    // Play audio if available
+    if (message.audio_data) {
+      audioService.playBase64Audio(message.audio_data).catch((error) => {
+        // Silent fail - audio playback errors shouldn't break the UI
+        console.error('Failed to play follow-up question audio:', error);
+      });
+    }
   };
 
-  const handleEvaluationMessage = (evaluation) => {
-    if (onEvaluationReceived) {
-      onEvaluationReceived(evaluation);
+  const handleInterviewCompleteMessage = (message) => {
+    // Show toast notification
+    toast.info('Interview completed! Viewing your feedback...');
+
+    // Extract detailed_feedback from message
+    if (message.detailed_feedback && onDetailedFeedbackReceived) {
+      onDetailedFeedbackReceived(message.detailed_feedback);
+    } else {
+      console.error('Interview complete message missing detailed_feedback:', message);
+      toast.error('Received incomplete feedback data');
     }
   };
 
@@ -172,7 +204,8 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
     }
 
     try {
-      // Check if we have a current question ID
+      // Get current question ID from shared service
+      const currentQuestionId = websocketService.getCurrentQuestionId();
       if (!currentQuestionId) {
         toast.warning('No active question to answer');
         return;
@@ -218,8 +251,9 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
           return 'Connecting...';
         case CONNECTION_STATUS.RECONNECTING:
           const maxAttempts = 5; // From WS_CONFIG
-          if (reconnectAttempt > 0 && reconnectAttempt <= maxAttempts) {
-            return `Reconnecting... (Attempt ${reconnectAttempt}/${maxAttempts})`;
+          const currentAttempt = websocketService.getReconnectAttempt();
+          if (currentAttempt > 0 && currentAttempt <= maxAttempts) {
+            return `Reconnecting... (Attempt ${currentAttempt}/${maxAttempts})`;
           }
           return 'Reconnecting...';
         default:
@@ -245,9 +279,9 @@ function TextChat({ interviewId, wsUrl, onEvaluationReceived }) {
             Reconnect
           </button>
         )}
-        {connectionStatus === CONNECTION_STATUS.RECONNECTING && reconnectAttempt > 0 && (
+        {connectionStatus === CONNECTION_STATUS.RECONNECTING && websocketService.getReconnectAttempt() > 0 && (
           <span className="reconnect-spinner">
-            <span className="material-icons spin">app_badging</span>
+            <span className="material-icons spin">autorenew</span>
           </span>
         )}
       </div>

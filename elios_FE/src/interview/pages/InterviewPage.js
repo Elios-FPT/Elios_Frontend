@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import TextChat from '../components/TextChat';
 import VoiceChat from '../components/VoiceChat';
 import TabControls from '../components/TabControls';
 import FeedbackModal from '../components/FeedbackModal';
 import { useInterview } from '../context/InterviewContext';
 import apiService from '../utils/apiService';
+import websocketService from '../utils/websocketService';
 import { INTERVIEW_STATUS } from '../utils/config';
 import toast from '../utils/toast';
 import '../style/InterviewPage.css';
@@ -15,7 +16,7 @@ function InterviewPage() {
     showFeedback,
     interviewId,
     wsUrl,
-    evaluations,
+    detailedFeedback,
     isStarting,
     cvAnalysisId,
     candidateId,
@@ -27,7 +28,7 @@ function InterviewPage() {
     handleTabSwitch,
     handleEndSession,
     handleCloseFeedback,
-    handleEvaluationReceived,
+    handleDetailedFeedbackReceived,
     setIsStarting,
   } = useInterview();
 
@@ -40,6 +41,21 @@ function InterviewPage() {
   const [interviewSubStep, setInterviewSubStep] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const fileInputRef = useRef(null);
+
+  // Disconnect WebSocket when interview ends or component unmounts
+  useEffect(() => {
+    // Disconnect when interviewId becomes null (interview ended)
+    if (!interviewId && wsUrl) {
+      websocketService.disconnect();
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (wsUrl) {
+        websocketService.disconnect();
+      }
+    };
+  }, [interviewId, wsUrl]);
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
@@ -255,7 +271,7 @@ function InterviewPage() {
               >
                 {isUploadingCV ? (
                   <>
-                    <span className="material-icons spin">app_badging</span>
+                    <span className="material-icons spin">autorenew</span>
                     Uploading...
                   </>
                 ) : (
@@ -301,7 +317,7 @@ function InterviewPage() {
             <div className="interview-substeps">
               <div className={`substep ${interviewSubStep === 'planning' ? 'active' : step2Status === 'completed' ? 'completed' : ''}`}>
                 <span className="material-icons">
-                  {interviewSubStep === 'planning' ? 'app_badging' : step2Status === 'completed' ? 'check' : ''}
+                  {interviewSubStep === 'planning' ? 'autorenew' : step2Status === 'completed' ? 'check' : ''}
                 </span>
                 <span>Planning interview...</span>
               </div>
@@ -376,10 +392,14 @@ function InterviewPage() {
             <TextChat
               interviewId={interviewId}
               wsUrl={wsUrl}
-              onEvaluationReceived={handleEvaluationReceived}
+              onDetailedFeedbackReceived={handleDetailedFeedbackReceived}
             />
           ) : (
-            <VoiceChat />
+            <VoiceChat
+              interviewId={interviewId}
+              wsUrl={wsUrl}
+              onDetailedFeedbackReceived={handleDetailedFeedbackReceived}
+            />
           )}
         </div>
 
@@ -396,7 +416,7 @@ function InterviewPage() {
       {/* Feedback Modal */}
       {showFeedback && (
         <FeedbackModal
-          evaluations={evaluations}
+          detailedFeedback={detailedFeedback}
           onClose={handleCloseFeedback}
         />
       )}

@@ -7,10 +7,13 @@ class WebSocketService {
     this.reconnectAttempt = 0;
     this.reconnectTimeout = null;
     this.messageHandlers = new Map();
-    this.statusChangeHandler = null;
+    this.statusChangeHandler = null; // Keep for backward compatibility, but use statusChangeHandlers array
     this.shouldReconnect = true;
     this.isConnected = false;
     this.connectedAt = null;
+    this.currentQuestionId = null; // Shared current question ID across components
+    this.connectionStatus = CONNECTION_STATUS.DISCONNECTED; // Shared connection status
+    this.statusChangeHandlers = []; // Multiple handlers for status changes
   }
 
   connect(wsUrl, isReconnect = false) {
@@ -90,6 +93,7 @@ class WebSocketService {
         handler(message);
       } else {
         console.warn('No handler for message type:', message.type);
+        console.log('Message:', message);
       }
     } catch (error) {
       console.error('Message handling error:', error);
@@ -201,18 +205,90 @@ class WebSocketService {
     });
   }
 
+  /**
+   * Send audio answer to backend
+   * @param {string} questionId - Current question ID
+   * @param {Uint8Array} audioBytes - Audio data as Uint8Array (WAV/PCM format)
+   * @param {string} language - Language code (default: "en-US") - Not used by backend, kept for compatibility
+   */
+  sendUserAudioAnswer(questionId, audioBytes, language = 'en-US') {
+    // Convert Uint8Array to base64 string
+    const base64Audio = this.arrayBufferToBase64(audioBytes.buffer);
+
+    this.sendMessage({
+      type: 'audio_chunk',
+      question_id: questionId,
+      audio_data: base64Audio,
+      chunk_index: 0,
+      is_final: true,
+    });
+  }
+
+  /**
+   * Convert ArrayBuffer to base64 string
+   * @param {ArrayBuffer} buffer - ArrayBuffer to convert
+   * @returns {string} - Base64 encoded string
+   */
+  arrayBufferToBase64(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
+
   onMessage(type, handler) {
     this.messageHandlers.set(type, handler);
   }
 
   onStatusChange(handler) {
-    this.statusChangeHandler = handler;
+    // Add handler to array to support multiple components
+    if (!this.statusChangeHandlers.includes(handler)) {
+      this.statusChangeHandlers.push(handler);
+    }
+  }
+
+  offStatusChange(handler) {
+    // Remove handler from array
+    this.statusChangeHandlers = this.statusChangeHandlers.filter(h => h !== handler);
   }
 
   updateStatus(status) {
-    if (this.statusChangeHandler) {
-      this.statusChangeHandler(status);
+    this.connectionStatus = status;
+    // Notify all registered handlers
+    this.statusChangeHandlers.forEach(handler => {
+      try {
+        handler(status);
+      } catch (error) {
+        console.error('Error in status change handler:', error);
+      }
+    });
+  }
+
+  getConnectionStatus() {
+    if (!this.ws) return CONNECTION_STATUS.DISCONNECTED;
+
+    // Return cached status if connection exists, otherwise check readyState
+    if (this.connectionStatus !== CONNECTION_STATUS.DISCONNECTED || this.ws.readyState === WebSocket.OPEN) {
+      return this.connectionStatus;
     }
+
+    switch (this.ws.readyState) {
+      case WebSocket.CONNECTING:
+        return CONNECTION_STATUS.CONNECTING;
+      case WebSocket.OPEN:
+        return CONNECTION_STATUS.CONNECTED;
+      case WebSocket.CLOSING:
+      case WebSocket.CLOSED:
+        return CONNECTION_STATUS.DISCONNECTED;
+      default:
+        return CONNECTION_STATUS.DISCONNECTED;
+    }
+  }
+
+  getReconnectAttempt() {
+    return this.reconnectAttempt;
   }
 
   disconnect() {
@@ -234,28 +310,16 @@ class WebSocketService {
     this.updateStatus(CONNECTION_STATUS.DISCONNECTED);
   }
 
-  getConnectionStatus() {
-    if (!this.ws) return CONNECTION_STATUS.DISCONNECTED;
-
-    switch (this.ws.readyState) {
-      case WebSocket.CONNECTING:
-        return CONNECTION_STATUS.CONNECTING;
-      case WebSocket.OPEN:
-        return CONNECTION_STATUS.CONNECTED;
-      case WebSocket.CLOSING:
-      case WebSocket.CLOSED:
-        return CONNECTION_STATUS.DISCONNECTED;
-      default:
-        return CONNECTION_STATUS.DISCONNECTED;
-    }
-  }
-
-  getReconnectAttempt() {
-    return this.reconnectAttempt;
-  }
-
   resetReconnectAttempt() {
     this.reconnectAttempt = 0;
+  }
+
+  getCurrentQuestionId() {
+    return this.currentQuestionId;
+  }
+
+  setCurrentQuestionId(questionId) {
+    this.currentQuestionId = questionId;
   }
 }
 

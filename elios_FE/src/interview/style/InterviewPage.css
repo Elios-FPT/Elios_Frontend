@@ -122,6 +122,120 @@
   position: relative;
 }
 
+/* Laptop Responsive Styles */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  #interview-start-container {
+    padding: 60px 40px;
+  }
+
+  #interview-start-container .start-interview-card {
+    max-width: 720px;
+    padding: 56px 64px;
+  }
+
+  #interview-start-container .start-interview-card h2 {
+    font-size: 36px;
+  }
+
+  #interview-start-container .step-title {
+    font-size: 28px;
+  }
+
+  #interview-start-container .step-guide {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  #interview-start-container .progressbar {
+    max-width: 720px;
+  }
+
+  #interview-start-container .page-content {
+    max-width: 100%;
+  }
+
+  #interview-start-container .start-interview-button {
+    padding: 18px 48px;
+    font-size: 19px;
+  }
+
+  #interview-start-container .next-button,
+  #interview-start-container .back-button {
+    padding: 14px 32px;
+    font-size: 17px;
+  }
+
+  #interview-start-container .cv-choose-button,
+  #interview-start-container .cv-upload-button {
+    padding: 14px 36px;
+    font-size: 17px;
+  }
+
+  #interview-start-container .step-header {
+    margin-bottom: 40px;
+  }
+
+  #interview-start-container .page-navigation {
+    margin-top: 40px;
+    padding-top: 32px;
+  }
+}
+
+/* Large Laptop/Desktop Styles */
+@media (min-width: 1441px) {
+  #interview-start-container {
+    padding: 80px 40px;
+  }
+
+  #interview-start-container .start-interview-card {
+    max-width: 800px;
+    padding: 64px 72px;
+  }
+
+  #interview-start-container .start-interview-card h2 {
+    font-size: 40px;
+  }
+
+  #interview-start-container .step-title {
+    font-size: 30px;
+  }
+
+  #interview-start-container .step-guide {
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  #interview-start-container .progressbar {
+    max-width: 800px;
+  }
+
+  #interview-start-container .start-interview-button {
+    padding: 20px 52px;
+    font-size: 20px;
+  }
+
+  #interview-start-container .next-button,
+  #interview-start-container .back-button {
+    padding: 15px 36px;
+    font-size: 18px;
+  }
+
+  #interview-start-container .cv-choose-button,
+  #interview-start-container .cv-upload-button {
+    padding: 15px 40px;
+    font-size: 18px;
+  }
+
+  #interview-start-container .step-header {
+    margin-bottom: 44px;
+  }
+
+  #interview-start-container .page-navigation {
+    margin-top: 44px;
+    padding-top: 36px;
+  }
+}
+
 #interview-start-container .start-interview-card h2 {
   font-size: 32px;
   margin-bottom: 16px;
