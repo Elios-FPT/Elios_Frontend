@@ -2,11 +2,12 @@
 const baseUrl = process.env.REACT_APP_DEVELOPMENT_API_URL;
 
 export const API_ENDPOINTS = {
-    LOGIN_PATH: 'http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com%2Fforum',
+    LOGIN_PATH: 'http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com',
     LOGOUT_PATH: 'http://oauth2.elios.com/oauth2/sign_out?rd=http%3A%2F%2Fwww.elios.com',
 
     // User API Endpoints
     GET_USER_PROFILE: `${baseUrl}/api/users/me/profile`,
+    GET_USER_BY_ID: (id) => `${baseUrl}/api/users/${id}`,
 
     // CV API Endpoints
     GET_USER_CV: `${baseUrl}/api/cvbuilder/UserCvs`,
@@ -69,6 +70,7 @@ export const API_ENDPOINTS = {
     GET_MOCK_PROJECTS_STATISTICS: `${baseUrl}/api/mockproject/mock-projects/statistics`,
     GET_TOP_SUBMISSIONS: (projectId, top = 10) => `${baseUrl}/api/mockproject/mock-projects/${projectId}/top-submissions?top=${top}`,
     AUTO_EVALUATE_SUBMISSION: (projectId) => `${baseUrl}/api/mockproject/mock-projects/${projectId}/auto-evaluate`,
+    UPLOAD_ZIP: `${baseUrl}/api/mockproject/mock-projects/upload-zip`,
 
     // PROCESS API ENDPOINTS
     GET_PROCESS_DETAIL: (processId) => `${baseUrl}/api/mockproject/processes/${processId}`,

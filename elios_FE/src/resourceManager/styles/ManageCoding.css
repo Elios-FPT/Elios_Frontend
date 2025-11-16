@@ -1,0 +1,222 @@
+.full-screen-loader {
+    position: fixed;
+    inset: 0;
+    background: #121212;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: 'Fira Code', monospace;
+}
+
+.spinner {
+    width: 64px;
+    height: 64px;
+    border: 6px solid #2a2a2a;
+    border-top-color: #50fa7b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 24px;
+}
+
+.full-screen-loader p {
+    font-size: 1.25rem;
+    color: #aaa;
+}
+
+.error-text {
+    color: #ff6b6b;
+    font-size: 1.25rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dashboard-container {
+    min-height: 100vh;
+    background: #181a1b;
+    padding: 80px 32px 40px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.main-tabs-container {
+    flex: 1;
+    max-width: 1200px;
+    background: #1e1e1e;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(80, 250, 123, 0.1);
+    border: 1px solid #333;
+}
+
+.tab-header {
+    text-align: center;
+    padding: 32px 40px 24px;
+    background: #25272a;
+    border-bottom: 1px solid #333;
+}
+
+.tab-header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #50fa7b;
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px rgba(80, 250, 123, 0.3);
+}
+
+.tab-header .intro-text {
+    color: #aaa;
+    font-size: 1.05rem;
+    margin-bottom: 16px;
+}
+
+.btn-success {
+    background: #50fa7b;
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(80, 250, 123, 0.3);
+}
+
+.btn-success:hover {
+    background: #45e06a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(80, 250, 123, 0.4);
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+    padding: 32px;
+}
+
+.project-card {
+    background: #1e1e1e;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #50fa7b, #44d66e);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    border-color: #50fa7b;
+    box-shadow: 0 16px 32px rgba(80, 250, 123, 0.2);
+}
+
+.project-card:hover::before {
+    opacity: 1;
+}
+
+.project-card h3 {
+    color: #50fa7b;
+    margin: 0 0 12px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(80, 250, 123, 0.2);
+}
+
+.project-card p {
+    color: #ccc;
+    margin: 8px 0;
+    font-size: 0.95rem;
+}
+
+.project-card strong {
+    color: #50fa7b;
+}
+
+.card-actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.card-actions button {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-success {
+    background: #50fa7b;
+    color: #000;
+}
+
+.btn-success:hover {
+    background: #44d66e;
+}
+
+.btn-danger {
+    background: #ff5555;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #ff4444;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    padding: 48px;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .tab-header {
+        padding: 24px 20px;
+    }
+
+    .tab-header h1 {
+        font-size: 2rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+
+    .card-actions button {
+        width: 100%;
+    }
+}
