@@ -82,6 +82,29 @@
   margin-bottom: 10px;
 }
 
+/* --- New styles for Share Solution Button --- */
+#modal-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#share-solution-button {
+  background-color: #50fa7b;
+  color: #252526;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#share-solution-button:hover {
+  background-color: #45d86a;
+}
+/* --- End new styles --- */
+
+
 #modal-table {
   width: 100%;
   border-collapse: collapse;

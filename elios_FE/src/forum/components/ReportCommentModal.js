@@ -1,18 +1,22 @@
-// file: elios_FE/src/forum/components/ReportPostModal.js
+// file: elios_FE/src/forum/components/ReportCommentModal.js
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../style/ReportPostModal.css';
 
-const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
+const ReportCommentModal = ({ show, handleClose, handleSubmit }) => {
     const [reason, setReason] = useState('');
     const [details, setDetails] = useState('');
+    const [error, setError] = useState(''); // New state for error message
 
     const onSubmit = (e) => {
         e.preventDefault();
+        setError(''); // Clear previous error
+
         if (!reason) {
-            alert("Please select a reason for the report.");
+            setError("Please select a reason for the report.");
             return;
         }
+        
         // Pass the reason and details up to the parent
         handleSubmit(reason, details);
         
@@ -26,6 +30,7 @@ const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
         // Reset fields and close
         setReason('');
         setDetails('');
+        setError(''); // Clear error on cancel
         handleClose();
     }
 
@@ -34,7 +39,6 @@ const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
             show={show} 
             onHide={onCancel} 
             centered
-            // ** MODIFICATION: Added ID and backdropClassName for dark theme styling **
             id="Report-Post-Modal"
             backdropClassName="dark-theme-backdrop"
         >
@@ -43,12 +47,17 @@ const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
             </Modal.Header>
             <Form onSubmit={onSubmit}>
                 <Modal.Body>
+                    {/* Display error message */}
+                    {error && <p className="text-danger">{error}</p>}
                     <Form.Group className="mb-3" controlId="reportReason">
                         <Form.Label>Reason</Form.Label>
                         <Form.Select 
                             aria-label="Select a reason"
                             value={reason}
-                            onChange={(e) => setReason(e.target.value)}
+                            onChange={(e) => {
+                                setReason(e.target.value);
+                                if (e.target.value) setError(''); // Clear error when a reason is selected
+                            }}
                             required
                         >
                             <option value="">Select a reason...</option>
@@ -84,4 +93,4 @@ const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
     );
 };
 
-export default ReportPostModal;
+export default ReportCommentModal;

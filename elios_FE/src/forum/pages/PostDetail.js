@@ -4,6 +4,7 @@ import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Card, Button } from "react-bootstrap";
+import {  FaFlag } from 'react-icons/fa';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -14,7 +15,7 @@ import UserNavbar from "../../components/navbars/UserNavbar";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import CommentForm from "../components/CommentForm";
 import LoadingCircle1 from "../../components/loading/LoadingCircle1";
-
+import ReportPostModal from "../components/ReportPostModal"; // Import the modal here for comment reporting
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -23,6 +24,9 @@ const PostDetail = () => {
     const [post, setPost] = useState(null);
     const [replyingTo, setReplyingTo] = useState(null);
     const [loading, setLoading] = useState(true);
+    // State for comment reporting modal
+    const [showCommentReportModal, setShowCommentReportModal] = useState(false);
+    const [reportTarget, setReportTarget] = useState({ id: null, type: null });
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -165,32 +169,55 @@ const PostDetail = () => {
         }
     };
 
-    // --- UPDATED FUNCTION ---
-    const handleReportPost = async (reason, details) => {
+    const handleReport = async (targetType, targetId, reason, details) => {
         if (!reason) {
             console.error("Report reason is required.");
             return;
         }
 
         try {
+            // Use REPORT_POST or REPORT_COMMENT, which are the same endpoint but different names for clarity
+            const endpoint = targetType === "Post" ? API_ENDPOINTS.REPORT_POST : API_ENDPOINTS.REPORT_COMMENT;
             await axios.post(
-                API_ENDPOINTS.REPORT_POST, 
+                endpoint,
                 {
-                    targetType: "Post",
-                    targetId: id,
+                    targetType: targetType,
+                    targetId: targetId,
                     reason: reason,
                     details: details ? details.trim() : ""
                 },
-                { 
+                {
                     withCredentials: true,
                     headers: { "Content-Type": "application/json" }
                 }
             );
-            alert("Post reported successfully!");
+            alert(`${targetType} reported successfully!`);
         } catch (error) {
-            console.error("Error reporting post:", error);
-            alert("There was an error submitting your report. Please try again.");
+            console.error(`Error reporting ${targetType}:`, error);
+            alert(`There was an error submitting your ${targetType} report. Please try again.`);
         }
+    };
+
+    // --- UPDATED FUNCTION to use generic handleReport ---
+    const handleReportPost = async (reason, details) => {
+        // Post ID is available from useParams
+        handleReport("Post", id, reason, details);
+    };
+
+    // --- NEW FUNCTION for Comment Reporting ---
+    const handleReportComment = async (commentId, reason, details) => {
+        handleReport("Comment", commentId, reason, details);
+        setShowCommentReportModal(false); // Close the modal
+    }
+
+    const handleShowCommentReportModal = (commentId) => {
+        setReportTarget({ id: commentId, type: "Comment" });
+        setShowCommentReportModal(true);
+    };
+
+    const handleCloseCommentReportModal = () => {
+        setShowCommentReportModal(false);
+        setReportTarget({ id: null, type: null });
     };
 
     const handleSetReply = (comment) => {
@@ -210,9 +237,21 @@ const PostDetail = () => {
                         <strong className="comment-author">{comment.authorFullName}</strong>{" "}
                         <small className="text-muted">{formatRelativeTime(comment.createdAt)}</small>
                         <p className="mb-0">{comment.content}</p>
-                        <Button variant="link" size="sm" className="p-0 mt-1 reply-button" onClick={() => handleSetReply(comment)}>
-                            Reply
-                        </Button>
+                        <div className="comment-actions">
+                            <Button variant="link" size="sm" className="p-0 mt-1 reply-button" onClick={() => handleSetReply(comment)}>
+                                Reply
+                            </Button>
+                            <span className="mx-2 text-muted">|</span>
+                            {/* Button to open the report modal for the comment */}
+                            <Button 
+                                variant="link" 
+                                size="sm" 
+                                className="p-0 mt-1 report-comment-button" 
+                                onClick={() => handleShowCommentReportModal(comment.commentId)}
+                            >
+                                <FaFlag />
+                            </Button>
+                        </div>
                     </div>
                 </div>
                 {comment.replies && comment.replies.length > 0 && (
@@ -282,11 +321,19 @@ const PostDetail = () => {
                             onCancelReply={handleCancelReply}
                             onUpvote={handleUpvote}
                             onDownvote={handleDownvote}
-                            onReport={handleReportPost}
+                            onReport={handleReportPost} // This is for POST reporting
                         />
                     </Card.Body>
                 </Container>
             </div>
+            
+            {/* Modal for Comment Reporting */}
+            <ReportPostModal
+                show={showCommentReportModal}
+                handleClose={handleCloseCommentReportModal}
+                // Pass the comment ID to the submit handler
+                handleSubmit={(reason, details) => handleReportComment(reportTarget.id, reason, details)}
+            />
         </>
     );
 };
