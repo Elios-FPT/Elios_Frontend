@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../style/SubmissionsView.css"; // <-- NEW CSS FILE
+import EditAndShareSolution from "./EditAndShareSolution"; // <-- IMPORT NEW COMPONENT
 
 const SubmissionsView = ({ problemId }) => {
   const [submissions, setSubmissions] = useState([]);
@@ -11,6 +12,9 @@ const SubmissionsView = ({ problemId }) => {
 
   const [submissionLoading, setSubmissionLoading] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
+
+  // State for the new "Share Solution" modal
+  const [isSharingSolution, setIsSharingSolution] = useState(false);
 
   // Fetches the list of submissions
   useEffect(() => {
@@ -123,7 +127,16 @@ const SubmissionsView = ({ problemId }) => {
             {submissionDetails ? (
               <>
                 <div id="modal-section">
-                  <h4>Code</h4>
+                  <div id="modal-code-header">
+                    <h4>Code</h4>
+                    {/* Share Solution Button */}
+                    <button 
+                      id="share-solution-button" 
+                      onClick={() => setIsSharingSolution(true)}
+                    >
+                      Share Solution
+                    </button>
+                  </div>
                   <pre className="code-block">
                     <code>{submissionDetails.submission.code}</code>
                   </pre>
@@ -165,6 +178,16 @@ const SubmissionsView = ({ problemId }) => {
             )}
           </div>
         </div>
+      )}
+
+      {/* Share Solution Modal */}
+      {isSharingSolution && submissionDetails && (
+          <EditAndShareSolution
+            isOpen={isSharingSolution}
+            onClose={() => setIsSharingSolution(false)}
+            submissionData={submissionDetails.submission.code}
+            problemId={problemId}
+          />
       )}
     </>
   );
