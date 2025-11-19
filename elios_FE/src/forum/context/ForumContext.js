@@ -16,7 +16,7 @@ export const ForumContextProvider = ({ children }) => {
                     withCredentials: true,
                     headers: { "Content-Type": "application/json" },
                 });
-                setPosts(response.data.responseData);
+                setPosts(response.data.responseData || []);
             } catch (error) {
                 console.error("Error fetching posts:", error);
             } finally {
@@ -24,10 +24,11 @@ export const ForumContextProvider = ({ children }) => {
             }
         };
 
-        if (posts.length === 0) {
+        if (!posts || posts.length === 0) {
             fetchPosts();
         }
-    }, [posts.length]); // We keep posts.length here to trigger the initial fetch
+    }, [posts.length]);
+
 
     return (
         <ForumContext.Provider value={{ posts, loading }}>
