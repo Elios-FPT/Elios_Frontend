@@ -1,0 +1,208 @@
+/* file: elios_FE/src/codingChallenge/style/EditAndShareSolution.css */
+
+#share-solution-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Higher than other modals/components */
+}
+
+#share-solution-modal-content {
+  background-color: #2c2c2c;
+  color: #f0f0f0;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#share-solution-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #3a3a3a;
+  background-color: #333333;
+}
+
+#share-solution-modal-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.25rem;
+}
+
+#share-solution-modal-close-button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+#share-solution-modal-close-button:hover {
+  opacity: 1;
+}
+
+#share-solution-form {
+  padding: 20px;
+  overflow-y: auto; /* Allow form content to scroll */
+}
+
+#share-solution-form-group {
+  margin-bottom: 15px;
+}
+
+#share-solution-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #c5c5c5;
+}
+
+#solution-title-input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #555;
+  background: transparent;
+  color: #fff;
+  font-size: 1.1em;
+  outline: none;
+  box-shadow: none;
+}
+
+/* --- Toolbar Styles --- */
+#solution-toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 6px;
+  background: #3a3a3a;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+#solution-toolbar button {
+  background: none;
+  border: none;
+  color: #ddd;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+#solution-toolbar button:hover {
+  color: #00bcd4;
+}
+
+/* --- Editor Styles --- */
+#solution-editor {
+  min-height: 350px; /* Increased height for editing code and explanation */
+  background: #181a1b;
+  color: #eee;
+  border-radius: 5px;
+  padding: 12px;
+  outline: none;
+  overflow-y: auto;
+  border: 1px solid #3a3a3a;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  font-family: monospace; /* Use monospace for code-focused editing */
+}
+
+/* Placeholder style for contentEditable */
+#solution-editor:empty:before {
+  content: attr(placeholder);
+  color: #666;
+}
+
+/* Ensure code blocks look distinct within the editor */
+#solution-editor pre {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 10px 0;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+#solution-editor code {
+  color: #00ff95; /* Highlight code text */
+}
+
+/* --- Action Buttons --- */
+#share-solution-error {
+  color: #ff6b6b;
+  background-color: #4a1d1d;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+#share-solution-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#share-solution-btn-cancel,
+#share-solution-btn-submit {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#share-solution-btn-cancel {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+  color: #fff;
+}
+
+#share-solution-btn-cancel:hover {
+  background-color: #7a868d;
+  border-color: #7a868d;
+}
+
+#share-solution-btn-submit {
+  background-color: #0F8A57;
+  border: 1px solid #0F8A57;
+  color: #fff;
+}
+
+#share-solution-btn-submit:hover {
+  background-color: #14b06f;
+  border-color: #15a96b;
+}
+
+#share-solution-btn-submit:disabled,
+#share-solution-btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 850px) {
+  #share-solution-modal-content {
+    width: 95%;
+  }
+
+  #solution-editor {
+    min-height: 250px;
+  }
+}

@@ -248,7 +248,8 @@ const EditPostForForum = () => {
                 withCredentials: true,
             });
 
-            console.log("Draft saved successfully.", response.data);
+            console.log("Response from saving draft:", response.data);
+            console.log('body being sent:', postData);
       
         } catch (error) {
             console.error("Error saving draft:", error.response || error);
