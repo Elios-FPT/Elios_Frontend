@@ -14,12 +14,13 @@ const EditPostForForum = () => {
     const navigate = useNavigate();
 
     // Hardcoded values
-    const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
     const POST_TYPE = "Post";
-
+    
     // State for form fields
+    const [forumCategories, setForumCategories] = useState([]);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [categoryId, setCategoryId] = useState("");
 
     // State for post loading and errors
     const [loading, setLoading] = useState(true);
@@ -33,9 +34,11 @@ const EditPostForForum = () => {
     // State for sidebar drag-to-upload
     const [isOverImagePool, setIsOverImagePool] = useState(false);
 
-    /**
-     * Fetches the user's uploaded images for the image pool.
-     */
+
+
+
+    //  Fetches the user's uploaded images for the image pool.
+
     const fetchUserImages = useCallback(async () => {
         setImagesLoading(true);
         setImageError(null);
@@ -57,9 +60,8 @@ const EditPostForForum = () => {
         }
     }, []); // No dependencies, function is stable
 
-    /**
-     * Fetches the main post content.
-     */
+
+    // Fetches content.
     useEffect(() => {
         const fetchPostData = async () => {
             if (!postId) return;
@@ -77,6 +79,10 @@ const EditPostForForum = () => {
                     const post = response.data.responseData;
                     setTitle(post.title);
                     setContent(post.content);
+                    // FIX: Initialize categoryId with the current post's categoryId
+                    if (post.categoryId) {
+                        setCategoryId(post.categoryId);
+                    }
                 } else {
                     setError("Post data not found in response.");
                 }
@@ -89,6 +95,22 @@ const EditPostForForum = () => {
             }
         };
 
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES_FORUM, {
+                    withCredentials: true,
+                });
+
+                if (response.data && Array.isArray(response.data.responseData)) {
+                    setForumCategories(response.data.responseData);
+                }
+            } catch (err) {
+                console.error("Error fetching categories:", err);
+            }
+        };
+
+
+        fetchCategories();
         fetchPostData();
         fetchUserImages();
     }, [postId, fetchUserImages]);
@@ -168,7 +190,7 @@ const EditPostForForum = () => {
         event.dataTransfer.setData("text/plain", markdownToInsert);
     };
 
-    
+
     const handlePoolDragOver = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -207,10 +229,10 @@ const EditPostForForum = () => {
      * Handles the final form submission (updating the post).
      */
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         const postData = {
-            categoryId: CATEGORY_ID,
+            categoryId: categoryId,
             title: title,
             content: content,
             postType: POST_TYPE,
@@ -223,9 +245,11 @@ const EditPostForForum = () => {
             const response = await axios.put(API_ENDPOINTS.SUBMIT_POST(postId), postData, {
                 withCredentials: true,
             });
-
-            console.log("Post published successfully:", response.data);
-            navigate('/forum/user-posts');
+            if (response.data.status === 200) {
+                navigate('/forum/user-posts');
+            } else {
+                alert("Failed to update post. With error: " + response.data.message);
+            }
 
         } catch (error) {
             console.error("Error updating post:", error.response || error);
@@ -235,8 +259,8 @@ const EditPostForForum = () => {
 
     const handleSaveDraft = async () => {
         const postData = {
-            postId: postId, 
-            categoryId: CATEGORY_ID,
+            postId: postId,
+            categoryId: categoryId,
             title: title,
             content: content,
             postType: POST_TYPE,
@@ -247,13 +271,15 @@ const EditPostForForum = () => {
             const response = await axios.put(API_ENDPOINTS.DRAFT_POST(postId), postData, {
                 withCredentials: true,
             });
+            if (response.data.status === 200) {
+                navigate('/forum/user-posts');
+            } else {
+                alert("Failed to save draft. With error: " + response.data.message);
+            }
 
-            console.log("Response from saving draft:", response.data);
-            console.log('body being sent:', postData);
-      
         } catch (error) {
             console.error("Error saving draft:", error.response || error);
-            setImageError("Failed to save draft."); 
+            alert("Failed to save draft." + (error.response ? ` Server responded with: ${error.response.data.message}` : ""));
         }
     };
 
@@ -317,11 +343,11 @@ const EditPostForForum = () => {
             <div id="edit-post-for-forum-container">
                 <Row>
                     {/* Image Pool Sidebar Column */}
-                    <Col md={3}>
+                    <Col md={2}>
                         {renderImagePool()}
                     </Col>
                     {/* Main Content Editor Column */}
-                    <Col md={9}>
+                    <Col md={10}>
                         <div id="edit-post-for-forum-form-wrapper">
                             <h1>Edit Your Post</h1>
                             <form id="edit-post-for-forum-form" onSubmit={handleSubmit}>
@@ -335,7 +361,21 @@ const EditPostForForum = () => {
                                         required
                                     />
                                 </div>
-                                <div className="edit-post-for-forum-form-group" data-color-mode="light">
+
+                                <div className="edit-post-for-forum-form-group-category">
+                                    <label htmlFor="postType">Post Category</label>
+                                    <select id="postType" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
+                                        {/* Added a default, disabled option to guide the user if categoryId is still empty */}
+                                        <option value="" disabled>Select a Category</option>
+                                        {forumCategories.map((category) => (
+                                            <option key={category.categoryId} value={category.categoryId}>
+                                                {category.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    
+                                </div>
+                                <div className="edit-post-for-forum-form-group" data-color-mode="dark">
                                     <label htmlFor="content">Content</label>
                                     <MDEditor
                                         value={content}
@@ -358,8 +398,8 @@ const EditPostForForum = () => {
                                     </button>
                                     {/* This is the main submit button for the form */}
                                     <button type="submit"
-                                     className="edit-post-for-forum-btn-save"
-                                     onClick={handleSubmit}>
+                                        className="edit-post-for-forum-btn-save"
+                                        onClick={handleSubmit}>
                                         Publish Post
                                     </button>
                                     <button
@@ -367,7 +407,7 @@ const EditPostForForum = () => {
                                         className="edit-post-for-forum-btn-cancel"
                                         onClick={() => navigate('/forum/user-posts')}
                                     >
-                                        Cancel
+                                        Return
                                     </button>
                                 </div>
                             </form>

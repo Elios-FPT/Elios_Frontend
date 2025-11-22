@@ -1,1 +1,132 @@
 /* file: elios_FE/src/codingChallenge/style/SolutionView.css */
+
+#solution-view-container {
+    padding: 10px;
+    color: #eee;
+    background-color: #1e1e1e; /* Matching dark theme */
+    min-height: 100%;
+}
+
+#solution-view-loading, 
+#solution-view-error,
+#solution-view-empty {
+    text-align: center;
+    margin-top: 20px;
+    color: #bbb;
+}
+
+#solution-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Solution Card Style - mimics Forum Post */
+.solution-card {
+    background: #23272f;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #333;
+}
+
+.solution-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.solution-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.solution-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #ffd700;
+}
+
+.solution-author {
+    font-weight: 600;
+    color: #ffd700;
+}
+
+.solution-time {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.solution-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #19c37d;
+    margin-bottom: 8px;
+}
+
+/* Content Truncation Logic */
+.solution-body {
+    color: #ddd;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    
+    /* Truncation properties */
+    max-height: 150px; /* Limit height */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* Limit lines */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    
+    background-color: #181a1b;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer; /* Indicates clickable */
+    transition: background-color 0.2s ease;
+}
+
+.solution-body:hover {
+    background-color: #202224;
+}
+
+/* When Expanded */
+.solution-body.expanded {
+    max-height: none;
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+}
+
+/* Footer / Stats */
+.solution-footer {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #6c757d;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+}
+
+.solution-stat-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.solution-stat-item.up:hover {
+    color: #19c37d;
+}
+
+.solution-stat-item.down:hover {
+    color: #d9534f;
+}
+
+.solution-stat-item svg {
+    margin-right: 2px;
+}

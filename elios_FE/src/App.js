@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./general/LandingPage";
+import UserProfile from "./user/pages/UserProfile";
 
 import Forum from "./forum/pages/Forum";
 import PostDetail from "./forum/pages/PostDetail";
@@ -51,6 +52,9 @@ function App() {
 
         {/* User Only Routes */}
         <Route element={<RoleProtectedRoute allowedRoles={["User"]} />}>
+
+          <Route path="/user/profile" element={<UserProfile />} />
+
           <Route path="/forum" element={<Forum />} />
           <Route path="/forum/post/:id" element={<PostDetail />} />
           <Route path="/forum/user-posts" element={<UserPostStorage />} />

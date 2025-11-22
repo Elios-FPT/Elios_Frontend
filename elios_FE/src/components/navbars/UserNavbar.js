@@ -111,7 +111,7 @@ const UserNavbar = () => {
                   </>
                 ) : (
                   <>
-                    <Dropdown.Item as={Link} to="/profile">
+                    <Dropdown.Item as={Link} to="/user/profile">
                       {t("UserNavbar.profile")}
                     </Dropdown.Item>
                     <Dropdown.Item as={Link} to="/settings">

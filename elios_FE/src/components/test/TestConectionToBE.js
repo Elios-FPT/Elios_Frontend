@@ -13,15 +13,12 @@ const TestConnectionToBE = () => {
     
     const challengeId = "a1b2c3d4-5678-90ab-cdef-1234567890ab";
     const postType = "Solution";
-    const apiUrl = API_ENDPOINTS.GET_SOLUTION; 
+    const apiUrl = API_ENDPOINTS.GET_USER_PROFILE; 
 
     const handleTestConnection = async () => {
         try {
             const response = await axios.get(apiUrl, {
-                params: {
-                    PostType: postType,
-                    ReferenceId: challengeId,
-                },
+
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",

@@ -2,6 +2,7 @@
   "UserNavbar": {
     "forum": "Diễn đàn",
     "codingChallenge": "Thử thách lập trình",
+    "projectChallenge": "Thử thách dự án",
     "contest": "Cuộc thi",
     "challenge": "Thử thách",
     "event": "Sự kiện",
@@ -11,7 +12,7 @@
     "buildCV": "Tạo dựng CV",
     "login": "Đăng nhập",
     "register": "Đăng ký",
-    "switch_language": "Chuyển sang Tiếng Anh",
+    "switch_language": "Switch to English",
     "profile": "Hồ sơ",
     "settings": "Cài đặt",
     "logout": "Đăng xuất"
@@ -21,8 +22,9 @@
       "forum": "Diễn đàn",
       "codingChallenge": "Thử thách lập trình",
       "buildCV": "Tạo CV",
+      "projectChallenge": "Thử thách dự án",
       "login": "Đăng nhập",
-      "language": "Ngôn ngữ: VI"
+      "language": "Switch to English"
     },
     "main_title": "Một cách học hoàn toàn mới",
     "main_desc": "Eliso là nền tảng tốt nhất giúp bạn nâng cao kỹ năng, mở rộng kiến thức và chuẩn bị cho các buổi phỏng vấn kỹ thuật.",

@@ -18,6 +18,7 @@ export const API_ENDPOINTS = {
 
     // Forum API Endpoints
     GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
+    GET_CATEGORIES_FORUM: `${baseUrl}/api/forum/Category`,
     GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     CREATE_POST:`${baseUrl}/api/forum/posts`,
     DRAFT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
