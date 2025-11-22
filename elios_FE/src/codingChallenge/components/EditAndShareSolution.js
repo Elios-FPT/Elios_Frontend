@@ -11,7 +11,7 @@ const turndownService = new TurndownService();
 // Note: This CATEGORY_ID is hardcoded, similar to EditPostForForum.js.
 // This might need to be a different ID for "Solutions".
 const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
-const POST_TYPE = "Solution"; // Solutions are a specific post type
+const POST_TYPE = "Solution"; 
 
 const EditAndShareSolution = ({ isOpen, onClose, submissionData, problemId }) => {
 
@@ -49,17 +49,15 @@ const EditAndShareSolution = ({ isOpen, onClose, submissionData, problemId }) =>
         const postData = {
             categoryId: CATEGORY_ID,
             title: title,
-            content: markdown, // Use the converted markdown
+            content: markdown, 
             postType: POST_TYPE,
-            referenceId: problemId, // Link this post to the coding problem
-            tags: [], // Start with empty tags
+            referenceId: problemId, 
+            tags: [], 
             submitForReview: true
         };
 
         try {
-            // This assumes a POST endpoint exists for creating new posts.
-            // If not, this API_ENDPOINT will need to be added to apiConfig.js
-            const response = await axios.post(API_ENDPOINTS.CREATE_FORUM_POST, postData, {
+            const response = await axios.post(API_ENDPOINTS.CREATE_POST, postData, {
                 withCredentials: true,
             });
 
