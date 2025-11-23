@@ -16,7 +16,8 @@ import { ForumContext } from "../context/ForumContext"; // Import the context
 const Forum = () => {
   const navigate = useNavigate();
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
-  const { posts, loading } = useContext(ForumContext);
+  // Destructure setCategoryId to update filter
+  const { posts, loading, categories, setCategoryId } = useContext(ForumContext);
 
   const isContentTooLong = (content) => {
     return content.length > 300;
@@ -47,7 +48,6 @@ const Forum = () => {
                 {loading ? (
                   <LoadingCircle1 />
                 ) : (
-                  // **MODIFICATION**: Map over 'posts' from context
                   posts.map((post) => (
                     <Card
                       key={post.postId}
@@ -98,7 +98,6 @@ const Forum = () => {
                             )}
                           </div>
                           <div id="user-forum-post-stats">
-                            {/* Kept as className: repeated utility classes */}
                             <span className="stat-item up">
                               <FaThumbsUp /> {post.upvoteCount}
                             </span>
@@ -120,14 +119,13 @@ const Forum = () => {
               </Col>
 
               <Col md={3} id="user-forum-forum-sidebar">
-                 <Card id="user-forum-sidebar-card">
+                <Card id="user-forum-sidebar-card">
                   <Card.Body>
-                    <div className="user-forum-sidebar-banner mb-3"> {/* Utility class, not in CSS file */}
-                      
+                    <div className="user-forum-sidebar-banner mb-3">
                       <Button
                         variant="outline-light"
                         size="sm"
-                        className="w-100 mb-2" /* Kept utility classes */
+                        className="w-100 mb-2"
                         id="user-forum-btn-outline-light"
                       >
                         Your Notification
@@ -140,7 +138,7 @@ const Forum = () => {
                         onClick={() => setShowCreatePostModal(true)}
                       >
                         <span role="img" aria-label="chat">
-                          
+
                         </span>{" "}
                         Discuss Now
                       </div>
@@ -151,31 +149,42 @@ const Forum = () => {
                         id="user-forum-btn-outline-light"
                         onClick={() => navigate("/forum/user-posts")}
                       >
-                        Your Post Storage 
+                        Your Post Storage
                       </Button>
                     </div>
 
 
                     <ListGroup variant="flush" className="mt-3">
-                      {/* --- EXCEPTION: Kept as className per request --- */}
-                      <ListGroup.Item className="user-forum-sidebar-list">
-                        OO Design
+
+                      <div className="user-forum-sidebar-banner mb-3">
+                        <div id="user-forum-sidebar-title">
+                          Topics
+                        </div>
+                      </div>
+                      
+                      {/* Added "All Topics" to allow resetting the filter */}
+                      <ListGroup.Item 
+                        className="user-forum-sidebar-list"
+                        action
+                        onClick={() => setCategoryId(null)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        All Topics
                       </ListGroup.Item>
-                      <ListGroup.Item className="user-forum-sidebar-list">
-                        Operating System
-                      </ListGroup.Item>
-                      <ListGroup.Item className="user-forum-sidebar-list">
-                        Algorithms
-                      </ListGroup.Item>
-                      <ListGroup.Item className="user-forum-sidebar-list">
-                        Database
-                      </ListGroup.Item>
-                      <ListGroup.Item className="user-forum-sidebar-list">
-                        Shell
-                      </ListGroup.Item>
-                      <ListGroup.Item className="user-forum-sidebar-list">
-                        Concurrency
-                      </ListGroup.Item>
+
+                      {/* Map categories, max 12 */}
+                      {categories && categories.slice(0, 12).map((category) => (
+                        <ListGroup.Item 
+                          key={category.categoryId}
+                          className="user-forum-sidebar-list"
+                          action
+                          onClick={() => setCategoryId(category.categoryId)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {category.name}
+                        </ListGroup.Item>
+                      ))}
+
                     </ListGroup>
                   </Card.Body>
                 </Card>
