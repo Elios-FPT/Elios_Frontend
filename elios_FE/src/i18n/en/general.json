@@ -2,7 +2,6 @@
   "UserNavbar": {
     "forum": "Forum",
     "codingChallenge": "Coding Challenge",
-    "projectChallenge": "Project Challenge",
     "contest": "Contest",
     "challenge": "Challenge",
     "event": "Event",
@@ -12,7 +11,7 @@
     "buildCV": "Build CV",
     "login": "Sign in",
     "register": "Sign up",
-    "switch_language": "Chuyển sang Tiếng Việt",
+    "switch_language": "Switch to Vietnamese",
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout",
@@ -23,9 +22,9 @@
       "forum": "Forum",
       "codingChallenge": "Coding Challenge",
       "buildCV": "Build CV",
-      "projectChallenge": "Project Challenge",
       "login": "Sign in",
-      "language": "Đổi sang Tiếng Việt"
+      "language": "Language: EN",
+      "projectChallenge" : "Mock Project"
     },
     "main_title": "A New Cool Way to Learn",
     "main_desc": "Elios is the best platform to help you enhance your skills, expand your knowledge and prepare for technical interviews.",
