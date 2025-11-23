@@ -5,6 +5,43 @@ export const API_ENDPOINTS = {
     LOGIN_PATH: 'http://oauth2.elios.com/oauth2/start?rd=http%3A%2F%2Fwww.elios.com',
     LOGOUT_PATH: 'http://oauth2.elios.com/oauth2/sign_out?rd=http%3A%2F%2Fwww.elios.com',
 
+    HEALTH_CHECK: '/health',
+    ROOT: '/',
+
+    CREATE_INITIAL_PROMPT: `${baseUrl}/api/ai/prompts`,
+
+    LIST_PROMPTS: `${baseUrl}/api/ai/prompts`,
+
+    CREATE_PROMPT_VERSION: (name) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/versions`,
+
+    GET_PROMPT_VERSION_HISTORY: (name) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/versions`,
+
+    ROLLBACK_PROMPT: (name) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/rollback`,
+
+    GET_SPECIFIC_PROMPT_VERSION: (name, version) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/versions/${version}`,
+
+    GET_PROMPT_BY_ID: (promptId) => `${baseUrl}/api/ai/prompts/${promptId}`,
+
+    DELETE_PROMPT: (promptId) => `${baseUrl}/api/ai/prompts/${promptId}`,
+
+    ACTIVATE_PROMPT_VERSION: (promptId) => `${baseUrl}/api/ai/prompts/${promptId}/activate`,
+
+    ADJUST_PROMPT_TRAFFIC: (promptId) => `${baseUrl}/api/ai/prompts/${promptId}/traffic`,
+
+    GET_ACTIVE_PROMPT: (name) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/active`,
+
+    GET_PROMPT_ANALYTICS: (name) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/analytics`,
+
+    GET_PROMPT_AUDIT_TRAIL: (name) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/audit-trail`,
+
+    UPLOAD_CV: '/api/interviews/cv/upload',
+    PLAN_INTERVIEW: '/api/interviews/plan',
+    GET_PLANNING_STATUS: (interviewId) => `/api/interviews/${interviewId}/plan`,
+    GET_INTERVIEW_DETAIL: (interviewId) => `/api/interviews/${interviewId}`,
+    START_INTERVIEW: (interviewId) => `/api/interviews/${interviewId}/start`,
+    GET_CURRENT_QUESTION: (interviewId) => `/api/interviews/${interviewId}/questions/current`,
+    GET_INTERVIEW_SUMMARY: (interviewId) => `/api/interviews/${interviewId}/summary`,
+
     // User API Endpoints
     GET_USER_PROFILE: `${baseUrl}/api/users/me/profile`,
     GET_USER_BY_ID: (id) => `${baseUrl}/api/users/${id}`,
@@ -20,7 +57,7 @@ export const API_ENDPOINTS = {
     GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
     GET_CATEGORIES_FORUM: `${baseUrl}/api/forum/Category`,
     GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
-    CREATE_POST:`${baseUrl}/api/forum/posts`,
+    CREATE_POST: `${baseUrl}/api/forum/posts`,
     DRAFT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     SUBMIT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/submit`,
     CREATE_COMMENT: `${baseUrl}/api/forum/Comment`,
@@ -36,9 +73,9 @@ export const API_ENDPOINTS = {
     DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/upload/${imageId}`,
     REPORT_POST: `${baseUrl}/api/forum/reports`,
     REPORT_COMMENT: `${baseUrl}/api/forum/reports`,
-    CREATE_SOLUTION:`${baseUrl}/api/forum/posts`,
-    GET_SOLUTION:`${baseUrl}/api/forum/posts`,
-    
+    CREATE_SOLUTION: `${baseUrl}/api/forum/posts`,
+    GET_SOLUTION: `${baseUrl}/api/forum/posts`,
+
 
     //Admin forum API Endpoints
     GET_PENDING_POSTS: `${baseUrl}/api/forum/moderator/posts/pending`,
@@ -51,9 +88,12 @@ export const API_ENDPOINTS = {
     DELETE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
 
     // Codeing Challenge API Endpoints
-    GET_CODE_CHALLENGES_LIST: `${baseUrl}/api/code-practices`,
-    GET_CODE_CHALLENGE_DETAIL: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}`,
+    GET_CODE_PRACTICES_LIST: `${baseUrl}/api/code-practices`,
+    GET_CODE_PRACTICE_DETAIL: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}`,
     RUN_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/run`,
+    CREATE_CODE_PRACTICE: `${baseUrl}/api/code-practices`,
+    UPDATE_CODE_PRACTICE: (id) => `${baseUrl}/api/code-practices/${id}`,
+    DELETE_CODE_PRACTICE: (id) => `${baseUrl}/api/code-practices/${id}`,
     SUBMIT_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/submissions`,
     GET_SUBMISSION_HISTORY_DETAIL: (submissionId) => `${baseUrl}/api/code-practices/submissions/${submissionId}`,

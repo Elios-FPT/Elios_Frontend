@@ -1,0 +1,160 @@
+/* src/resourceManager/pages/PromptDetail.css */
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border-secondary);
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-medium);
+  box-shadow: 0 4px 12px transparent;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Hover Effect – Siêu mượt */
+.btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-green);
+  background: rgba(80, 250, 123, 0.08);
+  box-shadow: 
+    0 6px 20px var(--shadow-accent),
+    0 0 20px rgba(80, 250, 123, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Active / Pressed */
+.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px var(--shadow-accent);
+}
+
+/* Focus (keyboard navigation) */
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 3px var(--shadow-accent),
+    0 6px 20px var(--shadow-accent-hover);
+}
+
+/* Optional: Thêm hiệu ứng ripple nhẹ */
+.btn-secondary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--accent-green);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.btn-secondary:active::before {
+  width: 300px;
+  height: 300px;
+  opacity: 0.15;
+}
+
+.current-active-card {
+  margin: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1e1e1e, #25272a);
+  border: 1px solid var(--accent-green);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px var(--shadow-accent);
+}
+
+.current-active-card h2 {
+  margin: 0 0 1.5rem;
+  color: var(--accent-green);
+  font-size: 1.6rem;
+}
+
+.active-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  font-size: 1rem;
+}
+
+.traffic-highlight {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent-green);
+  text-shadow: 0 0 10px var(--shadow-accent);
+}
+
+.action-bar {
+  padding: 0 2rem 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.versions-section {
+  padding: 0 2rem 2rem;
+}
+
+.versions-section h2 {
+  margin: 0 0 1.5rem;
+  color: var(--text-primary);
+  font-size: 1.8rem;
+}
+
+.version-card.active {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 20px var(--shadow-accent-hover);
+}
+
+.version-card.active::before {
+  opacity: 1;
+}
+
+.diff-details {
+  margin: 1rem 0;
+}
+
+.diff-details summary {
+  cursor: pointer;
+  color: var(--accent-green);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.diff-pre {
+  background: #000;
+  color: #0f0;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  max-height: 300px;
+  overflow: auto;
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .action-bar {
+    padding: 0 1.5rem 1.5rem;
+    flex-direction: column;
+  }
+  .action-bar button {
+    width: 100%;
+  }
+  .current-active-card,
+  .versions-section {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+}

@@ -27,11 +27,11 @@ const UserNavbar = () => {
     // Chỉ User mới thấy các link cơ bản
     const baseLinks = isUser
       ? [
-          { to: "/forum", label: t("UserNavbar.forum") },
-          { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
-          { to: "/resume-builder", label: t("UserNavbar.buildCV") },
-          { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
-        ]
+        { to: "/forum", label: t("UserNavbar.forum") },
+        { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
+        { to: "/resume-builder", label: t("UserNavbar.buildCV") },
+        { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
+      ]
       : [];
 
     // Các role đặc biệt: thêm link quản lý
@@ -40,7 +40,10 @@ const UserNavbar = () => {
     if (role === "Resource Manager") {
       extraLinks.push(
         { to: "/manage-coding-bank", label: "Manage Coding Bank" },
-        { to: "/manage-project-bank", label: "Manage Project Bank" }
+        { to: "/manage-project-bank", label: "Manage Project Bank" },
+        { to: "/manage-interviews", label: "Manage Interviews" },
+        { to: "/manage-prompts", label: "Manage Prompts" }
+
       );
     }
 

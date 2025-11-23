@@ -39,6 +39,17 @@ import EditProjectProcesses from "./resourceManager/pages/EditProjectProcesses";
 
 import ProjectSubmissionReview from "./resourceManager/pages/ProjectSubmissionReview";
 
+import ViewCodingPractice from "./resourceManager/pages/ViewCodingPractice";
+import EditCodingPractice from "./resourceManager/pages/EditCodingPractice";
+import CreateCodingPractice from "./resourceManager/pages/CreateCodingPractice";
+
+import ManageInterviews from "./resourceManager/pages/ManageInterviews";
+import ManagePrompts from "./resourceManager/pages/ManagePrompts";
+
+import CreatePrompt from "./resourceManager/pages/CreatePrompt";
+import PromptDetail from "./resourceManager/pages/PromptDetail";
+import EditPrompt from "./resourceManager/pages/EditPrompt";
+
 import ManageForum from "./moderator/pages/ManageForum";
 
 import { Navigate } from "react-router-dom";
@@ -82,7 +93,19 @@ function App() {
 
         {/* Resource Manager Routes */}
         <Route element={<RoleProtectedRoute allowedRoles={["Resource Manager"]} />}>
+
+          <Route path="/manage-interviews" element={<ManageInterviews />} />
+          
           <Route path="/manage-coding-bank" element={<ManageCodingBank />} />
+          <Route path="/manage-coding-bank/create" element={<CreateCodingPractice />} />
+          <Route path="/manage-coding-bank/edit/:id" element={<EditCodingPractice />} />
+          <Route path="/manage-coding-bank/view/:id" element={<ViewCodingPractice />} />
+
+          <Route path="/manage-prompts" element={<ManagePrompts />} />
+          <Route path="/manage-prompts/create" element={<CreatePrompt />} />
+          <Route path="/manage-prompts/:prompt_name" element={<PromptDetail />} />
+          <Route path="/manage-prompts/edit/:prompt_name/:version" element={<EditPrompt />} />
+
           <Route path="/manage-project-bank" element={<ManageProjectBank />} />
 
           <Route path="/manage-project-bank/view/:id" element={<ViewMockProject />} />

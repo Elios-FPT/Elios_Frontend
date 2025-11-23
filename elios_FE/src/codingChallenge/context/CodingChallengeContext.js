@@ -48,7 +48,7 @@ export const CodingChallengeProvider = ({ children }) => {
       };
 
       const response = await axios.get(
-        API_ENDPOINTS.GET_CODE_CHALLENGES_LIST,
+        API_ENDPOINTS.GET_CODE_PRACTICES_LIST,
         {
           params, // Axios automatically handles query string creation
           withCredentials: true,

@@ -40,7 +40,9 @@ const LandingPage = () => {
     if (user?.role === "Resource Manager") {
       extraLinks.push(
         { href: "/manage-coding-bank", label: "Manage Coding Bank" },
-        { href: "/manage-project-bank", label: "Manage Project Bank" }
+        { href: "/manage-project-bank", label: "Manage Project Bank" },
+        { href: "/manage-interviews", label: "Manage Interviews" },
+        { href: "/manage-prompts", label: "Manage Prompts" }
       );
     }
 

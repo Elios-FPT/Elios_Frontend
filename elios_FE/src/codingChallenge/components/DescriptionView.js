@@ -21,7 +21,7 @@ const DescriptionView = ({ problemId }) => {
       setError("");
       try {
         const response = await axios.get(
-          API_ENDPOINTS.GET_CODE_CHALLENGE_DETAIL(problemId),
+          API_ENDPOINTS.GET_CODE_PRACTICE_DETAIL(problemId),
           { withCredentials: true }
         );
         const data = response.data?.data || response.data;
