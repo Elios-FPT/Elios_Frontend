@@ -85,6 +85,7 @@
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
   font-size: 1rem;
+  color: white;
 }
 
 .traffic-highlight {
