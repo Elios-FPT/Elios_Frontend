@@ -34,6 +34,10 @@ export const API_ENDPOINTS = {
 
     GET_PROMPT_AUDIT_TRAIL: (name) => `${baseUrl}/api/ai/prompts/${encodeURIComponent(name)}/audit-trail`,
 
+    PUBLISH_DRAFT_PROMPT: (promptId) => `${baseUrl}/api/ai/prompts/${promptId}/publish`,
+
+    UPDATE_DRAFT_PROMPT: (promptId) => `${baseUrl}/api/ai/prompts/${promptId}/draft`,
+
     UPLOAD_CV: '/api/interviews/cv/upload',
     PLAN_INTERVIEW: '/api/interviews/plan',
     GET_PLANNING_STATUS: (interviewId) => `/api/interviews/${interviewId}/plan`,
@@ -75,6 +79,7 @@ export const API_ENDPOINTS = {
     REPORT_COMMENT: `${baseUrl}/api/forum/reports`,
     CREATE_SOLUTION: `${baseUrl}/api/forum/posts`,
     GET_SOLUTION: `${baseUrl}/api/forum/posts`,
+    
 
 
     //Admin forum API Endpoints

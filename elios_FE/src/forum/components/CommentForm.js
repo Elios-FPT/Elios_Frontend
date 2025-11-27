@@ -7,10 +7,9 @@ import ReportPostModal from './ReportPostModal';
 
 const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote, onDownvote, onReport }) => {
     const [content, setContent] = useState('');
-    const [showReportModal, setShowReportModal] = useState(false); // State for modal
+    const [showReportModal, setShowReportModal] = useState(false);
     const textareaRef = useRef(null);
 
-    // Modal handlers
     const handleCloseReportModal = () => setShowReportModal(false);
     const handleShowReportModal = () => setShowReportModal(true);
 
@@ -24,16 +23,14 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
     const handleSubmit = (e) => {
         e.preventDefault();
         if (content.trim()) {
-            // Pass the content and the ID of the comment being replied to
             onSubmit(content, replyingTo ? replyingTo.id : null);
-            setContent(''); // Clear the form after submission
+            setContent(''); 
         }
     };
 
     const handleReportSubmit = (reason, details) => {
-        // Call the onReport function passed from PostDetail
         onReport(reason, details);
-        handleCloseReportModal(); // Close modal after submit
+        handleCloseReportModal(); 
     };
 
     return (

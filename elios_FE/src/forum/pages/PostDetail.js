@@ -24,7 +24,6 @@ const PostDetail = () => {
     const [post, setPost] = useState(null);
     const [replyingTo, setReplyingTo] = useState(null);
     const [loading, setLoading] = useState(true);
-    // State for comment reporting modal
     const [showCommentReportModal, setShowCommentReportModal] = useState(false);
     const [reportTarget, setReportTarget] = useState({ id: null, type: null });
 
@@ -118,7 +117,6 @@ const PostDetail = () => {
 
     const handleUpvote = async () => {
         const originalPost = { ...post };
-        // Optimistic update
         setPost((current) => ({
             ...current,
             upvoteCount: current.upvoteCount + 1,
@@ -138,13 +136,12 @@ const PostDetail = () => {
 
         } catch (error) {
             console.error("Error upvoting post:", error);
-            setPost(originalPost); // Rollback on error
+            setPost(originalPost); 
         }
     };
 
     const handleDownvote = async () => {
         const originalPost = { ...post };
-        // Optimistic update
         setPost((current) => ({
             ...current,
             downvoteCount: current.downvoteCount + 1,
@@ -176,7 +173,6 @@ const PostDetail = () => {
         }
 
         try {
-            // Use REPORT_POST or REPORT_COMMENT, which are the same endpoint but different names for clarity
             const endpoint = targetType === "Post" ? API_ENDPOINTS.REPORT_POST : API_ENDPOINTS.REPORT_COMMENT;
             await axios.post(
                 endpoint,
@@ -198,16 +194,28 @@ const PostDetail = () => {
         }
     };
 
-    // --- UPDATED FUNCTION to use generic handleReport ---
+    const handleEditComment = async (commentId, newContent) => {
+        try {
+            const response = await axios.put(
+                API_ENDPOINTS.UPDATE_COMMENT(commentId),
+                { content: newContent },
+                { withCredentials: true }
+            );
+            const updatedPostFromServer = response.data.responseData;
+            updatedPostFromServer.comments = updatedPostFromServer.comments || [];
+            setPost(updatedPostFromServer);
+        } catch (error) {
+            console.error("Error updating comment:", error);
+        }
+    };
+
     const handleReportPost = async (reason, details) => {
-        // Post ID is available from useParams
         handleReport("Post", id, reason, details);
     };
 
-    // --- NEW FUNCTION for Comment Reporting ---
     const handleReportComment = async (commentId, reason, details) => {
         handleReport("Comment", commentId, reason, details);
-        setShowCommentReportModal(false); // Close the modal
+        setShowCommentReportModal(false); 
     }
 
     const handleShowCommentReportModal = (commentId) => {
@@ -321,7 +329,7 @@ const PostDetail = () => {
                             onCancelReply={handleCancelReply}
                             onUpvote={handleUpvote}
                             onDownvote={handleDownvote}
-                            onReport={handleReportPost} // This is for POST reporting
+                            onReport={handleReportPost} 
                         />
                     </Card.Body>
                 </Container>

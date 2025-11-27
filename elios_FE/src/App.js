@@ -50,6 +50,11 @@ import CreatePrompt from "./resourceManager/pages/CreatePrompt";
 import PromptDetail from "./resourceManager/pages/PromptDetail";
 import EditPrompt from "./resourceManager/pages/EditPrompt";
 
+import PromptAnalytics from "./resourceManager/pages/PromptAnalytics";
+import PromptAuditTrail from "./resourceManager/pages/PromptAuditTrail";
+
+import CreateNewPrompt from "./resourceManager/pages/CreateNewPrompt";
+
 import ManageForum from "./moderator/pages/ManageForum";
 
 import { Navigate } from "react-router-dom";
@@ -102,9 +107,14 @@ function App() {
           <Route path="/manage-coding-bank/view/:id" element={<ViewCodingPractice />} />
 
           <Route path="/manage-prompts" element={<ManagePrompts />} />
-          <Route path="/manage-prompts/create" element={<CreatePrompt />} />
+          <Route path="/manage-prompts/create" element={<CreateNewPrompt />} />
           <Route path="/manage-prompts/:prompt_name" element={<PromptDetail />} />
           <Route path="/manage-prompts/edit/:prompt_name/:version" element={<EditPrompt />} />
+          <Route path="/manage-prompts/create/:prompt_name/:from_version" element={<CreatePrompt />} />
+
+          <Route path="/manage-prompts/analytics/:prompt_name" element={<PromptAnalytics />} />
+
+          <Route path="/manage-prompts/audit/:prompt_name" element={<PromptAuditTrail />} />
 
           <Route path="/manage-project-bank" element={<ManageProjectBank />} />
 
