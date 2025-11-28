@@ -10,7 +10,6 @@
   padding-bottom: 2rem;
 }
 
-
 #post-detail-container {
   max-width: 1100px;
   margin-top: 2rem;
@@ -124,4 +123,55 @@
 
 .comment .text-muted {
   color: #888 !important;
+}
+
+/* --- New Dropdown and Edit Styles --- */
+
+/* Remove default caret from dropdown toggle */
+#post-detail-container .no-caret::after {
+    display: none !important;
+}
+
+/* Dropdown Toggle styling */
+#post-detail-container .comment-dropdown .dropdown-toggle {
+    color: #6c757d;
+    padding: 0 5px;
+    border: none;
+}
+
+#post-detail-container .comment-dropdown .dropdown-toggle:hover {
+    color: #ffffff;
+}
+
+/* Dark theme for dropdown menu */
+#post-detail-container .dropdown-menu-dark {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+}
+
+#post-detail-container .dropdown-menu-dark .dropdown-item {
+    color: #e0e0e0;
+}
+
+#post-detail-container .dropdown-menu-dark .dropdown-item:hover {
+    background-color: #3e3e3e;
+    color: #fff;
+}
+
+#post-detail-container .dropdown-menu-dark .dropdown-item.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #ff6b6b;
+}
+
+/* Edit Comment Textarea styling */
+#post-detail-container .comment-body textarea.form-control {
+    background-color: #1e1e1e !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+    resize: none;
+}
+
+#post-detail-container .comment-body textarea.form-control:focus {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
 }
