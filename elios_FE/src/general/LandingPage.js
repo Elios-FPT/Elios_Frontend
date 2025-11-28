@@ -27,11 +27,11 @@ const LandingPage = () => {
     // Chỉ User mới thấy các link cơ bản
     const baseLinks = isUser
       ? [
-          { href: "/forum", label: t("landingPage.navbar.forum") },
-          { href: "/codingchallenge", label: t("landingPage.navbar.codingChallenge") },
-          { href: "/resume-builder", label: t("landingPage.navbar.buildCV") },
-          { href: "/mock-projects", label: t("landingPage.navbar.projectChallenge") || "Project Challenge" },
-        ]
+        { href: "/forum", label: t("landingPage.navbar.forum") },
+        { href: "/codingchallenge", label: t("landingPage.navbar.codingChallenge") },
+        { href: "/resume-builder", label: t("landingPage.navbar.buildCV") },
+        { href: "/mock-projects", label: t("landingPage.navbar.projectChallenge") || "Project Challenge" },
+      ]
       : [];
 
     // Các role đặc biệt: thêm link quản lý
@@ -74,12 +74,6 @@ const LandingPage = () => {
           </Navbar.Brand>
 
           <Nav className="ml-auto" id="nav-links-landingPage">
-            {/* Role-based Links */}
-            {navbarLinks.map((link, idx) => (
-              <Nav.Link key={idx} href={link.href}>
-                {link.label}
-              </Nav.Link>
-            ))}
 
             {/* Language Switcher */}
             <Nav.Link onClick={toggleLanguage} style={{ cursor: "pointer" }}>
@@ -100,8 +94,16 @@ const LandingPage = () => {
               </Nav.Link>
             ) : (
               <>
+                {navbarLinks.map((link, idx) => (
+                  <Nav.Link key={idx} href={link.href}>
+                    {link.label}
+                  </Nav.Link>
+                ))}
                 <Nav.Link as={Link} to="/user/profile">
                   {t("UserNavbar.profile")}
+                </Nav.Link>
+                <Nav.Link as={Link} to="/interview">
+                  Interviews
                 </Nav.Link>
                 <Nav.Link
                   onClick={() => {
@@ -159,7 +161,7 @@ const LandingPage = () => {
       </div>
 
       {/* Explore Section – Chỉ hiển thị cho User hoặc chưa login */}
-      {( !user || user.role === "User" ) && (
+      {(!user || user.role === "User") && (
         <div id="lower-section-landingPage">
           <Container>
             <Row className="justify-content-center text-center">

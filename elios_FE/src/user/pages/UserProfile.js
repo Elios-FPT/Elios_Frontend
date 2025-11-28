@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../api/apiConfig';
 import '../styles/UserProfile.css';
@@ -34,10 +34,10 @@ const UserProfile = () => {
   const formatBirthDate = (isoDate) => {
     if (!isoDate) return 'N/A';
     const date = new Date(isoDate);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
   };
 
@@ -81,8 +81,8 @@ const UserProfile = () => {
         <div className="error-card">
           <h2>Could not load user profile</h2>
           <p>Please try refreshing the page</p>
-          <button 
-            className="btn-back" 
+          <button
+            className="btn-back"
             onClick={() => navigate('/')}
           >
             <FiArrowLeft /> Back to Home
@@ -109,12 +109,24 @@ const UserProfile = () => {
     fill: diff === 'Easy' ? '#0f8a57' : diff === 'Medium' ? '#ffd700' : '#ff6b6b'
   }));
 
+  const DifficultyTooltip = ({ active, payload }) => {
+    if (!active || !payload || !payload.length) return null;
+
+    const item = payload[0].payload;
+    return (
+      <div style={{ background: '#222', padding: 10, borderRadius: 4 }}>
+        <div><strong>{item.name}</strong></div>
+        <div>Projects: {item.value}</div>
+      </div>
+    );
+  };
+
   const submissionStatusData = Object.entries(submissionsData.statusCounts || {}).map(([status, count]) => ({
     name: status,
     value: count,
-    fill: status === 'Approved' ? '#0f8a57' : 
-          status === 'Pending' ? '#ffd700' : 
-          status === 'Rejected' ? '#ff6b6b' : '#888'
+    fill: status === 'Approved' ? '#0f8a57' :
+      status === 'Pending' ? '#ffd700' :
+        status === 'Rejected' ? '#ff6b6b' : '#888'
   }));
 
   const interviewScoresData = [
@@ -126,10 +138,10 @@ const UserProfile = () => {
   return (
     <div id="user-profile-bg">
       <div id="user-profile-container">
-        
+
         <div className="profile-header">
-          <button 
-            className="btn-back" 
+          <button
+            className="btn-back"
             onClick={() => navigate('/')}
           >
             <FiArrowLeft /> Back to Home
@@ -140,9 +152,9 @@ const UserProfile = () => {
           <div className="hero-content">
             <div className="avatar-section">
               <div className="avatar-wrapper">
-                <img 
+                <img
                   id="user-profile-avatar"
-                  src={profile.avatarUrl} 
+                  src={profile.avatarUrl}
                   alt={`${profile.firstName}'s Avatar`}
                   onError={(e) => {
                     e.target.src = "https://placehold.co/120x120/1a1a1a/ffffff?text=U";
@@ -271,8 +283,8 @@ const UserProfile = () => {
                   <defs>
                     {Object.keys(mockProjectsData.languageCounts || {}).map((lang, i) => (
                       <linearGradient key={lang} id={`language-${lang}`} x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#0f8a57" stopOpacity={0.8}/>
-                        <stop offset="100%" stopColor="#ffd700" stopOpacity={0.8}/>
+                        <stop offset="0%" stopColor="#0f8a57" stopOpacity={0.8} />
+                        <stop offset="100%" stopColor="#ffd700" stopOpacity={0.8} />
                       </linearGradient>
                     ))}
                   </defs>
@@ -290,13 +302,22 @@ const UserProfile = () => {
             <h3 className="chart-title">Project Difficulty</h3>
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height={280}>
-                <RadialBarChart cx="50%" cy="50%" innerRadius="20%" outerRadius="80%" data={difficultyChartData}>
+                <RadialBarChart
+                  cx="50%"
+                  cy="50%"
+                  innerRadius="20%"
+                  outerRadius="80%"
+                  data={difficultyChartData}
+                >
                   <RadialBar
                     minAngle={15}
                     background={{ fill: '#2a2a2a' }}
                     dataKey="value"
+                    nameKey="name"
                     cornerRadius={10}
                   />
+
+                  <Tooltip content={<DifficultyTooltip />} />
                   <Legend />
                 </RadialBarChart>
               </ResponsiveContainer>
@@ -332,13 +353,6 @@ const UserProfile = () => {
               </ResponsiveContainer>
             </div>
           </div>
-        </div>
-
-        <div className="profile-actions">
-          <button id="user-profile-action-btn" className="primary">
-            Edit Profile
-          </button>
-          <button className="secondary">Download Stats</button>
         </div>
       </div>
     </div>

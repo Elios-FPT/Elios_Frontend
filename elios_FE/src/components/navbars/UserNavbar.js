@@ -31,6 +31,8 @@ const UserNavbar = () => {
         { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
         { to: "/resume-builder", label: t("UserNavbar.buildCV") },
         { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
+        { to: "/user/profile", label: "Profile" },
+        { to: "/interview", label: "Interview" },
       ]
       : [];
 
