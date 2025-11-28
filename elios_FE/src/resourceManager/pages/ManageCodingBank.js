@@ -164,7 +164,7 @@ const ManageCodingBank = () => {
                     </span>
                     {problem.acceptanceRate !== null && (
                       <span className="acceptance-rate">
-                        {(problem.acceptanceRate * 100).toFixed(1)}% Accepted
+                        {(problem.acceptanceRate).toFixed(1)}% Accepted
                       </span>
                     )}
                   </div>

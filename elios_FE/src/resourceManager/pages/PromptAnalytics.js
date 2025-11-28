@@ -169,7 +169,7 @@ const PromptAnalytics = () => {
               </div>
 
               {/* Token & Cost Details */}
-              <div className="project-card" style={{ padding: '2rem' }}>
+              <div className="project-card" style={{ padding: '2rem', color: '#D3D3D3' }}>
                 <h2 style={{ marginBottom: '1.5rem' }}>Detailed Metrics</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
                   <div>

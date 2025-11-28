@@ -100,7 +100,7 @@ const LandingPage = () => {
               </Nav.Link>
             ) : (
               <>
-                <Nav.Link as={Link} to="/profile">
+                <Nav.Link as={Link} to="/user/profile">
                   {t("UserNavbar.profile")}
                 </Nav.Link>
                 <Nav.Link
