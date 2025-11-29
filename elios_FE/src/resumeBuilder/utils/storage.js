@@ -18,9 +18,13 @@ export const saveToLocalStorage = (data) => {
   }
 };
 
-export const saveToServer = (data, resumeId) => {
+/**
+ * Saves the resume data to the server.
+ * Added async/await to ensure the caller waits for the request to finish.
+ */
+export const saveToServer = async (data, resumeId) => {
   try {
-    axios.put(API_ENDPOINTS.SAVE_DRAFT_USER_CV(resumeId), data, {
+    await axios.put(API_ENDPOINTS.SAVE_DRAFT_USER_CV(resumeId), data, {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -29,6 +33,7 @@ export const saveToServer = (data, resumeId) => {
     console.log("Resume data saved to server successfully");
   } catch (error) {
     console.error("Could not save resume data to server", error);
+    throw error; // Re-throw to let the caller know it failed
   }
 };
 
