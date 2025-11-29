@@ -10,6 +10,7 @@ import Toolbar from '../components/Toolbar';
 import SectionEditor from '../components/SectionEditor';
 import PreviewPanel from '../components/PreviewPanel';
 import { loadFromLocalStorage, saveToLocalStorage, saveToServer } from '../utils/storage';
+import UserNavbar from '../../components/navbars/UserNavbar';
 
 const initialResumeState = {
   personalInfo: {
@@ -72,17 +73,27 @@ const createNewItem = (sectionId) => {
 const ResumeBuilder = () => {
   const { id } = useParams();
   const [resumeData, setResumeData] = useState(loadFromLocalStorage() || initialResumeState);
+  const [isSaving, setIsSaving] = useState(false);
 
   // This array defines the exact order for rendering the editor sections.
   const sectionOrder = ['personalInfo', 'education', 'experience', 'skillsets', 'projects'];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Debounce the save operation
+    const timer = setTimeout(async () => {
+      setIsSaving(true);
       saveToLocalStorage(resumeData);
-      saveToServer(resumeData, id);
-    }, 10000);
+      try {
+        await saveToServer(resumeData, id);
+      } catch (error) {
+        console.error("Failed to save to server", error);
+      } finally {
+        setIsSaving(false);
+      }
+    }, 10000); // 10s debounce
+
     return () => clearTimeout(timer);
-  }, [resumeData]);
+  }, [resumeData, id]);
 
   useEffect(() => {
     const fetchResume = async () => {
@@ -155,7 +166,8 @@ const ResumeBuilder = () => {
 
   return (
     <div id="rb-app-container">
-      <Toolbar resumeData={resumeData} onReset={handleReset} />
+      <UserNavbar />
+      <Toolbar resumeData={resumeData} onReset={handleReset} isSaving={isSaving} />
       <Container fluid className="rb-main-container">
         <Row>
           <Col md={5} id="rb-editor-panel">
