@@ -7,13 +7,19 @@ import rehypeHighlight from 'rehype-highlight';
 
 // Import the same highlight.js CSS used in PostDetail
 import 'highlight.js/styles/github-dark.css';
-import '../styles/PendingPosts.css'; // We'll add modal styles here
+import '../styles/PostPreviewModal.css';
 
 const PostPreviewModal = ({ post, show, onHide }) => {
     if (!post) return null;
 
     return (
-        <Modal show={show} onHide={onHide} size="lg" centered>
+        <Modal 
+            show={show} 
+            onHide={onHide} 
+            size="lg" 
+            centered 
+            contentClassName="admin-dark-modal"
+        >
             <Modal.Header closeButton id="preview-modal-header">
                 <Modal.Title>{post.title}</Modal.Title>
             </Modal.Header>

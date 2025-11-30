@@ -3,6 +3,8 @@
 #admin-manage-category-page {
     padding: 24px;
     color: #eee;
+    background-color: #1e1e1e; /* Dark background */
+    min-height: 100vh; /* Ensure it covers the full viewport height */
 }
 
 #admin-manage-category-page h1 {

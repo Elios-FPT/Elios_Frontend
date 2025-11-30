@@ -4,7 +4,7 @@
 #admin-layout-container {
     display: flex;
     min-height: 100vh;
-    background-color: #f4f7fa;
+    background-color: #1e1e1e;
 }
 
 #admin-main-content {

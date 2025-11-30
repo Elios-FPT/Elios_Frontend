@@ -21,9 +21,9 @@ import UserResume from "./resumeBuilder/pages/UserResume";
 
 import AdminScreenLayout from "./admin/pages/AdminScreenLayout";
 import AdminDashboard from "./admin/pages/AdminDashboard";
-import PendingPosts from "./admin/pages/forum/PendingPosts";
-import ReportedPosts from "./admin/pages/forum/ReportedPosts";
-import AdminManageCategory from "./admin/pages/forum/AdminManageCategory";
+import PendingPosts from "./admin/pages/forum/pages/PendingPosts";
+import ReportedPosts from "./admin/pages/forum/pages/ReportedPosts";
+import AdminManageCategory from "./admin/pages/forum/pages/AdminManageCategory";
 
 import MockProjects from "./mockProject/pages/MockProjects";
 import ProjectDetailPage from './mockProject/pages/ProjectDetailPage';

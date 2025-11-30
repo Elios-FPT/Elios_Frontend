@@ -1,0 +1,72 @@
+/* file: elios_FE/src/admin/styles/PostPreviewModal.css */
+
+/* --- Modal Container Styling (Applied via contentClassName) --- */
+.admin-dark-modal {
+    background-color: #1e1e1e !important;
+    color: #eee !important;
+    border: 1px solid #444 !important;
+}
+
+/* --- Header --- */
+#preview-modal-header {
+    background-color: #252526;
+    border-bottom: 1px solid #444;
+}
+
+#preview-modal-header .modal-title {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Invert the close button to make it white */
+#preview-modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* --- Body --- */
+#preview-modal-body {
+    padding: 2rem;
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+}
+
+.post-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+#preview-modal-body hr {
+    border-top: 1px solid #444;
+    opacity: 1;
+}
+
+#preview-modal-body .markdown-content {
+  line-height: 1.7;
+  color: #dcdcdc;
+}
+
+/* Inline code styling */
+#preview-modal-body .markdown-content code {
+  background-color: rgba(240, 98, 146, 0.15);
+  color: #f06292;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+/* Code block styling */
+#preview-modal-body .markdown-content pre {
+  background-color: #161b22;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  border: 1px solid #333;
+}
+
+/* --- Footer --- */
+#preview-modal-footer {
+    background-color: #252526;
+    border-top: 1px solid #444;
+}
