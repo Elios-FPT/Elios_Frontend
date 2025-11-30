@@ -1,16 +1,16 @@
 /* file: elios_FE/src/codingChallenge/style/CodeIDE.css */
 
 /* Allow normal typing & focus inside Monaco editor */
-.ide-wrapper {
+#codeIDE-wrapper {
   height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   background: #1e1e1e;
-  overflow: hidden; /* ✅ only this area ignores scroll */
+  overflow: hidden; 
 }
 
-.toolbar {
+#codeIDE-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,43 +19,75 @@
   border-bottom: 1px solid #333;
 }
 
-.lang-select {
+#codeIDE-lang-select {
   background: #2d2d2d;
   color: #fff;
   border: 1px solid #444;
-  padding: 6px 10px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   font-size: 0.9rem;
-}
-
-.run-btn {
-  background: #0f8a57;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-weight: 500;
+  outline: none;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
-.run-btn:hover {
-  background: #14b06f;
+#codeIDE-lang-select:focus {
+  border-color: #555;
 }
 
+#codeIDE-button-group {
+  display: flex;
+  gap: 10px;
+}
 
-/* --- NEW: Submit button styles --- */
-.submit-btn {
-  background: #3771c8; /* Blue color */
-  color: #fff;
-  border: none;
+/* --- Run Button Styling --- */
+#codeIDE-run-btn {
+  background-color: #006314; /* GitHub Green */
+  color: #ffffff;
+  border: 1px solid rgba(240, 246, 252, 0.1);
   border-radius: 6px;
-  padding: 6px 14px;
-  font-weight: 500;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  box-shadow: 0 0 transparent, 0 0 transparent;
+  transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.submit-btn:hover {
-  background: #4a8ee8;
+#codeIDE-run-btn:hover {
+  background-color: #2ea043;
+  border-color: #8b949e;
+}
+
+#codeIDE-run-btn:active {
+  background-color: #238636;
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.1); /* Subtle press effect */
+}
+
+/* --- Submit Button Styling --- */
+#codeIDE-submit-btn {
+  background-color: #005b14; /* GitHub Blue */
+  color: #ffffff;
+  border: 1px solid rgba(240, 246, 252, 0.1);
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#codeIDE-submit-btn:hover {
+  background-color: #027711;
+  border-color: #8b949e;
+}
+
+#codeIDE-submit-btn:active {
+  background-color: #027711;
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.1);
 }
