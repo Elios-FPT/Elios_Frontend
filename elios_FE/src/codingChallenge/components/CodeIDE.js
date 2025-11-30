@@ -1,9 +1,10 @@
 // file: elios_FE/src/codingChallenge/components/CodeIDE.js
 import React, { useState } from "react";
+import { FaTerminal, FaSave } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
 import "../style/CodeIDE.css";
 
-const CodeIDE = ({ onRun, onSubmit }) => {
+const CodeIDE = ({ onRun, onSubmit, onCodeChange }) => {
   const [language, setLanguage] = useState("JAVA");
   const [code, setCode] = useState("// Write your code here...");
 
@@ -21,26 +22,33 @@ const CodeIDE = ({ onRun, onSubmit }) => {
     onSubmit(code, language);
   };
 
+  const handleEditorChange = (value) => {
+    setCode(value || "");
+    if (onCodeChange) {
+      onCodeChange();
+    }
+  };
+
   return (
-    <div className="ide-wrapper">
-      <div className="toolbar">
+    <div id="codeIDE-wrapper">
+      <div id="codeIDE-toolbar">
         <select
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
-          className="lang-select"
+          id="codeIDE-lang-select"
         >
           <option value="JAVA">Java</option>
           <option value="JAVASCRIPT">JavaScript</option>
           <option value="CSHARP">C#</option>
         </select>
 
-        <div className="button-group">
-          <button onClick={handleRun} className="run-btn">
-            ▶ Run
+        <div id="codeIDE-button-group">
+          <button onClick={handleRun} id="codeIDE-run-btn">
+            <FaTerminal style={{ marginLeft: "5px" }} />Run
           </button>
 
-          <button onClick={handleSubmitClick} className="submit-btn">
-            Submit
+          <button onClick={handleSubmitClick} id="codeIDE-submit-btn">
+            <FaSave style={{ marginRight: "5px" }} />Submit
           </button>
         </div>
       </div>
@@ -50,7 +58,7 @@ const CodeIDE = ({ onRun, onSubmit }) => {
         theme="vs-dark"
         language={languageMap[language]}
         value={code}
-        onChange={(value) => setCode(value || "")}
+        onChange={handleEditorChange}
         onMount={(editor) => {
           editor.onKeyDown((event) => {
             if (event.code === "Space" && !event.ctrlKey && !event.metaKey) {
@@ -72,5 +80,3 @@ const CodeIDE = ({ onRun, onSubmit }) => {
 };
 
 export default CodeIDE;
-
-

@@ -1,5 +1,37 @@
+/* file: elios_FE/src/codingChallenge/style/OnlineIDE.css */
+
+/* Header Bar Styles */
+#ide-header {
+  height: 45px;
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #2d2d2d;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+}
+
+#back-to-problems-btn {
+  background-color: transparent;
+  color: #a0a0a0;
+  border: 1px solid #444;
+  padding: 5px 12px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+#back-to-problems-btn:hover {
+  background-color: #333;
+  color: #fff;
+  border-color: #666;
+}
+
+/* --- Main Container --- */
 #online-ide-container {
-  height: 100vh;
+  height: calc(100vh - 45px); /* Subtract header height */
   overflow: hidden;
   padding: 0;
   background: #1e1e1e;
