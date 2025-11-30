@@ -1,6 +1,6 @@
 // file: elios_FE/src/admin/components/forumComponents/AdminManageCategoryCard.js
 import React, { useState } from "react";
-import '../../styles/AdminManageCategoryCard.css';
+import '../styles/AdminManageCategoryCard.css';
 
 const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
     const [isEditing, setIsEditing] = useState(false);

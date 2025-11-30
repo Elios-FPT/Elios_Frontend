@@ -1,9 +1,9 @@
 // src/admin/pages/PendingPosts.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../../api/apiConfig';
-import PostPreviewModal from '../../components/PostPreviewModal';
-import '../../styles/PendingPosts.css';
+import { API_ENDPOINTS } from '../../../../api/apiConfig';
+import PostPreviewModal from '../forumComponents/PostPreviewModal'
+import '../styles/PendingPosts.css';
 
 const PendingPosts = () => {
     const [posts, setPosts] = useState([]);
