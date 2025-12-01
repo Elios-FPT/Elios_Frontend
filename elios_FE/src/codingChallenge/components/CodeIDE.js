@@ -38,7 +38,6 @@ const CodeIDE = ({ onRun, onSubmit, onCodeChange }) => {
           id="codeIDE-lang-select"
         >
           <option value="JAVA">Java</option>
-          <option value="JAVASCRIPT">JavaScript</option>
           <option value="CSHARP">C#</option>
         </select>
 
