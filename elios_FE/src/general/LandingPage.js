@@ -20,6 +20,14 @@ const LandingPage = () => {
     i18n.changeLanguage(i18n.language === "en" ? "vi" : "en");
   };
 
+  const creators = [
+    { name: "Nguyễn Ngọc Tuấn Huy", quote: "Chill, dăm ba ChatGPT, tôi tạo chục con.", img: "https://via.placeholder.com/150" },
+    { name: "Nguyễn Đăng Long", quote: "Cloudflare sập vì tôi bỏ họ ", img: "https://via.placeholder.com/150" },
+    { name: "Phạm Minh Khánh", quote: "Cái răng cái tóc là phần quan trọng của bộ mặt con ngươi", img: "https://via.placeholder.com/150" },
+    { name: "Tô Quang Huy", quote: "Không gì là không có thể không", img: "https://via.placeholder.com/150" },
+    { name: "Nguyễn Tiến Hưng", quote: "Tôi chỉ cần nói một câu là gọi được vốn của nhà nước ngay", img: "https://via.placeholder.com/150" },
+  ];
+
   // Xây dựng link theo role
   const getNavbarLinks = () => {
     const isUser = !user || user.role === "User" || !user.role;
@@ -214,10 +222,25 @@ const LandingPage = () => {
       <div id="creator-section-landingPage" className="py-5 bg-light">
         <Container>
           <Row className="justify-content-center">
-            <Col md={8} className="text-center">
-              <h4 id="creator-title-landingPage">{t("landingPage.creator")}</h4>
-              <p className="text-muted">Built with passion by the Elios team.</p>
+            <Col md={12} className="text-center mb-5">
+              <h4 id="creator-title-landingPage">{t("landingPage.creator.creator_Tilte")}</h4>
+              <p className="text-muted">{t("landingPage.creator.creator_subTile")}</p>
             </Col>
+          </Row>
+
+          <Row className="justify-content-center" id="creator-card-row">
+            {creators.map((dev, index) => (
+              <Col key={index} lg={2} md={4} sm={6} xs={12} className="mb-4">
+                <div className="creator-card">
+                  <div 
+                    className="creator-avatar" 
+                    style={{ backgroundImage: `url(${dev.img})` }}
+                  ></div>
+                  <h5 className="creator-name">{dev.name}</h5>
+                  <p className="creator-role">{dev.quote}</p>
+                </div>
+              </Col>
+            ))}
           </Row>
         </Container>
       </div>

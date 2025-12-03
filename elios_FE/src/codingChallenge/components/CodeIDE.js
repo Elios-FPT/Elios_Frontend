@@ -1,10 +1,10 @@
 // file: elios_FE/src/codingChallenge/components/CodeIDE.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTerminal, FaSave } from "react-icons/fa";
 import Editor from "@monaco-editor/react";
 import "../style/CodeIDE.css";
 
-const CodeIDE = ({ onRun, onSubmit, onCodeChange }) => {
+const CodeIDE = ({ onRun, onSubmit, onCodeChange, templates }) => {
   const [language, setLanguage] = useState("JAVA");
   const [code, setCode] = useState("// Write your code here...");
 
@@ -13,6 +13,16 @@ const CodeIDE = ({ onRun, onSubmit, onCodeChange }) => {
     JAVASCRIPT: "javascript",
     CSHARP: "csharp",
   };
+
+  // Update code when templates load or language changes
+  useEffect(() => {
+    if (templates && templates[language]) {
+      setCode(templates[language]);
+    } else {
+      // Fallback if no template exists for this language
+      setCode("// Write your code here...");
+    }
+  }, [templates, language]);
 
   const handleRun = () => {
     onRun(code, language);

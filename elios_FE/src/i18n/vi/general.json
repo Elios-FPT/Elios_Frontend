@@ -42,7 +42,10 @@
       "cv_desc": "Tạo CV chuyên nghiệp chỉ trong vài phút với mẫu thiết kế đẹp, tối ưu ATS và nổi bật kỹ năng lập trình của bạn.",
       "cv_link": "Tạo CV của bạn"
     },
-    "creator": "Những người tạo ra Elios"
+    "creator": {
+      "creator_Tilte":"Những người tạo ra Elios",
+      "creator_subTile":"Kiến tạo bằng cả niểm đam mê bởi đội ngũ Elios"
+    }
   },
   "landingSignUp": {
     "title": "Đăng ký",

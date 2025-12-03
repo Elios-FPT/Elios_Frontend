@@ -15,12 +15,17 @@ import "../style/OnlineIDE.css";
 const OnlineIDE = () => {
   const navigate = useNavigate();
   const [output, setOutput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // For running code
   const [error, setError] = useState("");
   const [searchParams] = useSearchParams();
   const problemId = searchParams.get("id");
   const [testResults, setTestResults] = useState(null);
   const [haveContent, setHaveContent] = useState(false);
+  
+  // Problem Data State
+  const [problem, setProblem] = useState(null);
+  const [fetchingProblem, setFetchingProblem] = useState(true);
+  const [problemError, setProblemError] = useState("");
 
   // State for horizontal split [Problem, Right Section]
   const [mainSizes, setMainSizes] = useState([30, 70]);
@@ -29,6 +34,31 @@ const OnlineIDE = () => {
   // State for vertical split [Code Editor, Output]
   const [verticalSizes, setVerticalSizes] = useState([65, 35]);
   const [lastEditorSize, setLastEditorSize] = useState(65);
+
+  // Fetch Problem Data
+  useEffect(() => {
+    if (!problemId) return;
+
+    const fetchProblem = async () => {
+      setFetchingProblem(true);
+      setProblemError("");
+      try {
+        const response = await axios.get(
+          API_ENDPOINTS.GET_CODE_PRACTICE_DETAIL(problemId),
+          { withCredentials: true }
+        );
+        const data = response.data?.data || response.data;
+        setProblem(data);
+      } catch (err) {
+        console.error("Error fetching problem:", err);
+        setProblemError("⚠️ Failed to load problem details. Please try again.");
+      } finally {
+        setFetchingProblem(false);
+      }
+    };
+
+    fetchProblem();
+  }, [problemId]);
 
   // Handle Browser Refresh / Tab Close
   useEffect(() => {
@@ -44,7 +74,7 @@ const OnlineIDE = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [haveContent]); // Add haveContent as dependency
+  }, [haveContent]);
 
   // Handle Back Button Click
   const handleBackNavigation = () => {
@@ -98,7 +128,7 @@ const OnlineIDE = () => {
     setError("");
     setOutput("");
     setTestResults(null);
-    setHaveContent(true); // Mark content as existing when running
+    setHaveContent(true);
     try {
       const payload = { code, language };
       const response = await axios.post(
@@ -121,7 +151,6 @@ const OnlineIDE = () => {
         evaluationResults.forEach((res, idx) => {
           displayText += `#${idx + 1}  ${res.status}\n`;
           if (res.input) displayText += `  Input  : ${res.input}\n`;
-          //  if (res.expectedOutput) displayText += `  Expected: ${res.expectedOutput}\n`;
           if (res.actualOutput) displayText += `  Output : ${res.actualOutput}\n`;
           if (res.errorMessage) displayText += `  Error  : ${res.errorMessage}\n`;
           displayText += "---------------------------------------\n";
@@ -164,7 +193,6 @@ const OnlineIDE = () => {
         evaluationResults.forEach((res, idx) => {
           displayText += `#${idx + 1}  ${res.status}\n`;
           if (res.input) displayText += `  Input  : ${res.input}\n`;
-          //  if (res.expectedOutput) displayText += `  Expected: ${res.expectedOutput}\n`;
           if (res.actualOutput) displayText += `  Output : ${res.actualOutput}\n`;
           if (res.errorMessage) displayText += `  Error  : ${res.errorMessage}\n`;
           displayText += "---------------------------------------\n";
@@ -172,7 +200,7 @@ const OnlineIDE = () => {
       }
       setTestResults(resultData);
       setOutput(displayText.trim());
-      setHaveContent(false); // Reset content state on successful submission
+      setHaveContent(false);
     } catch (err) {
       console.error("❌ Error running code:", err);
       setError(err.response?.data?.message || "❌ Error submitting code");
@@ -211,7 +239,12 @@ const OnlineIDE = () => {
             </button>
             {!isProblemCollapsed && (
               <div id="problem-panel-content">
-                <ProblemDescription problemId={problemId} />
+                <ProblemDescription 
+                  problemId={problemId} 
+                  problemData={problem} 
+                  loading={fetchingProblem}
+                  error={problemError}
+                />
               </div>
             )}
           </div>
@@ -233,13 +266,14 @@ const OnlineIDE = () => {
                     onRun={handleRun} 
                     onSubmit={handleSubmit} 
                     onCodeChange={() => setHaveContent(true)}
+                    templates={problem?.templates} 
                   />
                 )}
               </div>
 
               {/* Output Panel (Bottom) */}
               <div id="code-output-wrapper">
-                <CodeOutput output={output} error={error} isLoading={isLoading} />
+                <CodeOutput output={output} error={error} isLoading={isLoading} testResults={testResults} />
               </div>
             </Split>
           </div>
