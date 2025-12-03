@@ -5,7 +5,7 @@ import SubmissionsView from "./SubmissionsView";
 import SolutionView from "./SolutionView";
 import "../style/ProblemDescription.css"; 
 
-const ProblemDescription = ({ problemId }) => {
+const ProblemDescription = ({ problemId, problemData, loading, error }) => {
   const [activeTab, setActiveTab] = useState("description");
 
   return (
@@ -34,7 +34,13 @@ const ProblemDescription = ({ problemId }) => {
 
       {/* Tab Content */}
       <div id="tab-content">
-        {activeTab === "description" && <DescriptionView problemId={problemId} />}
+        {activeTab === "description" && (
+            <DescriptionView 
+                problem={problemData} 
+                loading={loading} 
+                error={error} 
+            />
+        )}
         {activeTab === "submissions" && <SubmissionsView problemId={problemId} />}
         {activeTab === "solution" && <SolutionView problemId={problemId} />}
       </div>
