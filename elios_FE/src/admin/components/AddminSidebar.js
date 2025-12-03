@@ -46,6 +46,11 @@ const AdminSidebar = () => {
                                     Reported Posts
                                 </NavLink>
                             </li>
+                            <li>
+                                <NavLink to="/admin/forum/banned-users">
+                                    Banned Users
+                                </NavLink>
+                            </li>
                         </ul>
                     )}
                 </li>

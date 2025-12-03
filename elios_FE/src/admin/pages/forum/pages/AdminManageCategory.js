@@ -1,9 +1,9 @@
 // file: elios_FE/src/admin/pages/forum/AdminManageCategory.js
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { API_ENDPOINTS } from "../../../api/apiConfig";
-import AdminManageCategoryCard from "../../components/forumComponents/AdminManageCategoryCard";
-import '../../styles/AdminManageCategory.css';
+import { API_ENDPOINTS } from "../../../../api/apiConfig";
+import AdminManageCategoryCard from "../forumComponents/AdminManageCategoryCard";
+import '../styles/AdminManageCategory.css';
 
 const AdminManageCategory = () => {
     const [categories, setCategories] = useState([]);

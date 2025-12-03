@@ -91,6 +91,12 @@ export const API_ENDPOINTS = {
     CREATE_CATEGORY: `${baseUrl}/api/forum/Category`,
     UPDATE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
     DELETE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
+    REPORTED_CONTENT: `${baseUrl}/api/forum/reports`,
+    GET_DETAIL_REPORTED_CONTENT: (reportId) => `${baseUrl}/api/forum/reports/${reportId}`,
+    BAN_USER: `${baseUrl}/api/forum/bans`,
+    UN_BAN_USER: (banId) => `${baseUrl}/api/forum/bans/${banId}/unban`,
+
+
 
     // Codeing Challenge API Endpoints
     GET_CODE_PRACTICES_LIST: `${baseUrl}/api/code-practices`,
