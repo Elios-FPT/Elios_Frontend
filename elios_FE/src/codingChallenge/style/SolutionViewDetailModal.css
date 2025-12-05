@@ -1,0 +1,82 @@
+/* file: elios_FE/src/codingChallenge/style/SolutionViewDetailModal.css */
+
+#solution-detail-modal .solution-detail-modal-content {
+    background-color: #1e1e1e;
+    color: #eee;
+    border: 1px solid #333;
+    border-radius: 10px;
+}
+
+#solution-detail-modal .modal-header {
+    border-bottom: 1px solid #333;
+}
+
+#solution-detail-modal .solution-modal-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ffd700;
+}
+
+/* Markdown Content Area */
+#solution-detail-modal .solution-modal-content {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 8px;
+    line-height: 1.6;
+    color: #dcdcdc;
+    border: 1px solid #30363d;
+}
+
+#solution-detail-modal .solution-modal-content pre {
+    background-color: #0d1117;
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+#solution-detail-modal .solution-modal-content code {
+    background-color: rgba(240, 98, 146, 0.15);
+    color: #f06292;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+#solution-detail-modal .solution-modal-content pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+}
+
+/* Comment Styles */
+.solution-comment-thread {
+    margin-bottom: 15px;
+}
+
+.solution-comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.solution-comment-author {
+    color: #ffd700;
+    font-size: 0.95rem;
+}
+
+.solution-comment-replies {
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid #333;
+}
+
+/* Dropdown override for dark modal */
+#solution-detail-modal .dropdown-menu-dark {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+}
+
+#solution-detail-modal .dropdown-toggle.no-caret::after {
+    display: none;
+}
