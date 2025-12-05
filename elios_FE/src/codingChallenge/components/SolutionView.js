@@ -3,18 +3,19 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { FaThumbsUp, FaThumbsDown, FaCommentAlt, FaEye } from "react-icons/fa";
+import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import { formatRelativeTime } from "../../forum/utils/formatTime";
 import "../style/SolutionView.css";
+import SolutionViewDetailModal from "./SolutionVIewDetailModal";
 
 const SolutionView = ({ problemId }) => {
     const [solutions, setSolutions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     
-    // Track expanded posts by ID
-    const [expandedIds, setExpandedIds] = useState(new Set());
+    // Modal State
+    const [selectedSolutionId, setSelectedSolutionId] = useState(null);
 
     const postType = "Solution";
 
@@ -53,17 +54,16 @@ const SolutionView = ({ problemId }) => {
         fetchSolutions();
     }, [problemId]);
 
-    const toggleExpand = (id) => {
-        const newSet = new Set(expandedIds);
-        if (newSet.has(id)) {
-            newSet.delete(id);
-        } else {
-            newSet.add(id);
-        }
-        setExpandedIds(newSet);
+    const handleOpenModal = (solutionId) => {
+        setSelectedSolutionId(solutionId);
     };
 
-    const handleUpvote = async (solutionId, index) => {
+    const handleCloseModal = () => {
+        setSelectedSolutionId(null);
+    };
+
+    const handleUpvote = async (solutionId, index, e) => {
+        e.stopPropagation(); // Prevent modal opening
         // Optimistic update
         const updatedSolutions = [...solutions];
         updatedSolutions[index].upvoteCount += 1;
@@ -73,13 +73,13 @@ const SolutionView = ({ problemId }) => {
             await axios.post(API_ENDPOINTS.UPVOTE_POST(solutionId), {}, { withCredentials: true });
         } catch (error) {
             console.error("Error upvoting:", error);
-            // Revert on error
             updatedSolutions[index].upvoteCount -= 1;
             setSolutions(updatedSolutions);
         }
     };
 
-    const handleDownvote = async (solutionId, index) => {
+    const handleDownvote = async (solutionId, index, e) => {
+        e.stopPropagation(); // Prevent modal opening
         // Optimistic update
         const updatedSolutions = [...solutions];
         updatedSolutions[index].downvoteCount += 1;
@@ -89,7 +89,6 @@ const SolutionView = ({ problemId }) => {
             await axios.post(API_ENDPOINTS.DOWNVOTE_POST(solutionId), {}, { withCredentials: true });
         } catch (error) {
             console.error("Error downvoting:", error);
-            // Revert on error
             updatedSolutions[index].downvoteCount -= 1;
             setSolutions(updatedSolutions);
         }
@@ -123,9 +122,9 @@ const SolutionView = ({ problemId }) => {
                             <div className="solution-title">{sol.title}</div>
 
                             <div 
-                                className={`solution-body ${expandedIds.has(sol.postId) ? 'expanded' : ''}`}
-                                onClick={() => toggleExpand(sol.postId)}
-                                title="Click to expand/collapse"
+                                className="solution-body"
+                                onClick={() => handleOpenModal(sol.postId)}
+                                title="Click to view full details"
                             >
                                 <ReactMarkdown 
                                     remarkPlugins={[remarkGfm]} 
@@ -136,16 +135,24 @@ const SolutionView = ({ problemId }) => {
                             </div>
 
                             <div className="solution-footer">
-                                <span className="solution-stat-item up" onClick={() => handleUpvote(sol.postId, index)}>
+                                <span className="solution-stat-item up" onClick={(e) => handleUpvote(sol.postId, index, e)}>
                                     <FaThumbsUp /> {sol.upvoteCount}
                                 </span>
-                                <span className="solution-stat-item down" onClick={() => handleDownvote(sol.postId, index)}>
+                                <span className="solution-stat-item down" onClick={(e) => handleDownvote(sol.postId, index, e)}>
                                     <FaThumbsDown /> {sol.downvoteCount}
                                 </span>
                             </div>
                         </div>
                     ))}
                 </div>
+            )}
+
+            {selectedSolutionId && (
+                <SolutionViewDetailModal 
+                    solutionId={selectedSolutionId} 
+                    show={!!selectedSolutionId}
+                    onClose={handleCloseModal}
+                />
             )}
         </div>
     );
