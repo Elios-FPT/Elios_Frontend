@@ -1,41 +1,13 @@
 // file: elios_FE/src/codingChallenge/components/DescriptionView.js
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
-import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../style/DescriptionView.css"; 
 
-const DescriptionView = ({ problemId }) => {
-  const [problem, setProblem] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!problemId) return;
-
-    const fetchProblem = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const response = await axios.get(
-          API_ENDPOINTS.GET_CODE_PRACTICE_DETAIL(problemId),
-          { withCredentials: true }
-        );
-        const data = response.data?.data || response.data;
-        setProblem(data);
-      } catch (err) {
-        console.error("Error fetching problem:", err);
-        setError("⚠️ Failed to load problem details. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProblem();
-  }, [problemId]);
+const DescriptionView = ({ problem, loading, error }) => {
+  // Logic moved to parent (OnlineIDE.js) to share data with Editor
 
   if (loading) return <div id="loading-message">Loading problem...</div>;
   if (error) return <div id="error-message">{error}</div>;

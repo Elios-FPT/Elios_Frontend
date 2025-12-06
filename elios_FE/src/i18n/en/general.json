@@ -24,7 +24,7 @@
       "buildCV": "Build CV",
       "login": "Sign in",
       "language": "Language: EN",
-      "projectChallenge" : "Mock Project"
+      "projectChallenge": "Mock Project"
     },
     "main_title": "A New Cool Way to Learn",
     "main_desc": "Elios is the best platform to help you enhance your skills, expand your knowledge and prepare for technical interviews.",
@@ -41,8 +41,11 @@
       "cv_title": "Build CV",
       "cv_desc": "Create a professional, ATS-friendly CV in minutes with stunning templates that highlight your coding skills.",
       "cv_link": "Create Your CV"
-    }, 
-    "creator": "Creators of Elios"
+    },
+    "creator": {
+      "creator_Title": "The people behind Elios",
+      "creator_subTitle": "Created with passion by the Elios team"
+    }
   },
   "landingSignUp": {
     "title": "Sign Up",
