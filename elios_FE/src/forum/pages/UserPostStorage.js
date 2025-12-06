@@ -24,9 +24,11 @@ const UserPostStorage = () => {
         const fetchUserPosts = async () => {
             try {
                 const response = await axios.get(API_ENDPOINTS.GET_MY_POSTS, {
+                    params: { PostType: POST_TYPE },
                     withCredentials: true,
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json" }
                 });
+
 
                 setUserPosts(response.data.responseData);
 
@@ -43,7 +45,7 @@ const UserPostStorage = () => {
 
     const handleCreateNewPost = async (e) => {
         e.preventDefault();
-        setError(null); 
+        setError(null);
 
         const postData = {
             categoryId: CATEGORY_ID,
@@ -52,7 +54,7 @@ const UserPostStorage = () => {
             postType: POST_TYPE,
             referenceId: null,
             tags: null,
-            submitForReview: false 
+            submitForReview: false
         };
 
         try {
@@ -63,11 +65,11 @@ const UserPostStorage = () => {
 
             // Get the new post ID from the response
             const newPost = response.data.message;
-          
-                console.log( newPost);
-                // Navigate to the edit page for the new post
-                navigate(`/forum/my-posts/edit/${newPost}`);
-            
+
+            console.log(newPost);
+            // Navigate to the edit page for the new post
+            navigate(`/forum/my-posts/edit/${newPost}`);
+
 
         } catch (error) {
             console.error("Error creating new post:", error.response || error);
@@ -89,7 +91,7 @@ const UserPostStorage = () => {
         } catch (error) {
             console.error("Error deleting post:", error);
             // Re-throw so the card can handle its own error state if needed
-            throw error; 
+            throw error;
         }
     };
 
@@ -98,12 +100,12 @@ const UserPostStorage = () => {
             <UserNavbar />
             <div id="user-post-storage-background">
                 <div id="user-post-storage-container">
-                    
+
                     {/* --- NEW/MODIFIED JSX --- */}
                     {/* This header wraps the title and the new button */}
                     <div id="user-post-storage-header">
                         <h1 id="user-post-storage-title">Your Post Storage</h1>
-                        <button 
+                        <button
                             id="user-post-storage-create-btn"
                             onClick={handleCreateNewPost}
                         >
