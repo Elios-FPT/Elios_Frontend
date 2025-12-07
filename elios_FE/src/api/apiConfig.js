@@ -93,6 +93,7 @@ export const API_ENDPOINTS = {
     DELETE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
     REPORTED_CONTENT: `${baseUrl}/api/forum/reports`,
     GET_DETAIL_REPORTED_CONTENT: (reportId) => `${baseUrl}/api/forum/reports/${reportId}`,
+    RESOLVE_REPORTED_CONTENT: (reportId) => `${baseUrl}/api/forum/reports/${reportId}/resolve`,
     BAN_USER: `${baseUrl}/api/forum/bans`,
     UN_BAN_USER: (banId) => `${baseUrl}/api/forum/bans/${banId}/unban`,
 

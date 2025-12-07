@@ -74,7 +74,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
 
           {/* User Only Routes */}
-          <Route element={<RoleProtectedRoute allowedRoles={["User"]} />}>
+          <Route element={<RoleProtectedRoute allowedRoles={["User", "Resource Manager", "Content Moderator", "Admin"]} />}>
 
             <Route path="/user/profile" element={<UserProfile />} />
 

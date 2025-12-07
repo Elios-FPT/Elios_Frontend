@@ -153,3 +153,8 @@
     color: #fff;
     box-shadow: none;
 }
+
+.italic-text {
+    font-style: italic;
+    color: #aaa;
+}

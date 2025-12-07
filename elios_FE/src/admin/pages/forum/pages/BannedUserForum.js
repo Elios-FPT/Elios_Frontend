@@ -135,7 +135,7 @@ const BannedUserForum = () => {
                         <thead>
                             <tr>
                                 <th>User</th>
-                                <th>Reason</th>
+                                <th>Ban Reason</th>
                                 <th>Banned By</th>
                                 <th>Duration</th>
                                 <th>Status</th>
@@ -200,7 +200,7 @@ const BannedUserForum = () => {
                                                 </Button>
                                             )}
                                             {!ban.isActive && ban.unbanReason && (
-                                                <span className="text-muted small fst-italic" title={ban.unbanReason}>
+                                                <span className="italic-text" title={ban.unbanReason}>
                                                     Reason: {ban.unbanReason.length > 20 ? ban.unbanReason.substring(0,20) + '...' : ban.unbanReason}
                                                 </span>
                                             )}
