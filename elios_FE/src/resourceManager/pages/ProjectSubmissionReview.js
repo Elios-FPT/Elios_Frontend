@@ -8,6 +8,7 @@ import '../styles/ManageProject.css';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { FiSearch, FiFilter, FiChevronDown, FiChevronUp, FiCheckCircle, FiEdit3, FiCode, FiStar, FiUser } from 'react-icons/fi';
+import { number } from 'prop-types';
 
 const ProjectSubmissionReview = () => {
   const { projectId } = useParams();
@@ -25,6 +26,7 @@ const ProjectSubmissionReview = () => {
   const [reviewData, setReviewData] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [finalAssessment, setFinalAssessment] = useState(0);
 
   const fetchProcess = useCallback(async (processId) => {
     if (processes[processId]) return processes[processId];
@@ -105,7 +107,7 @@ const ProjectSubmissionReview = () => {
       }
     };
     fetchData();
-  }, [projectId, fetchProcess, fetchUser]);
+  }, [projectId]);
 
   const toggleSubmission = (id) => {
     setExpandedSubmission(prev => (prev === id ? null : id));
@@ -123,7 +125,6 @@ const ProjectSubmissionReview = () => {
     }));
   };
 
-  // CHO PHÉP SỬA LẠI KHI ĐÃ REVIEWED
   const handleSubmitClassReview = async (classId, submissionId, userCode) => {
     const data = reviewData[classId];
     if (!data || data.score === undefined || !data.feedback?.trim()) {
@@ -149,13 +150,13 @@ const ProjectSubmissionReview = () => {
           prev.map(sub =>
             sub.id === submissionId
               ? {
-                  ...sub,
-                  classes: sub.classes.map(cls =>
-                    cls.id === classId
-                      ? { ...cls, grade, assessment: data.feedback, status: 'Reviewed' }
-                      : cls
-                  )
-                }
+                ...sub,
+                classes: sub.classes.map(cls =>
+                  cls.id === classId
+                    ? { ...cls, grade, assessment: data.feedback, status: 'Reviewed' }
+                    : cls
+                )
+              }
               : sub
           )
         );
@@ -172,7 +173,6 @@ const ProjectSubmissionReview = () => {
     }
   };
 
-  // TÍNH FINAL GRADE → SỐ NGUYÊN
   const recalculateFinalGrade = async (submissionId) => {
     const submission = submissions.find(s => s.id === submissionId);
     if (!submission || !submission.classes.length) return;
@@ -184,22 +184,41 @@ const ProjectSubmissionReview = () => {
 
     const sum = reviewedClasses.reduce((acc, c) => acc + parseFloat(c.grade), 0);
     const avg = sum / reviewedClasses.length;
-    const finalGrade = Math.floor(avg); // SỐ NGUYÊN
+    const finalGrade = Math.floor(avg);
+
+    const allReviewed = reviewedClasses.length === submission.classes.length;
 
     try {
       await axios.put(
         API_ENDPOINTS.UPDATE_SUBMISSION(submissionId),
-        { finalGrade },
+        {
+          Status: allReviewed ? finalGrade >= 60? 'Approved' : 'Failed' : 'Pending',
+          Grade: finalGrade,
+          FinalAssessment: finalAssessment[submissionId]?.trim() || "Great submission!"
+        },
         { withCredentials: true }
       );
 
       setSubmissions(prev =>
         prev.map(s =>
-          s.id === submissionId ? { ...s, finalGrade } : s
+          s.id === submissionId
+            ? {
+              ...s,
+              finalGrade,
+              status: allReviewed ? "Reviewed" : (s.status || "Partial")
+            }
+            : s
         )
       );
+
+      setFinalAssessment(prev => {
+        const newData = { ...prev };
+        delete newData[submissionId];
+        return newData;
+      });
     } catch (err) {
       console.warn('Failed to update final grade', err);
+      alert('Failed to save final grade');
     }
   };
 
@@ -207,7 +226,7 @@ const ProjectSubmissionReview = () => {
     .filter(s => {
       const user = users[s.userId] || {};
       const matchesSearch = (user.fullName || s.userId || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          s.id.toString().includes(searchTerm);
+        s.id.toString().includes(searchTerm);
       const matchesStatus = filterStatus === 'all' || s.status === filterStatus;
       return matchesSearch && matchesStatus;
     })

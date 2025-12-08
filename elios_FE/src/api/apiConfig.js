@@ -49,6 +49,7 @@ export const API_ENDPOINTS = {
     // User API Endpoints
     GET_USER_PROFILE: `${baseUrl}/api/users/me/profile`,
     GET_USER_BY_ID: (id) => `${baseUrl}/api/users/${id}`,
+    UPDATE_USER: `${baseUrl}/api/users`,
 
     // CV API Endpoints
     GET_USER_CV: `${baseUrl}/api/cvbuilder/UserCvs`,
@@ -79,7 +80,7 @@ export const API_ENDPOINTS = {
     REPORT_COMMENT: `${baseUrl}/api/forum/reports`,
     CREATE_SOLUTION: `${baseUrl}/api/forum/posts`,
     GET_SOLUTION: `${baseUrl}/api/forum/posts`,
-    
+
 
 
     //Admin forum API Endpoints
@@ -153,6 +154,40 @@ export const API_ENDPOINTS = {
     UPDATE_SUBMISSIONS_CLASS: (classId) => `${baseUrl}/api/mockproject/submissions/classes/${classId}`,
     DELETE_SUBMISSIONS_CLASS: (classId) => `${baseUrl}/api/mockproject/submissions/classes/${classId}`,
 
+    PEER_BROWSE_PUBLIC_POOL: `${baseUrl}/api/peerreview/SharedInterviews?status=open`,
+    PEER_SHARE_INTERVIEW: `${baseUrl}/api/peerreview/SharedInterviews`,
+    PEER_GET_MY_SHARED_INTERVIEWS: `${baseUrl}/api/peerreview/SharedInterviews/mine`,
+    PEER_GET_REVIEWS_RECEIVED: (sharedId) => `${baseUrl}/api/peerreview/SharedInterviews/${sharedId}/reviews`,
+    PEER_CLOSE_INTERVIEW: (sharedId) => `${baseUrl}/api/peerreview/SharedInterviews/${sharedId}/close`,
+
+    PEER_START_REVIEW: `${baseUrl}/api/peerreview/ReviewSubmissions/start`,
+    PEER_SUBMIT_REVIEW: (submissionId) => `${baseUrl}/api/peerreview/ReviewSubmissions/${submissionId}/submit`,
+    PEER_GET_PROGRESS: (submissionId) => `${baseUrl}/api/peerreview/ReviewSubmissions/${submissionId}`,
+    PEER_DELETE_DRAFT: (submissionId) => `${baseUrl}/api/peerreview/ReviewSubmissions/${submissionId}`,
+
+    PEER_SAVE_DRAFT_REVIEW: `${baseUrl}/api/peerreview/AnswerReviews`,
+
+    PEER_RATE_SUBMISSION: `${baseUrl}/api/peerreview/OwnerRatings`,
+
+    PEER_GET_REVIEWER_STATS: (userId) => `${baseUrl}/api/peerreview/ReviewerStats/${userId}/stats`,
+    PEER_GET_MY_STATS: `${baseUrl}/api/peerreview/my-stats`,
+
+    PAY_GET_USER_ORDERS: (userId) => `${baseUrl}/api/payment/Order/user/${userId}`,
+    PAY_GET_CURRENT_ORDERS: `${baseUrl}/api/payment/Order/user/current`, 
+    PAY_GET_ORDER_DETAIL: (orderId) => `${baseUrl}/api/payment/Order/${orderId}`,
+    PAY_CREATE_ORDER: `${baseUrl}/api/payment/Order`,
+    PAY_CANCEL_ORDER: (orderId) => `${baseUrl}/api/payment/Order/${orderId}/cancel`,
+    PAY_GET_INVOICES: (orderId) => `${baseUrl}/api/payment/Order/${orderId}/invoices`,
+    PAY_DOWNLOAD_INVOICE: (orderId, invoiceId) => `${baseUrl}/api/payment/Order/${orderId}/invoices/${invoiceId}/download`,
+
+    PAY_GET_ACCOUNT_BALANCE: `${baseUrl}/api/payment/Transfer/account-balance`,
+    PAY_CREATE_TRANSFER: `${baseUrl}/api/payment/Transfer`,
+    PAY_CREATE_BATCH_TRANSFER: `${baseUrl}/api/payment/Transfer/batch`,
+    PAY_ESTIMATE_CREDIT: `${baseUrl}/api/payment/Transfer/estimate-credit`,
+    PAY_GET_TRANSFERS: `${baseUrl}/api/payment/Transfer`,
+    PAY_GET_TRANSFER_DETAIL: (id) => `${baseUrl}/api/payment/Transfer/${id}`,
+
+    WEBHOOK_SUTILITY_PAYMENT: `${baseUrl}/api/payment/webhook/sutility-payment`,
 };
 
 export const NAME_CONFIG = {

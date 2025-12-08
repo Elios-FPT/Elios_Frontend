@@ -1,22 +1,35 @@
+import axios from 'axios';
 import { API_ENDPOINTS, TIMEOUTS, INTERVIEW_STATUS } from './config';
+
+const apiClient = axios.create({
+  baseURL: '', 
+
+  timeout: 30000, 
+
+  withCredentials: true, 
+
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
 
 class ApiService {
   async planInterview(cvAnalysisId, candidateId) {
     try {
-      const response = await fetch(API_ENDPOINTS.PLAN_INTERVIEW, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cv_analysis_id: cvAnalysisId,
-          candidate_id: candidateId,
-        }),
+      const response = await apiClient.post(API_ENDPOINTS.PLAN_INTERVIEW, {
+        cv_analysis_id: cvAnalysisId,
+        candidate_id: candidateId,
       });
 
-      if (!response.ok) {
-        throw new Error(`Plan interview failed: ${response.statusText}`);
-      }
-
-      return await response.json();
+      return response.data;
     } catch (error) {
       console.error('planInterview error:', error);
       throw error;
@@ -25,16 +38,8 @@ class ApiService {
 
   async getPlanningStatus(interviewId) {
     try {
-      const response = await fetch(API_ENDPOINTS.GET_PLANNING_STATUS(interviewId), {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Get planning status failed: ${response.statusText}`);
-      }
-
-      return await response.json();
+      const response = await apiClient.get(API_ENDPOINTS.GET_PLANNING_STATUS(interviewId));
+      return response.data;
     } catch (error) {
       console.error('getPlanningStatus error:', error);
       throw error;
@@ -43,16 +48,8 @@ class ApiService {
 
   async startInterview(interviewId) {
     try {
-      const response = await fetch(API_ENDPOINTS.START_INTERVIEW(interviewId), {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Start interview failed: ${response.statusText}`);
-      }
-
-      return await response.json();
+      const response = await apiClient.put(API_ENDPOINTS.START_INTERVIEW(interviewId));
+      return response.data;
     } catch (error) {
       console.error('startInterview error:', error);
       throw error;
@@ -61,7 +58,7 @@ class ApiService {
 
   async pollPlanningStatus(interviewId, onStatusUpdate) {
     const startTime = Date.now();
-    let pollInterval;
+    let pollInterval = null;
 
     const cleanup = () => {
       if (pollInterval) {
@@ -73,21 +70,18 @@ class ApiService {
     return new Promise((resolve, reject) => {
       pollInterval = setInterval(async () => {
         try {
-          // Check timeout
+
           if (Date.now() - startTime > TIMEOUTS.PLANNING) {
             cleanup();
-            reject(new Error('Planning timeout after 30 seconds'));
-            return;
+            return reject(new Error('Planning timeout after 30 seconds'));
           }
 
           const statusResponse = await this.getPlanningStatus(interviewId);
 
-          // Notify status update
           if (onStatusUpdate) {
             onStatusUpdate(statusResponse);
           }
 
-          // Check if planning is complete (transitioned to IDLE)
           if (statusResponse.status.toUpperCase() === INTERVIEW_STATUS.IDLE) {
             cleanup();
             resolve(statusResponse);
@@ -105,16 +99,13 @@ class ApiService {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch(API_ENDPOINTS.UPLOAD_CV, {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await axios.create({
+        withCredentials: true,
+        timeout: 60000, 
 
-      if (!response.ok) {
-        throw new Error(`CV upload failed: ${response.statusText}`);
-      }
+      }).post(API_ENDPOINTS.UPLOAD_CV, formData);
 
-      return await response.json();
+      return response.data;
     } catch (error) {
       console.error('uploadCV error:', error);
       throw error;

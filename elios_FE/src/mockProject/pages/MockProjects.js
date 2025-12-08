@@ -187,11 +187,6 @@ const MockProjects = () => {
                     </div>
                     <div className="stat-label">Average Grade</div>
                   </div>
-                  <div className="stat-card-large">
-                    <div className="stat-icon">Active</div>
-                    <div className="stat-value">{stats.totalUsers}</div>
-                    <div className="stat-label">Active Users</div>
-                  </div>
                 </div>
 
                 { }
