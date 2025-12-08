@@ -38,7 +38,7 @@ const CodeOutput = ({ output, error, isLoading, testResults }) => {
               {testResults.evaluationResults.map((result, index) => (
                 <tr key={index}>
                   <td>{result.input || `Case ${index + 1}`}</td>
-                  <td>{result.expectedOutput}</td>
+                  {/* Removed expectedOutput to match the 4 headers defined above */}
                   <td>{result.actualOutput}</td>
                   <td
                     className={
