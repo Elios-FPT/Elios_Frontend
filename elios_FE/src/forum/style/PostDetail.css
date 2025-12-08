@@ -16,6 +16,45 @@
   margin-bottom: 2rem;
 }
 
+/* --- Action Error Notification (Ban Alert) --- */
+#post-action-error-notification {
+  background-color: rgba(220, 53, 69, 0.15); /* Transparent Red */
+  border: 1px solid #dc3545;
+  color: #ff6b6b;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  animation: slideDown 0.3s ease-out;
+}
+
+#post-action-error-notification span {
+  flex-grow: 1;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+#post-action-error-close {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0 5px;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+#post-action-error-close:hover {
+  color: #ff6b6b;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .post-card {
   background-color: #2a2a2a;
   border: 1px solid #333;
