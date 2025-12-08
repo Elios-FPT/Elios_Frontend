@@ -76,6 +76,7 @@ export const API_ENDPOINTS = {
     UPLOAD_IMAGE: `${baseUrl}/api/forum/upload`,
     GET_MY_IMAGE_POOL: `${baseUrl}/api/forum/upload/images`,
     DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/upload/${imageId}`,
+    GET_MY_BANNED_STATUS: `${baseUrl}/api/forum/bans/myStatus`,
     REPORT_POST: `${baseUrl}/api/forum/reports`,
     REPORT_COMMENT: `${baseUrl}/api/forum/reports`,
     CREATE_SOLUTION: `${baseUrl}/api/forum/posts`,
@@ -94,6 +95,7 @@ export const API_ENDPOINTS = {
     DELETE_CATEGORY: (categoryId) => `${baseUrl}/api/forum/Category/${categoryId}`,
     REPORTED_CONTENT: `${baseUrl}/api/forum/reports`,
     GET_DETAIL_REPORTED_CONTENT: (reportId) => `${baseUrl}/api/forum/reports/${reportId}`,
+    RESOLVE_REPORTED_CONTENT: (reportId) => `${baseUrl}/api/forum/reports/${reportId}/resolve`,
     BAN_USER: `${baseUrl}/api/forum/bans`,
     UN_BAN_USER: (banId) => `${baseUrl}/api/forum/bans/${banId}/unban`,
 

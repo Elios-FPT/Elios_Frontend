@@ -1,11 +1,13 @@
 // src/admin/pages/ReportedPosts.js
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap'; 
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import { API_ENDPOINTS } from '../../../../api/apiConfig';
 import '../styles/ReportedPosts.css';
 
 const ReportedPosts = () => {
+    const navigate = useNavigate();
     const [reports, setReports] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,15 +19,16 @@ const ReportedPosts = () => {
     // Modal State
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [showBanModal, setShowBanModal] = useState(false);
-    const [showUnbanModal, setShowUnbanModal] = useState(false); // New: Unban Modal
     const [selectedReport, setSelectedReport] = useState(null);
-    const [detailLoading, setDetailLoading] = useState(false); // New: Loading for details
+    const [detailLoading, setDetailLoading] = useState(false);
 
     // Ban/Unban Form State
     const [banReason, setBanReason] = useState('');
-    const [unbanReason, setUnbanReason] = useState(''); // New: Unban Reason
-    const [banDuration, setBanDuration] = useState('7'); 
-    const [isSubmitting, setIsSubmitting] = useState(false); // Generic submitting state
+    const [banDuration, setBanDuration] = useState('7');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Resolution State
+    const [moderatorNote, setModeratorNote] = useState('');
 
     const fetchReports = useCallback(async () => {
         setLoading(true);
@@ -47,57 +50,26 @@ const ReportedPosts = () => {
         fetchReports();
     }, [fetchReports]);
 
-    // --- Updated: Handle View Details ---
+    // --- Handle View Details ---
     const handleViewDetails = async (report) => {
-        setSelectedReport(report); // Show immediate data first
+        setSelectedReport(report);
+        setModeratorNote(''); // Reset note
         setShowDetailModal(true);
-        setDetailLoading(true); // Start loading
+        setDetailLoading(true);
 
         try {
             const response = await axios.get(API_ENDPOINTS.GET_DETAIL_REPORTED_CONTENT(report.reportId), {
                 withCredentials: true
             });
-            // Merge the existing report data with the new details
+            // Merge existing report data with new details
             setSelectedReport(prev => ({ ...prev, ...response.data.responseData }));
         } catch (error) {
             console.error("Error fetching report details:", error);
-            // Optional: Show a toast error here
         } finally {
-            setDetailLoading(false); // Stop loading
+            setDetailLoading(false);
         }
     };
 
-    // --- Updated: Handle Unban User ---
-    const handleUnbanUser = async () => {
-        // Validation: Need a selected report and a banId (Assuming backend sends banId in details)
-        // If your report detail doesn't have banId, you might need to fetch the user's ban status first.
-        if (!selectedReport || !selectedReport.banId) {
-            alert("No Ban ID found for this user. They might not be banned.");
-            return;
-        }
-
-        setIsSubmitting(true);
-        try {
-            await axios.put(API_ENDPOINTS.UN_BAN_USER(selectedReport.banId), {
-                unbanReason: unbanReason
-            }, {
-                withCredentials: true
-            });
-            
-            alert(`User ${selectedReport.targetAuthorFirstName} has been unbanned.`);
-            setShowUnbanModal(false);
-            setShowDetailModal(false);
-            setUnbanReason(''); // Reset form
-            fetchReports(); // Refresh list
-        } catch (error) {
-            console.error('Error unban user:', error);
-            alert("Failed to unban user.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    // Open Ban Modal
     const handleOpenBanModal = () => {
         if (!banReason && selectedReport) {
             setBanReason(`Banned due to report: ${selectedReport.reason}`);
@@ -105,13 +77,47 @@ const ReportedPosts = () => {
         setShowBanModal(true);
     };
 
-    // Open Unban Modal
-    const handleOpenUnbanModal = () => {
-        setUnbanReason(''); // Reset reason
-        setShowUnbanModal(true);
-    };
+    const handleRedirectToReportedPosts = () => {
+        if (!selectedReport) return;
 
-    // Submit Ban API
+        // If it's a post, navigate to post ID. 
+        // If comment, we ideally need parent Post ID (referenceId), otherwise try targetId.
+        const navId = selectedReport.targetType === 'Post'
+            ? selectedReport.targetId
+            : (selectedReport.referenceId || selectedReport.targetId); // fallback
+
+        // Close modal
+        setShowDetailModal(false);
+        
+        // Open in new tab
+        window.open(`/forum/post/${navId}`, '_blank');
+    }
+
+    const handleResolveReport = async (status, deleteContent) => {
+        if (!selectedReport) return;
+        setIsSubmitting(true);
+
+        try {
+            await axios.put(API_ENDPOINTS.RESOLVE_REPORTED_CONTENT(selectedReport.reportId), {
+                status,        // 'Approved' or 'Rejected'
+                deleteContent, // boolean
+                moderatorNote  // string from state
+            }, {
+                withCredentials: true,
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            alert(`Report ${status === 'Approved' ? 'approved' : 'rejected'} successfully.`);
+            setShowDetailModal(false);
+            fetchReports(); // Refresh list
+        } catch (error) {
+            console.error("Error resolving report:", error);
+            alert("Failed to resolve report.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
     const handleBanUser = async () => {
         if (!selectedReport) return;
         setIsSubmitting(true);
@@ -147,7 +153,7 @@ const ReportedPosts = () => {
         }
     };
 
-    // Filter Logic & Helpers (Unchanged)
+    // Filter Logic
     const filteredReports = reports.filter(report => {
         const statusMatch = filterStatus === 'All' || report.status === filterStatus;
         const typeMatch = filterType === 'All' || report.targetType === filterType;
@@ -168,7 +174,6 @@ const ReportedPosts = () => {
             <h1>Reported Content</h1>
             <p>Review and moderate reported posts and comments.</p>
 
-            {/* Filters */}
             <div className="filters-container">
                 <div className="filter-group">
                     <label>Status:</label>
@@ -190,7 +195,6 @@ const ReportedPosts = () => {
                 <button className="btn-refresh" onClick={fetchReports}>Refresh</button>
             </div>
 
-            {/* Content Table */}
             <div className="reports-table-container">
                 {loading ? (
                     <div className="text-center p-4"><Spinner animation="border" variant="light" /></div>
@@ -216,9 +220,9 @@ const ReportedPosts = () => {
                                 <tr key={report.reportId}>
                                     <td>
                                         <div className="user-info-cell">
-                                            <img 
-                                                src={report.targetAuthorAvatarUrl || 'default-avatar.png'} 
-                                                alt="avatar" 
+                                            <img
+                                                src={report.targetAuthorAvatarUrl || 'default-avatar.png'}
+                                                alt="avatar"
                                                 className="table-avatar"
                                             />
                                             <div className="user-text-info">
@@ -246,7 +250,7 @@ const ReportedPosts = () => {
                                     </td>
                                     <td>{new Date(report.createdAt).toLocaleDateString()}</td>
                                     <td>
-                                        <button 
+                                        <button
                                             className="btn-action btn-view"
                                             onClick={() => handleViewDetails(report)}
                                         >
@@ -262,8 +266,8 @@ const ReportedPosts = () => {
 
             {/* --- Report Details Modal --- */}
             {selectedReport && (
-                <Modal 
-                    show={showDetailModal} 
+                <Modal
+                    show={showDetailModal}
                     onHide={() => setShowDetailModal(false)}
                     centered
                     size="lg"
@@ -274,7 +278,7 @@ const ReportedPosts = () => {
                     </Modal.Header>
                     <Modal.Body className="modal-body-custom">
                         {detailLoading ? (
-                             <div className="loading-container">
+                            <div className="loading-container">
                                 <Spinner animation="border" variant="success" />
                                 <p>Loading full details...</p>
                             </div>
@@ -284,47 +288,46 @@ const ReportedPosts = () => {
                                 <div className="detail-section">
                                     <h5>Reported User (Author)</h5>
                                     <div className="detail-user-card">
-                                        <img 
-                                            src={selectedReport.targetAuthorAvatarUrl} 
-                                            alt="Author" 
+                                        <img
+                                            src={selectedReport.targetAuthorAvatarUrl || 'default-avatar.png'}
+                                            alt="Author"
                                             className="detail-avatar"
                                         />
                                         <div>
                                             <h6>{selectedReport.targetAuthorFirstName} {selectedReport.targetAuthorLastName}</h6>
                                             <small className="text-muted">ID: {selectedReport.targetAuthorId}</small>
-                                            {/* Show status if available in details */}
                                             {selectedReport.isBanned && <span className="badge bg-danger ms-2">Banned</span>}
                                         </div>
                                         <div className="ms-auto d-flex gap-2">
-                                            {/* Logic: If report says user is banned, show Unban, else show Ban */}
-                                            {/* Since we don't know 'isBanned' from the snippet, showing both for now or conditional based on your API data */}
-                                            <Button 
-                                                variant="danger" 
-                                                size="sm" 
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
                                                 onClick={handleOpenBanModal}
                                             >
                                                 Ban User
                                             </Button>
-                                            
-                                            {/* Only enable/show this if we have a banId */}
-                                            {selectedReport.banId && (
-                                                <Button 
-                                                    variant="warning" 
-                                                    size="sm" 
-                                                    onClick={handleOpenUnbanModal}
-                                                >
-                                                    Unban User
-                                                </Button>
-                                            )}
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* 2. The Content */}
                                 <div className="detail-section">
-                                    <h5>Reported Content ({selectedReport.targetType})</h5>
+                                    <div className="d-flex justify-content-between align-items-center mb-2">
+                                        <h5>Reported Content ({selectedReport.targetType})</h5>
+
+                                        {/* Updated to check logic and use new handler */}
+                                        <Button
+                                            variant="primary"
+                                            size="sm"
+                                            onClick={handleRedirectToReportedPosts}
+                                        >
+                                            View Post
+                                        </Button>
+                                    </div>
+
                                     <div className="detail-content-box">
-                                        {selectedReport.targetContentDetail}
+                                        {/* Show detail if available, else fallback to snippet or ID */}
+                                        {selectedReport.targetContentDetail || selectedReport.targetContentSnippet || `ID: ${selectedReport.targetId}`}
                                     </div>
                                 </div>
 
@@ -336,6 +339,40 @@ const ReportedPosts = () => {
                                     <p><strong>Reporter:</strong> {selectedReport.reporterFirstName} {selectedReport.reporterLastName}</p>
                                     <p><strong>Date:</strong> {new Date(selectedReport.createdAt).toLocaleString()}</p>
                                 </div>
+
+                                {/* 4. Resolution Actions (Only if Pending) */}
+                                {selectedReport.status === 'Pending' && (
+                                    <div className="detail-section resolution-section mt-4 pt-3 border-top border-secondary">
+                                        <h5>Resolution</h5>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Moderator Note</Form.Label>
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={2}
+                                                value={moderatorNote}
+                                                onChange={(e) => setModeratorNote(e.target.value)}
+                                                placeholder="Add a note about this decision (optional)..."
+                                                className="bg-dark text-white border-secondary"
+                                            />
+                                        </Form.Group>
+                                        <div className="d-flex gap-2 justify-content-end">
+                                            <Button
+                                                variant="secondary"
+                                                onClick={() => handleResolveReport('Rejected', false)}
+                                                disabled={isSubmitting}
+                                            >
+                                                Dismiss Report (Keep Content)
+                                            </Button>
+                                            <Button
+                                                variant="danger"
+                                                onClick={() => handleResolveReport('Approved', true)}
+                                                disabled={isSubmitting}
+                                            >
+                                                Approve Report & Delete Content
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
                             </>
                         )}
                     </Modal.Body>
@@ -343,19 +380,14 @@ const ReportedPosts = () => {
                         <Button variant="secondary" onClick={() => setShowDetailModal(false)}>
                             Close
                         </Button>
-                        {selectedReport.status === 'Pending' && !detailLoading && (
-                            <Button variant="success">
-                                Mark as Resolved
-                            </Button>
-                        )}
                     </Modal.Footer>
                 </Modal>
             )}
 
             {/* --- Ban User Modal --- */}
-            <Modal 
-                show={showBanModal} 
-                onHide={() => setShowBanModal(false)} 
+            <Modal
+                show={showBanModal}
+                onHide={() => setShowBanModal(false)}
                 centered
                 className="dark-theme-modal"
             >
@@ -367,17 +399,17 @@ const ReportedPosts = () => {
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Ban Reason</Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="Enter reason..." 
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter reason..."
                                 value={banReason}
                                 onChange={(e) => setBanReason(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Duration</Form.Label>
-                            <Form.Select 
-                                value={banDuration} 
+                            <Form.Select
+                                value={banDuration}
                                 onChange={(e) => setBanDuration(e.target.value)}
                             >
                                 <option value="1">1 Day</option>
@@ -392,48 +424,12 @@ const ReportedPosts = () => {
                 </Modal.Body>
                 <Modal.Footer className="modal-footer-custom">
                     <Button variant="secondary" onClick={() => setShowBanModal(false)}>Cancel</Button>
-                    <Button 
-                        variant="danger" 
+                    <Button
+                        variant="danger"
                         onClick={handleBanUser}
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Processing...' : 'Confirm Ban'}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-            {/* --- Unban User Modal --- */}
-            <Modal 
-                show={showUnbanModal} 
-                onHide={() => setShowUnbanModal(false)} 
-                centered
-                className="dark-theme-modal"
-            >
-                <Modal.Header closeButton className="modal-header-custom">
-                    <Modal.Title>Unban User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className="modal-body-custom">
-                    <p>You are about to unban <strong>{selectedReport?.targetAuthorFirstName} {selectedReport?.targetAuthorLastName}</strong>.</p>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Unban Reason</Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="Why are you unbanning this user?" 
-                                value={unbanReason}
-                                onChange={(e) => setUnbanReason(e.target.value)}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer className="modal-footer-custom">
-                    <Button variant="secondary" onClick={() => setShowUnbanModal(false)}>Cancel</Button>
-                    <Button 
-                        variant="warning" 
-                        onClick={handleUnbanUser}
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ? 'Processing...' : 'Confirm Unban'}
                     </Button>
                 </Modal.Footer>
             </Modal>

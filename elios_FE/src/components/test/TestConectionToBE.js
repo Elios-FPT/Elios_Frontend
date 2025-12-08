@@ -13,7 +13,7 @@ const TestConnectionToBE = () => {
     
     const challengeId = "332c4330-050a-44a6-a644-76f892d57512";
     const postType = "Solution";
-    const apiUrl = API_ENDPOINTS.GET_POST_CONTENT(challengeId); 
+    const apiUrl = API_ENDPOINTS.REPORTED_CONTENT; 
 
     const handleTestConnection = async () => {
         try {
