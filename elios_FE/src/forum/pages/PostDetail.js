@@ -4,7 +4,7 @@ import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Card, Button, Dropdown, Form } from "react-bootstrap";
-import { FaFlag, FaEllipsisV, FaEdit, FaTrash, FaSave, FaTimes } from 'react-icons/fa';
+import { FaFlag, FaEllipsisV, FaEdit, FaTrash, FaSave, FaTimes, FaExclamationTriangle } from 'react-icons/fa';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -32,6 +32,9 @@ const PostDetail = () => {
     // Editing State
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editContent, setEditContent] = useState("");
+
+    // Error Notification State
+    const [actionError, setActionError] = useState(null);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -108,9 +111,24 @@ const PostDetail = () => {
         setPost(prev => ({ ...prev, comments: deleteRecursive(prev.comments || []) }));
     };
 
+    // --- Helper to handle API errors (specifically 403 Bans) ---
+    const handleActionError = (error) => {
+        if (error.response && error.response.status === 403) {
+            // Use the message from the backend which contains ban reason and time
+            setActionError(error.response.data.message || "Action forbidden.");
+            
+            // Scroll to top to ensure user sees the message
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            console.error("Action failed:", error);
+            // Optionally set a generic error, or just log it
+        }
+    };
+
     // --- Handlers ---
 
     const handleCommentSubmit = async (content, parentCommentId) => {
+        setActionError(null); // Clear previous errors
         if (!content.trim()) return;
 
         let currentUserName = "You";
@@ -135,6 +153,7 @@ const PostDetail = () => {
             replies: [],
         };
 
+        // Optimistically add comment
         addCommentToState(tempComment, parentCommentId);
         setReplyingTo(null);
 
@@ -145,7 +164,7 @@ const PostDetail = () => {
                 headers: { "Content-Type": "application/json" },
             });
 
-            // If server returns the updated post, use it. Otherwise, our optimistic update holds.
+            // If server returns the updated post, use it.
             const updatedPostFromServer = response.data.responseData;
             if (updatedPostFromServer && typeof updatedPostFromServer === 'object') {
                  updatedPostFromServer.comments = updatedPostFromServer.comments || [];
@@ -153,11 +172,14 @@ const PostDetail = () => {
             }
 
         } catch (error) {
-            console.error("Error posting comment:", error);
+            // Revert optimistic update by removing the temp comment
+            deleteCommentFromState(tempId);
+            handleActionError(error);
         }
     };
 
     const handleUpvote = async () => {
+        setActionError(null);
         const originalPost = { ...post };
         setPost((current) => ({
             ...current,
@@ -177,12 +199,13 @@ const PostDetail = () => {
             }));
 
         } catch (error) {
-            console.error("Error upvoting post:", error);
-            setPost(originalPost); 
+            setPost(originalPost); // Revert UI
+            handleActionError(error);
         }
     };
 
     const handleDownvote = async () => {
+        setActionError(null);
         const originalPost = { ...post };
         setPost((current) => ({
             ...current,
@@ -203,13 +226,14 @@ const PostDetail = () => {
             }));
 
         } catch (error) {
-            console.error("Error downvoting post:", error);
-            setPost(originalPost);
+            setPost(originalPost); // Revert UI
+            handleActionError(error);
         }
     };
 
     // --- Report Handlers ---
     const handleReport = async (targetType, targetId, reason, details) => {
+        setActionError(null);
         if (!reason) {
             console.error("Report reason is required.");
             return;
@@ -223,8 +247,7 @@ const PostDetail = () => {
             );
             alert(`${targetType} reported successfully!`);
         } catch (error) {
-            console.error(`Error reporting ${targetType}:`, error);
-            alert(`Error submitting report.`);
+            handleActionError(error);
         }
     };
 
@@ -257,9 +280,11 @@ const PostDetail = () => {
     };
 
     const handleSaveEdit = async (commentId) => {
+        setActionError(null);
         if (!editContent.trim()) return;
 
         // 1. Update UI immediately (Optimistic update)
+        const oldContent = post.comments.find(c => c.commentId === commentId)?.content; // simplified lookup
         updateCommentInState(commentId, editContent);
         
         // 2. Escape Edit Mode
@@ -272,14 +297,15 @@ const PostDetail = () => {
                 { withCredentials: true }
             );
         } catch (error) {
-            console.error("Error updating comment:", error);
-            // Optionally revert change here if needed
+            // Revert if failed (requires more complex state tracking or refetch, simple log here)
+            handleActionError(error);
         }
     };
 
     // --- Delete Handler ---
     const handleDeleteClick = async (commentId) => {
         if (!window.confirm("Are you sure you want to delete this comment?")) return;
+        setActionError(null);
 
         // 1. Update UI immediately
         deleteCommentFromState(commentId);
@@ -290,7 +316,7 @@ const PostDetail = () => {
                 { withCredentials: true }
             );    
         } catch (error) {
-            console.error("Error deleting comment:", error);
+            handleActionError(error);
         }
     };
 
@@ -401,6 +427,18 @@ const PostDetail = () => {
             <UserNavbar />
             <div id="post-detail-background">
                 <Container id="post-detail-container">
+                    
+                    {/* --- Notification Banner for Action Errors (Bans) --- */}
+                    {actionError && (
+                        <div id="post-action-error-notification">
+                            <FaExclamationTriangle className="me-2" />
+                            <span>{actionError}</span>
+                            <button onClick={() => setActionError(null)} id="post-action-error-close" title="Dismiss">
+                                <FaTimes />
+                            </button>
+                        </div>
+                    )}
+
                     <div id="post-detail-back-button">
                         <Button variant="outline-light" onClick={() => navigate("/forum")}>← Back to Forum</Button>
                     </div>

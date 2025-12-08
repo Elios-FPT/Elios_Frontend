@@ -75,6 +75,7 @@ export const API_ENDPOINTS = {
     UPLOAD_IMAGE: `${baseUrl}/api/forum/upload`,
     GET_MY_IMAGE_POOL: `${baseUrl}/api/forum/upload/images`,
     DELETE_IMAGE_FROM_POOL: (imageId) => `${baseUrl}/api/forum/upload/${imageId}`,
+    GET_MY_BANNED_STATUS: `${baseUrl}/api/forum/bans/myStatus`,
     REPORT_POST: `${baseUrl}/api/forum/reports`,
     REPORT_COMMENT: `${baseUrl}/api/forum/reports`,
     CREATE_SOLUTION: `${baseUrl}/api/forum/posts`,

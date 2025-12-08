@@ -12,39 +12,56 @@ const UserPostStorage = () => {
     const navigate = useNavigate();
     const [userPosts, setUserPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null); // <-- ADDED THIS STATE
+    const [error, setError] = useState(null);
+    const [banInfo, setBanInfo] = useState(null);
 
     // Hardcoded values
     const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
     const POST_TYPE = "Post";
-    const TITLE = "Your Post Title"; // Title for the new draft
-    const CONTENT = "Your post content goes here..."; // Content for the new draft
+    const TITLE = "Your Post Title";
+    const CONTENT = "Your post content goes here...";
 
     useEffect(() => {
-        const fetchUserPosts = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get(API_ENDPOINTS.GET_MY_POSTS, {
-                    params: { PostType: POST_TYPE },
-                    withCredentials: true,
-                    headers: { "Content-Type": "application/json" }
-                });
+                // Fetch posts and ban status in parallel
+                const [postsResponse, banResponse] = await Promise.all([
+                    axios.get(API_ENDPOINTS.GET_MY_POSTS, {
+                        params: { PostType: POST_TYPE },
+                        withCredentials: true,
+                        headers: { "Content-Type": "application/json" }
+                    }),
+                    axios.get(API_ENDPOINTS.GET_MY_BANNED_STATUS, {
+                        withCredentials: true
+                    })
+                ]);
 
-
-                setUserPosts(response.data.responseData);
+                setUserPosts(postsResponse.data.responseData);
+                
+                if (banResponse.data && banResponse.data.responseData) {
+                    setBanInfo(banResponse.data.responseData);
+                }
 
             } catch (error) {
-                console.error("Error fetching posts:", error);
-                setError("Failed to fetch your posts."); // <-- SET ERROR ON FAIL
+                console.error("Error fetching data:", error);
+                setError("Failed to fetch data.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchUserPosts();
+        fetchData();
     }, []);
 
     const handleCreateNewPost = async (e) => {
         e.preventDefault();
+        
+        // Prevent creation if banned
+        if (banInfo && banInfo.isBanned) {
+            alert("You cannot create posts while banned.");
+            return;
+        }
+
         setError(null);
 
         const postData = {
@@ -58,18 +75,12 @@ const UserPostStorage = () => {
         };
 
         try {
-            // Use POST to the base /posts endpoint to CREATE
             const response = await axios.post(API_ENDPOINTS.GET_POSTS_FORUM, postData, {
                 withCredentials: true,
             });
 
-            // Get the new post ID from the response
             const newPost = response.data.message;
-
-            console.log(newPost);
-            // Navigate to the edit page for the new post
             navigate(`/forum/my-posts/edit/${newPost}`);
-
 
         } catch (error) {
             console.error("Error creating new post:", error.response || error);
@@ -87,12 +98,30 @@ const UserPostStorage = () => {
             setUserPosts(prevPosts =>
                 prevPosts.filter(post => post.postId !== postId)
             );
-            console.log("Post deleted:", postId);
         } catch (error) {
             console.error("Error deleting post:", error);
-            // Re-throw so the card can handle its own error state if needed
             throw error;
         }
+    };
+
+    const renderBanNotification = () => {
+        if (!banInfo || !banInfo.isBanned) return null;
+
+        const banDate = new Date(banInfo.banUntil).toLocaleString();
+        const message = banInfo.isPermanent 
+            ? "You are permanently banned from posting." 
+            : `You are banned until ${banDate}.`;
+
+        return (
+            <div id="user-post-storage-ban-notification">
+                <div id="ban-notification-icon">⚠️</div>
+                <div id="ban-notification-content">
+                    <strong>Account Suspended</strong>
+                    <span>{message}</span>
+                    {banInfo.reason && <span className="ban-reason">Reason: {banInfo.reason}</span>}
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -100,22 +129,23 @@ const UserPostStorage = () => {
             <UserNavbar />
             <div id="user-post-storage-background">
                 <div id="user-post-storage-container">
+                    
+                    {renderBanNotification()}
 
-                    {/* --- NEW/MODIFIED JSX --- */}
-                    {/* This header wraps the title and the new button */}
                     <div id="user-post-storage-header">
                         <h1 id="user-post-storage-title">Your Post Storage</h1>
                         <button
                             id="user-post-storage-create-btn"
                             onClick={handleCreateNewPost}
+                            disabled={banInfo?.isBanned}
+                            title={banInfo?.isBanned ? "You are banned from creating posts" : "Create New Post"}
+                            style={banInfo?.isBanned ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: '#555' } : {}}
                         >
                             Create New Post
                         </button>
                     </div>
 
-                    {/* Display any errors here */}
                     {error && <p className="user-post-storage-error">{error}</p>}
-                    {/* --- END OF NEW/MODIFIED JSX --- */}
 
                     <div id="user-post-storage-list">
                         {loading ? (
@@ -127,7 +157,7 @@ const UserPostStorage = () => {
                                 <UserPostStorageCard
                                     key={post.postId}
                                     post={post}
-                                    onDelete={handleDeletePost} // Pass the handler
+                                    onDelete={handleDeletePost}
                                 />
                             ))
                         )}
