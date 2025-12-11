@@ -22,39 +22,51 @@ const UserNavbar = () => {
 
   // Xác định các link theo role
   const getRoleBasedLinks = () => {
-    const isUser = !role || role === "User";
+    // 1. Links Public (Khách và User đều thấy)
+    const publicLinks = [
+      { to: "/forum", label: t("UserNavbar.forum") },
+      { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
+    ];
+    
+    // 2. Links Private (Chỉ User đã đăng nhập mới thấy)
+    const userPrivateLinks = [
+      { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
+      { to: "/resume-builder", label: t("UserNavbar.buildCV") },
+      { to: "/user/profile", label: "Profile" },
+      { to: "/interview", label: "Interview" },
+    ];
 
-    // Chỉ User mới thấy các link cơ bản
-    const baseLinks = isUser
-      ? [
-        { to: "/forum", label: t("UserNavbar.forum") },
-        { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
-        { to: "/resume-builder", label: t("UserNavbar.buildCV") },
-        { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
-        { to: "/user/profile", label: "Profile" },
-        { to: "/interview", label: "Interview" },
-      ]
-      : [];
+    let linksToShow = [];
+
+    // Logic chia luồng hiển thị
+    if (!role) {
+      // Trường hợp chưa đăng nhập: Chỉ hiện Public Links
+      linksToShow = publicLinks;
+    } else if (role === "User") {
+      // Trường hợp là User: Hiện Public + Private
+      linksToShow = [...publicLinks, ...userPrivateLinks];
+    } else {
+      // Các role quản lý (Admin, Manager...) - bắt đầu với mảng rỗng (theo logic cũ)
+      // hoặc bạn có thể thêm publicLinks vào đây nếu muốn Admin cũng thấy Forum trên navbar
+      linksToShow = [];
+    }
 
     // Các role đặc biệt: thêm link quản lý
-    const extraLinks = [];
-
     if (role === "Resource Manager") {
-      extraLinks.push(
+      linksToShow.push(
         { to: "/manage-coding-bank", label: "Manage Coding Bank" },
         { to: "/manage-project-bank", label: "Manage Project Bank" },
         { to: "/manage-interviews", label: "Manage Interviews" },
         { to: "/manage-prompts", label: "Manage Prompts" }
-
       );
     }
 
     if (role === "Content Moderator") {
-      extraLinks.push({ to: "/manage-forum", label: "Manage Forum" });
+      linksToShow.push({ to: "/manage-forum", label: "Manage Forum" });
     }
 
     if (role === "Admin") {
-      extraLinks.push(
+      linksToShow.push(
         { to: "/manage-coding-bank", label: "Manage Coding Bank" },
         { to: "/manage-project-bank", label: "Manage Project Bank" },
         { to: "/manage-forum", label: "Manage Forum" },
@@ -62,7 +74,7 @@ const UserNavbar = () => {
       );
     }
 
-    return [...baseLinks, ...extraLinks];
+    return linksToShow;
   };
 
   const links = getRoleBasedLinks();

@@ -72,24 +72,25 @@ function App() {
         <Routes>
           {/* Public */}
           <Route path="/" element={<LandingPage />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/post/:id" element={<PostDetail />} />
+          <Route path="/codingChallenge" element={<CodingChallenge />} />
+          <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
+
 
           {/* User Only Routes */}
           <Route element={<RoleProtectedRoute allowedRoles={["User", "Resource Manager", "Content Moderator", "Admin"]} />}>
 
+            <Route path="/mock-projects" element={<MockProjects />} />
             <Route path="/user/profile" element={<UserProfile />} />
 
-            <Route path="/forum" element={<Forum />} />
-            <Route path="/forum/post/:id" element={<PostDetail />} />
             <Route path="/forum/user-posts" element={<UserPostStorage />} />
             <Route path="/forum/my-posts/edit/:postId" element={<EditPostForForum />} />
 
-            <Route path="/codingChallenge" element={<CodingChallenge />} />
-            <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
 
             <Route path="/resume-builder" element={<UserResume />} />
             <Route path="/resume/edit/:id" element={<ResumeBuilder />} />
 
-            <Route path="/mock-projects" element={<MockProjects />} />
             <Route path="/mock-projects/:projectId" element={<ProjectDetailPage />} />
             <Route path="/interview" element=
               {

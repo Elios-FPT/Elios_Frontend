@@ -1,0 +1,86 @@
+/* file: elios_FE/src/codingChallenge/style/SolutionCommentForm.css */
+
+#solution-comment-form {
+  background-color: #252525;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+#solution-comment-form .solution-comment-input {
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #444;
+  margin-top: 10px;
+}
+
+/* --- ADDED THIS SECTION --- */
+#solution-comment-form .solution-comment-input::placeholder {
+  color: #b0b0b0; /* Light gray color for placeholder */
+  opacity: 1; /* Firefox lowers opacity by default, this ensures color is vibrant */
+}
+
+#solution-comment-form .solution-comment-input:focus {
+  background-color: #1e1e1e;
+  color: #fff;
+  border-color: #0F8A57;
+  box-shadow: 0 0 0 0.2rem rgba(15, 138, 87, 0.25);
+}
+
+#solution-replying-to-banner {
+  background-color: #333;
+  color: #ddd;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+#solution-comment-cancel-reply-btn {
+  color: #bbb;
+  padding: 0;
+  font-size: 1rem;
+}
+
+#solution-comment-cancel-reply-btn:hover {
+  color: #fff;
+}
+
+/* Stats Container */
+.solution-post-stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 10px;
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.solution-post-stats .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+}
+
+/* Specific Stat Colors */
+.solution-post-stats .stat-item.upvote:hover {
+  color: #28a745; /* Green */
+  transform: translateY(-2px);
+}
+
+.solution-post-stats .stat-item.downvote:hover {
+  color: #dc3545; /* Red */
+  transform: translateY(2px);
+}
+
+.solution-post-stats .stat-item.comment {
+  cursor: default;
+}
+
+.solution-post-stats .stat-item.report:hover {
+  color: #ffc107; /* Yellow/Orange for Report */
+}

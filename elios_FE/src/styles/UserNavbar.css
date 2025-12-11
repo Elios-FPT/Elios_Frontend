@@ -1,7 +1,7 @@
 /* Frontend/elios_FE/src/styles/UserNavbar.css */
 
 .user-navbar {
-    background: #23272f;
+    background: #23272f!important;
     padding: 0.5rem 0;
     font-family: 'Roboto', Arial, sans-serif;
 }
