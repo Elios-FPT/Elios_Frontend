@@ -75,7 +75,7 @@ const UserPostStorage = () => {
         };
 
         try {
-            const response = await axios.post(API_ENDPOINTS.GET_POSTS_FORUM, postData, {
+            const response = await axios.post(API_ENDPOINTS.CREATE_POSTS_FORUM, postData, {
                 withCredentials: true,
             });
 

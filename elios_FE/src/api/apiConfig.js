@@ -59,9 +59,11 @@ export const API_ENDPOINTS = {
     DELETE_USER_CV: (cvId) => `${baseUrl}/api/cvbuilder/UserCvs/${cvId}`,
 
     // Forum API Endpoints
-    GET_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
-    GET_CATEGORIES_FORUM: `${baseUrl}/api/forum/Category`,
-    GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
+    GET_POSTS_FORUM: `${baseUrl}/api/forum/public/posts`,
+    CREATE_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
+    GET_CATEGORIES_FORUM: `${baseUrl}/api/forum/public/Category`,
+    GET_CATEGORIES_BY_ID: (categoryId) => `${baseUrl}/api/forum/public/Category/${categoryId}`,
+    GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/public/posts/${postId}`,
     CREATE_POST: `${baseUrl}/api/forum/posts`,
     DRAFT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     SUBMIT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/submit`,
@@ -80,7 +82,7 @@ export const API_ENDPOINTS = {
     REPORT_POST: `${baseUrl}/api/forum/reports`,
     REPORT_COMMENT: `${baseUrl}/api/forum/reports`,
     CREATE_SOLUTION: `${baseUrl}/api/forum/posts`,
-    GET_SOLUTION: `${baseUrl}/api/forum/posts`,
+    GET_SOLUTION: `${baseUrl}/api/forum/public/posts`,
 
 
 
@@ -102,8 +104,8 @@ export const API_ENDPOINTS = {
 
 
     // Codeing Challenge API Endpoints
-    GET_CODE_PRACTICES_LIST: `${baseUrl}/api/code-practices`,
-    GET_CODE_PRACTICE_DETAIL: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}`,
+    GET_CODE_PRACTICES_LIST: `${baseUrl}/api/code-practices/public`,
+    GET_CODE_PRACTICE_DETAIL: (codePracticeId) => `${baseUrl}/api/code-practices/public/${codePracticeId}`,
     RUN_CODE_SOLUTION: (codePracticeId) => `${baseUrl}/api/code-practices/${codePracticeId}/run`,
     CREATE_CODE_PRACTICE: `${baseUrl}/api/code-practices`,
     UPDATE_CODE_PRACTICE: (id) => `${baseUrl}/api/code-practices/${id}`,
