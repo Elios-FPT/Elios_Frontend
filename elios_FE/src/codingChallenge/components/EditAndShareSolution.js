@@ -11,7 +11,7 @@ const turndownService = new TurndownService();
 // Note: This CATEGORY_ID is hardcoded, similar to EditPostForForum.js.
 // This might need to be a different ID for "Solutions".
 const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
-const POST_TYPE = "Solution"; 
+const POST_TYPE = "Solution";
 
 const EditAndShareSolution = ({ isOpen, onClose, submissionData, problemId }) => {
 
@@ -49,10 +49,10 @@ const EditAndShareSolution = ({ isOpen, onClose, submissionData, problemId }) =>
         const postData = {
             categoryId: CATEGORY_ID,
             title: title,
-            content: markdown, 
+            content: markdown,
             postType: POST_TYPE,
-            referenceId: problemId, 
-            tags: [], 
+            referenceId: problemId,
+            tags: [],
             submitForReview: true
         };
 
@@ -83,55 +83,43 @@ const EditAndShareSolution = ({ isOpen, onClose, submissionData, problemId }) =>
                     <h3 id="share-solution-modal-title">Share Your Solution</h3>
                     <button id="share-solution-modal-close-button" onClick={onClose}>✕</button>
                 </div>
-                
+
                 <form id="share-solution-form" onSubmit={handleShareSolution}>
                     <div id="share-solution-form-group">
                         <label htmlFor="solution-title">Title</label>
                         <input
                             type="text"
-                            id="solution-title-input" // Changed ID for consistency with CSS style adaptation
+                            id="solution-title-input" 
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
                         />
                     </div>
-                    
+
                     {/* Toolbar */}
                     <div id="solution-toolbar">
-                      <button type="button" onClick={() => applyFormat("bold")} title="Bold"><FaBold /></button>
-                      <button type="button" onClick={() => applyFormat("italic")} title="Italic"><FaItalic /></button>
-                      <button type="button" onClick={() => applyFormat("insertHTML", "<code></code>")} title="Inline Code"><FaCode /></button>
-                      <button
-                          type="button"
-                          onClick={() => {
-                              const selection = window.getSelection();
-                              if (!selection.rangeCount) return;
-                              const range = selection.getRangeAt(0);
-                              const pre = document.createElement("pre");
-                              pre.innerHTML = "<code>" + selection.toString() + "</code>";
-                              range.deleteContents();
-                              range.insertNode(pre);
-                          }}
-                          title="Code Block"
-                      >
-                          <FaFileCode />
-                      </button>
+                        <div className="icon-toolbar-wrapper">
+                            <button type="button" onClick={() => applyFormat("bold")} title="Bold"><FaBold /></button>
+                        </div>
+                        <div className="icon-toolbar-wrapper">
+                            <button type="button" onClick={() => applyFormat("italic")} title="Italic"><FaItalic /></button>
+                        </div>
                     </div>
-                    
+
                     <div id="share-solution-form-group">
                         <label htmlFor="solution-editor">Content</label>
                         {/* Rich text editor adapted from CreatePostModal */}
-                        <div 
-                          ref={editorRef}
-                          id="solution-editor"
-                          contentEditable
-                          suppressContentEditableWarning
-                          placeholder="Write your explanation and code here..."
+                        <div
+                            ref={editorRef}
+                            id="solution-editor"
+                            contentEditable
+                            suppressContentEditableWarning
+                            placeholder="Write your explanation and code here..."
                         ></div>
                     </div>
-                    
+
                     {submitError && <div id="share-solution-error">{submitError}</div>}
-                    
+
                     <div id="share-solution-modal-actions">
                         <button
                             type="button"

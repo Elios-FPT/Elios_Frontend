@@ -135,12 +135,12 @@ const SolutionView = ({ problemId }) => {
                             </div>
 
                             <div className="solution-footer">
-                                <span className="solution-stat-item up" onClick={(e) => handleUpvote(sol.postId, index, e)}>
+                                {/* <span className="solution-stat-item up" onClick={(e) => handleUpvote(sol.postId, index, e)}>
                                     <FaThumbsUp /> {sol.upvoteCount}
                                 </span>
                                 <span className="solution-stat-item down" onClick={(e) => handleDownvote(sol.postId, index, e)}>
                                     <FaThumbsDown /> {sol.downvoteCount}
-                                </span>
+                                </span> */}
                             </div>
                         </div>
                     ))}
