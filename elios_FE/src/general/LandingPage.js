@@ -73,32 +73,6 @@ const LandingPage = () => {
     <div id="landing-bg-landingPage">
       {/* Header Section */}
       <div id="header-section-landingPage">
-            {/* <Nav.Link onClick={toggleLanguage} style={{ cursor: "pointer" }}>
-            </Nav.Link> */}
-                <Spinner animation="border" size="sm" /> Đang tải ...
-              <>
-                <Nav.Link
-                  onClick={() => navigate("/forum")}
-                  style={{ cursor: "pointer" }}
-                >
-                  Diễn Đàn
-                </Nav.Link>
-                <Nav.Link
-                  onClick={() => navigate("/codingChallenge")}
-                  style={{ cursor: "pointer" }}
-                >
-                  Thử Thách Lập Trình
-                </Nav.Link>
-                <Nav.Link
-                  onClick={() => (window.location.href = API_ENDPOINTS.LOGIN_PATH)}
-                  style={{ cursor: "pointer" }}
-                >
-                  Đăng nhập
-                </Nav.Link>
-              </>
-                  Trang Cá Nhân
-                  Phỏng Vấn Thử Với AI
-                  Đăng xuất
         <Container id="main-content-landingPage">
           <Row>
             <Col md={6} className="d-flex" id="align-items-center-landingPage">

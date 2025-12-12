@@ -175,7 +175,7 @@ const UserResume = () => {
               ))
             ) : (
               <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
-                <p>Chưa có CV nào. Hãy tạo CV đầu tiên của bạn!</p> {/* Translated */}
+                <p>Chưa có CV nào. Hãy tạo CV đầu tiên của bạn!</p>
               </div>
             )}
           </div>

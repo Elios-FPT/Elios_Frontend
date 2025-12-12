@@ -64,7 +64,6 @@ function App() {
     <BrowserRouter>
       <div className="app-wrapper">
         <UserNavbar/>
-        <div style={{marginTop: 80}}></div>
         <Routes>
           {/* Public */}
           <Route path="/" element={<LandingPage />} />

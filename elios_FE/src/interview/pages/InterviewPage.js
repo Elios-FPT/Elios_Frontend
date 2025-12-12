@@ -41,7 +41,6 @@ function InterviewPage() {
   const [isPlanning, setIsPlanning] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Peer Review states
   const [publicInterviews, setPublicInterviews] = useState([]);
   const [isLoadingPublic, setIsLoadingPublic] = useState(false);
   const [submissionId, setSubmissionId] = useState(null);
@@ -52,7 +51,6 @@ function InterviewPage() {
   const [savingQuestionId, setSavingQuestionId] = useState(null);
   const [isProgressLoading, setIsProgressLoading] = useState(false);
 
-  // ==================== EFFECTS ====================
   useEffect(() => {
     if (activeSection === 'review-others') {
       fetchPublicInterviews();
@@ -62,7 +60,6 @@ function InterviewPage() {
     };
   }, [activeSection, wsUrl]);
 
-  // ==================== FETCH PUBLIC INTERVIEWS ====================
   const fetchPublicInterviews = async () => {
     setIsLoadingPublic(true);
     try {
@@ -79,7 +76,6 @@ function InterviewPage() {
     }
   };
 
-  // ==================== FETCH CONVERSATION (FIXED) ====================
   const fetchInterviewConversation = async (interviewSessionId) => {
     try {
       const response = await axios.get(
@@ -97,7 +93,6 @@ function InterviewPage() {
     }
   };
 
-  // ==================== START REVIEW ====================
   const handleStartReview = async (interviewSessionId) => {
     try {
       setInterviewSessionId(interviewSessionId);
@@ -150,7 +145,6 @@ function InterviewPage() {
       setInterviewSessionId(null);
     }
   };
-  // ==================== PROGRESS & SAVE ====================
   const fetchReviewProgress = async (subId) => {
     if (!subId) return;
     setIsProgressLoading(true);
@@ -234,7 +228,6 @@ function InterviewPage() {
     setInterviewSessionId(null);
   };
 
-  // ==================== UPLOAD CV & START INTERVIEW ====================
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -311,13 +304,11 @@ function InterviewPage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // ==================== MỚI: TẠO DANH SÁCH CÁC ITEM CẦN REVIEW ====================
   const buildReviewableItems = () => {
     if (!conversationMessages.length || !reviewProgress) return [];
 
-    // Map để lưu câu hỏi theo ID (cả main và follow-up)
     const questionsMap = {};
-    const answersByQuestion = {}; // questionId/followupId => [answers]
+    const answersByQuestion = {};
 
     conversationMessages.forEach((msg) => {
       if (msg.type === 'question' || msg.type === 'followup') {
@@ -335,13 +326,11 @@ function InterviewPage() {
 
     const items = [];
 
-    // Duyệt tất cả các câu hỏi (main + follow-up)
     Object.keys(questionsMap).forEach((qId) => {
       const question = questionsMap[qId];
       const answers = answersByQuestion[qId] || [];
 
       if (answers.length === 0) {
-        // Chưa trả lời → vẫn cho review (có thể chấm 1 sao + comment)
         items.push({
           reviewId: `unanswered-${qId}`,
           question,
@@ -350,10 +339,8 @@ function InterviewPage() {
           parentSequence: question.parent_sequence ?? question.sequence,
         });
       } else {
-        // Lấy câu trả lời cuối cùng
         const finalAnswer = answers[answers.length - 1];
 
-        // Tìm review đã lưu (nếu có)
         const savedReview = reviewProgress.reviews?.find(
           (r) => r.questionId === qId
         ) || {
@@ -373,7 +360,6 @@ function InterviewPage() {
       }
     });
 
-    // Sắp xếp theo thứ tự xuất hiện trong conversation
     return items.sort((a, b) => {
       const seqA = a.parentSequence ?? a.question.sequence;
       const seqB = b.parentSequence ?? b.question.sequence;
@@ -383,7 +369,6 @@ function InterviewPage() {
   };
 
   const reviewableItems = buildReviewableItems();
-  // ==================== RENDER KHI ĐANG PHỎNG VẤN HOẶC REVIEW ====================
   if (interviewId || isReviewing) {
     return (
       <div id="interview-page">
@@ -515,7 +500,6 @@ function InterviewPage() {
     );
   }
 
-  // ==================== TRANG CHỌN CHẾ ĐỘ ====================
   return (
     <div id="interview-page">
       <div id="interview-container">
@@ -721,7 +705,6 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
         position: 'relative',
       }}
     >
-      {/* Badge trạng thái */}
       <div
         style={{
           position: 'absolute',
@@ -738,7 +721,6 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
         {isSaved ? 'Đã lưu' : 'Chưa lưu'}
       </div>
 
-      {/* Badge Follow-up */}
       {item.isFollowUp && (
         <div
           style={{
@@ -761,7 +743,6 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
         Câu hỏi: {item.question.text}
       </h3>
 
-      {/* Trả lời */}
       <div
         style={{
           background: hasAnswer ? '#f8fafc' : '#fee2e2',
@@ -800,7 +781,6 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
         )}
       </div>
 
-      {/* Điểm số */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, margin: '28px 0' }}>
         <div>
           <label style={{ display: 'block', marginBottom: 10, fontWeight: 600, color: '#1e40af', fontSize: 16 }}>
@@ -851,7 +831,6 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
         </div>
       </div>
 
-      {/* Comment */}
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
@@ -869,7 +848,6 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
         }}
       />
 
-      {/* Nút Lưu */}
       <div style={{ marginTop: 20, textAlign: 'right' }}>
         <button
           onClick={handleSave}
