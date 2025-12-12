@@ -23,7 +23,7 @@ const AdminManageCategory = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES, {
+            const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES_FORUM, {
                 withCredentials: true,
             });
             // Assuming the data is in response.data.responseData based on your note.json
