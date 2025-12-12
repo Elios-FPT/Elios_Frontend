@@ -300,7 +300,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
             contentClassName="solution-detail-modal-content" 
             id="solution-detail-modal"
         >
-            <Modal.Header closeButton closeVariant="white" style={{ background: '#1e1e1e' }}>
+            <Modal.Header closeButton closeVariant="white" >
                 {loading || !solution ? (
                     <Modal.Title>Loading...</Modal.Title>
                 ) : (
