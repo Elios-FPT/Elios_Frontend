@@ -2,7 +2,7 @@
 
 /* Main Modal Content Wrapper */
 .solution-detail-modal-content {
-    background-color: #1e1e1e; /* Dark background for the whole modal */
+    background-color: #1e1e1e!important; /* Dark background for the whole modal */
     color: #eee;
     border: 1px solid #333;
     border-radius: 10px;
@@ -20,7 +20,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid #0F8A57; /* Brand green border */
+    border: 2px solid #0F8A57;
     object-fit: cover;
 }
 
