@@ -115,7 +115,7 @@ const PostDetail = () => {
     const handleActionError = (error) => {
         if (error.response && error.response.status === 403) {
             // Use the message from the backend which contains ban reason and time
-            setActionError(error.response.data.message || "Action forbidden.");
+            setActionError(error.response.data.message || "Hành động bị cấm."); // Translated fallback
             
             // Scroll to top to ensure user sees the message
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -131,12 +131,12 @@ const PostDetail = () => {
         setActionError(null); // Clear previous errors
         if (!content.trim()) return;
 
-        let currentUserName = "You";
+        let currentUserName = "Bạn"; // Translated
         let currentUserAvatar = "/default-avatar.png";
 
         try {
             if (user) {
-                currentUserName = `${user.firstName} ${user.lastName}`.trim() || "You";
+                currentUserName = `${user.firstName} ${user.lastName}`.trim() || "Bạn"; // Translated
                 currentUserAvatar = user.avatarUrl || "/default-avatar.png";
             }
         } catch (e) {
@@ -245,7 +245,9 @@ const PostDetail = () => {
                 { targetType, targetId, reason, details: details ? details.trim() : "" },
                 { withCredentials: true, headers: { "Content-Type": "application/json" } }
             );
-            alert(`${targetType} reported successfully!`);
+            // Translated success message logic
+            const targetName = targetType === "Post" ? "Bài viết" : "Bình luận";
+            alert(`${targetName} đã được báo cáo thành công!`); 
         } catch (error) {
             handleActionError(error);
         }
@@ -304,7 +306,7 @@ const PostDetail = () => {
 
     // --- Delete Handler ---
     const handleDeleteClick = async (commentId) => {
-        if (!window.confirm("Are you sure you want to delete this comment?")) return;
+        if (!window.confirm("Bạn có chắc chắn muốn xóa bình luận này không?")) return; // Translated
         setActionError(null);
 
         // 1. Update UI immediately
@@ -363,15 +365,15 @@ const PostDetail = () => {
                                         {isAuthor ? (
                                             <>
                                                 <Dropdown.Item onClick={() => handleStartEdit(comment)}>
-                                                    <FaEdit className="me-2" /> Edit
+                                                    <FaEdit className="me-2" /> Chỉnh sửa {/* Translated */}
                                                 </Dropdown.Item>
                                                 <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger">
-                                                    <FaTrash className="me-2" /> Delete
+                                                    <FaTrash className="me-2" /> Xóa {/* Translated */}
                                                 </Dropdown.Item>
                                             </>
                                         ) : (
                                             <Dropdown.Item onClick={() => handleShowCommentReportModal(comment.commentId)}>
-                                                <FaFlag className="me-2" /> Report
+                                                <FaFlag className="me-2" /> Báo cáo {/* Translated */}
                                             </Dropdown.Item>
                                         )}
                                     </Dropdown.Menu>
@@ -390,10 +392,10 @@ const PostDetail = () => {
                                     />
                                     <div className="d-flex gap-2">
                                         <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}>
-                                            <FaSave className="me-1" /> Save
+                                            <FaSave className="me-1" /> Lưu {/* Translated */}
                                         </Button>
                                         <Button size="sm" variant="secondary" onClick={handleCancelEdit}>
-                                            <FaTimes className="me-1" /> Cancel
+                                            <FaTimes className="me-1" /> Hủy {/* Translated */}
                                         </Button>
                                     </div>
                                 </div>
@@ -405,7 +407,7 @@ const PostDetail = () => {
                             {!isEditing && (
                                 <div className="comment-actions mt-1">
                                     <Button variant="link" size="sm" className="p-0 reply-button" onClick={() => handleSetReply(comment)}>
-                                        Reply
+                                        Phản hồi {/* Translated */}
                                     </Button>
                                 </div>
                             )}
@@ -420,7 +422,7 @@ const PostDetail = () => {
     };
 
     if (loading) return <><UserNavbar /><div id="post-detail-background" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingCircle1 /></div></>;
-    if (!post) return <><UserNavbar /><div id="post-detail-background" className="text-center pt-5 text-white"><p>Post not found.</p><Button onClick={() => navigate("/forum")} variant="outline-light">Back to Forum</Button></div></>;
+    if (!post) return <><UserNavbar /><div id="post-detail-background" className="text-center pt-5 text-white"><p>Không tìm thấy bài viết.</p><Button onClick={() => navigate("/forum")} variant="outline-light">Quay lại diễn đàn</Button></div></>; // Translated
 
     return (
         <>
@@ -433,14 +435,14 @@ const PostDetail = () => {
                         <div id="post-action-error-notification">
                             <FaExclamationTriangle className="me-2" />
                             <span>{actionError}</span>
-                            <button onClick={() => setActionError(null)} id="post-action-error-close" title="Dismiss">
+                            <button onClick={() => setActionError(null)} id="post-action-error-close" title="Đóng">
                                 <FaTimes />
                             </button>
                         </div>
                     )}
 
                     <div id="post-detail-back-button">
-                        <Button variant="outline-light" onClick={() => navigate("/forum")}>← Back to Forum</Button>
+                        <Button variant="outline-light" onClick={() => navigate("/forum")}>← Quay lại diễn đàn</Button> {/* Translated */}
                     </div>
                     <Card.Header id="post-detail-card-header">
                         <img src={post.authorAvatarUrl} alt="user" id="post-detail-avatar" />
@@ -457,7 +459,7 @@ const PostDetail = () => {
                             </ReactMarkdown>
                         </div>
                         <hr />
-                        <h5 id="post-detail-comments-title">Comments</h5>
+                        <h5 id="post-detail-comments-title">Bình luận</h5> {/* Translated */}
                         {renderComments(post.comments || [])}
                         <CommentForm
                             postStats={{

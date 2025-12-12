@@ -194,7 +194,7 @@ const Forum = () => {
                         className="w-100 mb-2"
                         id="user-forum-btn-outline-light"
                       >
-                        Your Notification
+                        Thông báo
                       </Button>
                     </div>
 
@@ -204,7 +204,7 @@ const Forum = () => {
                         onClick={() => setShowCreatePostModal(true)}
                       >
                         <span role="img" aria-label="chat"></span>{" "}
-                        Discuss Now
+                        Tạo Bài Viết Mới
                       </div>
                       <Button
                         variant="outline-light"
@@ -213,14 +213,14 @@ const Forum = () => {
                         id="user-forum-btn-outline-light"
                         onClick={() => navigate("/forum/user-posts")}
                       >
-                        Your Post Storage
+                        Đi tới Kho Bài Viết Của Tôi
                       </Button>
                     </div>
 
                     <ListGroup variant="flush" className="mt-3">
                       <div className="user-forum-sidebar-banner mb-3">
                         <div id="user-forum-sidebar-title">
-                          Topics
+                          Chủ Đề Bài Viết
                         </div>
                       </div>
                       
@@ -230,7 +230,7 @@ const Forum = () => {
                         onClick={() => setCategoryId(null)}
                         style={{ cursor: 'pointer' }}
                       >
-                        All Topics
+                        Tất cả danh mục
                       </ListGroup.Item>
 
                       {categories && categories.slice(0, 12).map((category) => (

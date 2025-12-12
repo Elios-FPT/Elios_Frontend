@@ -1,6 +1,8 @@
-/* src/admin/styles/AdminSidebar.css */
-#admin-sidebar-nav {
-    width: 250px;
+/* src/forumModerator/styles/ContentModeratorSidebar.css */
+
+/* FIXED: Changed #admin-sidebar-nav to #moderator-sidebar-nav */
+#moderator-sidebar-nav {
+    width: 270px;
     position: fixed; /* Fixes the sidebar to the left */
     top: 0;
     left: 0;
@@ -9,6 +11,7 @@
     color: #ecf0f1;
     padding-top: 20px;
     overflow-y: auto;
+    z-index: 1000; /* Ensure it stays on top */
 }
 
 #sidebar-header {
@@ -21,6 +24,7 @@
 #sidebar-header h2 {
     margin: 0;
     color: #ffffff;
+    font-size: 1.5rem;
 }
 
 #sidebar-menu-list, .submenu {

@@ -28,7 +28,7 @@ const UserResume = () => {
         setResumes(data);
       } catch (error) {
         console.error("Error fetching resumes:", error);
-        setError("Failed to load resumes. Please try again later.");
+        setError("Không thể tải danh sách hồ sơ. Vui lòng thử lại sau."); // Translated
       } finally {
         setLoading(false);
       }
@@ -51,7 +51,7 @@ const UserResume = () => {
 
   // Handles the submission from the modal
   const handleSubmitNewResume = async () => {
-    const ResumeTitle = cvTitle.trim() || "Untitled Resume"; // Use title from state
+    const ResumeTitle = cvTitle.trim() || "Hồ sơ chưa đặt tên"; // Translated
     
     try {
       
@@ -70,7 +70,7 @@ const UserResume = () => {
       const newResumeId = response.data?.responseData?.id;
       if (!newResumeId) {
         console.error("No resume ID returned from server.");
-        alert("Error: Could not get new resume ID from server.");
+        alert("Lỗi: Không thể nhận ID hồ sơ mới từ máy chủ."); // Translated
         setIsModalOpen(false); 
         return;
       }
@@ -80,7 +80,7 @@ const UserResume = () => {
     } catch (error) {
       console.error("Error creating resume:", error);
       console.log("API Endpoint used: POST", API_ENDPOINTS.CREATE_USER_CV);
-      alert("Failed to create resume. Please try again.");
+      alert("Tạo hồ sơ thất bại. Vui lòng thử lại."); // Translated
       setIsModalOpen(false);
     }
   };
@@ -93,7 +93,7 @@ const UserResume = () => {
 
   // Handler for deleting a resume
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this resume?")) {
+    if (window.confirm("Bạn có chắc chắn muốn xóa hồ sơ này không?")) { // Translated
       try {
         await axios.delete(`${API_ENDPOINTS.DELETE_USER_CV(id)}`, {
           withCredentials: true,
@@ -103,7 +103,7 @@ const UserResume = () => {
         setResumes(resumes.filter((resume) => resume.id !== id));
       } catch (error) {
         console.error("Error deleting resume:", error);
-        alert("Failed to delete resume. Please try again.");
+        alert("Xóa hồ sơ thất bại. Vui lòng thử lại."); // Translated
       }
     }
   };
@@ -114,7 +114,7 @@ const UserResume = () => {
       <div id="user-resume-background">
         <UserNavbar />
         <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px" }}>
-          <p>Loading your resumes...</p>
+          <p>Đang tải hồ sơ của bạn...</p> {/* Translated */}
         </div>
       </div>
     );
@@ -127,7 +127,7 @@ const UserResume = () => {
         <UserNavbar />
         <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px", color: "red" }}>
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
+          <button onClick={() => window.location.reload()}>Thử lại</button> {/* Translated */}
         </div>
       </div>
     );
@@ -139,9 +139,9 @@ const UserResume = () => {
         <UserNavbar />
         <div id="user-resume-dashboard">
           <div id="dashboard-header">
-            <h1>My Resumes</h1>
+            <h1>CV của tôi</h1> {/* Translated */}
             <button id="create-resume-btn" onClick={handleCreateNew}>
-              + Create New CV
+              Tạo CV mới {/* Translated */}
             </button>
           </div>
 
@@ -151,10 +151,10 @@ const UserResume = () => {
                 <div className="resume-card" key={resume.id}>
                   <div className="card-content">
                     <h3 className="resume-card-title">
-                      {resume.resumeTitle || "Untitled Resume"}
+                      {resume.resumeTitle || "Hồ sơ chưa đặt tên"} {/* Translated */}
                     </h3>
                     <p className="resume-card-updated">
-                      Last updated: {new Date(resume.updatedAt).toLocaleDateString()}
+                      Cập nhật lần cuối: {new Date(resume.updatedAt).toLocaleDateString()} {/* Translated */}
                     </p>
                   </div>
                   <div className="resume-card-actions">
@@ -162,20 +162,20 @@ const UserResume = () => {
                       className="resume-action-btn edit"
                       onClick={() => handleEdit(resume.id)}
                     >
-                      Edit
+                      Sửa {/* Translated */}
                     </button>
                     <button
                       className="resume-action-btn delete"
                       onClick={() => handleDelete(resume.id)}
                     >
-                      Delete
+                      Xóa {/* Translated */}
                     </button>
                   </div>
                 </div>
               ))
             ) : (
               <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
-                <p>No resumes yet. Create your first one!</p>
+                <p>Chưa có CV nào. Hãy tạo CV đầu tiên của bạn!</p> {/* Translated */}
               </div>
             )}
           </div>
@@ -186,22 +186,22 @@ const UserResume = () => {
       {isModalOpen && (
         <div id="create-resume-modal-backdrop" onClick={handleCloseModal}>
           <div id="create-resume-modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Create New Resume</h2>
-            <p>Please enter a title for your new resume.</p>
+            <h2>Tạo hồ sơ mới</h2> {/* Translated */}
+            <p>Vui lòng nhập tiêu đề cho hồ sơ mới của bạn.</p> {/* Translated */}
             <input
               type="text"
               id="resume-title-input"
               value={cvTitle}
               onChange={(e) => setCvTitle(e.target.value)}
-              placeholder="eg. Khanh Dep Trai Resume"
+              placeholder="Ví dụ: CV Ứng tuyển..." // Translated
               autoFocus
             />
             <div id="modal-action-buttons">
               <button id="modal-cancel-btn" onClick={handleCloseModal}>
-                Cancel
+                Hủy {/* Translated */}
               </button>
               <button id="modal-create-btn" onClick={handleSubmitNewResume}>
-                Create
+                Tạo {/* Translated */}
               </button>
             </div>
           </div>

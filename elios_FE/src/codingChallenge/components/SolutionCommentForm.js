@@ -39,12 +39,12 @@ const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, o
             <Form id="solution-comment-form" onSubmit={handleSubmit}>
                 {replyingTo && (
                     <div id="solution-replying-to-banner">
-                        Replying to : <strong>{replyingTo.author}</strong>
+                        Đang trả lời : <strong>{replyingTo.author}</strong> {/* Translated */}
                         <Button
                             variant="link"
                             id="solution-comment-cancel-reply-btn"
                             onClick={onCancelReply}
-                            title="Cancel reply"
+                            title="Hủy trả lời" // Translated
                         >
                             <FaTimes />
                         </Button>
@@ -55,14 +55,14 @@ const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, o
                     {/* <span
                         className="stat-item upvote"
                         onClick={onUpvote}
-                        title="Upvote Solution"
+                        title="Thích giải pháp"
                     >
                         <FaThumbsUp /> {postStats.upvoteCount}
                     </span>
                     <span
                         className="stat-item downvote"
                         onClick={onDownvote}
-                        title="Downvote Solution"
+                        title="Không thích giải pháp"
                     >
                         <FaThumbsDown /> {postStats.downvoteCount}
                     </span> */}
@@ -76,7 +76,7 @@ const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, o
                     <span 
                         className="stat-item report" 
                         onClick={handleShowReportModal} 
-                        title="Report Solution"
+                        title="Báo cáo giải pháp" // Translated
                     >
                         <FaFlag />
                     </span>
@@ -89,13 +89,13 @@ const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, o
                         rows={3}
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        placeholder={replyingTo ? `Write your reply...` : "Write a comment..."}
+                        placeholder={replyingTo ? `Viết câu trả lời của bạn...` : "Viết bình luận..."} // Translated
                         required
                         className="solution-comment-input"
                     />
                 </Form.Group>
                 <Button variant="success" size="sm" className="mt-2" type="submit">
-                    Post Comment
+                    Đăng bình luận {/* Translated */}
                 </Button>
             </Form>
 

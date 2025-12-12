@@ -27,7 +27,7 @@ const UserNavbar = () => {
       { to: "/forum", label: t("UserNavbar.forum") },
       { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
     ];
-    
+
     // 2. Links Private (Chỉ User đã đăng nhập mới thấy)
     const userPrivateLinks = [
       { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
@@ -54,23 +54,22 @@ const UserNavbar = () => {
     // Các role đặc biệt: thêm link quản lý
     if (role === "Resource Manager") {
       linksToShow.push(
-        { to: "/manage-coding-bank", label: "Manage Coding Bank" },
-        { to: "/manage-project-bank", label: "Manage Project Bank" },
-        { to: "/manage-interviews", label: "Manage Interviews" },
-        { to: "/manage-prompts", label: "Manage Prompts" }
+        { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
+        { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
+        { to: "/manage-interviews", label: "Quản lý Phỏng vấn" },
+        { to: "/manage-prompts", label: "Quản lý Prompt" }
       );
     }
 
     if (role === "Content Moderator") {
-      linksToShow.push({ to: "/manage-forum", label: "Manage Forum" });
+      linksToShow.push({ to: "/manage-forum", label: "Quản lý Diễn đàn" });
     }
 
     if (role === "Admin") {
       linksToShow.push(
-        { to: "/manage-coding-bank", label: "Manage Coding Bank" },
-        { to: "/manage-project-bank", label: "Manage Project Bank" },
-        { to: "/manage-forum", label: "Manage Forum" },
-        { to: "/admin-dashboard", label: "Admin Dashboard" }
+        { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
+        { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
+        { to: "/content-moderator", label: "Quản lý Diễn đàn" },
       );
     }
 

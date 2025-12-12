@@ -95,6 +95,7 @@ const UserPostStorageCard = ({ post, onDelete }) => {
           <span className="user-post-stat-item">
             <FaEye /> {post.viewsCount}
           </span>
+          {/* Note: post.status is backend data, kept as is to preserve CSS class mapping */}
           <span id="user-post-card-status" className={post.status.toLowerCase()}>
             {post.status}
           </span>
@@ -105,15 +106,10 @@ const UserPostStorageCard = ({ post, onDelete }) => {
       <div id="user-post-card-controls">
         <div id="user-post-card-buttons">
           <button id="user-post-card-btn-edit" onClick={handleEdit}>
-            Edit
-          </button>
-          <button id="user-post-card-btn-submit" onClick={handleSubmit}>
-            Submit
+            Sửa bài viết
           </button>
         </div>
 
-        {/* --- MODIFIED --- */}
-        {/* Use the new handlers to manage showing/hiding with a delay */}
         <div
           id="user-post-card-menu-container"
           onMouseEnter={handleMouseEnter}
@@ -132,13 +128,7 @@ const UserPostStorageCard = ({ post, onDelete }) => {
                 className="user-post-card-menu-item"
                 onClick={handleDelete}
               >
-                Delete
-              </button>
-              <button
-                className="user-post-card-menu-item"
-                onClick={handleArchive}
-              >
-                Archive
+                Xóa {/* Translated from Delete */}
               </button>
             </div>
           )}

@@ -1,8 +1,8 @@
-// src/admin/pages/PendingPosts.js
+// file: elios_FE/src/forumModerator/pages/PendingPosts.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../../../api/apiConfig';
-import PostPreviewModal from '../forumComponents/PostPreviewModal'
+import { API_ENDPOINTS } from '../../api/apiConfig';
+import PostPreviewModal from '../components/PostPreviewModal'
 import '../styles/PendingPosts.css';
 
 const PendingPosts = () => {
@@ -36,7 +36,7 @@ const PendingPosts = () => {
             setPosts(response.data.responseData || []);
         } catch (err) {
             console.error('Error fetching pending posts:', err);
-            setError('Failed to load posts. Please try again later.');
+            setError('Không thể tải bài viết. Vui lòng thử lại sau.'); // Translated
         } finally {
             setLoading(false);
         }
@@ -56,13 +56,13 @@ const PendingPosts = () => {
             endpoint = API_ENDPOINTS.APPROVE_PENDING_POST(postId); // Assuming this exists
             method = 'put';
         } else if (action === 'reject') {
-            const reason = window.prompt("Please enter a reason for rejection (required):");
+            const reason = window.prompt("Vui lòng nhập lý do từ chối (bắt buộc):"); // Translated
 
             if (reason === null) {
                 return; 
             }
             if (reason.trim() === "") {
-                alert("A reason is required to reject a post.");
+                alert("Bạn cần phải nhập lý do để từ chối bài viết."); // Translated
                 return;
             }
             endpoint = API_ENDPOINTS.REJECT_PENDING_POST(postId); // Assuming this exists
@@ -84,7 +84,9 @@ const PendingPosts = () => {
             console.error(`Error ${action === 'approve' ? 'approving' : 'rejecting'} post:`, err);
             // Revert UI on failure
             fetchPendingPosts(); 
-            alert(`Failed to ${action} post.`);
+            // Translated action logic
+            const actionText = action === 'approve' ? 'duyệt' : 'từ chối';
+            alert(`Thất bại khi ${actionText} bài viết.`);
         }
     };
 
@@ -104,7 +106,7 @@ const PendingPosts = () => {
 
     const renderContent = () => {
         if (loading) {
-            return <div className="loader">Loading posts...</div>;
+            return <div className="loader">Đang tải bài viết...</div>; // Translated
         }
 
         if (error) {
@@ -112,19 +114,19 @@ const PendingPosts = () => {
         }
 
         if (posts.length === 0) {
-            return <p>No pending posts found.</p>;
+            return <p>Không tìm thấy bài viết chờ duyệt nào.</p>; // Translated
         }
 
         return (
             <table id="pending-posts-table">
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Category</th>
-                        <th>Type</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
+                        <th>Tiêu đề</th> {/* Translated */}
+                        <th>Tác giả</th> {/* Translated */}
+                        <th>Danh mục</th> {/* Translated */}
+                        <th>Loại</th> {/* Translated */}
+                        <th>Ngày tạo</th> {/* Translated */}
+                        <th>Hành động</th> {/* Translated */}
                     </tr>
                 </thead>
                 <tbody>
@@ -136,9 +138,9 @@ const PendingPosts = () => {
                             <td>{post.postType}</td>
                             <td>{new Date(post.createdAt).toLocaleDateString()}</td>
                             <td className="action-buttons">
-                                <button className="btn-preview" onClick={() => handlePreview(post)}>Preview</button>
-                                <button className="btn-approve" onClick={() => handleAction(post.postId, 'approve')}>Approve</button>
-                                <button className="btn-reject" onClick={() => handleAction(post.postId, 'reject')}>Reject</button>
+                                <button className="btn-preview" onClick={() => handlePreview(post)}>Xem trước</button> {/* Translated */}
+                                <button className="btn-approve" onClick={() => handleAction(post.postId, 'approve')}>Duyệt</button> {/* Translated */}
+                                <button className="btn-reject" onClick={() => handleAction(post.postId, 'reject')}>Từ chối</button> {/* Translated */}
                             </td>
                         </tr>
                     ))}
@@ -149,17 +151,17 @@ const PendingPosts = () => {
 
     return (
         <div id="pending-posts-container">
-            <h1>Pending Forum Posts</h1>
-            <p>Here you can review and approve posts submitted by users.</p>
+            <h1>Bài viết diễn đàn chờ duyệt</h1> {/* Translated */}
+            <p>Tại đây bạn có thể xem xét và duyệt các bài viết do người dùng gửi lên.</p> {/* Translated */}
 
             <form id="pending-posts-controls" onSubmit={handleSearchSubmit}>
                 <input
                     type="text"
-                    placeholder="Search by title, author, category..."
+                    placeholder="Tìm kiếm theo tiêu đề, tác giả, danh mục..." // Translated
                     value={searchTerm}
                     onChange={handleSearchChange}
                 />
-                <button type="submit">Search</button>
+                <button type="submit">Tìm kiếm</button> {/* Translated */}
             </form>
 
             <div id="posts-list">

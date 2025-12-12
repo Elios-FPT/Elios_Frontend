@@ -1,8 +1,8 @@
-// file: elios_FE/src/admin/components/forumComponents/AdminManageCategoryCard.js
+// file: elios_FE/src/forumModerator/components/ManageCategoryCard.js
 import React, { useState } from "react";
-import '../styles/AdminManageCategoryCard.css';
+import '../styles/ManageCategoryCard.css';
 
-const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
+const ManageCategoryCard = ({ category, onUpdate, onDelete }) => {
     const [isEditing, setIsEditing] = useState(false);
     
     // State to hold form data during edit
@@ -44,7 +44,7 @@ const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
             setIsEditing(false); // Exit edit mode on success
         } catch (err) {
             console.error("Save failed:", err);
-            setError("Failed to save changes. Please try again.");
+            setError("Lưu thay đổi thất bại. Vui lòng thử lại."); // Translated
         } finally {
             setIsSubmitting(false);
         }
@@ -59,15 +59,15 @@ const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
         <>
             <div className="card-view-info">
                 <span className={`status-badge ${category.isActive ? 'active' : 'inactive'}`}>
-                    {category.isActive ? "Active" : "Inactive"}
+                    {category.isActive ? "Hoạt động" : "Không hoạt động"} {/* Translated */}
                 </span>
                 <h3>{category.name}</h3>
-                <p>{category.description || "No description provided."}</p>
+                <p>{category.description || "Chưa có mô tả."}</p> {/* Translated */}
                 <small>Slug: {category.slug}</small>
             </div>
             <div className="card-actions">
-                <button onClick={handleEditToggle} className="btn-edit">Edit</button>
-                <button onClick={handleDelete} className="btn-delete">Delete</button>
+                <button onClick={handleEditToggle} className="btn-edit">Sửa</button> {/* Translated */}
+                <button onClick={handleDelete} className="btn-delete">Xóa</button> {/* Translated */}
             </div>
         </>
     );
@@ -76,7 +76,7 @@ const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
         <>
             <form className="card-edit-form">
                 <div className="form-group">
-                    <label htmlFor={`name-${category.categoryId}`}>Name</label>
+                    <label htmlFor={`name-${category.categoryId}`}>Tên</label> {/* Translated */}
                     <input
                         type="text"
                         id={`name-${category.categoryId}`}
@@ -85,7 +85,7 @@ const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor={`desc-${category.categoryId}`}>Description</label>
+                    <label htmlFor={`desc-${category.categoryId}`}>Mô tả</label> {/* Translated */}
                     <textarea
                         id={`desc-${category.categoryId}`}
                         value={editDescription}
@@ -100,17 +100,17 @@ const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
                         checked={editIsActive}
                         onChange={(e) => setEditIsActive(e.target.checked)}
                     />
-                    <label htmlFor={`active-${category.categoryId}`}>Is Active</label>
+                    <label htmlFor={`active-${category.categoryId}`}>Kích hoạt</label> {/* Translated */}
                 </div>
                 
                 {error && <p className="card-error">{error}</p>}
             </form>
             <div className="card-actions">
                 <button onClick={handleSave} className="btn-save" disabled={isSubmitting}>
-                    {isSubmitting ? "Saving..." : "Save"}
+                    {isSubmitting ? "Đang lưu..." : "Lưu"} {/* Translated */}
                 </button>
                 <button onClick={handleCancel} className="btn-cancel" disabled={isSubmitting}>
-                    Cancel
+                    Hủy {/* Translated */}
                 </button>
             </div>
         </>
@@ -123,4 +123,4 @@ const AdminManageCategoryCard = ({ category, onUpdate, onDelete }) => {
     );
 };
 
-export default AdminManageCategoryCard;
+export default ManageCategoryCard;

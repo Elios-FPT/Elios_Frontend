@@ -38,12 +38,12 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
             <Form id="post-detail-comment-form" onSubmit={handleSubmit}>
                 {replyingTo && (
                     <div id="replying-to-banner">
-                        Replying to : <strong>{replyingTo.author}</strong>
+                        Đang trả lời : <strong>{replyingTo.author}</strong> {/* Translated */}
                         <Button
                             variant="link"
                             id="comment-form-cancel-reply-btn"
                             onClick={onCancelReply}
-                            title="Cancel reply"
+                            title="Hủy trả lời" // Translated
                         >
                             <FaTimes />
                         </Button>
@@ -55,14 +55,14 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
                     <span
                         className="upvote-stat-item up"
                         onClick={onUpvote}
-                        title="Upvote"
+                        title="Thích" // Translated
                     >
                         <FaThumbsUp /> {postStats.upvoteCount}
                     </span>
                     <span
                         className="downvote-stat-item down"
                         onClick={onDownvote}
-                        title="Downvote"
+                        title="Không thích" // Translated
                     >
                         <FaThumbsDown /> {postStats.downvoteCount}
                     </span>
@@ -72,7 +72,7 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
                     <span 
                         className="stat-item report" 
                         onClick={handleShowReportModal} // Trigger modal
-                        title="Report post"
+                        title="Báo cáo bài viết" // Translated
                         style={{ cursor: 'pointer' }} // Add pointer cursor
                     >
                         <FaFlag />
@@ -86,12 +86,12 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
                         rows={3}
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        placeholder={replyingTo ? `Write your reply...` : "Write a comment..."}
+                        placeholder={replyingTo ? `Viết câu trả lời của bạn...` : "Viết bình luận..."} // Translated
                         required
                     />
                 </Form.Group>
                 <Button variant="primary" size="sm" className="mt-2" type="submit">
-                    Post Comment
+                    Đăng bình luận {/* Translated */}
                 </Button>
             </Form>
 

@@ -27,7 +27,7 @@ const RoleProtectedRoute = ({ children, allowedRoles = [] }) => {
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
     if (user.role === "Resource Manager") return <Navigate to="/manage-coding-bank" replace />;
-    if (user.role === "Content Moderator") return <Navigate to="/manage-forum" replace />;
+    if (user.role === "Content Moderator") return <Navigate to="/content-moderator" replace />;
     if (user.role === "Admin") return <Navigate to="/admin" replace />;
     return <NoAccessPage />;
   }

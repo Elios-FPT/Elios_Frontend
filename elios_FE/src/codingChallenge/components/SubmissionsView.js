@@ -31,7 +31,7 @@ const SubmissionsView = ({ problemId }) => {
         setSubmissions(response.data?.data || []);
       } catch (err) {
         console.error("Error fetching submission history:", err);
-        setSubmissionError("Failed to load submission history.");
+        setSubmissionError("Không thể tải lịch sử nộp bài."); // Translated
       } finally {
         setSubmissionLoading(false);
       }
@@ -52,7 +52,7 @@ const SubmissionsView = ({ problemId }) => {
       setSubmissionDetails(response.data.data);
     } catch (err) {
       console.error("Error fetching submission details:", err);
-      setSubmissionError("Failed to load submission details.");
+      setSubmissionError("Không thể tải chi tiết bài nộp."); // Translated
     }
   };
 
@@ -75,28 +75,28 @@ const SubmissionsView = ({ problemId }) => {
 
   const getStatusText = (submission) => {
     if (submission.status === "COMPLETED") {
-      return submission.failedTestCaseId ? "Failed" : "Accepted";
+      return submission.failedTestCaseId ? "Thất bại" : "Chấp nhận"; // Translated
     }
-    return "Pending";
+    return "Đang xử lý"; // Translated
   };
 
   return (
     <>
       <div>
-        {submissionLoading && <div id="loading-message">Loading submissions...</div>}
+        {submissionLoading && <div id="loading-message">Đang tải danh sách bài nộp...</div>} {/* Translated */}
         {submissionError && <div id="error-message">{submissionError}</div>}
         {!submissionLoading && !submissionError && submissions.length === 0 && (
-          <p>No submissions found for this problem.</p>
+          <p>Không tìm thấy bài nộp nào cho vấn đề này.</p> // Translated
         )}
         {!submissionLoading && submissions.length > 0 && (
           <table id="submission-table">
             <thead>
               <tr>
-                <th>Submitted At</th>
-                <th>Status</th>
-                <th>Language</th>
-                <th>Runtime</th>
-                <th>Memory</th>
+                <th>Thời gian nộp</th> {/* Translated */}
+                <th>Trạng thái</th> {/* Translated */}
+                <th>Ngôn ngữ</th> {/* Translated */}
+                <th>Thời gian chạy</th> {/* Translated */}
+                <th>Bộ nhớ</th> {/* Translated */}
               </tr>
             </thead>
             <tbody>
@@ -120,7 +120,7 @@ const SubmissionsView = ({ problemId }) => {
           <div id="modal-content">
             <div id="modal-header">
               <h3 id="modal-title">
-                Submission Details - {new Date(selectedSubmission.submittedAt).toLocaleString()}
+                Chi tiết bài nộp - {new Date(selectedSubmission.submittedAt).toLocaleString()} {/* Translated */}
               </h3>
               <button id="modal-close-button" onClick={closeModal}>✕</button>
             </div>
@@ -128,13 +128,13 @@ const SubmissionsView = ({ problemId }) => {
               <>
                 <div id="modal-section">
                   <div id="modal-code-header">
-                    <h4>Code</h4>
+                    <h4>Mã nguồn</h4> {/* Translated */}
                     {/* Share Solution Button */}
                     <button 
                       id="share-solution-button" 
                       onClick={() => setIsSharingSolution(true)}
                     >
-                      Share Solution
+                      Chia sẻ giải pháp {/* Translated */}
                     </button>
                   </div>
                   <pre className="code-block">
@@ -142,20 +142,20 @@ const SubmissionsView = ({ problemId }) => {
                   </pre>
                 </div>
                 <div id="modal-section">
-                  <h4>Summary</h4>
-                  <p>Status: <span className={submissionDetails.summary.overallStatus === "PASSED" ? "status-passed" : "status-failed"}>{submissionDetails.summary.overallStatus}</span></p>
-                  <p>Total Test Cases: {submissionDetails.summary.totalTestCases}</p>
-                  <p>Passed: {submissionDetails.summary.passedTestCases}</p>
+                  <h4>Tổng quan</h4> {/* Translated */}
+                  <p>Trạng thái: <span className={submissionDetails.summary.overallStatus === "PASSED" ? "status-passed" : "status-failed"}>{submissionDetails.summary.overallStatus}</span></p>
+                  <p>Tổng số Test Case: {submissionDetails.summary.totalTestCases}</p> {/* Translated */}
+                  <p>Đã qua: {submissionDetails.summary.passedTestCases}</p> {/* Translated */}
                 </div>
                 <div id="modal-section">
-                  <h4>Test Case Results</h4>
+                  <h4>Kết quả kiểm thử</h4> {/* Translated */}
                   <table id="modal-table">
                     <thead>
                       <tr>
-                        <th>Status</th>
-                        <th>Output</th>
-                        <th>Runtime</th>
-                        <th>Memory</th>
+                        <th>Trạng thái</th> {/* Translated */}
+                        <th>Đầu ra</th> {/* Translated */}
+                        <th>Thời gian chạy</th> {/* Translated */}
+                        <th>Bộ nhớ</th> {/* Translated */}
                       </tr>
                     </thead>
                     <tbody>
@@ -174,7 +174,7 @@ const SubmissionsView = ({ problemId }) => {
             ) : submissionError ? (
               <div id="error-message">{submissionError}</div>
             ) : (
-              <div id="loading-message">Loading submission details...</div>
+              <div id="loading-message">Đang tải chi tiết bài nộp...</div> // Translated
             )}
           </div>
         </div>
