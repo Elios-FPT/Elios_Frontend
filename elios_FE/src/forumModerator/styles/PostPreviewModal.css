@@ -1,6 +1,5 @@
-/* file: elios_FE/src/admin/styles/PostPreviewModal.css */
+/* file: elios_FE/src/forumModerator/styles/PostPreviewModal.css */
 
-/* --- Modal Container Styling (Applied via contentClassName) --- */
 .admin-dark-modal {
     background-color: #1e1e1e !important;
     color: #eee !important;
@@ -48,6 +47,15 @@
   color: #dcdcdc;
 }
 
+/* --- FIX: Constrain Images to Container Width --- */
+#preview-modal-body .markdown-content img {
+  max-width: 100%;
+  height: auto; /* Maintains aspect ratio */
+  display: block; /* Removes extra space below inline images */
+  margin: 10px 0; /* Adds some spacing */
+  border-radius: 4px; /* Optional: Slight rounding */
+}
+
 /* Inline code styling */
 #preview-modal-body .markdown-content code {
   background-color: rgba(240, 98, 146, 0.15);
@@ -61,7 +69,7 @@
   background-color: #161b22;
   padding: 1rem;
   border-radius: 5px;
-  overflow-x: auto;
+  overflow-x: auto; /* Handles code block scrolling */
   border: 1px solid #333;
 }
 

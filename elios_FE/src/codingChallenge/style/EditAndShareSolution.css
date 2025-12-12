@@ -10,7 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1050; /* Higher than other modals/components */
+  z-index: 1050;
 }
 
 #share-solution-modal-content {
@@ -56,7 +56,7 @@
 
 #share-solution-form {
   padding: 20px;
-  overflow-y: auto; /* Allow form content to scroll */
+  overflow-y: auto;
 }
 
 #share-solution-form-group {
@@ -82,32 +82,51 @@
   box-shadow: none;
 }
 
-/* --- Toolbar Styles --- */
+/* --- Toolbar Styles (UPDATED) --- */
 #solution-toolbar {
   display: flex;
   gap: 10px;
-  padding: 6px;
-  background: #3a3a3a;
-  border-radius: 5px;
+  /* Removed background and padding from the main container */
   margin-bottom: 15px;
 }
 
-#solution-toolbar button {
-  background: none;
-  border: none;
-  color: #ddd;
-  font-size: 1.1em;
-  cursor: pointer;
-  transition: color 0.2s;
+/* Style for the wrapper around each button */
+.icon-toolbar-wrapper {
+  background-color: #252525;
+  border: 1px solid #555;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
 }
 
-#solution-toolbar button:hover {
-  color: #00bcd4;
+.icon-toolbar-wrapper:hover {
+  background-color: #0F8A57; /* Green hover background */
+  border-color: #0F8A57;
+  cursor: pointer;
+}
+
+/* Style for the buttons inside the wrapper */
+#solution-toolbar button {
+  background: transparent; /* Transparent so wrapper background shows */
+  border: none;
+  color: #ddd;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 8px 12px;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.icon-toolbar-wrapper:hover button {
+  color: #ffffff;
 }
 
 /* --- Editor Styles --- */
 #solution-editor {
-  min-height: 350px; /* Increased height for editing code and explanation */
+  min-height: 350px;
   background: #181a1b;
   color: #eee;
   border-radius: 5px;
@@ -117,16 +136,14 @@
   border: 1px solid #3a3a3a;
   line-height: 1.5;
   font-size: 0.95rem;
-  font-family: monospace; /* Use monospace for code-focused editing */
+  font-family: monospace;
 }
 
-/* Placeholder style for contentEditable */
 #solution-editor:empty:before {
   content: attr(placeholder);
   color: #666;
 }
 
-/* Ensure code blocks look distinct within the editor */
 #solution-editor pre {
   background: rgba(255, 255, 255, 0.05);
   padding: 10px;
@@ -139,7 +156,7 @@
 }
 
 #solution-editor code {
-  color: #00ff95; /* Highlight code text */
+  color: #00ff95;
 }
 
 /* --- Action Buttons --- */
@@ -196,7 +213,6 @@
   cursor: not-allowed;
 }
 
-/* Responsive adjustments */
 @media (max-width: 850px) {
   #share-solution-modal-content {
     width: 95%;

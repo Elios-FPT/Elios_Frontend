@@ -1,7 +1,7 @@
 // FRONT-END: elios_FE/src/general/LandingPage.js
 import React from "react";
 import { Container, Row, Col, Button, Navbar, Nav, Spinner } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUserProfile } from "../hooks/useUserProfile";
 import {
@@ -13,12 +13,10 @@ import "../styles/LandingPage.css";
 import { API_ENDPOINTS } from "../api/apiConfig";
 
 const LandingPage = () => {
-  const { t, i18n } = useTranslation();
   const { user, loading: profileLoading } = useUserProfile();
 
-  const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === "en" ? "vi" : "en");
-  };
+  const navigate = useNavigate();
+
 
   const creators = [
     { name: "Nguyễn Ngọc Tuấn Huy", quote: "Chill, dăm ba ChatGPT, tôi tạo chục con.", img: "https://via.placeholder.com/150" },
@@ -35,10 +33,10 @@ const LandingPage = () => {
     // Chỉ User mới thấy các link cơ bản
     const baseLinks = isUser
       ? [
-        { href: "/forum", label: t("landingPage.navbar.forum") },
-        { href: "/codingchallenge", label: t("landingPage.navbar.codingChallenge") },
-        { href: "/resume-builder", label: t("landingPage.navbar.buildCV") },
-        { href: "/mock-projects", label: t("landingPage.navbar.projectChallenge") || "Project Challenge" },
+        { href: "/forum", label: "Diễn Đàn" },
+        { href: "/codingchallenge", label: "Thử Thách Lập Trình" },
+        { href: "/resume-builder", label: "Tạo CV" },
+        { href: "/mock-projects", label: "Dự Án Thực Hành" },
       ]
       : [];
 
@@ -47,23 +45,22 @@ const LandingPage = () => {
 
     if (user?.role === "Resource Manager") {
       extraLinks.push(
-        { href: "/manage-coding-bank", label: "Manage Coding Bank" },
-        { href: "/manage-project-bank", label: "Manage Project Bank" },
-        { href: "/manage-interviews", label: "Manage Interviews" },
-        { href: "/manage-prompts", label: "Manage Prompts" }
+        { href: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
+        { href: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
+        { href: "/manage-interviews", label: "Quản lý Phỏng vấn" },
+        { href: "/manage-prompts", label: "Quản lý Prompt" }
       );
     }
 
     if (user?.role === "Content Moderator") {
-      extraLinks.push({ href: "/manage-forum", label: "Manage Forum" });
+      extraLinks.push({ href: "/manage-forum", label: "Quản lý Diễn đàn" });
     }
 
     if (user?.role === "Admin") {
       extraLinks.push(
-        { href: "/manage-coding-bank", label: "Manage Coding Bank" },
-        { href: "/manage-project-bank", label: "Manage Project Bank" },
-        { href: "/manage-forum", label: "Manage Forum" },
-        { href: "/admin-dashboard", label: "Admin Dashboard" }
+        { href: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
+        { href: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
+        { href: "/content-moderator", label: "Quản lý Diễn đàn" },
       );
     }
 
@@ -76,6 +73,32 @@ const LandingPage = () => {
     <div id="landing-bg-landingPage">
       {/* Header Section */}
       <div id="header-section-landingPage">
+            {/* <Nav.Link onClick={toggleLanguage} style={{ cursor: "pointer" }}>
+            </Nav.Link> */}
+                <Spinner animation="border" size="sm" /> Đang tải ...
+              <>
+                <Nav.Link
+                  onClick={() => navigate("/forum")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Diễn Đàn
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => navigate("/codingChallenge")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Thử Thách Lập Trình
+                </Nav.Link>
+                <Nav.Link
+                  onClick={() => (window.location.href = API_ENDPOINTS.LOGIN_PATH)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Đăng nhập
+                </Nav.Link>
+              </>
+                  Trang Cá Nhân
+                  Phỏng Vấn Thử Với AI
+                  Đăng xuất
         <Container id="main-content-landingPage">
           <Row>
             <Col md={6} className="d-flex" id="align-items-center-landingPage">
@@ -86,13 +109,13 @@ const LandingPage = () => {
               />
             </Col>
             <Col md={6} id="text-section-landingPage">
-              <h1 id="main-title-landingPage">{t("landingPage.main_title")}</h1>
-              <p id="main-desc-landingPage">{t("landingPage.main_desc")}</p>
+              <h1 id="main-title-landingPage">Một cách học hoàn toàn mới</h1>
+              <p id="main-desc-landingPage">Eliso là nền tảng tốt nhất giúp bạn nâng cao kỹ năng, mở rộng kiến thức và chuẩn bị cho các buổi phỏng vấn kỹ thuật. </p>
 
               {/* Nút Get Started */}
               {profileLoading ? (
                 <Button variant="success" disabled>
-                  <Spinner animation="border" size="sm" /> Loading...
+                  <Spinner animation="border" size="sm" /> Đang tải ...
                 </Button>
               ) : !user ? (
                 <Button
@@ -100,7 +123,7 @@ const LandingPage = () => {
                   id="landingPage_signin_button"
                   onClick={() => (window.location.href = API_ENDPOINTS.LOGIN_PATH)}
                 >
-                  {t("landingPage.get_started")} &gt;
+                  Bắt đầu ngay &gt;
                 </Button>
               ) : (
                 <Button
@@ -109,7 +132,7 @@ const LandingPage = () => {
                   as={Link}
                   to={user.role === "User" ? "/mock-projects" : "/dashboard"}
                 >
-                  {user.role === "User" ? "Go to Projects" : "Go to Dashboard"} &gt;
+                  {user.role === "User" ? "Đi đến Dự Án Thực Hành" : "Go to Dashboard"} &gt;
                 </Button>
               )}
             </Col>
@@ -124,7 +147,7 @@ const LandingPage = () => {
             <Row className="justify-content-center text-center">
               <Col md={10}>
                 <h3 id="explore-title-landingPage">
-                  {t("landingPage.explore_title")}
+                  Khám phá ngay
                 </h3>
               </Col>
             </Row>
@@ -133,10 +156,10 @@ const LandingPage = () => {
               <Col md={4} className="h-100">
                 <div id="feature-card-forum">
                   <BsChatSquareDots id="forum-icon" />
-                  <h4 id="forum-title">{t("landingPage.explore.forum_title")}</h4>
-                  <p id="forum-desc">{t("landingPage.explore.forum_desc")}</p>
+                  <h4 id="forum-title">Diễn đàn</h4>
+                  <p id="forum-desc">Nơi lập trình viên kết nối, chia sẻ kinh nghiệm, đặt câu hỏi và học hỏi từ cộng đồng mạnh mẽ hàng ngày.</p>
                   <Link to="/forum" id="forum-link">
-                    {t("landingPage.explore.forum_link")} &gt;
+                    Xem trang diễn đàn ngay &gt;
                   </Link>
                 </div>
               </Col>
@@ -144,14 +167,14 @@ const LandingPage = () => {
               <Col md={4} className="h-100">
                 <div id="feature-card-challenge">
                   <BsCodeSlash id="challenge-icon" />
-                  <h4 id="challenge-title">{t("landingPage.explore.challenge_title")}</h4>
-                  <p id="challenge-desc">{t("landingPage.explore.challenge_desc")}</p>
+                  <h4 id="challenge-title">Thử thách lập trình</h4>
+                  <p id="challenge-desc">Hàng trăm bài tập thực tế, từ cơ bản đến nâng cao, giúp bạn rèn luyện tư duy thuật toán và sẵn sàng cho mọi buổi phỏng vấn.</p>
                   <Link to="/codingChallenge" id="challenge-link">
-                    {t("landingPage.explore.challenge_link")} &gt;
+                    Thử thách bản thân &gt;
                   </Link>
                 </div>
               </Col>
-
+              {/* 
               <Col md={4} className="h-100">
                 <div id="feature-card-cv">
                   <BsFileEarmarkPerson id="cv-icon" />
@@ -161,7 +184,7 @@ const LandingPage = () => {
                     {t("landingPage.explore.cv_link")} &gt;
                   </Link>
                 </div>
-              </Col>
+              </Col> */}
             </Row>
           </Container>
         </div>
@@ -172,8 +195,8 @@ const LandingPage = () => {
         <Container>
           <Row className="justify-content-center">
             <Col md={12} className="text-center mb-5">
-              <h4 id="creator-title-landingPage">{t("landingPage.creator.creator_Tilte")}</h4>
-              <p className="text-muted">{t("landingPage.creator.creator_subTile")}</p>
+              <h4 id="creator-title-landingPage">Những người tạo ra Elios</h4>
+              <p className="text-muted">Kiến tạo bằng cả niểm đam mê bởi đội ngũ Elios</p>
             </Col>
           </Row>
 
@@ -181,8 +204,8 @@ const LandingPage = () => {
             {creators.map((dev, index) => (
               <Col key={index} lg={2} md={4} sm={6} xs={12} className="mb-4">
                 <div className="creator-card">
-                  <div 
-                    className="creator-avatar" 
+                  <div
+                    className="creator-avatar"
                     style={{ backgroundImage: `url(${dev.img})` }}
                   ></div>
                   <h5 className="creator-name">{dev.name}</h5>

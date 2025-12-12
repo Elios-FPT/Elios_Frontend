@@ -44,7 +44,7 @@ const SolutionView = ({ problemId }) => {
 
             } catch (err) {
                 console.error("Error fetching solutions:", err);
-                setError("Failed to load solutions.");
+                setError("Không thể tải các giải pháp."); // Translated
                 setSolutions([]);
             } finally {
                 setLoading(false);
@@ -96,11 +96,11 @@ const SolutionView = ({ problemId }) => {
 
     return (
         <div id="solution-view-container">
-            {loading && <div id="solution-view-loading">Loading official solutions...</div>}
+            {loading && <div id="solution-view-loading">Đang tải các giải pháp chính thức...</div>} {/* Translated */}
             {error && <div id="solution-view-error">{error}</div>}
 
             {!loading && !error && solutions.length === 0 && (
-                <p id="solution-view-empty">No solutions found for this problem.</p>
+                <p id="solution-view-empty">Không tìm thấy giải pháp nào cho vấn đề này.</p> // Translated
             )}
 
             {!loading && !error && solutions.length > 0 && (
@@ -124,7 +124,7 @@ const SolutionView = ({ problemId }) => {
                             <div 
                                 className="solution-body"
                                 onClick={() => handleOpenModal(sol.postId)}
-                                title="Click to view full details"
+                                title="Nhấp để xem chi tiết đầy đủ" // Translated
                             >
                                 <ReactMarkdown 
                                     remarkPlugins={[remarkGfm]} 
@@ -135,12 +135,12 @@ const SolutionView = ({ problemId }) => {
                             </div>
 
                             <div className="solution-footer">
-                                <span className="solution-stat-item up" onClick={(e) => handleUpvote(sol.postId, index, e)}>
+                                {/* <span className="solution-stat-item up" onClick={(e) => handleUpvote(sol.postId, index, e)}>
                                     <FaThumbsUp /> {sol.upvoteCount}
                                 </span>
                                 <span className="solution-stat-item down" onClick={(e) => handleDownvote(sol.postId, index, e)}>
                                     <FaThumbsDown /> {sol.downvoteCount}
-                                </span>
+                                </span> */}
                             </div>
                         </div>
                     ))}

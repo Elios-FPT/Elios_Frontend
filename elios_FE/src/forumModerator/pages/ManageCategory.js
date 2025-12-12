@@ -1,9 +1,9 @@
-// file: elios_FE/src/admin/pages/forum/AdminManageCategory.js
+// file: elios_FE/src/forumModerator/pages/ManageCategory.js
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { API_ENDPOINTS } from "../../../../api/apiConfig";
-import AdminManageCategoryCard from "../forumComponents/AdminManageCategoryCard";
-import '../styles/AdminManageCategory.css';
+import { API_ENDPOINTS } from "../../api/apiConfig";
+import ManageCategoryCard from "../components/ManageCategoryCard";
+import '../styles/ManageCategory.css';
 
 const AdminManageCategory = () => {
     const [categories, setCategories] = useState([]);
@@ -23,18 +23,18 @@ const AdminManageCategory = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES, {
+            const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES_FORUM, {
                 withCredentials: true,
             });
             // Assuming the data is in response.data.responseData based on your note.json
             if (response.data && Array.isArray(response.data.responseData)) {
                 setCategories(response.data.responseData);
             } else {
-                setError("Unexpected response format.");
+                setError("Định dạng phản hồi không mong muốn."); // Translated
             }
         } catch (err) {
             console.error("Error fetching categories:", err);
-            setError("Failed to fetch categories. Please try again.");
+            setError("Không thể tải danh mục. Vui lòng thử lại."); // Translated
         } finally {
             setLoading(false);
         }
@@ -70,7 +70,7 @@ const AdminManageCategory = () => {
             await fetchCategories(); // Refresh the list
         } catch (err) {
             console.error("Error creating category:", err);
-            setCreateError("Failed to create category. Check console for details.");
+            setCreateError("Tạo danh mục thất bại. Kiểm tra console để biết chi tiết."); // Translated
         }
     };
 
@@ -87,7 +87,7 @@ const AdminManageCategory = () => {
         } catch (err) {
             console.error("Error updating category:", err);
             // Re-throw the error so the card can handle its own UI state (e.g., show an error)
-            throw new Error("Failed to update category.");
+            throw new Error("Cập nhật danh mục thất bại."); // Translated
         }
     };
 
@@ -96,7 +96,7 @@ const AdminManageCategory = () => {
      * This function is passed to the card.
      */
     const handleDelete = async (categoryId) => {
-        if (!window.confirm("Are you sure you want to delete this category? This action cannot be undone.")) {
+        if (!window.confirm("Bạn có chắc chắn muốn xóa danh mục này? Hành động này không thể hoàn tác.")) { // Translated
             return;
         }
 
@@ -107,20 +107,20 @@ const AdminManageCategory = () => {
             await fetchCategories(); // Refresh the list
         } catch (err) {
             console.error("Error deleting category:", err);
-            setError("Failed to delete category. It might be in use.");
+            setError("Xóa danh mục thất bại. Có thể danh mục đang được sử dụng."); // Translated
         }
     };
 
     return (
         <div id="admin-manage-category-page">
-            <h1>Manage Forum Categories</h1>
+            <h1>Quản lý danh mục diễn đàn</h1> {/* Translated */}
 
             {/* --- Create New Category Form --- */}
             <form id="create-category-form" onSubmit={handleCreate}>
-                <h2>Create New Category</h2>
+                <h2>Tạo danh mục mới</h2> {/* Translated */}
                 {createError && <p className="form-error">{createError}</p>}
                 <div className="form-group">
-                    <label htmlFor="newName">Name</label>
+                    <label htmlFor="newName">Tên danh mục</label> {/* Translated */}
                     <input
                         type="text"
                         id="newName"
@@ -130,7 +130,7 @@ const AdminManageCategory = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="newDescription">Description</label>
+                    <label htmlFor="newDescription">Mô tả</label> {/* Translated */}
                     <textarea
                         id="newDescription"
                         value={newDescription}
@@ -145,23 +145,23 @@ const AdminManageCategory = () => {
                         checked={newIsActive}
                         onChange={(e) => setNewIsActive(e.target.checked)}
                     />
-                    <label htmlFor="newIsActive">Set as Active</label>
+                    <label htmlFor="newIsActive">Đặt là hoạt động</label> {/* Translated */}
                 </div>
-                <button type="submit" className="btn-create">Create Category</button>
+                <button type="submit" className="btn-create">Tạo danh mục</button> {/* Translated */}
             </form>
 
             {/* --- Existing Categories List --- */}
-            <h2>Existing Categories</h2>
+            <h2>Danh mục hiện có</h2> {/* Translated */}
             {error && <p className="page-error">{error}</p>}
             
             <div id="category-list-container">
                 {loading ? (
-                    <p>Loading categories...</p>
+                    <p>Đang tải danh mục...</p> // Translated
                 ) : categories.length === 0 ? (
-                    <p>No categories found.</p>
+                    <p>Không tìm thấy danh mục nào.</p> // Translated
                 ) : (
                     categories.map(category => (
-                        <AdminManageCategoryCard
+                        <ManageCategoryCard
                             key={category.categoryId}
                             category={category}
                             onUpdate={handleUpdate}

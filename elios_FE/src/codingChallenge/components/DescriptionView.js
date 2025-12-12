@@ -9,7 +9,7 @@ import "../style/DescriptionView.css";
 const DescriptionView = ({ problem, loading, error }) => {
   // Logic moved to parent (OnlineIDE.js) to share data with Editor
 
-  if (loading) return <div id="loading-message">Loading problem...</div>;
+  if (loading) return <div id="loading-message">Đang tải đề bài...</div>; // Translated
   if (error) return <div id="error-message">{error}</div>;
   if (!problem) return null;
 
@@ -33,7 +33,7 @@ const DescriptionView = ({ problem, loading, error }) => {
       />
       {problem.exampleInput && problem.exampleOutput && (
         <pre id="example-block">
-          {`Input: ${problem.exampleInput}\nOutput: ${problem.exampleOutput}`}
+          {`Đầu vào: ${problem.exampleInput}\nĐầu ra: ${problem.exampleOutput}`} {/* Translated */}
         </pre>
       )}
     </>

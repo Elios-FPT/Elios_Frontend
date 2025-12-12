@@ -16,19 +16,19 @@ const ProblemDescription = ({ problemId, problemData, loading, error }) => {
           id={activeTab === "description" ? "tab-button-active" : "tab-button"}
           onClick={() => setActiveTab("description")}
         >
-          Description
+          Mô tả {/* Translated */}
         </button>
         <button
           id={activeTab === "submissions" ? "tab-button-active" : "tab-button"}
           onClick={() => setActiveTab("submissions")}
         >
-          Submissions
+          Bài nộp {/* Translated */}
         </button>
         <button
           id={activeTab === "solution" ? "tab-button-active" : "tab-button"}
           onClick={() => setActiveTab("solution")}
         >
-          Solution
+          Giải pháp {/* Translated */}
         </button>
       </div>
 

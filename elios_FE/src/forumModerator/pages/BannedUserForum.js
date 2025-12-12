@@ -1,8 +1,8 @@
-// elios_FE/src/admin/pages/forum/pages/BannedUserForum.js
+// elios_FE/src/forumModerator/pages/BannedUserForum.js
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Table, Badge, Button, Pagination, Modal, Form, Spinner } from "react-bootstrap";
-import { API_ENDPOINTS } from "../../../../api/apiConfig";
+import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../styles/BannedUserForum.css";
 
 const BannedUserForum = () => {
@@ -79,7 +79,7 @@ const BannedUserForum = () => {
             fetchBannedUsers(); // Refresh list
         } catch (error) {
             console.error('Error unbanning user:', error);
-            alert("Failed to unban user.");
+            alert("Không thể gỡ lệnh cấm người dùng."); // Translated
         } finally {
             setIsSubmitting(false);
         }
@@ -101,26 +101,26 @@ const BannedUserForum = () => {
     return (
         <div id="banned-users-page">
             <div className="page-header">
-                <h1>Banned Users Management</h1>
-                <p>Monitor and manage suspended accounts.</p>
+                <h1>Quản lý người dùng bị cấm</h1> {/* Translated */}
+                <p>Theo dõi và quản lý các tài khoản bị đình chỉ.</p> {/* Translated */}
             </div>
 
             {/* Filters */}
             <div className="banned-filters">
                 <div className="filter-group">
-                    <label>Status:</label>
+                    <label>Trạng thái:</label> {/* Translated */}
                     <select 
                         value={filterStatus} 
                         onChange={(e) => setFilterStatus(e.target.value)}
                         className="dark-select"
                     >
-                        <option value="All">All History</option>
-                        <option value="Active">Active Bans Only</option>
-                        <option value="Inactive">Expired/Unbanned</option>
+                        <option value="All">Toàn bộ lịch sử</option> {/* Translated */}
+                        <option value="Active">Đang bị cấm</option> {/* Translated */}
+                        <option value="Inactive">Đã hết hạn/Đã mở khóa</option> {/* Translated */}
                     </select>
                 </div>
                 <Button variant="secondary" size="sm" onClick={fetchBannedUsers} className="ms-auto">
-                    Refresh
+                    Làm mới {/* Translated */}
                 </Button>
             </div>
 
@@ -134,18 +134,18 @@ const BannedUserForum = () => {
                     <Table hover variant="dark" className="banned-table">
                         <thead>
                             <tr>
-                                <th>User</th>
-                                <th>Ban Reason</th>
-                                <th>Banned By</th>
-                                <th>Duration</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th>Người dùng</th> {/* Translated */}
+                                <th>Lý do cấm</th> {/* Translated */}
+                                <th>Người cấm</th> {/* Translated */}
+                                <th>Thời hạn</th> {/* Translated */}
+                                <th>Trạng thái</th> {/* Translated */}
+                                <th>Hành động</th> {/* Translated */}
                             </tr>
                         </thead>
                         <tbody>
                             {getFilteredUsers().length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="text-center text-muted">No records found.</td>
+                                    <td colSpan="6" className="text-center text-muted">Không tìm thấy bản ghi nào.</td> {/* Translated */}
                                 </tr>
                             ) : (
                                 getFilteredUsers().map((ban) => (
@@ -174,19 +174,19 @@ const BannedUserForum = () => {
                                         </td>
                                         <td>
                                             {ban.isPermanent ? (
-                                                <Badge bg="danger">Permanent</Badge>
+                                                <Badge bg="danger">Vĩnh viễn</Badge> // Translated
                                             ) : (
                                                 <div className="d-flex flex-column small">
-                                                    <span>Until: {formatDate(ban.banUntil)}</span>
-                                                    {ban.unbannedAt && <span className="text-success">Unbanned: {formatDate(ban.unbannedAt)}</span>}
+                                                    <span>Đến ngày: {formatDate(ban.banUntil)}</span> {/* Translated */}
+                                                    {ban.unbannedAt && <span className="text-success">Đã mở khóa: {formatDate(ban.unbannedAt)}</span>} {/* Translated */}
                                                 </div>
                                             )}
                                         </td>
                                         <td>
                                             {ban.isActive ? (
-                                                <Badge bg="danger" className="status-badge">Active</Badge>
+                                                <Badge bg="danger" className="status-badge">Hiệu lực</Badge> // Translated
                                             ) : (
-                                                <Badge bg="secondary" className="status-badge">Inactive</Badge>
+                                                <Badge bg="secondary" className="status-badge">Hết hiệu lực</Badge> // Translated
                                             )}
                                         </td>
                                         <td>
@@ -196,12 +196,12 @@ const BannedUserForum = () => {
                                                     size="sm" 
                                                     onClick={() => handleOpenUnbanModal(ban)}
                                                 >
-                                                    Unban
+                                                    Gỡ lệnh cấm {/* Translated */}
                                                 </Button>
                                             )}
                                             {!ban.isActive && ban.unbanReason && (
                                                 <span className="italic-text" title={ban.unbanReason}>
-                                                    Reason: {ban.unbanReason.length > 20 ? ban.unbanReason.substring(0,20) + '...' : ban.unbanReason}
+                                                    Lý do: {ban.unbanReason.length > 20 ? ban.unbanReason.substring(0,20) + '...' : ban.unbanReason} {/* Translated */}
                                                 </span>
                                             )}
                                         </td>
@@ -234,35 +234,35 @@ const BannedUserForum = () => {
                 className="dark-theme-modal"
             >
                 <Modal.Header closeButton className="modal-header-custom">
-                    <Modal.Title>Lift Ban</Modal.Title>
+                    <Modal.Title>Gỡ lệnh cấm</Modal.Title> {/* Translated */}
                 </Modal.Header>
                 <Modal.Body className="modal-body-custom">
                     <p>
-                        Are you sure you want to unban 
+                        Bạn có chắc chắn muốn mở khóa cho 
                         <strong className="text-gold mx-1">
                             {selectedBan?.userFirstName} {selectedBan?.userLastName}
-                        </strong>?
+                        </strong>không? {/* Translated */}
                     </p>
                     <Form.Group>
-                        <Form.Label>Unban Reason (Optional)</Form.Label>
+                        <Form.Label>Lý do mở khóa (Tùy chọn)</Form.Label> {/* Translated */}
                         <Form.Control 
                             as="textarea" 
                             rows={3}
                             value={unbanReason}
                             onChange={(e) => setUnbanReason(e.target.value)}
                             className="dark-input"
-                            placeholder="e.g. Appeal accepted, mistake corrected..."
+                            placeholder="Ví dụ: Kháng cáo được chấp nhận, sửa lỗi nhầm lẫn..." // Translated
                         />
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer className="modal-footer-custom">
-                    <Button variant="secondary" onClick={() => setShowUnbanModal(false)}>Cancel</Button>
+                    <Button variant="secondary" onClick={() => setShowUnbanModal(false)}>Hủy</Button> {/* Translated */}
                     <Button 
                         variant="success" 
                         onClick={handleUnbanUser}
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Processing...' : 'Confirm Unban'}
+                        {isSubmitting ? 'Đang xử lý...' : 'Xác nhận mở khóa'} {/* Translated */}
                     </Button>
                 </Modal.Footer>
             </Modal>

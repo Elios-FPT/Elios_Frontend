@@ -22,41 +22,57 @@ const UserNavbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("userId");
-    localStorage.removeItem("userRole");
-    window.location.href = API_ENDPOINTS.LOGOUT_PATH;
+    // 1. Links Public (Khách và User đều thấy)
+    const publicLinks = [
   };
-
-  // Danh sách link theo role
-  const getNavLinks = () => {
-    const baseLinks = [
       { to: "/forum", label: t("UserNavbar.forum") },
       { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
-      { to: "/resume-builder", label: t("UserNavbar.buildCV") },
-      { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
-      { to: "/interview", label: "Interview" },
     ];
 
-    const adminLinks = [
-      { to: "/manage-coding-bank", label: "Coding Bank" },
-      { to: "/manage-project-bank", label: "Project Bank" },
-      { to: "/manage-forum", label: "Forum" },
-      { to: "/manage-interviews", label: "Interviews" },
-      { to: "/manage-prompts", label: "Prompts" },
-      { to: "/admin-dashboard", label: "Dashboard", badge: "Admin" },
+    // 2. Links Private (Chỉ User đã đăng nhập mới thấy)
+    const userPrivateLinks = [
+      { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
+      { to: "/resume-builder", label: t("UserNavbar.buildCV") },
+      { to: "/user/profile", label: "Profile" },
+      { to: "/interview", label: "Interview" },
+    ];
+    let linksToShow = [];
+    // Logic chia luồng hiển thị
+    if (!role) {
+      // Trường hợp chưa đăng nhập: Chỉ hiện Public Links
+      linksToShow = publicLinks;
+    } else if (role === "User") {
+      // Trường hợp là User: Hiện Public + Private
+      linksToShow = [...publicLinks, ...userPrivateLinks];
+    } else {
+      // Các role quản lý (Admin, Manager...) - bắt đầu với mảng rỗng (theo logic cũ)
+      // hoặc bạn có thể thêm publicLinks vào đây nếu muốn Admin cũng thấy Forum trên navbar
+      linksToShow = [];
+    }
+
+    // Các role đặc biệt: thêm link quản lý
+    if (role === "Resource Manager") {
+      linksToShow.push(
+        { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
+        { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
+        { to: "/manage-interviews", label: "Quản lý Phỏng vấn" },
+        { to: "/manage-prompts", label: "Quản lý Prompt" }
     ];
 
     const resourceManagerLinks = [
-      { to: "/manage-coding-bank", label: "Coding Bank" },
+      linksToShow.push({ to: "/manage-forum", label: "Quản lý Diễn đàn" });
       { to: "/manage-project-bank", label: "Project Bank" },
       { to: "/manage-interviews", label: "Interviews" },
       { to: "/manage-prompts", label: "Prompts" },
     ];
 
     const moderatorLinks = [
-      { to: "/manage-forum", label: "Manage Forum" },
-    ];
+      linksToShow.push(
+        { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
+        { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
+        { to: "/content-moderator", label: "Quản lý Diễn đàn" },
 
-    if (role === "Admin") return [...baseLinks, ...adminLinks];
+    return linksToShow;
     if (role === "Resource Manager") return [...baseLinks, ...resourceManagerLinks];
     if (role === "Content Moderator") return [...baseLinks, ...moderatorLinks];
     return baseLinks; // User thường

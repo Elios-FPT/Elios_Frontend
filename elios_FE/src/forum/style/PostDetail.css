@@ -100,6 +100,15 @@
   color: #dcdcdc;
 }
 
+/* --- FIX: Constrain Markdown Images --- */
+#post-detail-markdown-content img {
+  max-width: 100%;       /* Ensure image fits within container width */
+  height: auto;          /* Maintain aspect ratio */
+  display: block;        /* Remove extra bottom spacing */
+  margin: 1rem 0;        /* Add vertical spacing */
+  border-radius: 5px;    /* Optional: rounded corners */
+}
+
 /* Inline code */
 #post-detail-markdown-content code {
   background-color: rgba(240, 98, 146, 0.15);

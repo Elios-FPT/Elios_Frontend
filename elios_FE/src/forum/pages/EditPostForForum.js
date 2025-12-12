@@ -46,11 +46,11 @@ const EditPostForForum = () => {
             if (response.data && Array.isArray(response.data.responseData)) {
                 setUserImages(response.data.responseData);
             } else {
-                setImageError("Could not load user images.");
+                setImageError("Không thể tải hình ảnh người dùng."); // Translated
             }
         } catch (err) {
             console.error("Error fetching user images:", err);
-            setImageError("Failed to fetch images.");
+            setImageError("Lỗi khi tải hình ảnh."); // Translated
         } finally {
             setImagesLoading(false);
         }
@@ -78,12 +78,12 @@ const EditPostForForum = () => {
                         setCategoryId(post.categoryId);
                     }
                 } else {
-                    setError("Post data not found in response.");
+                    setError("Không tìm thấy dữ liệu bài viết trong phản hồi."); // Translated
                 }
 
             } catch (err) {
                 console.error("Error fetching post data:", err);
-                setError("Failed to fetch post. You may not have permission to edit this post or it may not exist.");
+                setError("Lỗi khi tải bài viết. Bạn có thể không có quyền chỉnh sửa bài viết này hoặc bài viết không tồn tại."); // Translated
             } finally {
                 setLoading(false);
             }
@@ -131,7 +131,7 @@ const EditPostForForum = () => {
             if (err.response) {
                 console.error("Server responded with:", err.response.data);
             }
-            setImageError("Failed to upload image. Please try again.");
+            setImageError("Tải hình ảnh thất bại. Vui lòng thử lại."); // Translated
             return null;
         }
     };
@@ -230,11 +230,11 @@ const EditPostForForum = () => {
             if (response.data.status === 200) {
                 navigate('/forum/user-posts');
             } else {
-                alert("Failed to save draft. With error: " + response.data.message);
+                alert("Lưu bản nháp thất bại. Lỗi: " + response.data.message); // Translated
             }
         } catch (error) {
             console.error("Error saving draft:", error.response || error);
-            alert("Failed to save draft." + (error.response ? ` Server responded with: ${error.response.data.message}` : ""));
+            alert("Lưu bản nháp thất bại." + (error.response ? ` Máy chủ phản hồi: ${error.response.data.message}` : "")); // Translated
         }
     };
 
@@ -252,12 +252,12 @@ const EditPostForForum = () => {
             
             if (!draftResponse || draftResponse.data.status !== 200) {
                 // If draft save failed logically (but didn't throw), stop here
-                alert("Auto-save failed. Cannot submit post. " + (draftResponse?.data?.message || ""));
+                alert("Lưu tự động thất bại. Không thể gửi bài viết. " + (draftResponse?.data?.message || "")); // Translated
                 return;
             }
         } catch (error) {
             console.error("Error during auto-save before submit:", error);
-            alert("Error saving draft. Post was not submitted.");
+            alert("Lỗi khi lưu bản nháp. Bài viết chưa được gửi đi."); // Translated
             return; // Stop submission if draft save fails
         }
 
@@ -279,12 +279,12 @@ const EditPostForForum = () => {
             if (response.data.status === 200) {
                 navigate('/forum/user-posts');
             } else {
-                alert("Failed to update post. With error: " + response.data.message);
+                alert("Cập nhật bài viết thất bại. Lỗi: " + response.data.message); // Translated
             }
 
         } catch (error) {
             console.error("Error updating post:", error.response || error);
-            setError("Failed to update post. Please try again.");
+            setError("Cập nhật bài viết thất bại. Vui lòng thử lại."); // Translated
         }
     };
 
@@ -293,7 +293,7 @@ const EditPostForForum = () => {
             <>
                 
                 <div id="edit-post-for-forum-container">
-                    <p>Loading post data...</p>
+                    <p>Đang tải dữ liệu bài viết...</p> {/* Translated */}
                 </div>
             </>
         );
@@ -305,7 +305,7 @@ const EditPostForForum = () => {
                 
                 <div id="edit-post-for-forum-container">
                     <p id="edit-post-for-forum-error">{error}</p>
-                    <button type="button" className="edit-post-for-forum-btn-cancel" onClick={() => navigate(-1)}>Go Back</button>
+                    <button type="button" className="edit-post-for-forum-btn-cancel" onClick={() => navigate(-1)}>Quay lại</button> {/* Translated */}
                 </div>
             </>
         );
@@ -319,24 +319,24 @@ const EditPostForForum = () => {
             onDragLeave={handlePoolDragLeave}
             onDrop={handlePoolDrop}
         >
-            <h3>Image Pool</h3>
+            <h3>Kho hình ảnh</h3> {/* Translated */}
             {imageError && <p className="image-pool-error">{imageError}</p>}
             <div id="image-pool-list-container">
                 {imagesLoading ? (
-                    <p>Loading images...</p>
+                    <p>Đang tải hình ảnh...</p> 
                 ) : userImages.length > 0 ? (
                     userImages.map((image) => (
                         <div key={image.attachmentId} className="image-pool-item">
                             <img
                                 src={image.url}
-                                alt={image.fileName || "User upload"}
+                                alt={image.fileName || "Hình ảnh người dùng tải lên"} // Translated
                                 draggable="true"
                                 onDragStart={(e) => handleImagePoolDragStart(e, image.url)}
                             />
                         </div>
                     ))
                 ) : (
-                    <p>No images uploaded yet. Drag images here to upload.</p>
+                    <p>Chưa có hình ảnh nào được tải lên. Kéo hình ảnh vào đây để tải lên.</p>
                 )}
             </div>
         </div>
@@ -352,10 +352,10 @@ const EditPostForForum = () => {
                     </Col>
                     <Col md={10}>
                         <div id="edit-post-for-forum-form-wrapper">
-                            <h1>Edit Your Post</h1>
+                            <h1>Chỉnh sửa bài viết của bạn</h1> {/* Translated */}
                             <form id="edit-post-for-forum-form" onSubmit={handleSubmit}>
                                 <div className="edit-post-for-forum-form-group">
-                                    <label htmlFor="title">Title</label>
+                                    <label htmlFor="title">Tiêu đề</label> {/* Translated */}
                                     <input
                                         type="text"
                                         id="title"
@@ -366,9 +366,9 @@ const EditPostForForum = () => {
                                 </div>
 
                                 <div className="edit-post-for-forum-form-group-category">
-                                    <label htmlFor="postType">Post Category</label>
+                                    <label htmlFor="postType">Danh mục bài viết</label> {/* Translated */}
                                     <select id="postType" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
-                                        <option value="" disabled>Select a Category</option>
+                                        <option value="" disabled>Chọn Danh mục</option> {/* Translated */}
                                         {forumCategories.map((category) => (
                                             <option key={category.categoryId} value={category.categoryId}>
                                                 {category.name}
@@ -378,7 +378,7 @@ const EditPostForForum = () => {
                                     
                                 </div>
                                 <div className="edit-post-for-forum-form-group" data-color-mode="dark">
-                                    <label htmlFor="content">Content</label>
+                                    <label htmlFor="content">Nội dung</label> {/* Translated */}
                                     <MDEditor
                                         value={content}
                                         onChange={setContent}
@@ -395,18 +395,18 @@ const EditPostForForum = () => {
                                         className="edit-post-for-forum-btn-draft"
                                         onClick={handleSaveDraft}
                                     >
-                                        Save Draft
+                                        Lưu bản nháp {/* Translated */}
                                     </button>
                                     <button type="submit"
                                         className="edit-post-for-forum-btn-save">
-                                        Publish Post
+                                        Đăng bài viết {/* Translated */}
                                     </button>
                                     <button
                                         type="button"
                                         className="edit-post-for-forum-btn-cancel"
                                         onClick={() => navigate('/forum/user-posts')}
                                     >
-                                        Return
+                                        Trở về {/* Translated */}
                                     </button>
                                 </div>
                             </form>

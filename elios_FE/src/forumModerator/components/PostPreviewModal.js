@@ -1,4 +1,4 @@
-// src/admin/components/PostPreviewModal.js
+// file: elios_FE/src/forumModerator/components/PostPreviewModal.js
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
@@ -25,9 +25,9 @@ const PostPreviewModal = ({ post, show, onHide }) => {
             </Modal.Header>
             <Modal.Body id="preview-modal-body">
                 <div className="post-meta">
-                    <span><strong>Author:</strong> {post.authorFullName}</span>
-                    <span><strong>Category:</strong> {post.categoryName}</span>
-                    <span><strong>Type:</strong> {post.postType}</span>
+                    <span><strong>Tác giả:</strong> {post.authorFullName}</span> {/* Translated */}
+                    <span><strong>Danh mục:</strong> {post.categoryName}</span> {/* Translated */}
+                    <span><strong>Loại:</strong> {post.postType}</span> {/* Translated */}
                 </div>
                 <hr />
                 <div className="markdown-content">
@@ -41,7 +41,7 @@ const PostPreviewModal = ({ post, show, onHide }) => {
             </Modal.Body>
             <Modal.Footer id="preview-modal-footer">
                 <Button variant="secondary" onClick={onHide}>
-                    Close
+                    Đóng {/* Translated */}
                 </Button>
             </Modal.Footer>
         </Modal>

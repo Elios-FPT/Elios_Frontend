@@ -1,11 +1,11 @@
-// file: elios_FE/src/forum/components/CommentForm.js
+// file: elios_FE/src/codingChallenge/components/SolutionCommentForm.js
 import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FaThumbsUp, FaThumbsDown, FaCommentAlt, FaTimes, FaFlag } from 'react-icons/fa';
-import "../style/CommentForm.css";
-import ReportPostModal from './ReportPostModal';
+import "../style/SolutionCommentForm.css";
+import ReportPostModal from '../../forum/components/ReportPostModal';
 
-const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote, onDownvote, onReport }) => {
+const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote, onDownvote, onReport }) => {
     const [content, setContent] = useState('');
     const [showReportModal, setShowReportModal] = useState(false);
     const textareaRef = useRef(null);
@@ -29,19 +29,20 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
     };
 
     const handleReportSubmit = (reason, details) => {
+        // onReport here triggers the parent handler for reporting the "Post" (Solution)
         onReport(reason, details);
         handleCloseReportModal(); 
     };
 
     return (
         <>
-            <Form id="post-detail-comment-form" onSubmit={handleSubmit}>
+            <Form id="solution-comment-form" onSubmit={handleSubmit}>
                 {replyingTo && (
-                    <div id="replying-to-banner">
+                    <div id="solution-replying-to-banner">
                         Đang trả lời : <strong>{replyingTo.author}</strong> {/* Translated */}
                         <Button
                             variant="link"
-                            id="comment-form-cancel-reply-btn"
+                            id="solution-comment-cancel-reply-btn"
                             onClick={onCancelReply}
                             title="Hủy trả lời" // Translated
                         >
@@ -50,30 +51,32 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
                     </div>
                 )}
 
-                {/* These classNames are left as-is because they are repeating or have no CSS */}
-                <div className="user-forum-post-stats">
-                    <span
-                        className="upvote-stat-item up"
+                <div className="solution-post-stats">
+                    {/* <span
+                        className="stat-item upvote"
                         onClick={onUpvote}
-                        title="Thích" // Translated
+                        title="Thích giải pháp"
                     >
                         <FaThumbsUp /> {postStats.upvoteCount}
                     </span>
                     <span
-                        className="downvote-stat-item down"
+                        className="stat-item downvote"
                         onClick={onDownvote}
-                        title="Không thích" // Translated
+                        title="Không thích giải pháp"
                     >
                         <FaThumbsDown /> {postStats.downvoteCount}
-                    </span>
+                    </span> */}
+
+                    {/* Comment Count */}
                     <span className="stat-item comment">
                         <FaCommentAlt /> {postStats.commentCount}
                     </span>
+
+                    {/* Report Button */}
                     <span 
                         className="stat-item report" 
-                        onClick={handleShowReportModal} // Trigger modal
-                        title="Báo cáo bài viết" // Translated
-                        style={{ cursor: 'pointer' }} // Add pointer cursor
+                        onClick={handleShowReportModal} 
+                        title="Báo cáo giải pháp" // Translated
                     >
                         <FaFlag />
                     </span>
@@ -88,14 +91,15 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
                         onChange={(e) => setContent(e.target.value)}
                         placeholder={replyingTo ? `Viết câu trả lời của bạn...` : "Viết bình luận..."} // Translated
                         required
+                        className="solution-comment-input"
                     />
                 </Form.Group>
-                <Button variant="primary" size="sm" className="mt-2" type="submit">
+                <Button variant="success" size="sm" className="mt-2" type="submit">
                     Đăng bình luận {/* Translated */}
                 </Button>
             </Form>
 
-            {/* Render the modal */}
+            {/* Modal for Reporting the Solution */}
             <ReportPostModal
                 show={showReportModal}
                 handleClose={handleCloseReportModal}
@@ -105,4 +109,4 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
     );
 };
 
-export default CommentForm;
+export default SolutionCommentForm;

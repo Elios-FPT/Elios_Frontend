@@ -1,4 +1,4 @@
-// file: elios_FE/src/codingChallenge/components/SolutionVIewDetailModal.js
+// file: elios_FE/src/codingChallenge/components/SolutionViewDetailModal.js
 import React, { useState, useEffect, useContext } from "react";
 import { Modal, Button, Dropdown, Form } from "react-bootstrap";
 import axios from "axios";
@@ -8,9 +8,10 @@ import rehypeHighlight from "rehype-highlight";
 import { FaEllipsisV, FaEdit, FaTrash, FaSave, FaTimes, FaFlag } from "react-icons/fa";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import { formatRelativeTime } from "../../forum/utils/formatTime";
-import CommentForm from "../../forum/components/CommentForm";
+import SolutionCommentForm from "./SolutionCommentForm";
 import LoadingCircle1 from "../../components/loading/LoadingCircle1";
 import { AppContext } from "../../context/AppContext";
+import ReportPostModal from "../../forum/components/ReportPostModal"; // Import Report Modal
 import 'highlight.js/styles/github-dark.css';
 import "../style/SolutionViewDetailModal.css";
 
@@ -22,6 +23,10 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editContent, setEditContent] = useState("");
 
+    // Report State
+    const [showCommentReportModal, setShowCommentReportModal] = useState(false);
+    const [reportTarget, setReportTarget] = useState({ id: null, type: null });
+
     useEffect(() => {
         if (show && solutionId) {
             fetchSolutionDetails(solutionId);
@@ -31,7 +36,6 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     const fetchSolutionDetails = async (id) => {
         setLoading(true);
         try {
-            // Using the endpoint provided in the skeleton
             const response = await axios.get(API_ENDPOINTS.GET_POST_CONTENT(id), {
                 withCredentials: true,
                 headers: { "Content-Type": "application/json" },
@@ -50,7 +54,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
         }
     };
 
-    // --- State Helpers (Mirrors PostDetail.js) ---
+    // --- State Helpers ---
     const addCommentToState = (newComment, parentId) => {
         const findAndAddReply = (comments) => {
             return comments.map(comment => {
@@ -106,7 +110,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     const handleCommentSubmit = async (content, parentCommentId) => {
         if (!content.trim()) return;
 
-        let currentUserName = user ? `${user.firstName} ${user.lastName}`.trim() : "You";
+        let currentUserName = user ? `${user.firstName} ${user.lastName}`.trim() : "Bạn"; // Translated
         let currentUserAvatar = user?.avatarUrl || "/default-avatar.png";
 
         const tempId = `temp-${Date.now()}`;
@@ -129,12 +133,11 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                 headers: { "Content-Type": "application/json" },
             });
             
-            // Sync with server response if available
             if (response.data.responseData && response.data.responseData.comments) {
                 setSolution(response.data.responseData);
             }
         } catch (error) {
-            alert("Error submitting comment. Please try again.");
+            alert("Lỗi khi gửi bình luận. Vui lòng thử lại."); // Translated
             console.error("Error submitting comment:", error);
         }
     };
@@ -175,7 +178,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     };
 
     const handleDeleteClick = async (commentId) => {
-        if (!window.confirm("Delete this comment?")) return;
+        if (!window.confirm("Bạn có chắc chắn muốn xóa bình luận này?")) return; // Translated
         deleteCommentFromState(commentId);
         try {
             await axios.delete(API_ENDPOINTS.DELETE_COMMENT(commentId), { withCredentials: true });
@@ -184,10 +187,43 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
         }
     };
 
-    const handleReport = async (reason, details) => {
-         // Implement report logic here if needed, similar to PostDetail
-         console.log("Report submitted", reason, details);
-    }
+    // --- Report Handlers ---
+    const handleReport = async (targetType, targetId, reason, details) => {
+        if (!reason) {
+            console.error("Report reason is required.");
+            return;
+        }
+        try {
+            const endpoint = targetType === "Post" ? API_ENDPOINTS.REPORT_POST : API_ENDPOINTS.REPORT_COMMENT;
+            await axios.post(
+                endpoint,
+                { targetType, targetId, reason, details: details ? details.trim() : "" },
+                { withCredentials: true, headers: { "Content-Type": "application/json" } }
+            );
+            // Translated
+            const translatedTarget = targetType === "Post" ? "Bài viết" : "Bình luận";
+            alert(`${translatedTarget} đã được báo cáo thành công!`);
+        } catch (error) {
+            console.error(`Error reporting ${targetType}:`, error);
+            const msg = error.response?.data?.message || "Hành động thất bại."; // Translated
+            alert(msg);
+        }
+    };
+
+    const handleReportComment = async (commentId, reason, details) => {
+        handleReport("Comment", commentId, reason, details);
+        setShowCommentReportModal(false); 
+    };
+
+    const handleShowCommentReportModal = (commentId) => {
+        setReportTarget({ id: commentId, type: "Comment" });
+        setShowCommentReportModal(true);
+    };
+
+    const handleCloseCommentReportModal = () => {
+        setShowCommentReportModal(false);
+        setReportTarget({ id: null, type: null });
+    };
 
     // --- Render Comments ---
     const renderComments = (comments) => {
@@ -196,27 +232,29 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
             const isEditing = editingCommentId === comment.commentId;
 
             return (
-                <div key={comment.commentId} className="solution-comment-thread">
+                <div key={comment.commentId} className="solution-comment-thread" >
                     <div className="d-flex align-items-start solution-comment mb-3">
                         <img src={comment.authorAvatarUrl || "/default-avatar.png"} alt="user" className="solution-comment-avatar me-3" />
                         <div className="solution-comment-body w-100">
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
                                     <strong className="solution-comment-author">{comment.authorFullName}</strong>
-                                    <small className="text-muted ms-2">{formatRelativeTime(comment.createdAt)}</small>
+                                    <small className="text-gray ms-2">{formatRelativeTime(comment.createdAt)}</small>
                                 </div>
                                 <Dropdown className="solution-comment-dropdown">
-                                    <Dropdown.Toggle variant="link" className="text-muted p-0 no-caret">
+                                    <Dropdown.Toggle variant="link" className="text-gray p-0 no-caret">
                                         <FaEllipsisV />
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu align="end" variant="dark">
                                         {isAuthor ? (
                                             <>
-                                                <Dropdown.Item onClick={() => handleStartEdit(comment)}><FaEdit className="me-2" /> Edit</Dropdown.Item>
-                                                <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger"><FaTrash className="me-2" /> Delete</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => handleStartEdit(comment)}><FaEdit className="me-2" /> Sửa</Dropdown.Item> {/* Translated */}
+                                                <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger"><FaTrash className="me-2" /> Xóa</Dropdown.Item> {/* Translated */}
                                             </>
                                         ) : (
-                                            <Dropdown.Item><FaFlag className="me-2" /> Report</Dropdown.Item>
+                                            <Dropdown.Item onClick={() => handleShowCommentReportModal(comment.commentId)}>
+                                                <FaFlag className="me-2" /> Báo cáo {/* Translated */}
+                                            </Dropdown.Item>
                                         )}
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -230,8 +268,8 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                                         className="mb-2 bg-dark text-white border-secondary"
                                     />
                                     <div className="d-flex gap-2">
-                                        <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}><FaSave className="me-1" /> Save</Button>
-                                        <Button size="sm" variant="secondary" onClick={() => setEditingCommentId(null)}><FaTimes className="me-1" /> Cancel</Button>
+                                        <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}><FaSave className="me-1" /> Lưu</Button> {/* Translated */}
+                                        <Button size="sm" variant="secondary" onClick={() => setEditingCommentId(null)}><FaTimes className="me-1" /> Hủy</Button> {/* Translated */}
                                     </div>
                                 </div>
                             ) : (
@@ -240,8 +278,8 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
 
                             {!isEditing && (
                                 <div className="mt-1">
-                                    <Button variant="link" size="sm" className="p-0 text-decoration-none text-muted" onClick={() => setReplyingTo({ id: comment.commentId, author: comment.authorFullName })}>
-                                        Reply
+                                    <Button variant="link" size="sm" className="p-0 text-decoration-none text-gray" onClick={() => setReplyingTo({ id: comment.commentId, author: comment.authorFullName })}>
+                                        Phản hồi {/* Translated */}
                                     </Button>
                                 </div>
                             )}
@@ -264,15 +302,15 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
             contentClassName="solution-detail-modal-content" 
             id="solution-detail-modal"
         >
-            <Modal.Header closeButton closeVariant="white">
+            <Modal.Header closeButton closeVariant="white" >
                 {loading || !solution ? (
-                    <Modal.Title>Loading...</Modal.Title>
+                    <Modal.Title>Đang tải...</Modal.Title> // Translated
                 ) : (
-                    <div className="d-flex align-items-center gap-3">
+                    <div className="d-flex align-items-center gap-3" >
                         <img src={solution.authorAvatarUrl || "/default-avatar.png"} alt="avatar" className="solution-modal-avatar" />
                         <div>
                             <h5 className="mb-0 text-white">{solution.authorFullName}</h5>
-                            <small className="text-muted">{formatRelativeTime(solution.createdAt)}</small>
+                            <small className="text-white" >{formatRelativeTime(solution.createdAt)}</small>
                         </div>
                     </div>
                 )}
@@ -289,12 +327,12 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                             </ReactMarkdown>
                         </div>
                         <hr className="border-secondary" />
-                        <h5 className="text-white mb-3">Comments</h5>
+                        <h5 className="text-white mb-3">Bình luận</h5> {/* Translated */}
                         <div className="solution-comments-list">
                             {renderComments(solution.comments || [])}
                         </div>
                         <div className="mt-4">
-                            <CommentForm 
+                            <SolutionCommentForm
                                 postStats={{
                                     upvoteCount: solution.upvoteCount || 0,
                                     downvoteCount: solution.downvoteCount || 0,
@@ -305,14 +343,21 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                                 onCancelReply={() => setReplyingTo(null)}
                                 onUpvote={handleUpvote}
                                 onDownvote={handleDownvote}
-                                onReport={handleReport}
+                                onReport={(reason, details) => handleReport("Post", solutionId, reason, details)}
                             />
                         </div>
                     </>
                 ) : (
-                    <p className="text-center text-muted">Failed to load solution.</p>
+                    <p className="text-center text-gray">Không thể tải giải pháp.</p> // Translated
                 )}
             </Modal.Body>
+
+            {/* Modal specifically for reporting comments */}
+            <ReportPostModal
+                show={showCommentReportModal}
+                handleClose={handleCloseCommentReportModal}
+                handleSubmit={(reason, details) => handleReportComment(reportTarget.id, reason, details)}
+            />
         </Modal>
     );
 }

@@ -1,26 +1,32 @@
 /* file: elios_FE/src/codingChallenge/style/SolutionViewDetailModal.css */
 
-#solution-detail-modal .solution-detail-modal-content {
-    background-color: #1e1e1e;
+/* Main Modal Content Wrapper */
+.solution-detail-modal-content {
+    background-color: #1e1e1e!important; /* Dark background for the whole modal */
     color: #eee;
     border: 1px solid #333;
     border-radius: 10px;
 }
 
-#solution-detail-modal .modal-header {
+/* Header */
+.solution-detail-modal-content .modal-header {
     border-bottom: 1px solid #333;
+    background-color: #252525; /* Slightly lighter header */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
-#solution-detail-modal .solution-modal-avatar {
+.solution-modal-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid #ffd700;
+    border: 2px solid #0F8A57;
+    object-fit: cover;
 }
 
-/* Markdown Content Area */
-#solution-detail-modal .solution-modal-content {
-    background-color: #161b22;
+/* Post Content (Markdown) */
+.solution-modal-content {
+    background-color: #161b22; /* Very dark for code/markdown area */
     padding: 20px;
     border-radius: 8px;
     line-height: 1.6;
@@ -28,14 +34,14 @@
     border: 1px solid #30363d;
 }
 
-#solution-detail-modal .solution-modal-content pre {
+.solution-modal-content pre {
     background-color: #0d1117;
     padding: 15px;
     border-radius: 6px;
     overflow-x: auto;
 }
 
-#solution-detail-modal .solution-modal-content code {
+.solution-modal-content code {
     background-color: rgba(240, 98, 146, 0.15);
     color: #f06292;
     padding: 0.2em 0.4em;
@@ -43,40 +49,71 @@
     font-family: monospace;
 }
 
-#solution-detail-modal .solution-modal-content pre code {
+.solution-modal-content pre code {
     background-color: transparent;
     color: inherit;
     padding: 0;
 }
 
-/* Comment Styles */
+/* --- Comment Section Styles --- */
+
+.solution-comments-list {
+    margin-top: 1rem;
+    padding-right: 5px; /* Spacing for scrollbar */
+}
+
 .solution-comment-thread {
     margin-bottom: 15px;
 }
 
 .solution-comment-avatar {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #444;
+}
+
+/* Specific background for the comment text area (The Bubble) */
+.solution-comment-body {
+    background-color: #2c2c2c; /* Distinct background for comments */
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid #3e3e3e; /* Subtle border */
+    position: relative;
 }
 
 .solution-comment-author {
-    color: #ffd700;
+    color: #0F8A57; /* Green author name */
+    font-weight: 600;
     font-size: 0.95rem;
 }
 
+.text-gray {
+    color: #a0a0a0 !important;
+}
+
+/* Reply indentation */
 .solution-comment-replies {
-    margin-left: 20px;
-    padding-left: 15px;
+    margin-left: 45px; /* Indent replies */
+    padding-left: 10px;
     border-left: 2px solid #333;
 }
 
 /* Dropdown override for dark modal */
-#solution-detail-modal .dropdown-menu-dark {
+.solution-comment-dropdown .dropdown-toggle::after {
+    display: none; /* Hide default arrow */
+}
+
+.solution-comment-dropdown .dropdown-menu.show {
     background-color: #2a2a2a;
     border: 1px solid #444;
 }
 
-#solution-detail-modal .dropdown-toggle.no-caret::after {
-    display: none;
+.solution-comment-dropdown .dropdown-item {
+    color: #e0e0e0;
+}
+
+.solution-comment-dropdown .dropdown-item:hover {
+    background-color: #3e3e3e;
 }

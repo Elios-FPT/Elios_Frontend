@@ -57,28 +57,28 @@ const CodingChallenge = () => {
       <main id="coding-challenges-container">
         {/* Left Sidebar ID */}
         <aside id="coding-challenge-left">
-          <h3>Categories</h3>
+          <h3>Danh mục</h3> {/* Translated: Categories */}
           {/* --- START: Difficulty Filter --- */}
-          <label htmlFor="difficulty-select" style={{ fontSize: '0.9rem', color: '#bbbbbb' }}>Difficulty:</label>
+          <label htmlFor="difficulty-select" style={{ fontSize: '0.9rem', color: '#bbbbbb' }}>Độ khó:</label> {/* Translated: Difficulty */}
           <select
             id="difficulty-select"
             value={difficulty}
             onChange={handleDifficultyChange}
             className="difficulty-filter-dropdown" // Added class for styling
           >
-            <option value="">All</option>
-            <option value="EASY">Easy</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="HARD">Hard</option>
+            <option value="">Tất cả</option> {/* Translated: All */}
+            <option value="EASY">Dễ</option> {/* Translated: Easy */}
+            <option value="MEDIUM">Trung bình</option> {/* Translated: Medium */}
+            <option value="HARD">Khó</option> {/* Translated: Hard */}
           </select>
           {/* --- END: Difficulty Filter --- */}
-          <p style={{ marginTop: '20px' }}>More filters coming soon.</p>
+          <p style={{ marginTop: '20px' }}>Sắp có thêm bộ lọc.</p> {/* Translated: More filters coming soon. */}
         </aside>
 
         {/* Main Content ID */}
         <section id="coding-challenge-middle">
           <div className="coding-challenges-background">
-            <h1>Coding Challenges</h1>
+            <h1>Thử thách lập trình</h1> {/* Translated: Coding Challenges */}
             
             {/* Show loading spinner over table if fetching new page/filter */}
             {loading && <LoadingCircle1 />}
@@ -88,9 +88,9 @@ const CodingChallenge = () => {
             <table className="coding-challenges-table" style={{ display: loading ? 'none' : 'table' }}>
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Difficulty</th>
-                  <th>Topics</th>
+                  <th>Tiêu đề</th> {/* Translated: Title */}
+                  <th>Độ khó</th> {/* Translated: Difficulty */}
+                  <th>Chủ đề</th> {/* Translated: Topics */}
                 </tr>
               </thead>
               <tbody>
@@ -114,16 +114,16 @@ const CodingChallenge = () => {
                 onClick={() => setPage((p) => p - 1)}
                 disabled={page === 0 || loading}
               >
-                Previous
+                Trước {/* Translated: Previous */}
               </button>
               <span>
-                Page {page + 1} of {totalPages}
+                Trang {page + 1} / {totalPages} {/* Translated: Page X of Y */}
               </span>
               <button
                 onClick={() => setPage((p) => p + 1)}
                 disabled={page >= totalPages - 1 || loading}
               >
-                Next
+                Tiếp {/* Translated: Next */}
               </button>
             </div>
             {/* --- END: Pagination Controls --- */}
@@ -132,8 +132,8 @@ const CodingChallenge = () => {
 
         {/* Right Sidebar ID */}
         <aside id="coding-challenge-right">
-          <h3>Tips</h3>
-          <p>Placeholder for future leaderboard or announcements.</p>
+          <h3>Mẹo</h3> {/* Translated: Tips */}
+          <p>Khu vực dành cho bảng xếp hạng hoặc thông báo trong tương lai.</p> {/* Translated placeholder */}
         </aside>
       </main>
     </>
