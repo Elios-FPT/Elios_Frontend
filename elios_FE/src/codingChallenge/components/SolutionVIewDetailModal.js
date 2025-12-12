@@ -110,7 +110,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     const handleCommentSubmit = async (content, parentCommentId) => {
         if (!content.trim()) return;
 
-        let currentUserName = user ? `${user.firstName} ${user.lastName}`.trim() : "You";
+        let currentUserName = user ? `${user.firstName} ${user.lastName}`.trim() : "Bạn"; // Translated
         let currentUserAvatar = user?.avatarUrl || "/default-avatar.png";
 
         const tempId = `temp-${Date.now()}`;
@@ -137,7 +137,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                 setSolution(response.data.responseData);
             }
         } catch (error) {
-            alert("Error submitting comment. Please try again.");
+            alert("Lỗi khi gửi bình luận. Vui lòng thử lại."); // Translated
             console.error("Error submitting comment:", error);
         }
     };
@@ -178,7 +178,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     };
 
     const handleDeleteClick = async (commentId) => {
-        if (!window.confirm("Delete this comment?")) return;
+        if (!window.confirm("Bạn có chắc chắn muốn xóa bình luận này?")) return; // Translated
         deleteCommentFromState(commentId);
         try {
             await axios.delete(API_ENDPOINTS.DELETE_COMMENT(commentId), { withCredentials: true });
@@ -200,10 +200,12 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                 { targetType, targetId, reason, details: details ? details.trim() : "" },
                 { withCredentials: true, headers: { "Content-Type": "application/json" } }
             );
-            alert(`${targetType} reported successfully!`);
+            // Translated
+            const translatedTarget = targetType === "Post" ? "Bài viết" : "Bình luận";
+            alert(`${translatedTarget} đã được báo cáo thành công!`);
         } catch (error) {
             console.error(`Error reporting ${targetType}:`, error);
-            const msg = error.response?.data?.message || "Action failed.";
+            const msg = error.response?.data?.message || "Hành động thất bại."; // Translated
             alert(msg);
         }
     };
@@ -246,12 +248,12 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                                     <Dropdown.Menu align="end" variant="dark">
                                         {isAuthor ? (
                                             <>
-                                                <Dropdown.Item onClick={() => handleStartEdit(comment)}><FaEdit className="me-2" /> Edit</Dropdown.Item>
-                                                <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger"><FaTrash className="me-2" /> Delete</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => handleStartEdit(comment)}><FaEdit className="me-2" /> Sửa</Dropdown.Item> {/* Translated */}
+                                                <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger"><FaTrash className="me-2" /> Xóa</Dropdown.Item> {/* Translated */}
                                             </>
                                         ) : (
                                             <Dropdown.Item onClick={() => handleShowCommentReportModal(comment.commentId)}>
-                                                <FaFlag className="me-2" /> Report
+                                                <FaFlag className="me-2" /> Báo cáo {/* Translated */}
                                             </Dropdown.Item>
                                         )}
                                     </Dropdown.Menu>
@@ -266,8 +268,8 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                                         className="mb-2 bg-dark text-white border-secondary"
                                     />
                                     <div className="d-flex gap-2">
-                                        <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}><FaSave className="me-1" /> Save</Button>
-                                        <Button size="sm" variant="secondary" onClick={() => setEditingCommentId(null)}><FaTimes className="me-1" /> Cancel</Button>
+                                        <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}><FaSave className="me-1" /> Lưu</Button> {/* Translated */}
+                                        <Button size="sm" variant="secondary" onClick={() => setEditingCommentId(null)}><FaTimes className="me-1" /> Hủy</Button> {/* Translated */}
                                     </div>
                                 </div>
                             ) : (
@@ -277,7 +279,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                             {!isEditing && (
                                 <div className="mt-1">
                                     <Button variant="link" size="sm" className="p-0 text-decoration-none text-gray" onClick={() => setReplyingTo({ id: comment.commentId, author: comment.authorFullName })}>
-                                        Reply
+                                        Phản hồi {/* Translated */}
                                     </Button>
                                 </div>
                             )}
@@ -302,7 +304,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
         >
             <Modal.Header closeButton closeVariant="white" >
                 {loading || !solution ? (
-                    <Modal.Title>Loading...</Modal.Title>
+                    <Modal.Title>Đang tải...</Modal.Title> // Translated
                 ) : (
                     <div className="d-flex align-items-center gap-3" >
                         <img src={solution.authorAvatarUrl || "/default-avatar.png"} alt="avatar" className="solution-modal-avatar" />
@@ -325,7 +327,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                             </ReactMarkdown>
                         </div>
                         <hr className="border-secondary" />
-                        <h5 className="text-white mb-3">Comments</h5>
+                        <h5 className="text-white mb-3">Bình luận</h5> {/* Translated */}
                         <div className="solution-comments-list">
                             {renderComments(solution.comments || [])}
                         </div>
@@ -346,7 +348,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                         </div>
                     </>
                 ) : (
-                    <p className="text-center text-gray">Failed to load solution.</p>
+                    <p className="text-center text-gray">Không thể tải giải pháp.</p> // Translated
                 )}
             </Modal.Body>
 

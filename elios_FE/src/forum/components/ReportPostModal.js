@@ -10,7 +10,7 @@ const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
     const onSubmit = (e) => {
         e.preventDefault();
         if (!reason) {
-            alert("Please select a reason for the report.");
+            alert("Vui lòng chọn lý do báo cáo."); // Translated
             return;
         }
         // Pass the reason and details up to the parent
@@ -39,44 +39,45 @@ const ReportPostModal = ({ show, handleClose, handleSubmit }) => {
             backdropClassName="dark-theme-backdrop"
         >
             <Modal.Header closeButton>
-                <Modal.Title>Report Content</Modal.Title>
+                <Modal.Title>Báo cáo nội dung</Modal.Title> {/* Translated */}
             </Modal.Header>
             <Form onSubmit={onSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="reportReason">
-                        <Form.Label>Reason</Form.Label>
+                        <Form.Label>Lý do</Form.Label> {/* Translated */}
                         <Form.Select 
                             aria-label="Select a reason"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
                             required
                         >
-                            <option value="">Select a reason...</option>
-                            <option value="Spam or Advertising">Spam or Advertising</option>
-                            <option value="Harassment or Bullying">Harassment or Bullying</option>
-                            <option value="Hate Speech or Discrimination">Hate Speech or Discrimination</option>
-                            <option value="Misinformation or Fake News">Misinformation or Fake News</option>
-                            <option value="Offensive or Inappropriate Content">Offensive or Inappropriate Content</option>
-                            <option value="Other">Other</option>
+                            <option value="">Chọn một lý do...</option> {/* Translated */}
+                            {/* Values are kept in English for Backend compatibility, labels translated */}
+                            <option value="Spam or Advertising">Spam hoặc Quảng cáo</option>
+                            <option value="Harassment or Bullying">Quấy rối hoặc Bắt nạt</option>
+                            <option value="Hate Speech or Discrimination">Lời nói thù ghét hoặc Phân biệt đối xử</option>
+                            <option value="Misinformation or Fake News">Thông tin sai lệch hoặc Tin giả</option>
+                            <option value="Offensive or Inappropriate Content">Nội dung phản cảm hoặc không phù hợp</option>
+                            <option value="Other">Khác</option>
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="reportDetails">
-                        <Form.Label>Details (Optional)</Form.Label>
+                        <Form.Label>Chi tiết (Tùy chọn)</Form.Label> {/* Translated */}
                         <Form.Control
                             as="textarea"
                             rows={3}
                             value={details}
                             onChange={(e) => setDetails(e.target.value)}
-                            placeholder="Provide any additional information here..."
+                            placeholder="Cung cấp thêm thông tin tại đây..." // Translated
                         />
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onCancel}>
-                        Cancel
+                        Hủy {/* Translated */}
                     </Button>
                     <Button variant="danger" type="submit">
-                        Submit Report
+                        Gửi báo cáo {/* Translated */}
                     </Button>
                 </Modal.Footer>
             </Form>

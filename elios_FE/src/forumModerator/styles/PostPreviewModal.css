@@ -1,6 +1,5 @@
-/* file: elios_FE/src/admin/styles/PostPreviewModal.css */
+/* file: elios_FE/src/forumModerator/styles/PostPreviewModal.css */
 
-/* --- Modal Container Styling (Applied via contentClassName) --- */
 .admin-dark-modal {
     background-color: #1e1e1e !important;
     color: #eee !important;

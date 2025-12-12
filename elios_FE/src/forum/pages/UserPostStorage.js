@@ -18,8 +18,8 @@ const UserPostStorage = () => {
     // Hardcoded values
     const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
     const POST_TYPE = "Post";
-    const TITLE = "Your Post Title";
-    const CONTENT = "Your post content goes here...";
+    const TITLE = "Tiêu đề bài viết"; // Translated
+    const CONTENT = "Nội dung bài viết của bạn..."; // Translated
 
     useEffect(() => {
         const fetchData = async () => {
@@ -44,7 +44,7 @@ const UserPostStorage = () => {
 
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setError("Failed to fetch data.");
+                setError("Không thể tải dữ liệu."); // Translated
             } finally {
                 setLoading(false);
             }
@@ -58,7 +58,7 @@ const UserPostStorage = () => {
         
         // Prevent creation if banned
         if (banInfo && banInfo.isBanned) {
-            alert("You cannot create posts while banned.");
+            alert("Bạn không thể tạo bài viết khi đang bị cấm."); // Translated
             return;
         }
 
@@ -84,7 +84,7 @@ const UserPostStorage = () => {
 
         } catch (error) {
             console.error("Error creating new post:", error.response || error);
-            setError("Failed to create new post. Please try again.");
+            setError("Không thể tạo bài viết mới. Vui lòng thử lại."); // Translated
         }
     };
 
@@ -107,18 +107,18 @@ const UserPostStorage = () => {
     const renderBanNotification = () => {
         if (!banInfo || !banInfo.isBanned) return null;
 
-        const banDate = new Date(banInfo.banUntil).toLocaleString();
+        const banDate = new Date(banInfo.banUntil).toLocaleString("vi-VN"); // Added locale
         const message = banInfo.isPermanent 
-            ? "You are permanently banned from posting." 
-            : `You are banned until ${banDate}.`;
+            ? "Bạn đã bị cấm đăng bài vĩnh viễn." // Translated
+            : `Bạn bị cấm đăng bài cho đến ${banDate}.`; // Translated
 
         return (
             <div id="user-post-storage-ban-notification">
                 <div id="ban-notification-icon">⚠️</div>
                 <div id="ban-notification-content">
-                    <strong>Account Suspended</strong>
+                    <strong>Tài khoản bị tạm khóa</strong> {/* Translated */}
                     <span>{message}</span>
-                    {banInfo.reason && <span className="ban-reason">Reason: {banInfo.reason}</span>}
+                    {banInfo.reason && <span className="ban-reason">Lý do: {banInfo.reason}</span>} {/* Translated */}
                 </div>
             </div>
         );
@@ -133,15 +133,15 @@ const UserPostStorage = () => {
                     {renderBanNotification()}
 
                     <div id="user-post-storage-header">
-                        <h1 id="user-post-storage-title">Your Post Storage</h1>
+                        <h1 id="user-post-storage-title">Kho Bài Viết Của Bạn</h1> {/* Translated */}
                         <button
                             id="user-post-storage-create-btn"
                             onClick={handleCreateNewPost}
                             disabled={banInfo?.isBanned}
-                            title={banInfo?.isBanned ? "You are banned from creating posts" : "Create New Post"}
+                            title={banInfo?.isBanned ? "Bạn đang bị cấm tạo bài viết" : "Tạo bài viết mới"} // Translated
                             style={banInfo?.isBanned ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: '#555' } : {}}
                         >
-                            Create New Post
+                            Tạo bài viết mới {/* Translated */}
                         </button>
                     </div>
 

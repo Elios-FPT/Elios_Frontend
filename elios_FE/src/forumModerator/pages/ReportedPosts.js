@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
-import { API_ENDPOINTS } from '../../../../api/apiConfig';
+import { API_ENDPOINTS } from '../../api/apiConfig';
 import '../styles/ReportedPosts.css';
 
 const ReportedPosts = () => {
@@ -40,7 +40,7 @@ const ReportedPosts = () => {
             setReports(response.data.responseData || []);
         } catch (err) {
             console.error('Error fetching reported posts:', err);
-            setError('Failed to load reports.');
+            setError('Không thể tải danh sách báo cáo.'); // Translated
         } finally {
             setLoading(false);
         }
@@ -72,7 +72,7 @@ const ReportedPosts = () => {
 
     const handleOpenBanModal = () => {
         if (!banReason && selectedReport) {
-            setBanReason(`Banned due to report: ${selectedReport.reason}`);
+            setBanReason(`Bị cấm do báo cáo: ${selectedReport.reason}`); // Translated
         }
         setShowBanModal(true);
     };
@@ -107,12 +107,14 @@ const ReportedPosts = () => {
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            alert(`Report ${status === 'Approved' ? 'approved' : 'rejected'} successfully.`);
+            // Translated alert logic
+            const statusMsg = status === 'Approved' ? 'đã được duyệt' : 'đã bị từ chối';
+            alert(`Báo cáo ${statusMsg} thành công.`);
             setShowDetailModal(false);
             fetchReports(); // Refresh list
         } catch (error) {
             console.error("Error resolving report:", error);
-            alert("Failed to resolve report.");
+            alert("Không thể xử lý báo cáo."); // Translated
         } finally {
             setIsSubmitting(false);
         }
@@ -141,13 +143,13 @@ const ReportedPosts = () => {
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            alert(`User ${selectedReport.targetAuthorFirstName} has been banned.`);
+            alert(`Người dùng ${selectedReport.targetAuthorFirstName} đã bị cấm.`); // Translated
             setShowBanModal(false);
             setShowDetailModal(false);
             fetchReports();
         } catch (err) {
             console.error("Error banning user:", err);
-            alert("Failed to ban user.");
+            alert("Không thể cấm người dùng."); // Translated
         } finally {
             setIsSubmitting(false);
         }
@@ -171,28 +173,28 @@ const ReportedPosts = () => {
 
     return (
         <div id="reported-posts-page">
-            <h1>Reported Content</h1>
-            <p>Review and moderate reported posts and comments.</p>
+            <h1>Nội dung bị báo cáo</h1> {/* Translated */}
+            <p>Xem xét và kiểm duyệt các bài viết và bình luận bị báo cáo.</p> {/* Translated */}
 
             <div className="filters-container">
                 <div className="filter-group">
-                    <label>Status:</label>
+                    <label>Trạng thái:</label> {/* Translated */}
                     <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-                        <option value="All">All</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Approved">Approved (Resolved)</option>
-                        <option value="Rejected">Rejected</option>
+                        <option value="All">Tất cả</option> {/* Translated */}
+                        <option value="Pending">Chờ xử lý</option> {/* Translated */}
+                        <option value="Approved">Đã duyệt (Đã xử lý)</option> {/* Translated */}
+                        <option value="Rejected">Đã từ chối</option> {/* Translated */}
                     </select>
                 </div>
                 <div className="filter-group">
-                    <label>Type:</label>
+                    <label>Loại:</label> {/* Translated */}
                     <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-                        <option value="All">All</option>
-                        <option value="Post">Post</option>
-                        <option value="Comment">Comment</option>
+                        <option value="All">Tất cả</option> {/* Translated */}
+                        <option value="Post">Bài viết</option> {/* Translated */}
+                        <option value="Comment">Bình luận</option> {/* Translated */}
                     </select>
                 </div>
-                <button className="btn-refresh" onClick={fetchReports}>Refresh</button>
+                <button className="btn-refresh" onClick={fetchReports}>Làm mới</button> {/* Translated */}
             </div>
 
             <div className="reports-table-container">
@@ -201,18 +203,18 @@ const ReportedPosts = () => {
                 ) : error ? (
                     <p className="error-msg">{error}</p>
                 ) : filteredReports.length === 0 ? (
-                    <p>No reports found matching your criteria.</p>
+                    <p>Không tìm thấy báo cáo nào phù hợp.</p> // Translated
                 ) : (
                     <table className="reports-table">
                         <thead>
                             <tr>
-                                <th>Reported User</th>
-                                <th>Target</th>
-                                <th>Reason</th>
-                                <th>Content Snippet</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
+                                <th>Người dùng bị báo cáo</th> {/* Translated */}
+                                <th>Mục tiêu</th> {/* Translated */}
+                                <th>Lý do</th> {/* Translated */}
+                                <th>Đoạn nội dung</th> {/* Translated */}
+                                <th>Trạng thái</th> {/* Translated */}
+                                <th>Ngày</th> {/* Translated */}
+                                <th>Hành động</th> {/* Translated */}
                             </tr>
                         </thead>
                         <tbody>
@@ -254,7 +256,7 @@ const ReportedPosts = () => {
                                             className="btn-action btn-view"
                                             onClick={() => handleViewDetails(report)}
                                         >
-                                            View Details
+                                            Xem chi tiết {/* Translated */}
                                         </button>
                                     </td>
                                 </tr>
@@ -274,19 +276,19 @@ const ReportedPosts = () => {
                     className="dark-theme-modal"
                 >
                     <Modal.Header closeButton className="modal-header-custom">
-                        <Modal.Title>Report Details</Modal.Title>
+                        <Modal.Title>Chi tiết báo cáo</Modal.Title> {/* Translated */}
                     </Modal.Header>
                     <Modal.Body className="modal-body-custom">
                         {detailLoading ? (
                             <div className="loading-container">
                                 <Spinner animation="border" variant="success" />
-                                <p>Loading full details...</p>
+                                <p>Đang tải chi tiết đầy đủ...</p> {/* Translated */}
                             </div>
                         ) : (
                             <>
                                 {/* 1. The Reported User */}
                                 <div className="detail-section">
-                                    <h5>Reported User (Author)</h5>
+                                    <h5>Người dùng bị báo cáo (Tác giả)</h5> {/* Translated */}
                                     <div className="detail-user-card">
                                         <img
                                             src={selectedReport.targetAuthorAvatarUrl || 'default-avatar.png'}
@@ -296,7 +298,7 @@ const ReportedPosts = () => {
                                         <div>
                                             <h6>{selectedReport.targetAuthorFirstName} {selectedReport.targetAuthorLastName}</h6>
                                             <small className="text-muted">ID: {selectedReport.targetAuthorId}</small>
-                                            {selectedReport.isBanned && <span className="badge bg-danger ms-2">Banned</span>}
+                                            {selectedReport.isBanned && <span className="badge bg-danger ms-2">Đã bị cấm</span>} {/* Translated */}
                                         </div>
                                         <div className="ms-auto d-flex gap-2">
                                             <Button
@@ -304,7 +306,7 @@ const ReportedPosts = () => {
                                                 size="sm"
                                                 onClick={handleOpenBanModal}
                                             >
-                                                Ban User
+                                                Cấm người dùng {/* Translated */}
                                             </Button>
                                         </div>
                                     </div>
@@ -313,7 +315,7 @@ const ReportedPosts = () => {
                                 {/* 2. The Content */}
                                 <div className="detail-section">
                                     <div className="d-flex justify-content-between align-items-center mb-2">
-                                        <h5>Reported Content ({selectedReport.targetType})</h5>
+                                        <h5>Nội dung bị báo cáo ({selectedReport.targetType})</h5> {/* Translated */}
 
                                         {/* Updated to check logic and use new handler */}
                                         <Button
@@ -321,7 +323,7 @@ const ReportedPosts = () => {
                                             size="sm"
                                             onClick={handleRedirectToReportedPosts}
                                         >
-                                            View Post
+                                            Xem bài viết {/* Translated */}
                                         </Button>
                                     </div>
 
@@ -333,25 +335,25 @@ const ReportedPosts = () => {
 
                                 {/* 3. The Report Info */}
                                 <div className="detail-section">
-                                    <h5>Report Information</h5>
-                                    <p><strong>Reason:</strong> {selectedReport.reason}</p>
-                                    {selectedReport.details && <p><strong>Details:</strong> {selectedReport.details}</p>}
-                                    <p><strong>Reporter:</strong> {selectedReport.reporterFirstName} {selectedReport.reporterLastName}</p>
-                                    <p><strong>Date:</strong> {new Date(selectedReport.createdAt).toLocaleString()}</p>
+                                    <h5>Thông tin báo cáo</h5> {/* Translated */}
+                                    <p><strong>Lý do:</strong> {selectedReport.reason}</p> {/* Translated */}
+                                    {selectedReport.details && <p><strong>Chi tiết:</strong> {selectedReport.details}</p>} {/* Translated */}
+                                    <p><strong>Người báo cáo:</strong> {selectedReport.reporterFirstName} {selectedReport.reporterLastName}</p> {/* Translated */}
+                                    <p><strong>Ngày:</strong> {new Date(selectedReport.createdAt).toLocaleString()}</p> {/* Translated */}
                                 </div>
 
                                 {/* 4. Resolution Actions (Only if Pending) */}
                                 {selectedReport.status === 'Pending' && (
                                     <div className="detail-section resolution-section mt-4 pt-3 border-top border-secondary">
-                                        <h5>Resolution</h5>
+                                        <h5>Giải quyết</h5> {/* Translated */}
                                         <Form.Group className="mb-3">
-                                            <Form.Label>Moderator Note</Form.Label>
+                                            <Form.Label>Ghi chú của kiểm duyệt viên</Form.Label> {/* Translated */}
                                             <Form.Control
                                                 as="textarea"
                                                 rows={2}
                                                 value={moderatorNote}
                                                 onChange={(e) => setModeratorNote(e.target.value)}
-                                                placeholder="Add a note about this decision (optional)..."
+                                                placeholder="Thêm ghi chú về quyết định này (tùy chọn)..." // Translated
                                                 className="bg-dark text-white border-secondary"
                                             />
                                         </Form.Group>
@@ -361,14 +363,14 @@ const ReportedPosts = () => {
                                                 onClick={() => handleResolveReport('Rejected', false)}
                                                 disabled={isSubmitting}
                                             >
-                                                Dismiss Report (Keep Content)
+                                                Bỏ qua báo cáo (Giữ nội dung) {/* Translated */}
                                             </Button>
                                             <Button
                                                 variant="danger"
                                                 onClick={() => handleResolveReport('Approved', true)}
                                                 disabled={isSubmitting}
                                             >
-                                                Approve Report & Delete Content
+                                                Duyệt báo cáo & Xóa nội dung {/* Translated */}
                                             </Button>
                                         </div>
                                     </div>
@@ -378,7 +380,7 @@ const ReportedPosts = () => {
                     </Modal.Body>
                     <Modal.Footer className="modal-footer-custom">
                         <Button variant="secondary" onClick={() => setShowDetailModal(false)}>
-                            Close
+                            Đóng {/* Translated */}
                         </Button>
                     </Modal.Footer>
                 </Modal>
@@ -392,44 +394,44 @@ const ReportedPosts = () => {
                 className="dark-theme-modal"
             >
                 <Modal.Header closeButton className="modal-header-custom">
-                    <Modal.Title>Ban User</Modal.Title>
+                    <Modal.Title>Cấm người dùng</Modal.Title> {/* Translated */}
                 </Modal.Header>
                 <Modal.Body className="modal-body-custom">
-                    <p>You are about to ban <strong>{selectedReport?.targetAuthorFirstName} {selectedReport?.targetAuthorLastName}</strong>.</p>
+                    <p>Bạn sắp cấm người dùng <strong>{selectedReport?.targetAuthorFirstName} {selectedReport?.targetAuthorLastName}</strong>.</p> {/* Translated */}
                     <Form>
                         <Form.Group className="mb-3">
-                            <Form.Label>Ban Reason</Form.Label>
+                            <Form.Label>Lý do cấm</Form.Label> {/* Translated */}
                             <Form.Control
                                 type="text"
-                                placeholder="Enter reason..."
+                                placeholder="Nhập lý do..." // Translated
                                 value={banReason}
                                 onChange={(e) => setBanReason(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Duration</Form.Label>
+                            <Form.Label>Thời hạn</Form.Label> {/* Translated */}
                             <Form.Select
                                 value={banDuration}
                                 onChange={(e) => setBanDuration(e.target.value)}
                             >
-                                <option value="1">1 Day</option>
-                                <option value="3">3 Days</option>
-                                <option value="7">7 Days</option>
-                                <option value="30">30 Days</option>
-                                <option value="365">1 Year</option>
-                                <option value="permanent">Permanent</option>
+                                <option value="1">1 Ngày</option> {/* Translated */}
+                                <option value="3">3 Ngày</option> {/* Translated */}
+                                <option value="7">7 Ngày</option> {/* Translated */}
+                                <option value="30">30 Ngày</option> {/* Translated */}
+                                <option value="365">1 Năm</option> {/* Translated */}
+                                <option value="permanent">Vĩnh viễn</option> {/* Translated */}
                             </Form.Select>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer className="modal-footer-custom">
-                    <Button variant="secondary" onClick={() => setShowBanModal(false)}>Cancel</Button>
+                    <Button variant="secondary" onClick={() => setShowBanModal(false)}>Hủy</Button> {/* Translated */}
                     <Button
                         variant="danger"
                         onClick={handleBanUser}
                         disabled={isSubmitting}
                     >
-                        {isSubmitting ? 'Processing...' : 'Confirm Ban'}
+                        {isSubmitting ? 'Đang xử lý...' : 'Xác nhận cấm'} {/* Translated */}
                     </Button>
                 </Modal.Footer>
             </Modal>
