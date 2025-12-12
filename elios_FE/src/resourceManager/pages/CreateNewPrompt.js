@@ -61,7 +61,7 @@ const CreateNewPrompt = () => {
 
   return (
     <>
-      <UserNavbar />
+      
       <main className="dashboard-container">
         <div className="main-tabs-container">
           {/* Header với nút Back */}

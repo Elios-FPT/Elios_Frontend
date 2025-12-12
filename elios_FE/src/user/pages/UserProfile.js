@@ -37,7 +37,7 @@ const UserProfile = () => {
   const [editForm, setEditForm] = useState({
     firstName: '',
     lastName: '',
-    gender: '',
+    gender: null,
     dateOfBirth: '',
   });
   const [saving, setSaving] = useState(false);
@@ -501,9 +501,8 @@ const UserProfile = () => {
                     onChange={e => setEditForm(prev => ({ ...prev, gender: e.target.value }))}
                   >
                     <option value="">Select gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
                   </select>
                 </div>
 

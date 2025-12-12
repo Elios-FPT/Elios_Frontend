@@ -419,12 +419,12 @@ const PostDetail = () => {
         });
     };
 
-    if (loading) return <><UserNavbar /><div id="post-detail-background" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingCircle1 /></div></>;
-    if (!post) return <><UserNavbar /><div id="post-detail-background" className="text-center pt-5 text-white"><p>Post not found.</p><Button onClick={() => navigate("/forum")} variant="outline-light">Back to Forum</Button></div></>;
+    if (loading) return <><div id="post-detail-background" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingCircle1 /></div></>;
+    if (!post) return <><div id="post-detail-background" className="text-center pt-5 text-white"><p>Post not found.</p><Button onClick={() => navigate("/forum")} variant="outline-light">Back to Forum</Button></div></>;
 
     return (
         <>
-            <UserNavbar />
+            
             <div id="post-detail-background">
                 <Container id="post-detail-container">
                     

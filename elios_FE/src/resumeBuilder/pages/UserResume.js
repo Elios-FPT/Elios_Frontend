@@ -112,7 +112,7 @@ const UserResume = () => {
   if (loading) {
     return (
       <div id="user-resume-background">
-        <UserNavbar />
+        
         <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px" }}>
           <p>Loading your resumes...</p>
         </div>
@@ -124,7 +124,7 @@ const UserResume = () => {
   if (error) {
     return (
       <div id="user-resume-background">
-        <UserNavbar />
+        
         <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px", color: "red" }}>
           <p>{error}</p>
           <button onClick={() => window.location.reload()}>Retry</button>
@@ -136,7 +136,7 @@ const UserResume = () => {
   return (
     <>
       <div id="user-resume-background">
-        <UserNavbar />
+        
         <div id="user-resume-dashboard">
           <div id="dashboard-header">
             <h1>My Resumes</h1>

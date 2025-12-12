@@ -85,7 +85,7 @@ const MockProjects = () => {
   return (
     <>
       <header>
-        <UserNavbar />
+        
       </header>
 
       <main className="dashboard-container">

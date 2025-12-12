@@ -76,57 +76,6 @@ const LandingPage = () => {
     <div id="landing-bg-landingPage">
       {/* Header Section */}
       <div id="header-section-landingPage">
-        <Navbar expand="lg" id="navbar-custom-landingPage">
-          <Navbar.Brand href="#">
-            <img src="/assets/logo/logo1.png" alt="Logo" id="logo-img" />
-          </Navbar.Brand>
-
-          <Nav className="ml-auto" id="nav-links-landingPage">
-
-            {/* Language Switcher */}
-            <Nav.Link onClick={toggleLanguage} style={{ cursor: "pointer" }}>
-              {t("landingPage.navbar.language")}
-            </Nav.Link>
-
-            {/* Trạng thái đăng nhập */}
-            {profileLoading ? (
-              <Nav.Link disabled>
-                <Spinner animation="border" size="sm" /> Loading...
-              </Nav.Link>
-            ) : !user ? (
-              <Nav.Link
-                onClick={() => (window.location.href = API_ENDPOINTS.LOGIN_PATH)}
-                style={{ cursor: "pointer" }}
-              >
-                {t("landingPage.navbar.login")}
-              </Nav.Link>
-            ) : (
-              <>
-                {navbarLinks.map((link, idx) => (
-                  <Nav.Link key={idx} href={link.href}>
-                    {link.label}
-                  </Nav.Link>
-                ))}
-                <Nav.Link as={Link} to="/user/profile">
-                  {t("UserNavbar.profile")}
-                </Nav.Link>
-                <Nav.Link as={Link} to="/interview">
-                  Interviews
-                </Nav.Link>
-                <Nav.Link
-                  onClick={() => {
-                    localStorage.clear();
-                    window.location.href = API_ENDPOINTS.LOGOUT_PATH;
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  {t("UserNavbar.logout")}
-                </Nav.Link>
-              </>
-            )}
-          </Nav>
-        </Navbar>
-
         <Container id="main-content-landingPage">
           <Row>
             <Col md={6} className="d-flex" id="align-items-center-landingPage">

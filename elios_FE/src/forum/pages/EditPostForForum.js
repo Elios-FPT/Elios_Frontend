@@ -291,7 +291,7 @@ const EditPostForForum = () => {
     if (loading) {
         return (
             <>
-                <UserNavbar />
+                
                 <div id="edit-post-for-forum-container">
                     <p>Loading post data...</p>
                 </div>
@@ -302,7 +302,7 @@ const EditPostForForum = () => {
     if (error) {
         return (
             <>
-                <UserNavbar />
+                
                 <div id="edit-post-for-forum-container">
                     <p id="edit-post-for-forum-error">{error}</p>
                     <button type="button" className="edit-post-for-forum-btn-cancel" onClick={() => navigate(-1)}>Go Back</button>
@@ -344,7 +344,7 @@ const EditPostForForum = () => {
 
     return (
         <>
-            <UserNavbar />
+            
             <div id="edit-post-for-forum-container">
                 <Row>
                     <Col md={2}>

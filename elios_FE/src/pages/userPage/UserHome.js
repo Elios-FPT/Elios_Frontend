@@ -14,7 +14,7 @@ const UserHome = () => {
   return (
     <>
       <header>
-        <UserNavbar />
+        
       </header>
 
       <main>

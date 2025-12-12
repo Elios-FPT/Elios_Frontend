@@ -53,7 +53,7 @@ const Forum = () => {
   return (
     <>
       <header>
-        <UserNavbar />
+        
       </header>
 
       <main>

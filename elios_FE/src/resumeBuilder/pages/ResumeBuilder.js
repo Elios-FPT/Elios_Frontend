@@ -166,7 +166,7 @@ const ResumeBuilder = () => {
 
   return (
     <div id="rb-app-container">
-      <UserNavbar />
+      
       <Toolbar resumeData={resumeData} onReset={handleReset} isSaving={isSaving} />
       <Container fluid className="rb-main-container">
         <Row>

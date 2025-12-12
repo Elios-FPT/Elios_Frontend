@@ -223,7 +223,7 @@ const ProjectDetailPage = () => {
 
   return (
     <>
-      <header><UserNavbar /></header>
+      <header></header>
 
       <main className="project-detail-container">
         {}

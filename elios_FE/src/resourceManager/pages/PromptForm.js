@@ -17,7 +17,7 @@ export const PromptForm = ({
 
   return (
     <>
-      <UserNavbar />
+      
       <main className="dashboard-container">
         <div className="main-tabs-container">
           <div className="tab-header" style={{ marginBottom: '2rem' }}>

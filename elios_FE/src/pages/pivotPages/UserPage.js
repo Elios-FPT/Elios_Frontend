@@ -14,7 +14,7 @@ const UserPage = () => {
     return (
         <>
             <header>
-                <UserNavbar />
+                
             </header>
 
             <main>

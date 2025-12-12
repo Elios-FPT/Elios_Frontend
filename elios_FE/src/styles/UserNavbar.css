@@ -1,100 +1,195 @@
-/* Frontend/elios_FE/src/styles/UserNavbar.css */
-
-.user-navbar {
-    background: #23272f;
-    padding: 0.5rem 0;
-    font-family: 'Roboto', Arial, sans-serif;
+.user-navbar-modern {
+  background: #23272f !important;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+  padding: 0.75rem 0;
+  font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1050;
+  position: relative;
+  height: 80px;
 }
 
-.user-navbar-navbar-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+/* Logo */
+.user-navbar-modern .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffd700 !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
 }
 
-.user-navbar-logo-img {
-    height: fit-content;
-    width: fit-content;
-    max-height: 40px;
+.user-navbar-modern .navbar-brand:hover {
+  transform: scale(1.03);
 }
 
-.user-navbar-logo-text {
-    font-weight: bold;
-    color: #3a2ea8;
-    font-size: 1.3rem;
-    letter-spacing: 1px;
+.user-navbar-modern .navbar-brand img {
+  height: 42px;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.3));
 }
 
-.user-navbar-navbar-links .nav-link {
-    color: #ffd700;
-    font-weight: 500;
-    margin-right: 24px;
-    font-size: 1rem;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    transition: color 0.2s;
+/* Nav Links - Giữ màu vàng + hiệu ứng đẹp */
+.user-navbar-modern .nav-link-modern {
+  color: #ffd700 !important;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+  position: relative;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.user-navbar-navbar-links .nav-link:hover {
-    color: #f9b302;
-    text-decoration: underline;
+.user-navbar-modern .nav-link-modern:hover {
+  color: #fff !important;
+  background: rgba(255, 215, 0, 0.15);
+  transform: translateY(-1px);
 }
 
-.user-navbar-navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.user-navbar-modern .nav-link-modern.active {
+  background: #236902;
+  color: #ffd700 !important;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(58, 46, 168, 0.6);
 }
 
-.user-navbar-flag-icon img {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 0 2px #ccc;
-    background: #fff;
+/* Badge Admin/Mod */
+.user-navbar-modern .badge {
+  font-size: 0.65rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #e74c3c;
+  color: white;
+  font-weight: 700;
 }
 
-.user-navbar-login-link {
-    color: #3a2ea8;
-    font-weight: 500;
-    text-decoration: none;
-    font-size: 1rem;
-    margin-right: 8px;
+/* Language Switcher */
+.user-navbar-modern .nav-link[role="button"] {
+  color: #b0b0b0 !important;
+  font-size: 0.95rem;
 }
 
-.user-navbar-login-link:hover {
-    text-decoration: underline;
+.user-navbar-modern .nav-link[role="button"]:hover {
+  color: #ffd700 !important;
 }
 
-.user-navbar-register-btn {
-    font-weight: 500;
-    background: #e74c3c;
-    border: none;
-    padding: 6px 18px;
-    border-radius: 4px;
+/* Nút Login / Register khi chưa đăng nhập */
+.btn-login-outline {
+  color: #3a2ea8 !important;
+  border: 2px solid #3a2ea8;
+  font-weight: 600;
+  padding: 0.5rem 1.3rem !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
-/* Dropdown */
-.user-navbar-navbar-actions .dropdown-toggle {
-    font-weight: 500;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 4px;
-    color: #fff;
+.btn-login-outline:hover {
+  background: #3a2ea8;
+  color: #ffd700 !important;
 }
 
-.user-navbar-navbar-actions .dropdown-menu {
-    background: #23272f;
-    border-radius: 6px;
-    min-width: 180px;
+.btn-register {
+  background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+  color: white !important;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem !important;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4);
+  transition: all 0.3s ease;
 }
 
-.user-navbar-navbar-actions .dropdown-item {
-    color: #ffd700;
-    font-weight: 500;
+.btn-register:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.6);
 }
 
-.user-navbar-navbar-actions .dropdown-item:hover {
-    background: #4f4f4f;
-    color: #fff;
+/* Avatar Dropdown */
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3a2ea8, #5b4cc7);
+  color: #ffd700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1rem;
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.avatar-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* Dropdown Menu */
+.dropdown-menu-modern {
+  background: #2c313c;
+  border: 1px solid #3a2ea8;
+  border-radius: 12px;
+  padding: 12px 0;
+  min-width: 210px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-top: 8px;
+}
+
+.dropdown-menu-modern .dropdown-item {
+  color: #ffd700;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: all 0.2s;
+}
+
+.dropdown-menu-modern .dropdown-item:hover {
+  background: #3a2ea8;
+  color: white;
+  padding-left: 24px;
+}
+
+.dropdown-menu-modern .dropdown-item.text-danger {
+  color: #e74c3c !important;
+}
+
+.dropdown-menu-modern .dropdown-item.text-danger:hover {
+  background: #e74c3c;
+  color: white !important;
+}
+
+.dropdown-menu-modern .dropdown-item.disabled {
+  color: #aaa !important;
+  font-size: 0.85rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 992px) {
+  .user-navbar-modern .navbar-collapse {
+    margin-top: 1rem;
+    background: #1e2229;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid #3a2ea8;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  .user-navbar-modern .nav-link-modern {
+    padding: 0.8rem 1rem !important;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+  }
+
+  .user-navbar-modern .nav-link-modern:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Hiệu ứng khi scroll */
+.user-navbar-modern.scrolled {
+  background: rgba(35, 39, 47, 0.98) !important;
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
 }

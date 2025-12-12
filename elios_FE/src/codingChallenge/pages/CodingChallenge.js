@@ -37,7 +37,7 @@ const CodingChallenge = () => {
     return (
       <>
         <header>
-          <UserNavbar />
+          
         </header>
         {/* We use an ID for the main container AND a "loading" class for centering */}
         <main id="coding-challenges-container" className="loading">
@@ -50,7 +50,7 @@ const CodingChallenge = () => {
   return (
     <>
       <header>
-        <UserNavbar />
+        
       </header>
 
       {/* Main container ID */}

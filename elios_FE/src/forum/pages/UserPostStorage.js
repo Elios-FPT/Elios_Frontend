@@ -126,7 +126,7 @@ const UserPostStorage = () => {
 
     return (
         <div id="user-post-storage-page">
-            <UserNavbar />
+            
             <div id="user-post-storage-background">
                 <div id="user-post-storage-container">
                     

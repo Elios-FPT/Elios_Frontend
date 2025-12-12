@@ -77,7 +77,7 @@ const PromptAuditTrail = () => {
 
   return (
     <>
-      <UserNavbar />
+      
       <main className="dashboard-container">
         <div className="main-tabs-container" style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div className="tab-header" style={{ marginBottom: '2rem' }}>

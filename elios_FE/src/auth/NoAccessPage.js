@@ -8,7 +8,7 @@ const NoAccessPage = () => {
 
   return (
     <>
-      <UserNavbar />
+      
       <div style={{
         minHeight: '100vh',
         background: '#121212',

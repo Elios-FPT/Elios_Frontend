@@ -64,11 +64,14 @@ import { InterviewProvider } from "./interview/context/InterviewContext";
 import Footer from "./components/footers/Footer";
 
 import { Navigate } from "react-router-dom";
+import UserNavbar from "./components/navbars/UserNavbar";
 
 function App() {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
+        <UserNavbar/>
+        <div style={{marginTop: 80}}></div>
         <Routes>
           {/* Public */}
           <Route path="/" element={<LandingPage />} />

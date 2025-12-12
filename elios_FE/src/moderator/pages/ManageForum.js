@@ -75,7 +75,7 @@ const ManageForum = () => {
 
   return (
     <>
-      <UserNavbar />
+      
       <main className="dashboard-container">
         <div className="main-tabs-container">
           <div className="tab-header">
