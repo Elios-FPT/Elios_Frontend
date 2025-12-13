@@ -1,6 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
+import axios from 'axios';
+import { API_ENDPOINTS } from '../../api/apiConfig';
+import websocketService from '../utils/websocketService';
+import toast from '../utils/toast';
+import { useNavigate } from 'react-router-dom';
 
 const InterviewContext = createContext(null);
+
+
 
 export function InterviewProvider({ children }) {
   const [activeTab, setActiveTab] = useState('text');
@@ -11,23 +18,68 @@ export function InterviewProvider({ children }) {
   const [isStarting, setIsStarting] = useState(false);
   const [cvAnalysisId, setCvAnalysisId] = useState(null);
   const [candidateId, setCandidateId] = useState(null);
-  const [messages, setMessages] = useState([]); // Shared messages across TextChat and VoiceChat
+  const [messages, setMessages] = useState([]);
+
+  const navigate = useNavigate();
 
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleEndSession = () => {
-    setShowFeedback(true);
+  const handleEndSession = async () => {
+    if (!interviewId) {
+      toast.warning('Không có buổi phỏng vấn nào đang diễn ra.');
+      return;
+    }
+
+    try {
+      setIsStarting(true);
+      toast.info('Đang kết thúc buổi phỏng vấn và tạo báo cáo đánh giá...');
+
+      const response = await axios.put(
+        API_ENDPOINTS.STOP_AI_INTERVIEW(interviewId),
+        {},
+        { withCredentials: true }
+      );
+
+      const feedbackData = response.data;
+
+      if (feedbackData) {
+        setDetailedFeedback(feedbackData);
+        setShowFeedback(true);
+
+        toast.success('Buổi phỏng vấn đã kết thúc thành công! Xem kết quả bên dưới.');
+      }
+    } catch (err) {
+      console.error('Lỗi khi kết thúc phỏng vấn:', err);
+      const message = err.response?.data?.message || 'Không thể kết thúc phỏng vấn. Vui lòng thử lại.';
+      toast.error(message);
+
+      if (err.response?.data) {
+        setDetailedFeedback(err.response.data);
+        setShowFeedback(true);
+      }
+    } finally {
+      setIsStarting(false);
+
+      setInterviewId(null);
+      setWsUrl(null);
+      setMessages([]);
+
+      if (wsUrl) {
+        websocketService.disconnect();
+      }
+    }
   };
 
   const handleCloseFeedback = () => {
     setShowFeedback(false);
+    navigate("/interview");
   };
 
   const handleDetailedFeedbackReceived = (feedback) => {
     setDetailedFeedback(feedback);
-    setShowFeedback(true); // Automatically open modal when feedback is received
+    setShowFeedback(true);
   };
 
   const value = {
@@ -41,6 +93,7 @@ export function InterviewProvider({ children }) {
     cvAnalysisId,
     candidateId,
     messages,
+
     // Setters
     setActiveTab,
     setShowFeedback,
@@ -51,6 +104,7 @@ export function InterviewProvider({ children }) {
     setCvAnalysisId,
     setCandidateId,
     setMessages,
+
     // Handlers
     handleTabSwitch,
     handleEndSession,
@@ -72,4 +126,3 @@ export function useInterview() {
   }
   return context;
 }
-

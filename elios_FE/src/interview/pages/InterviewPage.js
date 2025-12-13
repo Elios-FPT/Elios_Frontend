@@ -369,7 +369,7 @@ function InterviewPage() {
   };
 
   const reviewableItems = buildReviewableItems();
-  if (interviewId || isReviewing) {
+  if (interviewId || isReviewing || showFeedback) {
     return (
       <div id="interview-page">
         <div id="interview-container">

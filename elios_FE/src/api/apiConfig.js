@@ -40,6 +40,7 @@ export const API_ENDPOINTS = {
 
     UPLOAD_CV: `${baseUrl}/api/ai/interviews/cv/upload`,
     PLAN_INTERVIEW: `${baseUrl}/api/ai/interviews/plan`,
+    GET_INTERVIEW_HISTORY: (userId) => `${baseUrl}/api/ai/interviews/users/${userId}/history`,
     GET_PLANNING_STATUS: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/plan`,
     GET_INTERVIEW_DETAIL: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}`,
     START_INTERVIEW: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/start`,
@@ -47,6 +48,7 @@ export const API_ENDPOINTS = {
     GET_INTERVIEW_SUMMARY: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/summary`,
     GET_AI_INTERVIEW_CONVERSATION: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/conversation`,
     GET_AI_INTERVIEW_DETAIL: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}`,
+    STOP_AI_INTERVIEW: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/stop`,
 
     // User API Endpoints
     GET_USER_PROFILE: `${baseUrl}/api/users/me/profile`,
