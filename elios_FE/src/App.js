@@ -24,10 +24,10 @@ import RoleProtectedRoute from "./auth/RoleProtectedRoute";
 import TestConnectionToBE from "./components/test/TestConectionToBE";
 
 // --- Content Moderator (Fixed Imports) ---
-import ContentModeratorLayout from "./forumModerator/components/ContentModeratorLayout"; 
-import PendingPosts from "./forumModerator/pages/PendingPosts"; 
-import ReportedPosts from "./forumModerator/pages/ReportedPosts"; 
-import ManageCategory from "./forumModerator/pages/ManageCategory"; 
+import ContentModeratorLayout from "./forumModerator/components/ContentModeratorLayout";
+import PendingPosts from "./forumModerator/pages/PendingPosts";
+import ReportedPosts from "./forumModerator/pages/ReportedPosts";
+import ManageCategory from "./forumModerator/pages/ManageCategory";
 import BannedUserForum from "./forumModerator/pages/BannedUserForum";
 
 // --- Resource Manager ---
@@ -56,6 +56,7 @@ import CreateNewPrompt from "./resourceManager/pages/CreateNewPrompt";
 import MockProjects from "./mockProject/pages/MockProjects";
 import ProjectDetailPage from './mockProject/pages/ProjectDetailPage';
 import InterviewPage from "./interview/pages/InterviewPage";
+import InterviewHistory from "./interviewHistory/pages/InterviewHistory";
 import { InterviewProvider } from "./interview/context/InterviewContext";
 
 import UserNavbar from "./components/navbars/UserNavbar";
@@ -63,7 +64,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
-        <UserNavbar/>
+        <UserNavbar />
         <Routes>
           {/* Public */}
           <Route path="/" element={<LandingPage />} />
@@ -82,10 +83,11 @@ function App() {
             <Route path="/resume/edit/:id" element={<ResumeBuilder />} />
             <Route path="/mock-projects/:projectId" element={<ProjectDetailPage />} />
             <Route path="/interview" element={
-                <InterviewProvider>
-                  <InterviewPage />
-                </InterviewProvider>
-              } />
+              <InterviewProvider>
+                <InterviewPage />
+              </InterviewProvider>
+            } />
+            <Route path="/interview/history" element={<InterviewHistory />} />
           </Route>
 
           {/* --- CONTENT MODERATOR ROUTES (Updated) --- */}
@@ -101,7 +103,7 @@ function App() {
 
           {/* --- RESOURCE MANAGER ROUTES --- */}
           <Route element={<RoleProtectedRoute allowedRoles={["Resource Manager", "Admin"]} />}>
-            
+
             <Route path="/manage-interviews" element={<ManageInterviews />} />
 
             <Route path="/manage-coding-bank" element={<ManageCodingBank />} />

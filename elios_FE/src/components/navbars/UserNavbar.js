@@ -40,6 +40,7 @@ const UserNavbar = () => {
       { to: "/resume-builder", label: t("UserNavbar.buildCV") },
       { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
       { to: "/interview", label: "Interview" },
+      { to: "/interview/history", label: "Interview History" }
     ];
 
     // Role-based links
