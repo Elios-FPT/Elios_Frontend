@@ -1,0 +1,337 @@
+.myreviews-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f7ff 0%, #f8f5ff 100%);
+  padding: 40px 20px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #1e293b;
+}
+
+.page-header h1 {
+  font-size: 34px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 12px;
+}
+
+.page-header p {
+  font-size: 17px;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.loading {
+  text-align: center;
+  padding: 100px;
+  color: #64748b;
+}
+
+.shared-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 24px;
+}
+
+.shared-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.3s;
+  cursor: pointer;
+  border: 1px solid #e2e2f0;
+}
+
+.shared-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(99,102,241,0.2);
+}
+
+.card-content {
+  padding: 28px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+.card-info p {
+  margin: 10px 0;
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+.question-count { font-size: 20px; font-weight: 600; }
+.reviewer-count { font-size: 24px; font-weight: 700; margin: 8px 0; }
+
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.card-action {
+  padding: 20px 28px;
+  background: white;
+  color: #6366f1;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+/* ==================== CHI TIẾT REVIEW ==================== */
+.myreviews-detail {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 30px;
+}
+
+.detail-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  padding: 10px 20px;
+  background: #64748b;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.detail-header {
+  text-align: center;
+  background: white;
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  margin-bottom: 32px;
+}
+
+.detail-header h1 {
+  font-size: 28px;
+  color: #1e40af;
+  margin: 0 0 12px;
+}
+
+.interview-info {
+  font-size: 17px;
+  color: #64748b;
+  margin: 8px 0;
+}
+
+.reviews-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.review-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.reviewer-info h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #1e293b;
+}
+
+.submitted-at {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.my-rating {
+  background: #fbbf24;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.ratings {
+  display: grid;
+  gap: 16px;
+}
+
+.rating-item {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid #6366f1;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.rating-stars .stars {
+  display: flex;
+  gap: 4px;
+}
+
+.rating-stars .stars span {
+  color: #e2e8f0;
+  font-size: 18px;
+}
+
+.rating-stars .stars span.filled {
+  color: #fbbf24;
+}
+
+.comment {
+  margin: 12px 0 0;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  font-style: italic;
+  color: #374151;
+  border-left: 3px solid #6366f1;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 100px 20px;
+  color: #64748b;
+}
+
+.empty-state .material-icons {
+  font-size: 80px;
+  opacity: 0.5;
+  margin-bottom: 20px;
+}
+
+.rating-item {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  border-left: 4px solid #6366f1;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.question-label {
+  font-weight: 700;
+  font-size: 18px;
+  color: #1e40af;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e0e7ff;
+}
+
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  font-size: 15px;
+}
+
+.rating-title {
+  font-weight: 600;
+  color: #374151;
+  min-width: 80px;
+}
+
+.stars {
+  display: flex;
+  gap: 6px;
+}
+
+.star {
+  transition: all 0.2s ease;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.rating-value {
+  font-weight: 700;
+  color: #1e293b;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Comment đẹp hơn */
+.review-comment {
+  margin-top: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  font-style: italic;
+  color: #1e293b;
+  line-height: 1.6;
+  position: relative;
+  border-left: 4px solid #6366f1;
+  font-size: 16px;
+}
+
+.quote-icon {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-size: 32px;
+  color: #6366f1;
+  opacity: 0.3;
+  font-family: Georgia, serif;
+}
+
+.review-comment::before {
+  content: '“';
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-size: 60px;
+  color: #6366f1;
+  opacity: 0.15;
+  font-family: Georgia, serif;
+  line-height: 1;
+}

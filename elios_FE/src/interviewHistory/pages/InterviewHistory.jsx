@@ -13,6 +13,54 @@ function InterviewHistory() {
 
     const userId = localStorage.getItem('userId');
 
+    const [isSharing, setIsSharing] = useState(false);
+
+    const handleQuickShare = async () => {
+        if (!selected) return;
+
+        setIsSharing(true);
+
+        try {
+            const questionCount = messages.filter(m =>
+                m.type === 'question' || m.type === 'followup'
+            ).length;
+
+            const title = selected.title && selected.title.trim() !== ''
+                ? selected.title
+                : `Mock Interview – ${new Date(selected.started_at).toLocaleDateString('vi-VN')} ${new Date(selected.started_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}`;
+
+            const skills = extractSkillsFromMessages(messages) || "Java, Spring Boot, System Design, Problem Solving";
+
+            const response = await axios.post(
+                API_ENDPOINTS.PEER_SHARE_INTERVIEW,
+                {
+                    InterviewSessionId: selected.id,
+                    Title: title,
+                    Skills: skills,
+                    QuestionCount: questionCount
+                },
+                { withCredentials: true }
+            );
+
+            if (response.data?.status == 201) {
+                alert('Đã chia sẻ thành công!')
+            } else {
+            }
+
+        } catch (err) {
+            const msg = err.response?.data?.message || 'Không thể chia sẻ buổi phỏng vấn';
+        } finally {
+            setIsSharing(false);
+        }
+    };
+
+    const extractSkillsFromMessages = (msgs) => {
+        const text = msgs.map(m => m.text).join(' ').toLowerCase();
+        const commonSkills = ['java', 'spring', 'react', 'node', 'python', 'docker', 'aws', 'system design', 'algorithm'];
+        const found = commonSkills.filter(skill => text.includes(skill));
+        return found.length > 0 ? found.map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(', ') : null;
+    };
+
     useEffect(() => {
         if (!userId) {
             console.log('Vui lòng đăng nhập');
@@ -208,6 +256,19 @@ function InterviewHistory() {
                             </button>
                         </div>
                     )}
+
+                    {selected?.status === 'COMPLETE' && (
+                        <div className="share-section">
+                            <button
+                                onClick={handleQuickShare}
+                                disabled={isSharing}
+                                className="share-button"
+                            >
+                                <span className="material-icons">share</span>
+                                {isSharing ? 'Đang chia sẻ...' : 'Chia sẻ để nhận review từ cộng đồng'}
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 {/* Feedback Modal */}
@@ -292,15 +353,15 @@ function InterviewHistory() {
                     <div className="history-grid">
                         {interviews.map((item) => (
                             <div key={item.id} className="history-card" onClick={() => viewInterview(item)}>
-                                <div className="card-header">
+                                <div className="card-header" style={{padding:20}}>
                                     <h3 className="card-title">{item.title || 'Phỏng vấn không tiêu chuẩn'}</h3>
                                     {getStatusBadge(item.status)}
                                 </div>
-                                <div className="card-body">
+                                <div className="card-body" style={{padding:20}}>
                                     <p className="date"><strong>Bắt đầu:</strong> {formatDate(item.started_at)}</p>
                                     <p className="date"><strong>Kết thúc:</strong> {formatDate(item.completed_at) || 'Chưa kết thúc'}</p>
                                 </div>
-                                <div className="card-footer">
+                                <div className="card-footer" style={{padding:20}}>
                                     <span className="view-text">Xem chi tiết</span>
                                     <span className="material-icons">chevron_right</span>
                                 </div>

@@ -57,6 +57,7 @@ import MockProjects from "./mockProject/pages/MockProjects";
 import ProjectDetailPage from './mockProject/pages/ProjectDetailPage';
 import InterviewPage from "./interview/pages/InterviewPage";
 import InterviewHistory from "./interviewHistory/pages/InterviewHistory";
+import MyReviews from "./interviewHistory/pages/MyReviews";
 import { InterviewProvider } from "./interview/context/InterviewContext";
 
 import UserNavbar from "./components/navbars/UserNavbar";
@@ -88,6 +89,7 @@ function App() {
               </InterviewProvider>
             } />
             <Route path="/interview/history" element={<InterviewHistory />} />
+            <Route path="/interview/my-reviews" element={<MyReviews />} />
           </Route>
 
           {/* --- CONTENT MODERATOR ROUTES (Updated) --- */}

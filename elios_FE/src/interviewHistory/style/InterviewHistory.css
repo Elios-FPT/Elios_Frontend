@@ -379,6 +379,44 @@
     margin: 8px 0;
 }
 
+.share-section {
+  text-align: center;
+  margin: 40px 0 20px;
+}
+
+.share-button {
+  padding: 18px 40px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 320px;
+  justify-content: center;
+}
+
+.share-button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(16, 185, 129, 0.5);
+}
+
+.share-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.share-button .material-icons {
+  font-size: 24px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .history-grid {
