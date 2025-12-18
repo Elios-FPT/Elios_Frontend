@@ -1,57 +1,51 @@
-// src/general/UserNavbar.js
-import React, { useEffect, useState } from "react";
+// src/components/navbars/UserNavbar.js
+import React from "react"; // Removed unnecessary hooks like useState/useEffect
 import { Container, Row, Col, Nav, Navbar, Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../../styles/UserNavbar.css";
+import { useUserProfile } from "../../hooks/useUserProfile"; // <--- Import the hook
 
 const UserNavbar = () => {
-  const { t, i18n } = useTranslation();
-  const [role, setRole] = useState(null);
+  const navigate = useNavigate();
 
-  // Đọc role từ localStorage
-  useEffect(() => {
-    const savedRole = localStorage.getItem('userRole');
-    setRole(savedRole);
-  }, []);
+  // Get user data directly from the Global Auth Context
+  const { user } = useUserProfile();
+  const role = user?.role; // Safely access the role
 
-  const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === "en" ? "vi" : "en");
-  };
 
-  // Xác định các link theo role
+  // Define links based on the role from Context
   const getRoleBasedLinks = () => {
-    // 1. Links Public (Khách và User đều thấy)
+    // 1. Public Links (Visible to Guests and Users)
     const publicLinks = [
-      { to: "/forum", label: t("UserNavbar.forum") },
-      { to: "/codingChallenge", label: t("UserNavbar.codingChallenge") },
+      { to: "/forum", label: "Diễn đàn" },
+      { to: "/codingChallenge", label: "Thử Thách Lập Trình" },
     ];
 
-    // 2. Links Private (Chỉ User đã đăng nhập mới thấy)
+    // 2. Private User Links (Only for logged-in Users)
     const userPrivateLinks = [
-      { to: "/mock-projects", label: t("UserNavbar.projectChallenge") },
-      { to: "/resume-builder", label: t("UserNavbar.buildCV") },
+      { to: "/mock-projects", label: "Thử Thách Dự Án" },
+      { to: "/resume-builder", label: "Tạo CV" },
       { to: "/user/profile", label: "Profile" },
-      { to: "/interview", label: "Interview" },
+      { to: "/interview", label: "Phỏng Vấn" },
+      { to: "/interview/history", label: "Interview History" },
+      { to: "/interview/my-reviews", label: "My Reviews"}
     ];
 
     let linksToShow = [];
 
-    // Logic chia luồng hiển thị
-    if (!role) {
-      // Trường hợp chưa đăng nhập: Chỉ hiện Public Links
+    if (!user) {
+      // Guest
       linksToShow = publicLinks;
     } else if (role === "User") {
-      // Trường hợp là User: Hiện Public + Private
+      // Standard User
       linksToShow = [...publicLinks, ...userPrivateLinks];
     } else {
-      // Các role quản lý (Admin, Manager...) - bắt đầu với mảng rỗng (theo logic cũ)
-      // hoặc bạn có thể thêm publicLinks vào đây nếu muốn Admin cũng thấy Forum trên navbar
+      // Admins/Managers start empty (or add publicLinks if you want them to see Forum)
       linksToShow = [];
     }
 
-    // Các role đặc biệt: thêm link quản lý
+    // Role-specific Management Links
     if (role === "Resource Manager") {
       linksToShow.push(
         { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
@@ -78,6 +72,13 @@ const UserNavbar = () => {
 
   const links = getRoleBasedLinks();
 
+  const handleLogout = () => {
+    // Clear any leftover local data
+    localStorage.clear();
+    // Redirect to backend logout to kill the cookie
+    window.location.href = API_ENDPOINTS.LOGOUT_PATH;
+  };
+
   return (
     <nav className="user-navbar">
       <Container fluid>
@@ -93,7 +94,7 @@ const UserNavbar = () => {
             </Link>
           </Col>
 
-          {/* Middle Links - Chỉ hiển thị nếu có link */}
+          {/* Middle Links */}
           {links.length > 0 && (
             <Col>
               <Nav className="user-navbar-navbar-links">
@@ -114,43 +115,38 @@ const UserNavbar = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                {/* Ẩn Login/Register nếu đã có role */}
-                {!role ? (
+                {!user ? (
                   <>
                     <Dropdown.Item as={Link} to={API_ENDPOINTS.LOGIN_PATH}>
-                      {t("UserNavbar.login")}
+                      Đăng nhập
                     </Dropdown.Item>
                     <Dropdown.Item as={Link} to="/register">
-                      {t("UserNavbar.register")}
+                      Đăng ký
                     </Dropdown.Item>
                     <Dropdown.Divider />
                   </>
                 ) : (
                   <>
                     <Dropdown.Item as={Link} to="/user/profile">
-                      {t("UserNavbar.profile")}
+                      Hồ sơ
                     </Dropdown.Item>
                     <Dropdown.Item as={Link} to="/settings">
-                      {t("UserNavbar.settings")}
+                      Cài đặt
                     </Dropdown.Item>
-                    <Dropdown.Item
-                      onClick={() => {
-                        localStorage.removeItem('userId');
-                        localStorage.removeItem('userRole');
-                        window.location.href = API_ENDPOINTS.LOGOUT_PATH;
-                      }}
-                    >
-                      {t("UserNavbar.logout")}
+                    <Dropdown.Item onClick={handleLogout}>
+                      Đăng xuất
                     </Dropdown.Item>
                     <Dropdown.Divider />
                   </>
                 )}
 
-                <Dropdown.Item onClick={toggleLanguage}>
-                  {t("UserNavbar.switch_language")}
+                <Dropdown.Item onClick={() => navigate("/help")}>
+                  Trợ giúp
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => navigate("/terms")}>
+                  Điều khoản dịch vụ
                 </Dropdown.Item>
 
-                {/* Debug: Hiển thị role */}
                 {role && (
                   <>
                     <Dropdown.Divider />

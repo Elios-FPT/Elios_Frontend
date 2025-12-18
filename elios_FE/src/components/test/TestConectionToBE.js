@@ -11,9 +11,9 @@ const TestConnectionToBE = () => {
     const [result, setResult] = useState("Click the button to test the connection.");
     
     
-    const challengeId = "332c4330-050a-44a6-a644-76f892d57512";
+    const challengeId = "361d14e8-9e40-4e63-91bf-795c0c3f255a";
     const postType = "Solution";
-    const apiUrl = API_ENDPOINTS.GET_POSTS_FORUM; 
+    const apiUrl = API_ENDPOINTS.GET_POST_CONTENT(challengeId); 
 
     const handleTestConnection = async () => {
         try {

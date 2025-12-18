@@ -26,7 +26,7 @@ const ManageInterviews = () => {
         try {
             // Note: OpenAPI không có endpoint list interviews → giả sử backend sẽ bổ sung
             // Tạm thời dùng mock hoặc gọi custom endpoint nếu có
-            const res = await axios.get(`${API_ENDPOINTS.LIST_INTERVIEWS || 'http://localhost:8010/api/interviews'}`, {
+            const res = await axios.get(`http://localhost:8010/api/interviews`, {
                 params: {
                     page: filters.page,
                     page_size: filters.pageSize,

@@ -2,10 +2,15 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+// --- Auth Context ---
+import { AuthProvider } from "./auth/AuthContext"; // <--- Import this
+
 // --- General & User ---
 import LandingPage from "./general/LandingPage";
 import UserProfile from "./user/pages/UserProfile";
 import Footer from "./components/footers/Footer";
+import InterviewHistory from "./interviewHistory/pages/InterviewHistory";
+import MyReviews from "./interviewHistory/pages/MyReviews";
 
 // --- Forum (Public) ---
 import Forum from "./forum/pages/Forum";
@@ -23,7 +28,7 @@ import UserResume from "./resumeBuilder/pages/UserResume";
 import RoleProtectedRoute from "./auth/RoleProtectedRoute";
 import TestConnectionToBE from "./components/test/TestConectionToBE";
 
-// --- Content Moderator (Fixed Imports) ---
+// --- Content Moderator ---
 import ContentModeratorLayout from "./forumModerator/components/ContentModeratorLayout"; 
 import PendingPosts from "./forumModerator/pages/PendingPosts"; 
 import ReportedPosts from "./forumModerator/pages/ReportedPosts"; 
@@ -60,78 +65,82 @@ import { InterviewProvider } from "./interview/context/InterviewContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="app-wrapper">
-        <Routes>
-          {/* Public */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/forum" element={<Forum />} />
-          <Route path="/forum/post/:id" element={<PostDetail />} />
-          <Route path="/codingChallenge" element={<CodingChallenge />} />
-          <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
+    <AuthProvider> {/* <--- Wrap app in AuthProvider */}
+      <BrowserRouter>
+        <div className="app-wrapper">
+          <Routes>
+            {/* Public */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/forum" element={<Forum />} />
+            <Route path="/forum/post/:id" element={<PostDetail />} />
+            <Route path="/codingChallenge" element={<CodingChallenge />} />
+            <Route path="/codingChallenge/online-ide" element={<OnlineIDE />} />
 
-          {/* User Protected Routes */}
-          <Route element={<RoleProtectedRoute allowedRoles={["User", "Resource Manager", "Content Moderator", "Admin"]} />}>
-            <Route path="/mock-projects" element={<MockProjects />} />
-            <Route path="/user/profile" element={<UserProfile />} />
-            <Route path="/forum/user-posts" element={<UserPostStorage />} />
-            <Route path="/forum/my-posts/edit/:postId" element={<EditPostForForum />} />
-            <Route path="/resume-builder" element={<UserResume />} />
-            <Route path="/resume/edit/:id" element={<ResumeBuilder />} />
-            <Route path="/mock-projects/:projectId" element={<ProjectDetailPage />} />
-            <Route path="/interview" element={
-                <InterviewProvider>
-                  <InterviewPage />
-                </InterviewProvider>
-              } />
-          </Route>
-
-          {/* --- CONTENT MODERATOR ROUTES (Updated) --- */}
-          <Route element={<RoleProtectedRoute allowedRoles={["Content Moderator", "Admin"]} />}>
-            <Route path="/content-moderator" element={<ContentModeratorLayout />}>
-              <Route index element={<ManageCategory />} />
-              <Route path="pending" element={<PendingPosts />} />
-              <Route path="reported" element={<ReportedPosts />} />
-              <Route path="manage-categories" element={<ManageCategory />} />
-              <Route path="banned-users" element={<BannedUserForum />} />
+            {/* User Protected Routes */}
+            <Route element={<RoleProtectedRoute allowedRoles={["User", "Resource Manager", "Content Moderator", "Admin"]} />}>
+              <Route path="/mock-projects" element={<MockProjects />} />
+              <Route path="/user/profile" element={<UserProfile />} />
+              <Route path="/forum/user-posts" element={<UserPostStorage />} />
+              <Route path="/forum/my-posts/edit/:postId" element={<EditPostForForum />} />
+              <Route path="/resume-builder" element={<UserResume />} />
+              <Route path="/resume/edit/:id" element={<ResumeBuilder />} />
+              <Route path="/mock-projects/:projectId" element={<ProjectDetailPage />} />
+              <Route path="/interview" element={
+                  <InterviewProvider>
+                    <InterviewPage />
+                  </InterviewProvider>
+                } />
+              <Route path="/interview/history" element={<InterviewHistory />} />
+              <Route path="/interview/my-reviews" element={<MyReviews />} />
             </Route>
-          </Route>
 
-          {/* --- RESOURCE MANAGER ROUTES --- */}
-          <Route element={<RoleProtectedRoute allowedRoles={["Resource Manager", "Admin"]} />}>
-            
-            <Route path="/manage-interviews" element={<ManageInterviews />} />
+            {/* --- CONTENT MODERATOR ROUTES --- */}
+            <Route element={<RoleProtectedRoute allowedRoles={["Content Moderator", "Admin"]} />}>
+              <Route path="/content-moderator" element={<ContentModeratorLayout />}>
+                <Route index element={<ManageCategory />} />
+                <Route path="pending" element={<PendingPosts />} />
+                <Route path="reported" element={<ReportedPosts />} />
+                <Route path="manage-categories" element={<ManageCategory />} />
+                <Route path="banned-users" element={<BannedUserForum />} />
+              </Route>
+            </Route>
 
-            <Route path="/manage-coding-bank" element={<ManageCodingBank />} />
-            <Route path="/manage-coding-bank/create" element={<CreateCodingPractice />} />
-            <Route path="/manage-coding-bank/edit/:id" element={<EditCodingPractice />} />
-            <Route path="/manage-coding-bank/view/:id" element={<ViewCodingPractice />} />
+              <Route path="/manage-interviews" element={<ManageInterviews />} />
+            {/* --- RESOURCE MANAGER ROUTES --- */}
+            <Route element={<RoleProtectedRoute allowedRoles={["Resource Manager", "Admin"]} />}>
+              
 
-            <Route path="/manage-prompts" element={<ManagePrompts />} />
-            <Route path="/manage-prompts/create" element={<CreateNewPrompt />} />
-            <Route path="/manage-prompts/:prompt_name" element={<PromptDetail />} />
-            <Route path="/manage-prompts/edit/:prompt_name/:version" element={<EditPrompt />} />
-            <Route path="/manage-prompts/create/:prompt_name/:from_version" element={<CreatePrompt />} />
-            <Route path="/manage-prompts/analytics/:prompt_name" element={<PromptAnalytics />} />
-            <Route path="/manage-prompts/audit/:prompt_name" element={<PromptAuditTrail />} />
+              <Route path="/manage-coding-bank" element={<ManageCodingBank />} />
+              <Route path="/manage-coding-bank/create" element={<CreateCodingPractice />} />
+              <Route path="/manage-coding-bank/edit/:id" element={<EditCodingPractice />} />
+              <Route path="/manage-coding-bank/view/:id" element={<ViewCodingPractice />} />
 
-            <Route path="/manage-project-bank" element={<ManageProjectBank />} />
-            <Route path="/manage-project-bank/view/:id" element={<ViewMockProject />} />
-            <Route path="/manage-project-bank/create" element={<CreateMockProject />} />
-            <Route path="/manage-project-bank/edit/:id" element={<EditMockProject />} />
-            <Route path="/manage-project-bank/edit/:id/processes" element={<EditProjectProcesses />} />
-            <Route path="/project/:projectId/submissions" element={<ProjectSubmissionReview />} />
-          </Route>
+              <Route path="/manage-prompts" element={<ManagePrompts />} />
+              <Route path="/manage-prompts/create" element={<CreateNewPrompt />} />
+              <Route path="/manage-prompts/:prompt_name" element={<PromptDetail />} />
+              <Route path="/manage-prompts/edit/:prompt_name/:version" element={<EditPrompt />} />
+              <Route path="/manage-prompts/create/:prompt_name/:from_version" element={<CreatePrompt />} />
+              <Route path="/manage-prompts/analytics/:prompt_name" element={<PromptAnalytics />} />
+              <Route path="/manage-prompts/audit/:prompt_name" element={<PromptAuditTrail />} />
 
-          {/* Debug */}
-          <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
+              <Route path="/manage-project-bank" element={<ManageProjectBank />} />
+              <Route path="/manage-project-bank/view/:id" element={<ViewMockProject />} />
+              <Route path="/manage-project-bank/create" element={<CreateMockProject />} />
+              <Route path="/manage-project-bank/edit/:id" element={<EditMockProject />} />
+              <Route path="/manage-project-bank/edit/:id/processes" element={<EditProjectProcesses />} />
+              <Route path="/project/:projectId/submissions" element={<ProjectSubmissionReview />} />
+            </Route>
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        <Footer />
-      </div>
-    </BrowserRouter>
+            {/* Debug */}
+            <Route path="/test-backend-connection" element={<TestConnectionToBE />} />
+
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
