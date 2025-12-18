@@ -11,7 +11,7 @@ function MyReviews() {
     const [loading, setLoading] = useState(true);
     const [loadingDetail, setLoadingDetail] = useState(false);
 
-    // Lấy danh sách buổi đã chia sẻ
+    // ... (logic remains the same) ...
     useEffect(() => {
         const fetchShared = async () => {
             try {
@@ -28,11 +28,9 @@ function MyReviews() {
                 setLoading(false);
             }
         };
-
         fetchShared();
     }, []);
 
-    // Xem chi tiết buổi + transcript + đánh giá
     const viewSharedInterview = async (item) => {
         try {
             setLoadingDetail(true);
@@ -51,14 +49,11 @@ function MyReviews() {
                     API_ENDPOINTS.PEER_GET_REVIEWS_RECEIVED(item.id),
                     { withCredentials: true }
                 );
-
                 if (reviewRes.data.status === 200) {
                     const rawSubmissions = reviewRes.data.responseData.submissions || [];
-
                     const enrichedSubmissions = await Promise.all(
                         rawSubmissions.map(async (sub) => {
                             const reviewerId = sub.reviewer?.id || sub.reviewerId;
-
                             let reviewerName = 'Đang tải...';
                             if (reviewerId) {
                                 try {
@@ -66,29 +61,21 @@ function MyReviews() {
                                         API_ENDPOINTS.GET_USER_BY_ID(reviewerId),
                                         { withCredentials: true }
                                     );
-                                    reviewerName = (userRes.data?.data.firstName + userRes.data?.data.lastName) ||
-                                        'Người dùng ẩn danh';
+                                    reviewerName = (userRes.data?.data.firstName + userRes.data?.data.lastName) || 'Người dùng ẩn danh';
                                 } catch (err) {
-                                    console.warn('Không lấy được tên reviewer:', reviewerId);
                                     reviewerName = 'Người dùng ẩn danh';
                                 }
                             } else {
                                 reviewerName = 'Người dùng ẩn danh';
                             }
-
-                            return {
-                                ...sub,
-                                reviewerName
-                            };
+                            return { ...sub, reviewerName };
                         })
                     );
-
                     setReviews(enrichedSubmissions);
                 } else {
                     setReviews([]);
                 }
             } catch (e) {
-                console.log('Chưa có ai review buổi này');
                 setReviews([]);
             }
 
@@ -101,20 +88,16 @@ function MyReviews() {
     const formatDate = (d) => {
         if (!d) return '—';
         return new Date(d).toLocaleString('vi-VN', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+            day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
         });
     };
 
     const getStatusBadge = (status) => {
         const map = {
             open: { bg: '#10b981', text: 'Đang mở' },
-            closed: { bg: '#ef4444', text: 'Đã đóng' },
+            closed: { bg: '#dc3545', text: 'Đã đóng' },
         };
-        const s = map[status] || { bg: '#6b7280', text: status };
+        const s = map[status] || { bg: '#6c757d', text: status };
         return <span className="MyReviews-status-badge" style={{ background: s.bg }}>{s.text}</span>;
     };
 
@@ -136,7 +119,7 @@ function MyReviews() {
                             <strong>{selectedInterview.currentReviewerCount}</strong> người đã review •
                             {getStatusBadge(selectedInterview.status)}
                         </p>
-                        <p className="shared-date">
+                        <p className="shared-date" style={{color: '#888'}}>
                             Chia sẻ lúc: {formatDate(selectedInterview.createdAt)}
                         </p>
                     </div>
@@ -159,20 +142,22 @@ function MyReviews() {
                                             <div
                                                 className="MyReviews-message-bubble"
                                                 style={{
+                                                    // === THEME UPDATE: Dark Bubble Colors ===
                                                     background: isQuestion
-                                                        ? 'linear-gradient(135deg, #f1f5f9, #e2e8f0)'
-                                                        : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                                                    color: isQuestion ? '#1e293b' : 'white',
+                                                        ? '#2c313a' // Dark Gray for AI
+                                                        : '#0f8a57', // Green for User
+                                                    color: '#fff',
                                                     borderRadius: isQuestion
                                                         ? '20px 20px 20px 4px'
                                                         : '20px 20px 4px 20px',
+                                                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                                                 }}
                                             >
                                                 {isQuestion && (
                                                     <div style={{
                                                         fontSize: '13px',
                                                         fontWeight: 600,
-                                                        color: '#6366f1',
+                                                        color: '#19c37d',
                                                         marginBottom: '8px',
                                                         textTransform: 'uppercase'
                                                     }}>
@@ -244,7 +229,7 @@ function MyReviews() {
                                                                     key={star}
                                                                     className="MyReviews-star-icon"
                                                                     style={{
-                                                                        color: star <= r.skillRating ? '#fbbf24' : '#e2e8f0',
+                                                                        color: star <= r.skillRating ? '#ffd700' : '#444',
                                                                         fontSize: '20px'
                                                                     }}
                                                                 >
@@ -264,7 +249,7 @@ function MyReviews() {
                                                                     key={star}
                                                                     className="MyReviews-star-icon"
                                                                     style={{
-                                                                        color: star <= r.softSkillRating ? '#10b981' : '#e2e8f0',
+                                                                        color: star <= r.softSkillRating ? '#19c37d' : '#444',
                                                                         fontSize: '20px'
                                                                     }}
                                                                 >
@@ -323,11 +308,11 @@ function MyReviews() {
                                 className="MyReviews-shared-card"
                                 onClick={() => viewSharedInterview(item)}
                             >
-                                <div className="MyReviews-card-header" style={{padding:20}}>
+                                <div className="MyReviews-card-header">
                                     <h3>{item.title}</h3>
                                     {getStatusBadge(item.status)}
                                 </div>
-                                <div className="MyReviews-card-body" style={{padding:20}}>
+                                <div className="MyReviews-card-body">
                                     <p><strong>Kỹ năng:</strong> {item.skills}</p>
                                     <p><strong>Số câu hỏi:</strong> {item.questionCount}</p>
                                     <p><strong>Đã review:</strong> {item.currentReviewerCount} người</p>

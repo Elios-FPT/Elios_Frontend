@@ -3,35 +3,31 @@
 /* --- Page Containers & Layout (IDs) --- */
 #InterviewHistory-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f0f7ff 0%, #f8f5ff 100%);
+    background: #181a1b; /* Theme BG */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #eee;
 }
 
 #InterviewHistory-header {
     padding: 40px 30px 20px;
     text-align: center;
-    color: #1e293b;
 }
 
 #InterviewHistory-page-title {
     font-size: 32px;
     font-weight: 700;
     margin: 0 0 8px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffd700; /* Theme Gold Accent */
 }
 
 #InterviewHistory-page-subtitle {
     font-size: 17px;
-    color: #64748b;
+    color: #bbb; /* Theme Muted Text */
     margin: 0;
     font-weight: 500;
 }
 
 #InterviewHistory-container {
-    background: #f8f5ff !important;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 30px 60px;
@@ -41,12 +37,12 @@
 #InterviewHistory-empty-state {
     text-align: center;
     padding: 100px 20px;
-    color: #64748b;
+    color: #888;
 }
 
 #InterviewHistory-loading-icon {
     font-size: 64px;
-    color: #6366f1;
+    color: #19c37d; /* Theme Green */
     animation: spin 2s linear infinite;
 }
 
@@ -54,6 +50,7 @@
     font-size: 80px;
     opacity: 0.5;
     margin-bottom: 20px;
+    color: #666;
 }
 
 #InterviewHistory-grid {
@@ -65,24 +62,25 @@
 
 /* --- List Items (Distinct Classes) --- */
 .InterviewHistory-card-item {
-    background: white;
-    border-radius: 20px;
+    background: #23272f; /* Theme Card BG */
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
     transition: all 0.3s ease;
     cursor: pointer;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #333;
 }
 
 .InterviewHistory-card-item:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border-color: #444;
 }
 
 .InterviewHistory-card-header {
-    padding: 24px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: white;
+    padding: 20px;
+    background: transparent;
+    border-bottom: 1px solid #333;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -92,43 +90,47 @@
     margin: 0;
     font-size: 19px;
     font-weight: 600;
+    color: #ffd700; /* Theme Gold */
 }
 
 .InterviewHistory-status-badge {
     padding: 6px 14px;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    color: white;
+    color: #fff;
+    /* BG is set inline in JS, handled there */
 }
 
 .InterviewHistory-card-body {
-    padding: 20px 24px;
-    background: #f8fafc;
+    padding: 20px;
+    background: transparent;
 }
 
 .InterviewHistory-date-text {
-    margin: 10px 0;
+    margin: 8px 0;
     font-size: 15px;
-    color: #475569;
+    color: #bbb;
 }
 
 .InterviewHistory-card-footer {
-    padding: 16px 24px;
-    background: white;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #6366f1;
+    color: #19c37d; /* Theme Green */
     font-weight: 600;
     font-size: 15px;
+    border-top: 1px solid #333;
 }
 
 /* --- Detail View (IDs) --- */
 #InterviewHistory-detail-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f0f7ff 0%, #f8f5ff 100%);
+    background: #181a1b;
     padding: 30px;
+    color: #eee;
 }
 
 #InterviewHistory-detail-container {
@@ -137,54 +139,64 @@
 }
 
 #InterviewHistory-detail-header-card {
-    background: white;
+    background: #23272f;
     padding: 32px;
-    border-radius: 20px;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
     margin-bottom: 32px;
+    border: 1px solid #333;
 }
 
 #InterviewHistory-back-button {
     padding: 10px 20px;
-    background: #64748b;
-    color: white;
-    border: none;
-    border-radius: 12px;
+    background: transparent;
+    color: #bbb;
+    border: 1px solid #444;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 20px;
+    transition: all 0.2s;
+}
+
+#InterviewHistory-back-button:hover {
+    background: #333;
+    color: #fff;
 }
 
 #InterviewHistory-detail-title {
     font-size: 28px;
     font-weight: 700;
-    color: #1e40af;
+    color: #ffd700;
     margin: 0 0 12px;
 }
 
 #InterviewHistory-detail-date-label {
     font-size: 16px;
-    color: #64748b;
+    color: #888;
     margin: 0;
 }
 
 #InterviewHistory-transcript-container {
-    background: white;
-    border-radius: 20px;
+    background: #23272f;
+    border-radius: 12px;
     padding: 32px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    border: 1px solid #333;
 }
 
 #InterviewHistory-transcript-header {
     font-size: 22px;
-    color: #1e40af;
+    color: #eee;
     margin: 0 0 24px;
     text-align: center;
     font-weight: 600;
+    border-bottom: 1px solid #333;
+    padding-bottom: 16px;
 }
 
 /* --- Messages (Distinct Classes) --- */
@@ -208,43 +220,45 @@
 }
 
 .InterviewHistory-message-bubble {
-    background: #e0e7ff;
+    /* Base bubble styles - colors set inline in JS to separate User/AI */
     padding: 16px 20px;
     border-radius: 20px;
     border-bottom-left-radius: 4px;
     max-width: 100%;
     word-wrap: break-word;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .InterviewHistory-message-row.user .InterviewHistory-message-bubble {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 20px;
 }
 
 .InterviewHistory-message-content {
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 10px;
+    color: #eee;
 }
 
 .InterviewHistory-audio-player {
     width: 100%;
     margin-top: 10px;
     border-radius: 8px;
+    opacity: 0.9;
 }
 
 .InterviewHistory-timestamp {
     font-size: 12px;
-    opacity: 0.8;
+    opacity: 0.6;
     text-align: right;
     margin-top: 8px;
+    color: #ccc;
 }
 
 .InterviewHistory-empty-text {
     text-align: center;
-    color: #94a3b8;
+    color: #666;
     font-size: 18px;
     padding: 60px 20px;
 }
@@ -257,20 +271,20 @@
 
 #InterviewHistory-feedback-button {
     padding: 16px 40px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: #0F8A57; /* Theme Green Button */
     color: white;
     border: none;
-    border-radius: 16px;
+    border-radius: 8px;
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     transition: all 0.3s;
 }
 
 #InterviewHistory-feedback-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4);
+    background: #14b06f;
+    transform: translateY(-2px);
 }
 
 #InterviewHistory-share-container {
@@ -280,14 +294,13 @@
 
 #InterviewHistory-share-button {
     padding: 18px 40px;
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    border: none;
-    border-radius: 16px;
+    background: #23272f;
+    color: #19c37d;
+    border: 1px solid #19c37d;
+    border-radius: 8px;
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
@@ -297,36 +310,49 @@
 }
 
 #InterviewHistory-share-button:hover:not(:disabled) {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(16, 185, 129, 0.5);
+    background: #19c37d;
+    color: #fff;
 }
 
 #InterviewHistory-share-button:disabled {
-    opacity: 0.7;
+    opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
 }
 
 /* --- Modal (IDs) --- */
 #InterviewHistory-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.85);
     display: grid;
     place-items: center;
     z-index: 1000;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
 }
 
 #InterviewHistory-modal-card {
-    background: white;
-    border-radius: 24px;
+    background: #1e1e1e;
+    border-radius: 12px;
     padding: 40px;
     max-width: 700px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
     position: relative;
+    border: 1px solid #333;
+    color: #eee;
+}
+
+/* Scrollbar for modal */
+#InterviewHistory-modal-card::-webkit-scrollbar {
+    width: 8px;
+}
+#InterviewHistory-modal-card::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+#InterviewHistory-modal-card::-webkit-scrollbar-track {
+    background: #1e1e1e;
 }
 
 #InterviewHistory-modal-close-btn {
@@ -337,17 +363,20 @@
     border: none;
     font-size: 36px;
     cursor: pointer;
-    color: #94a3b8;
+    color: #888;
     width: 40px;
     height: 40px;
     display: grid;
     place-items: center;
 }
+#InterviewHistory-modal-close-btn:hover {
+    color: #fff;
+}
 
 #InterviewHistory-modal-title {
     text-align: center;
     font-size: 26px;
-    color: #1e40af;
+    color: #fff;
     margin: 0 0 24px;
 }
 
@@ -355,8 +384,13 @@
     text-align: center;
     font-size: 72px;
     font-weight: 800;
-    color: #6366f1;
+    color: #19c37d; /* Theme Green */
     margin: 20px 0;
+}
+
+#InterviewHistory-modal-score-display small {
+    font-size: 32px;
+    color: #666;
 }
 
 #InterviewHistory-modal-score-grid {
@@ -368,23 +402,23 @@
 }
 
 .InterviewHistory-score-box {
-    background: #f8fafc;
+    background: #2a2a2a;
     padding: 20px;
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    border: 1px solid #333;
 }
 
 .InterviewHistory-score-label {
     display: block;
     font-size: 15px;
-    color: #64748b;
+    color: #aaa;
     margin-bottom: 8px;
 }
 
 .InterviewHistory-score-value {
     font-size: 32px;
     font-weight: 700;
-    color: #1e40af;
+    color: #ffd700; /* Gold */
 }
 
 .InterviewHistory-modal-section {
@@ -392,17 +426,17 @@
 }
 
 .InterviewHistory-modal-section h3 {
-    color: #1e40af;
+    color: #ffd700;
     font-size: 20px;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 2px solid #e0e7ff;
+    border-bottom: 1px solid #333;
 }
 
 .InterviewHistory-modal-section ul {
     padding-left: 20px;
     line-height: 1.7;
-    color: #374151;
+    color: #ddd;
 }
 
 .InterviewHistory-modal-section li {

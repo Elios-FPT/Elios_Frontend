@@ -3,29 +3,26 @@
 /* --- Page & Layout (IDs) --- */
 #MyReviews-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f0f7ff 0%, #f8f5ff 100%);
+  background: #181a1b; /* Theme BG */
   padding: 40px 20px;
+  color: #eee;
 }
 
 #MyReviews-page-header {
   text-align: center;
   margin-bottom: 40px;
-  color: #1e293b;
 }
 
 #MyReviews-main-title {
   font-size: 34px;
   font-weight: 700;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffd700; /* Theme Gold */
   margin: 0 0 12px;
 }
 
 #MyReviews-sub-title {
   font-size: 17px;
-  color: #64748b;
+  color: #bbb;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -38,7 +35,7 @@
 #MyReviews-loading-state {
   text-align: center;
   padding: 100px;
-  color: #64748b;
+  color: #888;
 }
 
 #MyReviews-grid {
@@ -49,24 +46,35 @@
 
 /* --- Shared List Cards (Distinct Classes) --- */
 .MyReviews-shared-card {
-  background: white;
-  border-radius: 20px;
+  background: #23272f; /* Theme Card BG */
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   transition: all 0.3s;
   cursor: pointer;
-  border: 1px solid #e2e2f0;
+  border: 1px solid #333;
 }
 
 .MyReviews-shared-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(99,102,241,0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  border-color: #555;
 }
 
 .MyReviews-card-header {
-  padding: 28px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
+  padding: 20px 28px;
+  background: transparent;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.MyReviews-card-header h3 {
+    margin: 0;
+    color: #ffd700; /* Gold */
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .MyReviews-card-body {
@@ -75,34 +83,37 @@
 
 .MyReviews-card-body p {
   margin: 10px 0;
-  font-size: 16px;
-  opacity: 0.95;
+  font-size: 15px;
+  opacity: 0.9;
+  color: #ddd;
 }
 
 .MyReviews-status-badge {
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 30px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  align-self: flex-start;
+  color: #fff;
 }
 
 .MyReviews-card-action {
-  padding: 20px 28px;
-  background: white;
-  color: #6366f1;
+  padding: 16px 28px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #19c37d; /* Green */
   font-weight: 600;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
+  font-size: 15px;
+  border-top: 1px solid #333;
 }
 
 /* --- Detail Page (IDs) --- */
 #MyReviews-detail-page {
   min-height: 100vh;
-  background: #f8fafc;
+  background: #181a1b;
   padding: 30px;
+  color: #eee;
 }
 
 #MyReviews-detail-container {
@@ -112,51 +123,61 @@
 
 #MyReviews-back-btn {
   padding: 10px 20px;
-  background: #64748b;
-  color: white;
-  border: none;
-  border-radius: 12px;
+  background: transparent;
+  color: #bbb;
+  border: 1px solid #444;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 24px;
+  transition: all 0.2s;
+}
+
+#MyReviews-back-btn:hover {
+    background: #333;
+    color: #fff;
 }
 
 #MyReviews-detail-header-card {
   text-align: center;
-  background: white;
+  background: #23272f;
   padding: 32px;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   margin-bottom: 32px;
+  border: 1px solid #333;
 }
 
 #MyReviews-detail-title {
   font-size: 28px;
-  color: #1e40af;
+  color: #ffd700;
   margin: 0 0 12px;
 }
 
 .MyReviews-detail-meta {
-  font-size: 17px;
-  color: #64748b;
+  font-size: 16px;
+  color: #bbb;
   margin: 8px 0;
 }
 
 #MyReviews-transcript-container {
-    background: white;
-    border-radius: 20px;
+    background: #23272f;
+    border-radius: 12px;
     padding: 32px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #333;
 }
 
 #MyReviews-transcript-title {
     font-size: 22px;
-    color: #1e40af;
+    color: #eee;
     margin: 0 0 24px;
     font-weight: 600;
+    border-bottom: 1px solid #333;
+    padding-bottom: 16px;
 }
 
 /* --- Messages (Distinct Classes for MyReviews) --- */
@@ -183,25 +204,30 @@
     padding: 16px 20px;
     border-radius: 20px;
     max-width: 100%;
+    /* Colors handled in JS inline styles */
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .MyReviews-message-content {
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 10px;
+    color: #eee;
 }
 
 .MyReviews-audio-player {
     width: 100%;
     margin-top: 10px;
     border-radius: 8px;
+    opacity: 0.9;
 }
 
 .MyReviews-message-timestamp {
     font-size: 12px;
-    opacity: 0.8;
+    opacity: 0.6;
     text-align: right;
     margin-top: 8px;
+    color: #ccc;
 }
 
 /* --- Review List & Items (Distinct Classes) --- */
@@ -211,7 +237,7 @@
 
 #MyReviews-reviews-title {
     font-size: 22px;
-    color: #1e40af;
+    color: #eee;
     margin-bottom: 24px;
     font-weight: 600;
 }
@@ -222,10 +248,11 @@
 }
 
 .MyReviews-review-card {
-  background: white;
-  border-radius: 20px;
+  background: #23272f;
+  border-radius: 12px;
   padding: 28px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 1px solid #333;
 }
 
 .MyReviews-reviewer-header {
@@ -236,10 +263,11 @@
 }
 
 .MyReviews-reviewer-avatar {
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
+  width: 50px;
+  height: 50px;
+  background: #2c2c2c;
+  color: #ffd700;
+  border: 2px solid #ffd700;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -250,12 +278,12 @@
 .MyReviews-reviewer-name {
   margin: 0;
   font-size: 18px;
-  color: #1e293b;
+  color: #ffd700;
 }
 
 .MyReviews-review-time {
   margin: 4px 0 0;
-  color: #64748b;
+  color: #888;
   font-size: 14px;
 }
 
@@ -266,21 +294,21 @@
 }
 
 .MyReviews-rating-item {
-  background: #f8fafc;
+  background: #1e1e1e;
   padding: 20px;
-  border-radius: 16px;
+  border-radius: 8px;
   margin-bottom: 16px;
-  border-left: 4px solid #6366f1;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-left: 4px solid #19c37d;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .MyReviews-question-label {
   font-weight: 700;
-  font-size: 18px;
-  color: #1e40af;
+  font-size: 17px;
+  color: #eee;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #e0e7ff;
+  border-bottom: 1px solid #333;
 }
 
 .MyReviews-star-row {
@@ -293,7 +321,7 @@
 
 .MyReviews-rating-label {
   font-weight: 600;
-  color: #374151;
+  color: #bbb;
   min-width: 80px;
 }
 
@@ -305,14 +333,13 @@
 .MyReviews-star-icon {
   transition: all 0.2s ease;
 }
-
 .MyReviews-star-icon:hover {
-  transform: scale(1.2);
+    transform: scale(1.2);
 }
 
 .MyReviews-rating-value {
   font-weight: 700;
-  color: #1e293b;
+  color: #fff;
   min-width: 40px;
   text-align: right;
 }
@@ -321,14 +348,14 @@
 .MyReviews-comment-box {
   margin-top: 16px;
   padding: 16px;
-  background: white;
-  border-radius: 12px;
+  background: #2a2a2a;
+  border-radius: 8px;
   font-style: italic;
-  color: #1e293b;
+  color: #ccc;
   line-height: 1.6;
   position: relative;
-  border-left: 4px solid #6366f1;
-  font-size: 16px;
+  border-left: 3px solid #ffd700;
+  font-size: 15px;
 }
 
 .MyReviews-quote-icon {
@@ -336,31 +363,20 @@
   top: -8px;
   left: 12px;
   font-size: 32px;
-  color: #6366f1;
-  opacity: 0.3;
+  color: #ffd700;
+  opacity: 0.4;
   font-family: Georgia, serif;
-}
-
-.MyReviews-comment-box::before {
-  content: '“';
-  position: absolute;
-  top: -8px;
-  left: 12px;
-  font-size: 60px;
-  color: #6366f1;
-  opacity: 0.15;
-  font-family: Georgia, serif;
-  line-height: 1;
 }
 
 .MyReviews-empty-state {
   text-align: center;
   padding: 100px 20px;
-  color: #64748b;
+  color: #888;
 }
 
 .MyReviews-empty-icon {
   font-size: 80px;
   opacity: 0.5;
   margin-bottom: 20px;
+  color: #666;
 }
