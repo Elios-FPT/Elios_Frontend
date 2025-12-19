@@ -10,11 +10,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // 1. Setup Axios Interceptor to handle session expiration (Security)
-    // This ensures that if the cookie dies while the user is active, they get logged out.
     const interceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        // FIX: Only logout on 401 (Session Expired). 
+        // 403 is used for "Banned" or "Permission Denied" and should be handled by the specific component, not global logout.
+        if (error.response && error.response.status === 401) {
           setUser(null);
         }
         return Promise.reject(error);
@@ -28,7 +29,6 @@ export const AuthProvider = ({ children }) => {
             withCredentials: true
         });
         
-        // Matching your API structure: response.data.data contains user info
         if (response.data?.status === 200 && response.data?.data) {
           const { id, role } = response.data.data;
           setUser({ id, role }); 
@@ -36,7 +36,6 @@ export const AuthProvider = ({ children }) => {
           setUser(null);
         }
       } catch (error) {
-        // Silent fail is okay here, it just means the user isn't logged in
         setUser(null);
       } finally {
         setLoading(false);

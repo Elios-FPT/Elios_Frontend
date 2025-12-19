@@ -11,19 +11,21 @@ import { FaEye, FaCommentAlt, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 import "../style/Forum.css";
 import LoadingCircle1 from "../../components/loading/LoadingCircle1";
 import { ForumContext } from "../context/ForumContext";
+import { useUserProfile } from "../../hooks/useUserProfile"; // Added Import
 
 const Forum = () => {
   const navigate = useNavigate();
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
-  
-  const { 
-    posts, 
-    loading, 
-    categories, 
-    setCategoryId, 
-    currentPage, 
-    setCurrentPage, 
-    totalPages 
+  const { user } = useUserProfile(); // Added: Get user state
+
+  const {
+    posts,
+    loading,
+    categories,
+    setCategoryId,
+    currentPage,
+    setCurrentPage,
+    totalPages
   } = useContext(ForumContext);
 
   const isContentTooLong = (content) => {
@@ -45,8 +47,8 @@ const Forum = () => {
     setCurrentPage(pageNumber);
     // Scroll to top of the post list
     const mainContent = document.getElementById("user-forum-forum-main");
-    if(mainContent) {
-        mainContent.scrollIntoView({ behavior: 'smooth' });
+    if (mainContent) {
+      mainContent.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -136,44 +138,40 @@ const Forum = () => {
                     {totalPages > 1 && (
                       <div className="d-flex justify-content-center mt-4 mb-4">
                         <Pagination id="user-forum-pagination">
-                          <Pagination.First 
+                          <Pagination.First
                             onClick={() => handlePageChange(1)}
                             disabled={currentPage === 1}
                           />
-                          <Pagination.Prev 
+                          <Pagination.Prev
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                           />
-                          
-                          {/* Logic to show a reasonable number of pages could go here */}
-                          {/* For simple implementation, we show current and neighbors */}
-                           {[...Array(totalPages)].map((_, idx) => {
-                              const page = idx + 1;
-                              // Show first, last, current, and immediate neighbors
-                              if (
-                                page === 1 || 
-                                page === totalPages || 
-                                (page >= currentPage - 1 && page <= currentPage + 1)
-                              ) {
-                                return (
-                                  <Pagination.Item 
-                                    key={page} 
-                                    active={page === currentPage}
-                                    onClick={() => handlePageChange(page)}
-                                  >
-                                    {page}
-                                  </Pagination.Item>
-                                );
-                              }
-                              // Add ellipsis logic if needed, omitted for simplicity
-                              return null;
-                           })}
 
-                          <Pagination.Next 
+                          {[...Array(totalPages)].map((_, idx) => {
+                            const page = idx + 1;
+                            if (
+                              page === 1 ||
+                              page === totalPages ||
+                              (page >= currentPage - 1 && page <= currentPage + 1)
+                            ) {
+                              return (
+                                <Pagination.Item
+                                  key={page}
+                                  active={page === currentPage}
+                                  onClick={() => handlePageChange(page)}
+                                >
+                                  {page}
+                                </Pagination.Item>
+                              );
+                            }
+                            return null;
+                          })}
+
+                          <Pagination.Next
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                           />
-                          <Pagination.Last 
+                          <Pagination.Last
                             onClick={() => handlePageChange(totalPages)}
                             disabled={currentPage === totalPages}
                           />
@@ -198,24 +196,24 @@ const Forum = () => {
                       </Button>
                     </div>
 
-                    <div id="user-forum-sidebar-section">
-                      <div
-                        id="user-forum-sidebar-title"
-                        onClick={() => setShowCreatePostModal(true)}
-                      >
-                        <span role="img" aria-label="chat"></span>{" "}
-                        Tạo Bài Viết Mới
+                    {/* Added: Check if user exists before showing this section */}
+                    {user && (
+                      <div id="user-forum-sidebar-section">
+                        <div id="user-forum-sidebar-title">
+                          <span role="img" aria-label="chat"></span>{" "}
+                          Tạo Bài Viết Mới
+                        </div>
+                        <Button
+                          variant="outline-light"
+                          size="sm"
+                          className="w-100 mb-2"
+                          id="user-forum-btn-outline-light"
+                          onClick={() => navigate("/forum/user-posts")}
+                        >
+                          Đi tới Kho Bài Viết Của Tôi
+                        </Button>
                       </div>
-                      <Button
-                        variant="outline-light"
-                        size="sm"
-                        className="w-100 mb-2"
-                        id="user-forum-btn-outline-light"
-                        onClick={() => navigate("/forum/user-posts")}
-                      >
-                        Đi tới Kho Bài Viết Của Tôi
-                      </Button>
-                    </div>
+                    )}
 
                     <ListGroup variant="flush" className="mt-3">
                       <div className="user-forum-sidebar-banner mb-3">
@@ -223,8 +221,8 @@ const Forum = () => {
                           Chủ Đề Bài Viết
                         </div>
                       </div>
-                      
-                      <ListGroup.Item 
+
+                      <ListGroup.Item
                         className="user-forum-sidebar-list"
                         action
                         onClick={() => setCategoryId(null)}
@@ -234,7 +232,7 @@ const Forum = () => {
                       </ListGroup.Item>
 
                       {categories && categories.slice(0, 12).map((category) => (
-                        <ListGroup.Item 
+                        <ListGroup.Item
                           key={category.categoryId}
                           className="user-forum-sidebar-list"
                           action
