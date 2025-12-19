@@ -38,13 +38,17 @@ export const API_ENDPOINTS = {
 
     UPDATE_DRAFT_PROMPT: (promptId) => `${baseUrl}/api/ai/prompts/${promptId}/draft`,
 
-    UPLOAD_CV: '/api/interviews/cv/upload',
-    PLAN_INTERVIEW: '/api/interviews/plan',
-    GET_PLANNING_STATUS: (interviewId) => `/api/interviews/${interviewId}/plan`,
-    GET_INTERVIEW_DETAIL: (interviewId) => `/api/interviews/${interviewId}`,
-    START_INTERVIEW: (interviewId) => `/api/interviews/${interviewId}/start`,
-    GET_CURRENT_QUESTION: (interviewId) => `/api/interviews/${interviewId}/questions/current`,
-    GET_INTERVIEW_SUMMARY: (interviewId) => `/api/interviews/${interviewId}/summary`,
+    UPLOAD_CV: `${baseUrl}/api/ai/interviews/cv/upload`,
+    PLAN_INTERVIEW: `${baseUrl}/api/ai/interviews/plan`,
+    GET_INTERVIEW_HISTORY: (userId) => `${baseUrl}/api/ai/interviews/users/${userId}/history`,
+    GET_PLANNING_STATUS: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/plan`,
+    GET_INTERVIEW_DETAIL: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}`,
+    START_INTERVIEW: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/start`,
+    GET_CURRENT_QUESTION: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/questions/current`,
+    GET_INTERVIEW_SUMMARY: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/summary`,
+    GET_AI_INTERVIEW_CONVERSATION: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/conversation`,
+    GET_AI_INTERVIEW_DETAIL: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}`,
+    STOP_AI_INTERVIEW: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/stop`,
 
     // User API Endpoints
     GET_USER_PROFILE: `${baseUrl}/api/users/me/profile`,
@@ -177,7 +181,7 @@ export const API_ENDPOINTS = {
     PEER_GET_MY_STATS: `${baseUrl}/api/peerreview/my-stats`,
 
     PAY_GET_USER_ORDERS: (userId) => `${baseUrl}/api/payment/Order/user/${userId}`,
-    PAY_GET_CURRENT_ORDERS: `${baseUrl}/api/payment/Order/user/current`, 
+    PAY_GET_CURRENT_ORDERS: `${baseUrl}/api/payment/Order/user/current`,
     PAY_GET_ORDER_DETAIL: (orderId) => `${baseUrl}/api/payment/Order/${orderId}`,
     PAY_CREATE_ORDER: `${baseUrl}/api/payment/Order`,
     PAY_CANCEL_ORDER: (orderId) => `${baseUrl}/api/payment/Order/${orderId}/cancel`,
