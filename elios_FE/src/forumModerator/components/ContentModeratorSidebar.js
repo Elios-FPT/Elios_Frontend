@@ -7,34 +7,40 @@ const ContentModeratorSidebar = () => {
     return (
         <nav id="moderator-sidebar-nav">
             <div id="sidebar-header">
-                <h2>Kiểm Duyệt Nội Dung</h2> {/* Translated: Content Moderator */}
+                <h2>Kiểm Duyệt Nội Dung</h2> 
             </div>
             <ul id="sidebar-menu-list">
                 <li>
-                    {/* Updated to match App.js route */}
                     <NavLink to="/content-moderator/dashboard" end>
-                        Bảng Điều Khiển {/* Translated: Dashboard */}
+                        Bảng Điều Khiển
                     </NavLink>
                 </li>
                 
+                {/* NEW LINK ADDED HERE */}
+                <li>
+                    <NavLink to="/content-moderator/monitor-posts">
+                        Quản Lý Bài Viết
+                    </NavLink>
+                </li>
+
                 <li>
                     <NavLink to="/content-moderator/pending">
-                        Bài Viết Chờ Duyệt {/* Translated: Pending Posts */}
+                        Bài Viết Chờ Duyệt
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to="/content-moderator/reported">
-                        Nội Dung Bị Báo Cáo {/* Translated: Reported Content */}
+                        Nội Dung Bị Báo Cáo
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to="/content-moderator/manage-categories">
-                        Quản Lý Danh Mục {/* Translated: Manage Categories */}
+                        Quản Lý Danh Mục
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to="/content-moderator/banned-users">
-                        Người Dùng Bị Cấm {/* Translated: Banned Users */}
+                        Người Dùng Bị Cấm
                     </NavLink>
                 </li>
             </ul>

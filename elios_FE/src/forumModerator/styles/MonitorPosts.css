@@ -1,0 +1,81 @@
+/* file: elios_FE/src/forumModerator/styles/MonitorPosts.css */
+#monitor-posts-page {
+    padding: 2rem;
+    color: #e0e0e0;
+    width: 100%;
+}
+
+.page-header h1 {
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #a0a0a0;
+    margin-bottom: 2rem;
+}
+
+/* Filter Bar Styles */
+#monitor-filters-container {
+    background-color: #2c2f36;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.dark-input, .dark-select {
+    background-color: #1e2126 !important;
+    border: 1px solid #444 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-input:focus, .dark-select:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+/* Table Styles */
+.dark-table-container {
+    background-color: #2c2f36;
+    border-radius: 8px;
+    border: 1px solid #444;
+    overflow: hidden;
+}
+
+#monitor-posts-table th {
+    background-color: #1e2126;
+    color: #a0a0a0;
+    border-bottom: 2px solid #444;
+    padding: 1rem;
+}
+
+#monitor-posts-table td {
+    background-color: #2c2f36;
+    color: #e0e0e0;
+    border-bottom: 1px solid #444;
+    vertical-align: middle;
+    padding: 1rem;
+}
+
+.post-stats-small {
+    font-size: 0.85rem;
+    color: #b0b0b0;
+}
+
+/* Pagination overrides for dark theme */
+.dark-pagination .page-link {
+    background-color: #2c2f36;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.dark-pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.dark-pagination .page-item.disabled .page-link {
+    background-color: #1e2126;
+    color: #6c757d;
+}

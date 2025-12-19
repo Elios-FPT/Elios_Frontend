@@ -11,40 +11,41 @@ export const ForumContextProvider = ({ children }) => {
     const [CategoryId, setCategoryId] = useState(null);
     const [loading, setLoading] = useState(true);
     
-    // Pagination State
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const pageSize = 10; // Default items per page
+    const pageSize = 10; 
 
     const postType = "Post";
 
-    // Reset page to 1 when category changes
     useEffect(() => {
         setCurrentPage(1);
     }, [CategoryId]);
 
-    // Updated: Fetch posts whenever CategoryId or currentPage changes
     useEffect(() => {
         const fetchPosts = async () => {
             setLoading(true);
             try {
-                // Assuming backend uses 0-based indexing for pages (based on your response snippet "page": 0)
-                // If backend is 1-based, remove the "- 1"
-                const apiPage = currentPage > 0 ? currentPage - 1 : 0;
+                // CHANGE 1: Use currentPage directly if the backend is 1-based.
+                // If your backend specifically requires 0-based, change this back to currentPage - 1.
+                const apiPage = currentPage; 
+
+                // Debugging: Check your console to see exactly what is being sent
+                console.log(`Fetching Page: ${apiPage}, Category: ${CategoryId}`);
 
                 const response = await axios.get(API_ENDPOINTS.GET_SOLUTION, {
                     params: {
                         PostType: postType,
                         CategoryId: CategoryId,
-                        page: apiPage,
-                        pageSize: pageSize 
+                        // CHANGE 2: Ensure these keys match your C# DTO (often PascalCase)
+                        Page: apiPage, 
+                        PageSize: pageSize 
                     },
                     withCredentials: true,
                     headers: { "Content-Type": "application/json" },
                 });
+                
                 setPosts(response.data.responseData || []);
                 
-                // Update pagination data
                 if (response.data.pagination) {
                     setTotalPages(response.data.pagination.totalPages);
                 }

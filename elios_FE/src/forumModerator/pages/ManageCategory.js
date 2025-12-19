@@ -26,15 +26,14 @@ const AdminManageCategory = () => {
             const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES_FORUM, {
                 withCredentials: true,
             });
-            // Assuming the data is in response.data.responseData based on your note.json
             if (response.data && Array.isArray(response.data.responseData)) {
                 setCategories(response.data.responseData);
             } else {
-                setError("Định dạng phản hồi không mong muốn."); // Translated
+                setError("Định dạng phản hồi không mong muốn.");
             }
         } catch (err) {
             console.error("Error fetching categories:", err);
-            setError("Không thể tải danh mục. Vui lòng thử lại."); // Translated
+            setError("Không thể tải danh mục. Vui lòng thử lại.");
         } finally {
             setLoading(false);
         }

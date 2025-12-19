@@ -34,6 +34,7 @@ import PendingPosts from "./forumModerator/pages/PendingPosts";
 import ReportedPosts from "./forumModerator/pages/ReportedPosts"; 
 import ManageCategory from "./forumModerator/pages/ManageCategory"; 
 import BannedUserForum from "./forumModerator/pages/BannedUserForum";
+import MonitorPosts from "./forumModerator/pages/MonitorPosts";
 
 // --- Resource Manager ---
 import ManageCodingBank from "./resourceManager/pages/ManageCodingBank";
@@ -102,6 +103,7 @@ function App() {
                 <Route path="reported" element={<ReportedPosts />} />
                 <Route path="manage-categories" element={<ManageCategory />} />
                 <Route path="banned-users" element={<BannedUserForum />} />
+                <Route path="monitor-posts" element={<MonitorPosts />} />
               </Route>
             </Route>
 
