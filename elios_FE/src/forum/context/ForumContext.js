@@ -25,18 +25,12 @@ export const ForumContextProvider = ({ children }) => {
         const fetchPosts = async () => {
             setLoading(true);
             try {
-                // CHANGE 1: Use currentPage directly if the backend is 1-based.
-                // If your backend specifically requires 0-based, change this back to currentPage - 1.
                 const apiPage = currentPage; 
-
-                // Debugging: Check your console to see exactly what is being sent
-                console.log(`Fetching Page: ${apiPage}, Category: ${CategoryId}`);
 
                 const response = await axios.get(API_ENDPOINTS.GET_SOLUTION, {
                     params: {
                         PostType: postType,
                         CategoryId: CategoryId,
-                        // CHANGE 2: Ensure these keys match your C# DTO (often PascalCase)
                         Page: apiPage, 
                         PageSize: pageSize 
                     },
@@ -64,6 +58,10 @@ export const ForumContextProvider = ({ children }) => {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES_FORUM, {
+                     params: {
+                        Page: 1, 
+                        Size: 50 
+                    },
                     withCredentials: true,
                     headers: { "Content-Type": "application/json" },
                 });

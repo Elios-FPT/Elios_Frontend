@@ -24,6 +24,10 @@ const AdminManageCategory = () => {
         setError(null);
         try {
             const response = await axios.get(API_ENDPOINTS.GET_CATEGORIES_FORUM, {
+                params: {
+                    Page: 1,
+                    Size: 50
+                },
                 withCredentials: true,
             });
             if (response.data && Array.isArray(response.data.responseData)) {
@@ -50,7 +54,7 @@ const AdminManageCategory = () => {
     const handleCreate = async (e) => {
         e.preventDefault();
         setCreateError(null);
-        
+
         const newCategoryData = {
             name: newName,
             description: newDescription,
@@ -61,7 +65,7 @@ const AdminManageCategory = () => {
             await axios.post(API_ENDPOINTS.CREATE_CATEGORY, newCategoryData, {
                 withCredentials: true,
             });
-            
+
             // Reset form and refetch the list
             setNewName("");
             setNewDescription("");
@@ -152,7 +156,7 @@ const AdminManageCategory = () => {
             {/* --- Existing Categories List --- */}
             <h2>Danh mục hiện có</h2> {/* Translated */}
             {error && <p className="page-error">{error}</p>}
-            
+
             <div id="category-list-container">
                 {loading ? (
                     <p>Đang tải danh mục...</p> // Translated
