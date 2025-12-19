@@ -1,0 +1,137 @@
+/* file: elios_FE/src/codingChallenge/style/FeedbackView.css */
+
+#feedback-view-container {
+  padding: 10px;
+  color: #e0e0e0;
+  font-family: "Inter", sans-serif;
+  height: 100%;
+  overflow-y: auto;
+}
+
+#feedback-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#feedback-title {
+  color: #a78bfa; /* Soft purple for AI theme */
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+#feedback-subtitle {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+#feedback-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#analyze-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+#analyze-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+}
+
+#analyze-btn:disabled {
+  background: #3a3a3a;
+  color: #777;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+#feedback-error {
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid #f44336;
+  color: #f44336;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+#feedback-result {
+  background-color: #23272f;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #333;
+}
+
+#feedback-score-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3e3e3e;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+#score-label {
+  font-weight: bold;
+  color: #ccc;
+}
+
+#score-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #50fa7b; /* Green for score */
+}
+
+#feedback-content {
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+#feedback-content h1, 
+#feedback-content h2, 
+#feedback-content h3 {
+  color: #f0f0f0;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+#feedback-content p {
+  margin-bottom: 10px;
+  color: #d1d1d1;
+}
+
+#feedback-content ul, #feedback-content ol {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+#feedback-content li {
+  margin-bottom: 5px;
+}
+
+#feedback-content code {
+  background-color: #1a1a1a;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #ff79c6;
+  font-family: monospace;
+}
+
+#feedback-empty-state {
+  text-align: center;
+  color: #666;
+  margin-top: 40px;
+  font-style: italic;
+}

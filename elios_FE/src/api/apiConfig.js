@@ -49,6 +49,7 @@ export const API_ENDPOINTS = {
     GET_AI_INTERVIEW_CONVERSATION: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/conversation`,
     GET_AI_INTERVIEW_DETAIL: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}`,
     STOP_AI_INTERVIEW: (interviewId) => `${baseUrl}/api/ai/interviews/${interviewId}/stop`,
+    AI_FEEDBACK_ANALYZE: `${baseUrl}/api/ai/feedback/analyze`,
 
     // User API Endpoints
     GET_USER_PROFILE: `${baseUrl}/api/users/me/profile`,
