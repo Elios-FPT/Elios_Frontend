@@ -1,11 +1,13 @@
-// file: elios_FE/src/codingChallenge/components/ProblemDescription.jsx
+// file: elios_FE/src/codingChallenge/components/ProblemDescription.js
 import React, { useState } from "react";
 import DescriptionView from "./DescriptionView"; 
 import SubmissionsView from "./SubmissionsView"; 
 import SolutionView from "./SolutionView";
+import FeedbackView from "./FeedbackView"; // <--- Import
 import "../style/ProblemDescription.css"; 
 
-const ProblemDescription = ({ problemId, problemData, loading, error }) => {
+// Added props: currentCode, currentLanguage
+const ProblemDescription = ({ problemId, problemData, loading, error, currentCode, currentLanguage }) => {
   const [activeTab, setActiveTab] = useState("description");
 
   return (
@@ -30,6 +32,13 @@ const ProblemDescription = ({ problemId, problemData, loading, error }) => {
         >
           Giải pháp {/* Translated */}
         </button>
+        {/* NEW TAB */}
+        <button
+          id={activeTab === "feedback" ? "tab-button-active" : "tab-button"}
+          onClick={() => setActiveTab("feedback")}
+        >
+          Phản hồi AI
+        </button>
       </div>
 
       {/* Tab Content */}
@@ -43,6 +52,15 @@ const ProblemDescription = ({ problemId, problemData, loading, error }) => {
         )}
         {activeTab === "submissions" && <SubmissionsView problemId={problemId} />}
         {activeTab === "solution" && <SolutionView problemId={problemId} />}
+        
+        {/* NEW VIEW */}
+        {activeTab === "feedback" && (
+            <FeedbackView 
+                problemId={problemId}
+                currentCode={currentCode}
+                currentLanguage={currentLanguage}
+            />
+        )}
       </div>
     </div>
   );

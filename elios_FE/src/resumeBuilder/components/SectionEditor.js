@@ -96,7 +96,16 @@ const SectionEditor = ({ section, path, onFieldChange, onAddItem, onRemoveItem }
                     />
                 );
               })}
-              <button className="remove-btn" onClick={() => onRemoveItem(path, item.id)}>Remove</button>
+              {/* Changed Remove button to simple text link without underline */}
+              <div style={{ textAlign: 'right', marginTop: '5px' }}>
+                <span 
+                  className="remove-item-text" 
+                  onClick={() => onRemoveItem(path, item.id)}
+                  style={{ cursor: 'pointer', color: 'red' }}
+                >
+                  Remove
+                </span>
+              </div>
             </div>
           ))}
           <button className="add-btn" onClick={() => onAddItem(path)}>+ Add {title}</button>

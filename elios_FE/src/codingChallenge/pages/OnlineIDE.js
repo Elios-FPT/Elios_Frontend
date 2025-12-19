@@ -22,6 +22,10 @@ const OnlineIDE = () => {
   const [testResults, setTestResults] = useState(null);
   const [haveContent, setHaveContent] = useState(false);
   
+  // NEW STATE: Track code and language for AI Feedback
+  const [currentCode, setCurrentCode] = useState("");
+  const [currentLanguage, setCurrentLanguage] = useState("javascript"); 
+
   // Problem Data State
   const [problem, setProblem] = useState(null);
   const [fetchingProblem, setFetchingProblem] = useState(true);
@@ -123,7 +127,18 @@ const OnlineIDE = () => {
     }
   };
 
+  // Wrapper to capture code state changes
+  const handleCodeChange = (newCode, language) => {
+    setHaveContent(true);
+    setCurrentCode(newCode);
+    if (language) setCurrentLanguage(language);
+  };
+
   const handleRun = async (code, language) => {
+    // Ensure state is synced on Run
+    setCurrentCode(code); 
+    setCurrentLanguage(language);
+
     setIsLoading(true);
     setError("");
     setOutput("");
@@ -167,6 +182,10 @@ const OnlineIDE = () => {
   };
 
   const handleSubmit = async (code, language) => {
+    // Ensure state is synced on Submit
+    setCurrentCode(code);
+    setCurrentLanguage(language);
+
     setIsLoading(true);
     setError("");
     setOutput("");
@@ -244,6 +263,9 @@ const OnlineIDE = () => {
                   problemData={problem} 
                   loading={fetchingProblem}
                   error={problemError}
+                  // Pass code state to ProblemDescription so FeedbackView can access it
+                  currentCode={currentCode}
+                  currentLanguage={currentLanguage}
                 />
               </div>
             )}
@@ -265,7 +287,8 @@ const OnlineIDE = () => {
                   <CodeIDE 
                     onRun={handleRun} 
                     onSubmit={handleSubmit} 
-                    onCodeChange={() => setHaveContent(true)}
+                    // UPDATED: Use the wrapper to capture code state
+                    onCodeChange={handleCodeChange}
                     templates={problem?.templates} 
                   />
                 )}

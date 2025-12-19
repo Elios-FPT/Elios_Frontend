@@ -14,15 +14,29 @@ const CodeIDE = ({ onRun, onSubmit, onCodeChange, templates }) => {
     CSHARP: "csharp",
   };
 
-  // Update code when templates load or language changes
+  // Update code when templates load
   useEffect(() => {
-    if (templates && templates[language]) {
+    // Only update if code is the default or empty to prevent overwriting user work on re-renders
+    if (templates && templates[language] && (code === "// Write your code here..." || !code)) {
       setCode(templates[language]);
-    } else {
-      // Fallback if no template exists for this language
-      setCode("// Write your code here...");
+      // Sync with parent immediately on template load
+      if (onCodeChange) onCodeChange(templates[language], language);
     }
-  }, [templates, language]);
+  }, [templates, language]); // logic adjusted slightly to be safer
+
+  const handleLanguageChange = (e) => {
+    const newLang = e.target.value;
+    setLanguage(newLang);
+    
+    // Switch template if available
+    const newCode = templates && templates[newLang] ? templates[newLang] : "// Write your code here...";
+    setCode(newCode);
+
+    // CRITICAL FIX: Notify parent of language change
+    if (onCodeChange) {
+      onCodeChange(newCode, newLang);
+    }
+  };
 
   const handleRun = () => {
     onRun(code, language);
@@ -34,8 +48,9 @@ const CodeIDE = ({ onRun, onSubmit, onCodeChange, templates }) => {
 
   const handleEditorChange = (value) => {
     setCode(value || "");
+    // CRITICAL FIX: Pass value and language to parent
     if (onCodeChange) {
-      onCodeChange();
+      onCodeChange(value, language);
     }
   };
 
@@ -44,11 +59,13 @@ const CodeIDE = ({ onRun, onSubmit, onCodeChange, templates }) => {
       <div id="codeIDE-toolbar">
         <select
           value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={handleLanguageChange} /* Updated handler */
           id="codeIDE-lang-select"
         >
           <option value="JAVA">Java</option>
           <option value="CSHARP">C#</option>
+          {/* Added Javascript option since mapped in languageMap */}
+          <option value="JAVASCRIPT">JavaScript</option> 
         </select>
 
         <div id="codeIDE-button-group">

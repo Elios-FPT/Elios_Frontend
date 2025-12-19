@@ -1,0 +1,203 @@
+/* file: elios_FE/src/resumeBuilder/styles/CVFeedbackView.css */
+
+.cv-feedback-container {
+    padding: 24px;
+    height: 100%;
+    overflow-y: auto;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+}
+
+/* --- Empty State --- */
+.feedback-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.feedback-icon-wrapper {
+    background-color: #e8f5e9;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.feedback-mascot {
+    font-size: 40px;
+    color: #2e8555;
+}
+
+.feedback-empty-state h3 {
+    font-weight: 700;
+    color: #2e8555;
+    margin-bottom: 10px;
+}
+
+.feedback-empty-state p {
+    color: #666;
+    max-width: 300px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* --- Buttons --- */
+.feedback-btn-primary {
+    background-color: #2e8555;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 4px 10px rgba(46, 133, 85, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.feedback-btn-primary:hover {
+    background-color: #256b44;
+    transform: translateY(-2px);
+}
+
+.feedback-btn-secondary {
+    background-color: transparent;
+    color: #555;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+.feedback-btn-secondary:hover {
+    background-color: #f5f5f5;
+}
+
+/* --- Loading State --- */
+.feedback-loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px;
+    text-align: center;
+}
+.feedback-loading-state p {
+    margin-top: 15px;
+    font-weight: 600;
+    color: #333;
+}
+.feedback-loading-state small {
+    color: #888;
+}
+
+/* --- Results State --- */
+.feedback-header-card {
+    background: linear-gradient(135deg, #2e8555 0%, #43a047 100%);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(46, 133, 85, 0.25);
+}
+
+.score-circle {
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.score-value {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+}
+.score-label {
+    font-size: 10px;
+    opacity: 0.9;
+}
+
+.score-text {
+    flex-grow: 1;
+}
+
+.score-text h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.score-progress .progress-bar {
+    background-color: #ffffff !important; 
+    /* Force white bar on green background */
+}
+.score-progress {
+    background-color: rgba(0,0,0,0.2);
+    height: 8px;
+    border-radius: 4px;
+}
+
+/* --- Markdown Styling --- */
+.feedback-markdown-content {
+    background: #fff;
+}
+
+.fb-h1, .fb-h2 {
+    color: #2e8555;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.fb-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.fb-li {
+    background-color: #f9f9f9;
+    margin-bottom: 8px;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.fb-bullet {
+    color: #2e8555;
+    margin-right: 10px;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+/* Animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -9,9 +9,12 @@ import '../styles/ResumeBuilder.css';
 import Toolbar from '../components/Toolbar';
 import SectionEditor from '../components/SectionEditor';
 import PreviewPanel from '../components/PreviewPanel';
+import CVFeedbackView from '../components/CVFeedbackView'; // <--- IMPORT
 import { loadFromLocalStorage, saveToLocalStorage, saveToServer } from '../utils/storage';
 import UserNavbar from '../../components/navbars/UserNavbar';
+import { FaEdit, FaRobot } from 'react-icons/fa'; // Icons for tabs
 
+// ... [Keep initialResumeState and createNewItem exactly as they were] ...
 const initialResumeState = {
   personalInfo: {
     id: 'personalInfo',
@@ -57,7 +60,18 @@ const createNewItem = (sectionId) => {
     case 'experience':
       return { ...base, employer: '', jobTitle: '', start: '', end: '', location: '', description: '' };
     case 'projects':
-      return { ...base, projectName: '', role: '', description: '', techStack: '', achievements: '', githubUrl: '', liveUrl: '' };
+      return { 
+        ...base, 
+        projectName: '', 
+        role: '', 
+        start: '', 
+        end: '', 
+        description: '', 
+        techStack: '', 
+        achievements: '', 
+        githubUrl: '', 
+        liveUrl: '' 
+      };
     case 'education':
       return { ...base, institution: '', location: '', degreeType: '', fieldOfStudy: '', start: '', grad: '', gpa: '' };
     case 'skillsets.languages':
@@ -74,12 +88,13 @@ const ResumeBuilder = () => {
   const { id } = useParams();
   const [resumeData, setResumeData] = useState(loadFromLocalStorage() || initialResumeState);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // NEW STATE: Manage active tab ('editor' or 'feedback')
+  const [activeTab, setActiveTab] = useState('editor');
 
-  // This array defines the exact order for rendering the editor sections.
   const sectionOrder = ['personalInfo', 'education', 'experience', 'skillsets', 'projects'];
 
   useEffect(() => {
-    // Debounce the save operation
     const timer = setTimeout(async () => {
       setIsSaving(true);
       saveToLocalStorage(resumeData);
@@ -90,7 +105,7 @@ const ResumeBuilder = () => {
       } finally {
         setIsSaving(false);
       }
-    }, 10000); // 10s debounce
+    }, 10000); 
 
     return () => clearTimeout(timer);
   }, [resumeData, id]);
@@ -101,8 +116,11 @@ const ResumeBuilder = () => {
         const response = await axios.get(API_ENDPOINTS.GET_USER_CV_DETAIL(id), {
           withCredentials: true,
         });
-        setResumeData(response.data.responseData);
-        console.log("Fetched resume data:", response.data.responseData);
+        // Merge fetched data with initial state structure to ensure all keys exist
+        // This prevents crashes if the DB has partial data
+        if(response.data.responseData) {
+            setResumeData(prev => ({...initialResumeState, ...response.data.responseData}));
+        }
       } catch (error) {
         console.error('Error fetching resume:', error);
       }
@@ -171,22 +189,42 @@ const ResumeBuilder = () => {
       <Container fluid className="rb-main-container">
         <Row>
           <Col md={5} id="rb-editor-panel">
+            {/* UPDATED TABS */}
             <div className="editor-tabs">
-              <button className="editor-tab-btn active">Resume Details</button>
+              <button 
+                className={`editor-tab-btn ${activeTab === 'editor' ? 'active' : ''}`}
+                onClick={() => setActiveTab('editor')}
+              >
+                <FaEdit style={{marginRight: '6px'}}/> Editor
+              </button>
+              <button 
+                className={`editor-tab-btn ${activeTab === 'feedback' ? 'active' : ''}`}
+                onClick={() => setActiveTab('feedback')}
+              >
+                <FaRobot style={{marginRight: '6px'}}/> AI Assistant
+              </button>
             </div>
-            {/* Map over the sectionOrder array to render sections in the correct order */}
-            {sectionOrder.map(sectionId => (
-              resumeData[sectionId] && (
-                <SectionEditor
-                  key={sectionId}
-                  section={resumeData[sectionId]}
-                  path={sectionId}
-                  onFieldChange={handleFieldChange}
-                  onAddItem={handleAddItem}
-                  onRemoveItem={handleRemoveItem}
-                />
-              )
-            ))}
+
+            {/* CONDITIONAL CONTENT */}
+            {activeTab === 'editor' ? (
+                <div className="editor-content-wrapper">
+                    {sectionOrder.map(sectionId => (
+                    resumeData[sectionId] && (
+                        <SectionEditor
+                        key={sectionId}
+                        section={resumeData[sectionId]}
+                        path={sectionId}
+                        onFieldChange={handleFieldChange}
+                        onAddItem={handleAddItem}
+                        onRemoveItem={handleRemoveItem}
+                        />
+                    )
+                    ))}
+                </div>
+            ) : (
+                // NEW FEEDBACK VIEW
+                <CVFeedbackView resumeData={resumeData} resumeId={id} />
+            )}
           </Col>
           <Col md={7} id="rb-preview-panel">
             <PreviewPanel resumeData={resumeData} />
