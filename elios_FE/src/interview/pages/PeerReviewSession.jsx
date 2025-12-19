@@ -1,4 +1,4 @@
-// file: elios_FE/src/interview/pages/PeerReviewSession.js
+// src/interview/pages/PeerReviewSession.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from '../utils/toast';

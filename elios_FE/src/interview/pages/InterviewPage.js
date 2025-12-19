@@ -1,4 +1,3 @@
-// file: elios_FE/src/interview/pages/InterviewPage.js
 import React, { useState, useRef, useEffect } from 'react';
 import TextChat from '../components/TextChat';
 import VoiceChat from '../components/VoiceChat';

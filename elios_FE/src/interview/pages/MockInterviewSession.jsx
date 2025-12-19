@@ -1,4 +1,4 @@
-// file: elios_FE/src/interview/pages/MockInterviewSession.js
+// src/interview/pages/MockInterviewSession.jsx
 import React from 'react';
 import TextChat from '../components/TextChat';
 import VoiceChat from '../components/VoiceChat';

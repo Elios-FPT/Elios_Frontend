@@ -249,7 +249,7 @@ function FeedbackModal({ detailedFeedback = null, onClose }) {
                 {feedback.speaking_score_avg !== undefined && (
                   <div className="category-card">
                     <div className="category-name">Speaking & Communication</div>
-                    <div className="category-score">{feedback.speaking_score_avg.toFixed(1)}</div>
+                    <div className="category-score">{(feedback.speaking_score_avg ?? 0).toFixed(1)}</div>
                     <div className="category-feedback">Average communication effectiveness score</div>
                   </div>
                 )}

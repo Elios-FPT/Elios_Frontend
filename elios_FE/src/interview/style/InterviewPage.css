@@ -21,14 +21,16 @@
   padding: 20px 30px;
   background: white;
   border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header-left {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
 }
 
 .header-title {
@@ -45,22 +47,51 @@
   font-weight: 400;
 }
 
+/* Section Tabs */
+.section-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.section-tabs button {
+  padding: 10px 20px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.section-tabs button:hover {
+  background: #e0e7ff;
+  border-color: #6366f1;
+}
+
+.section-tabs button.active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+}
+
 /* Main Content - Trang bắt đầu */
 .main-content {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 40px 20px;
   overflow-y: auto;
 }
 
-/* Card trung tâm */
 .start-interview-card.compact {
   background: white;
   padding: 48px 56px;
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.06);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.06);
   max-width: 520px;
   width: 100%;
   text-align: center;
@@ -72,6 +103,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -124,8 +156,13 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Upload thành công */
@@ -214,6 +251,106 @@
   animation: spin 1.5s linear infinite;
 }
 
+/* Peer Review List */
+.interview-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.interview-list li {
+  background: #f8fafc;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+}
+
+.interview-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.interview-list li span {
+  font-size: 14px;
+  color: #475569;
+}
+
+.interview-list li button {
+  padding: 8px 16px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.interview-list li button:hover {
+  background: #5b5ce0;
+}
+
+/* Review Container */
+.review-container {
+  width: 100%;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.review-item {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.review-item h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #1e293b;
+}
+
+.review-item input,
+.review-item textarea {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.review-item input:focus,
+.review-item textarea:focus {
+  border-color: #6366f1;
+  outline: none;
+}
+
+.review-item button {
+  padding: 8px 16px;
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.review-item button:hover {
+  background: #16a34a;
+}
+
 /* Khi đang trong phỏng vấn - Header gọn lại */
 #interview-page .header-title {
   font-size: 20px;
@@ -244,6 +381,9 @@
 
   .header {
     padding: 16px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 
   .header-title {
@@ -252,6 +392,11 @@
 
   .header-subtitle {
     font-size: 14px;
+  }
+
+  .section-tabs {
+    width: 100%;
+    justify-content: space-around;
   }
 }
 
@@ -269,14 +414,108 @@
   .change-cv-btn {
     margin: 8px auto 0;
   }
+
+  .interview-list li {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
 }
 
 /* Animation cho trang phỏng vấn xuất hiện */
-.main-content > * {
+.main-content>* {
   animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.public-interview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.public-interview-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.public-interview-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.public-interview-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.public-interview-card h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+.draft-badge {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.card-details p {
+  margin: 10px 0;
+  font-size: 15px;
+  color: #475569;
+}
+
+.skills-tag {
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.start-review-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.2s;
+}
+
+.start-review-btn:hover {
+  background: linear-gradient(135deg, #5b5ce0 0%, #7c4dff 100%);
+  transform: translateY(-2px);
+}
+
+.start-review-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

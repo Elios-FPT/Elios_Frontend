@@ -1,4 +1,4 @@
-// file: elios_FE/src/interview/pages/InterviewDashboard.js
+// src/interview/pages/InterviewDashboard.jsx
 import React, { useState, useRef } from 'react';
 import CVUploadCard from '../components/CVUploadCard';
 import PublicInterviewList from '../components/PublicInterviewList';
