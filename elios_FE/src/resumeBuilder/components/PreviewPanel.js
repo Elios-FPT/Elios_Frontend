@@ -19,6 +19,9 @@ const PreviewPanel = ({ resumeData }) => {
     personalInfo.address
   ].filter(Boolean).join(' | ');
 
+  // Get links array safely
+  const socialLinks = personalInfo.links?.items || [];
+
   // Filter out any skillset subsections that don't have items
   const populatedSkillsets = Object.values(skillsets)
     .filter(subset => subset && Array.isArray(subset.items) && subset.items.length > 0);
@@ -33,9 +36,27 @@ const PreviewPanel = ({ resumeData }) => {
           <p className="preview-contact-info">
             {contactInfo}
           </p>
+          
+          {/* Social Links Section */}
+          {socialLinks.length > 0 && (
+            <div id="preview-social-links">
+              {socialLinks.map((link, index) => (
+                <span key={link.id}>
+                  {link.url ? (
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                      {link.name || link.url}
+                    </a>
+                  ) : (
+                    <span>{link.name}</span>
+                  )}
+                  {index < socialLinks.length - 1 && ' | '}
+                </span>
+              ))}
+            </div>
+          )}
         </header>
 
-                {/* Education Section */}
+        {/* Education Section */}
         {education.items?.length > 0 && (
           <section className="preview-section">
             <h2>EDUCATION</h2>
@@ -63,11 +84,6 @@ const PreviewPanel = ({ resumeData }) => {
           </section>
         )}
         
-
-
-
-
-        {/* --- THIS IS THE FIX --- */}
         {/* Skillsets Section */}
         {populatedSkillsets.length > 0 && (
           <section className="preview-section">
@@ -83,13 +99,19 @@ const PreviewPanel = ({ resumeData }) => {
           </section>
         )}
 
-                {/* Projects Section */}
+        {/* Projects Section */}
         {projects.items?.length > 0 && (
           <section className="preview-section">
             <h2>PROJECTS</h2>
             {projects.items.map(item => (
               <div key={item.id} className="preview-item">
                 <h4>{item.projectName} | <span className="project-role">{item.role}</span></h4>
+                {/* Added Date display here */}
+                {(item.start || item.end) && (
+                   <em style={{ display: 'block', marginBottom: '5px' }}>
+                     {item.start}{item.start && item.end ? ' - ' : ''}{item.end}
+                   </em>
+                )}
                 <p className="project-description">{item.description}</p>
                 <p className="project-tech-stack"><strong>Tech Stack:</strong> {item.techStack}</p>
 

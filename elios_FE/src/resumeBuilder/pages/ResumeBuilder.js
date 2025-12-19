@@ -57,7 +57,19 @@ const createNewItem = (sectionId) => {
     case 'experience':
       return { ...base, employer: '', jobTitle: '', start: '', end: '', location: '', description: '' };
     case 'projects':
-      return { ...base, projectName: '', role: '', description: '', techStack: '', achievements: '', githubUrl: '', liveUrl: '' };
+      // Added start and end fields here
+      return { 
+        ...base, 
+        projectName: '', 
+        role: '', 
+        start: '', 
+        end: '', 
+        description: '', 
+        techStack: '', 
+        achievements: '', 
+        githubUrl: '', 
+        liveUrl: '' 
+      };
     case 'education':
       return { ...base, institution: '', location: '', degreeType: '', fieldOfStudy: '', start: '', grad: '', gpa: '' };
     case 'skillsets.languages':
