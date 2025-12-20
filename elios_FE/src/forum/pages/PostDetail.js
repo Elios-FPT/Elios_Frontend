@@ -40,7 +40,8 @@ const PostDetail = () => {
         const fetchPost = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(API_ENDPOINTS.GET_POST_CONTENT(id), {
+                // Pass requesterId (user.id) if user is logged in
+                const response = await axios.get(API_ENDPOINTS.GET_POST_CONTENT(id, user?.id), {
                     withCredentials: true,
                     headers: { "Content-Type": "application/json" },
                 });
@@ -55,7 +56,7 @@ const PostDetail = () => {
             }
         };
         fetchPost();
-    }, [id]);
+    }, [id, user]);
 
     // --- State Management Helpers ---
 
@@ -114,29 +115,25 @@ const PostDetail = () => {
     // --- Helper to handle API errors (specifically 403 Bans) ---
     const handleActionError = (error) => {
         if (error.response && error.response.status === 403) {
-            // Use the message from the backend which contains ban reason and time
-            setActionError(error.response.data.message || "Hành động bị cấm."); // Translated fallback
-            
-            // Scroll to top to ensure user sees the message
+            setActionError(error.response.data.message || "Hành động bị cấm."); 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             console.error("Action failed:", error);
-            // Optionally set a generic error, or just log it
         }
     };
 
     // --- Handlers ---
 
     const handleCommentSubmit = async (content, parentCommentId) => {
-        setActionError(null); // Clear previous errors
+        setActionError(null);
         if (!content.trim()) return;
 
-        let currentUserName = "Bạn"; // Translated
+        let currentUserName = "Bạn"; 
         let currentUserAvatar = "/default-avatar.png";
 
         try {
             if (user) {
-                currentUserName = `${user.firstName} ${user.lastName}`.trim() || "Bạn"; // Translated
+                currentUserName = `${user.firstName} ${user.lastName}`.trim() || "Bạn";
                 currentUserAvatar = user.avatarUrl || "/default-avatar.png";
             }
         } catch (e) {
@@ -153,7 +150,6 @@ const PostDetail = () => {
             replies: [],
         };
 
-        // Optimistically add comment
         addCommentToState(tempComment, parentCommentId);
         setReplyingTo(null);
 
@@ -164,7 +160,6 @@ const PostDetail = () => {
                 headers: { "Content-Type": "application/json" },
             });
 
-            // If server returns the updated post, use it.
             const updatedPostFromServer = response.data.responseData;
             if (updatedPostFromServer && typeof updatedPostFromServer === 'object') {
                  updatedPostFromServer.comments = updatedPostFromServer.comments || [];
@@ -172,19 +167,47 @@ const PostDetail = () => {
             }
 
         } catch (error) {
-            // Revert optimistic update by removing the temp comment
             deleteCommentFromState(tempId);
             handleActionError(error);
         }
     };
 
     const handleUpvote = async () => {
+        if (!user) {
+            alert("Vui lòng đăng nhập để thực hiện chức năng này");
+            return;
+        }
         setActionError(null);
         const originalPost = { ...post };
-        setPost((current) => ({
-            ...current,
-            upvoteCount: current.upvoteCount + 1,
-        }));
+
+        // Optimistic Update Logic
+        setPost((current) => {
+            let newUpvoteCount = current.upvoteCount;
+            let newDownvoteCount = current.downvoteCount;
+            let newUserVoteType = current.userVoteType;
+
+            if (current.userVoteType === "Upvote") {
+                // Remove Upvote
+                newUpvoteCount -= 1;
+                newUserVoteType = null;
+            } else if (current.userVoteType === "Downvote") {
+                // Switch Down to Up
+                newDownvoteCount -= 1;
+                newUpvoteCount += 1;
+                newUserVoteType = "Upvote";
+            } else {
+                // Add Upvote
+                newUpvoteCount += 1;
+                newUserVoteType = "Upvote";
+            }
+
+            return {
+                ...current,
+                upvoteCount: newUpvoteCount,
+                downvoteCount: newDownvoteCount,
+                userVoteType: newUserVoteType
+            };
+        });
 
         try {
             const response = await axios.post(
@@ -192,6 +215,7 @@ const PostDetail = () => {
                 {},
                 { withCredentials: true }
             );
+            // Sync with server response
             const updatedData = response.data.responseData;
             setPost((current) => ({
                 ...current,
@@ -199,18 +223,47 @@ const PostDetail = () => {
             }));
 
         } catch (error) {
-            setPost(originalPost); // Revert UI
+            setPost(originalPost); // Revert on failure
             handleActionError(error);
         }
     };
 
     const handleDownvote = async () => {
+        if (!user) {
+            alert("Vui lòng đăng nhập để thực hiện chức năng này");
+            return;
+        }
         setActionError(null);
         const originalPost = { ...post };
-        setPost((current) => ({
-            ...current,
-            downvoteCount: current.downvoteCount + 1,
-        }));
+
+        // Optimistic Update Logic
+        setPost((current) => {
+            let newUpvoteCount = current.upvoteCount;
+            let newDownvoteCount = current.downvoteCount;
+            let newUserVoteType = current.userVoteType;
+
+            if (current.userVoteType === "Downvote") {
+                // Remove Downvote
+                newDownvoteCount -= 1;
+                newUserVoteType = null;
+            } else if (current.userVoteType === "Upvote") {
+                // Switch Up to Down
+                newUpvoteCount -= 1;
+                newDownvoteCount += 1;
+                newUserVoteType = "Downvote";
+            } else {
+                // Add Downvote
+                newDownvoteCount += 1;
+                newUserVoteType = "Downvote";
+            }
+
+            return {
+                ...current,
+                upvoteCount: newUpvoteCount,
+                downvoteCount: newDownvoteCount,
+                userVoteType: newUserVoteType
+            };
+        });
 
         try {
             const response = await axios.post(
@@ -219,6 +272,7 @@ const PostDetail = () => {
                 { withCredentials: true }
             );
 
+            // Sync with server response
             const updatedData = response.data.responseData;
             setPost((current) => ({
                 ...current,
@@ -226,7 +280,7 @@ const PostDetail = () => {
             }));
 
         } catch (error) {
-            setPost(originalPost); // Revert UI
+            setPost(originalPost); // Revert on failure
             handleActionError(error);
         }
     };
@@ -245,7 +299,6 @@ const PostDetail = () => {
                 { targetType, targetId, reason, details: details ? details.trim() : "" },
                 { withCredentials: true, headers: { "Content-Type": "application/json" } }
             );
-            // Translated success message logic
             const targetName = targetType === "Post" ? "Bài viết" : "Bình luận";
             alert(`${targetName} đã được báo cáo thành công!`); 
         } catch (error) {
@@ -286,10 +339,8 @@ const PostDetail = () => {
         if (!editContent.trim()) return;
 
         // 1. Update UI immediately (Optimistic update)
-        const oldContent = post.comments.find(c => c.commentId === commentId)?.content; // simplified lookup
+        const oldContent = post.comments.find(c => c.commentId === commentId)?.content; 
         updateCommentInState(commentId, editContent);
-        
-        // 2. Escape Edit Mode
         setEditingCommentId(null);
 
         try {
@@ -299,17 +350,15 @@ const PostDetail = () => {
                 { withCredentials: true }
             );
         } catch (error) {
-            // Revert if failed (requires more complex state tracking or refetch, simple log here)
             handleActionError(error);
         }
     };
 
     // --- Delete Handler ---
     const handleDeleteClick = async (commentId) => {
-        if (!window.confirm("Bạn có chắc chắn muốn xóa bình luận này không?")) return; // Translated
+        if (!window.confirm("Bạn có chắc chắn muốn xóa bình luận này không?")) return; 
         setActionError(null);
 
-        // 1. Update UI immediately
         deleteCommentFromState(commentId);
 
         try {
@@ -334,7 +383,6 @@ const PostDetail = () => {
     // --- RENDER COMMENTS ---
     const renderComments = (comments) => {
         return comments.map((comment) => {
-            // Determine if current user is the author
             let isAuthor = false;
             if (user) {
                 isAuthor = (user.firstName + " " + user.lastName === comment.authorFullName);
@@ -348,14 +396,12 @@ const PostDetail = () => {
                         <img src={comment.authorAvatarUrl || "/default-avatar.png"} alt="user" className="comment-avatar me-3" />
                         
                         <div className="comment-body w-100">
-                            {/* Header: Name, Time, Three-Dots Menu */}
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
                                     <strong className="comment-author">{comment.authorFullName}</strong>{" "}
                                     <small className="text-muted ms-2">{formatRelativeTime(comment.createdAt)}</small>
                                 </div>
 
-                                {/* Three Dots Dropdown */}
                                 <Dropdown className="comment-dropdown">
                                     <Dropdown.Toggle variant="link" id={`dropdown-${comment.commentId}`} className="text-muted p-0 no-caret">
                                         <FaEllipsisV />
@@ -365,22 +411,21 @@ const PostDetail = () => {
                                         {isAuthor ? (
                                             <>
                                                 <Dropdown.Item onClick={() => handleStartEdit(comment)}>
-                                                    <FaEdit className="me-2" /> Chỉnh sửa {/* Translated */}
+                                                    <FaEdit className="me-2" /> Chỉnh sửa 
                                                 </Dropdown.Item>
                                                 <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger">
-                                                    <FaTrash className="me-2" /> Xóa {/* Translated */}
+                                                    <FaTrash className="me-2" /> Xóa 
                                                 </Dropdown.Item>
                                             </>
                                         ) : (
                                             <Dropdown.Item onClick={() => handleShowCommentReportModal(comment.commentId)}>
-                                                <FaFlag className="me-2" /> Báo cáo {/* Translated */}
+                                                <FaFlag className="me-2" /> Báo cáo 
                                             </Dropdown.Item>
                                         )}
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </div>
 
-                            {/* Content or Edit Form */}
                             {isEditing ? (
                                 <div className="mt-2" id={`edit-box-${comment.commentId}`}>
                                     <Form.Control 
@@ -392,10 +437,10 @@ const PostDetail = () => {
                                     />
                                     <div className="d-flex gap-2">
                                         <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}>
-                                            <FaSave className="me-1" /> Lưu {/* Translated */}
+                                            <FaSave className="me-1" /> Lưu 
                                         </Button>
                                         <Button size="sm" variant="secondary" onClick={handleCancelEdit}>
-                                            <FaTimes className="me-1" /> Hủy {/* Translated */}
+                                            <FaTimes className="me-1" /> Hủy 
                                         </Button>
                                     </div>
                                 </div>
@@ -403,11 +448,10 @@ const PostDetail = () => {
                                 <p className="mb-0 mt-1">{comment.content}</p>
                             )}
 
-                            {/* Actions Footer (Reply) - Hide if editing */}
                             {!isEditing && (
                                 <div className="comment-actions mt-1">
                                     <Button variant="link" size="sm" className="p-0 reply-button" onClick={() => handleSetReply(comment)}>
-                                        Phản hồi {/* Translated */}
+                                        Phản hồi 
                                     </Button>
                                 </div>
                             )}
@@ -422,7 +466,7 @@ const PostDetail = () => {
     };
 
     if (loading) return <><UserNavbar /><div id="post-detail-background" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><LoadingCircle1 /></div></>;
-    if (!post) return <><UserNavbar /><div id="post-detail-background" className="text-center pt-5 text-white"><p>Không tìm thấy bài viết.</p><Button onClick={() => navigate("/forum")} variant="outline-light">Quay lại diễn đàn</Button></div></>; // Translated
+    if (!post) return <><UserNavbar /><div id="post-detail-background" className="text-center pt-5 text-white"><p>Không tìm thấy bài viết.</p><Button onClick={() => navigate("/forum")} variant="outline-light">Quay lại diễn đàn</Button></div></>; 
 
     return (
         <>
@@ -430,7 +474,6 @@ const PostDetail = () => {
             <div id="post-detail-background">
                 <Container id="post-detail-container">
                     
-                    {/* --- Notification Banner for Action Errors (Bans) --- */}
                     {actionError && (
                         <div id="post-action-error-notification">
                             <FaExclamationTriangle className="me-2" />
@@ -442,7 +485,7 @@ const PostDetail = () => {
                     )}
 
                     <div id="post-detail-back-button">
-                        <Button variant="outline-light" onClick={() => navigate("/forum")}>← Quay lại diễn đàn</Button> {/* Translated */}
+                        <Button variant="outline-light" onClick={() => navigate("/forum")}>← Quay lại diễn đàn</Button> 
                     </div>
                     <Card.Header id="post-detail-card-header">
                         <img src={post.authorAvatarUrl} alt="user" id="post-detail-avatar" />
@@ -459,13 +502,14 @@ const PostDetail = () => {
                             </ReactMarkdown>
                         </div>
                         <hr />
-                        <h5 id="post-detail-comments-title">Bình luận</h5> {/* Translated */}
+                        <h5 id="post-detail-comments-title">Bình luận</h5> 
                         {renderComments(post.comments || [])}
                         <CommentForm
                             postStats={{
                                 upvoteCount: post.upvoteCount || 0,
                                 downvoteCount: post.downvoteCount || 0,
                                 commentCount: post.commentCount || 0,
+                                userVoteType: post.userVoteType // Pass the current vote state
                             }}
                             onSubmit={handleCommentSubmit}
                             replyingTo={replyingTo}

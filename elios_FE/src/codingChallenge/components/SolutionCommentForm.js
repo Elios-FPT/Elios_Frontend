@@ -10,6 +10,9 @@ const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, o
     const [showReportModal, setShowReportModal] = useState(false);
     const textareaRef = useRef(null);
 
+    // Extract userVoteType from postStats
+    const { userVoteType } = postStats;
+
     const handleCloseReportModal = () => setShowReportModal(false);
     const handleShowReportModal = () => setShowReportModal(true);
 
@@ -52,20 +55,28 @@ const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, o
                 )}
 
                 <div className="solution-post-stats">
-                    {/* <span
-                        className="stat-item upvote"
+                    <span
+                        className={`stat-item upvote ${userVoteType === 'Upvote' ? 'active' : ''}`}
                         onClick={onUpvote}
                         title="Thích giải pháp"
+                        style={{ 
+                            cursor: 'pointer',
+                            color: userVoteType === 'Upvote' ? '#00a8ff' : 'inherit'
+                        }}
                     >
                         <FaThumbsUp /> {postStats.upvoteCount}
                     </span>
                     <span
-                        className="stat-item downvote"
+                        className={`stat-item downvote ${userVoteType === 'Downvote' ? 'active' : ''}`}
                         onClick={onDownvote}
                         title="Không thích giải pháp"
+                        style={{ 
+                            cursor: 'pointer',
+                            color: userVoteType === 'Downvote' ? '#ff4757' : 'inherit'
+                        }}
                     >
                         <FaThumbsDown /> {postStats.downvoteCount}
-                    </span> */}
+                    </span>
 
                     {/* Comment Count */}
                     <span className="stat-item comment">
@@ -77,6 +88,7 @@ const SolutionCommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, o
                         className="stat-item report" 
                         onClick={handleShowReportModal} 
                         title="Báo cáo giải pháp" // Translated
+                        style={{ cursor: 'pointer' }}
                     >
                         <FaFlag />
                     </span>
