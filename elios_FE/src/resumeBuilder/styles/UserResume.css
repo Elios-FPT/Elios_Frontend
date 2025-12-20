@@ -1,14 +1,15 @@
 /* file: elios_FE/src/resumeBuilder/styles/UserResume.css */
 
-/* -------------------------------------------------
-   1. GLOBAL DARK BACKGROUND (never any white flash)
-   ------------------------------------------------- */
+/* ... [Keep existing styles 1-6 unchanged] ... */
 
+/* -------------------------------------------------
+   1. GLOBAL DARK BACKGROUND
+   ------------------------------------------------- */
 #user-resume-background {
     margin: 0;
     padding: 0;
-    background-color: #121212 !important;   /* Deep dark */
-    color: #e0e0e0;                         /* Light text */
+    background-color: #121212 !important;
+    color: #e0e0e0;
     min-height: 100vh;
 }
 
@@ -21,7 +22,7 @@
     margin: 0 auto;
     margin-top: 25px;
     padding: 20px;
-    background-color: #1e1e1e;   /* Slightly lighter card-area */
+    background-color: #1e1e1e;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
@@ -116,7 +117,6 @@
     transition: all 0.2s ease;
 }
 
-/* Edit button – green */
 .resume-action-btn.edit {
     background-color: #2e8555;
     color: #fff;
@@ -125,7 +125,6 @@
     background-color: #3aa06b;
 }
 
-/* Delete button – red outline */
 .resume-action-btn.delete {
     background-color: transparent;
     border: 1px solid #c0392b;
@@ -136,9 +135,8 @@
     color: #fff;
 }
 
-
 /* -------------------------------------------------
-   7. CREATE MODAL
+   7. CREATE MODAL (UPDATED)
    ------------------------------------------------- */
 #create-resume-modal-backdrop {
     position: fixed;
@@ -159,19 +157,25 @@
     border-radius: 10px;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
     width: 90%;
-    max-width: 450px;
+    max-width: 600px; /* Increased width for template grid */
     border: 1px solid #444;
 }
 
 #create-resume-modal-content h2 {
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     color: #ffffff;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
 }
 
-#create-resume-modal-content p {
-    margin-bottom: 20px;
-    color: #aaaaaa;
+/* Modal Form Labels */
+.modal-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #cccccc;
+    font-size: 14px;
 }
 
 #resume-title-input {
@@ -182,7 +186,7 @@
     border: 1px solid #555;
     color: #e0e0e0;
     border-radius: 5px;
-    box-sizing: border-box; /* Important */
+    box-sizing: border-box;
     margin-bottom: 25px;
 }
 
@@ -192,10 +196,77 @@
     box-shadow: 0 0 0 2px rgba(46, 133, 85, 0.5);
 }
 
+/* Template Selection Grid */
+#template-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* Template Card Styles */
+.template-option-card {
+    background-color: #1e1e1e;
+    border: 2px solid #444;
+    border-radius: 6px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.template-option-card:hover {
+    border-color: #666;
+    opacity: 1;
+}
+
+.template-option-card.selected {
+    border-color: #2e8555;
+    opacity: 1;
+    box-shadow: 0 0 0 2px rgba(46, 133, 85, 0.3);
+}
+
+.template-option-card.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+    filter: grayscale(100%);
+}
+
+.template-preview-box {
+    height: 80px;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #444;
+}
+
+.template-info {
+    padding: 10px;
+    text-align: center;
+}
+
+.template-info strong {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.template-info small {
+    display: block;
+    color: #888;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+
+/* Modal Buttons */
 #modal-action-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 15px;
+    margin-top: 10px;
 }
 
 #modal-cancel-btn,
@@ -210,7 +281,7 @@
 }
 
 #modal-create-btn {
-    background-color: #2e8555; /* Green */
+    background-color: #2e8555;
     color: #fff;
 }
 #modal-create-btn:hover {
@@ -218,7 +289,7 @@
 }
 
 #modal-cancel-btn {
-    background-color: #555; /* Grey */
+    background-color: #555;
     color: #fff;
 }
 #modal-cancel-btn:hover {

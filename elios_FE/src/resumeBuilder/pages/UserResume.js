@@ -6,11 +6,21 @@ import { useNavigate } from "react-router-dom";
 import UserNavbar from "../../components/navbars/UserNavbar";
 import '../styles/UserResume.css';
 
+// Define available templates
+const AVAILABLE_TEMPLATES = [
+  { id: 'basic', name: 'Basic', description: 'Clean, simple, and professional.', isAvailable: true },
+  { id: 'modern', name: 'Modern', description: 'Coming soon.', isAvailable: false },
+  { id: 'creative', name: 'Creative', description: 'Coming soon.', isAvailable: false },
+];
+
 const UserResume = () => {
   const [resumes, setResumes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Modal State
   const [cvTitle, setCvTitle] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState("basic");
   const [isModalOpen, setIsModalOpen] = useState(false); 
 
   const navigate = useNavigate();
@@ -28,7 +38,7 @@ const UserResume = () => {
         setResumes(data);
       } catch (error) {
         console.error("Error fetching resumes:", error);
-        setError("Không thể tải danh sách hồ sơ. Vui lòng thử lại sau."); // Translated
+        setError("Không thể tải danh sách hồ sơ. Vui lòng thử lại sau."); 
       } finally {
         setLoading(false);
       }
@@ -38,29 +48,27 @@ const UserResume = () => {
   }, []);
 
 
-  // Opens the "create new" modal
   const handleCreateNew = () => {
-    setCvTitle(""); // Reset title field
+    setCvTitle(""); 
+    setSelectedTemplate("basic"); // Default to basic
     setIsModalOpen(true);
   };
 
-  // Closes the "create new" modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-  // Handles the submission from the modal
   const handleSubmitNewResume = async () => {
-    const ResumeTitle = cvTitle.trim() || "Hồ sơ chưa đặt tên"; // Translated
+    const ResumeTitle = cvTitle.trim() || "Hồ sơ chưa đặt tên"; 
     
     try {
-      
       const url = `${API_ENDPOINTS.CREATE_USER_CV}`;
 
       const response = await axios.post(
         url,
         {
           resumeTitle: ResumeTitle,
+          template: selectedTemplate, // Sending selected template to backend
         },
         { withCredentials: true }
       );
@@ -70,64 +78,55 @@ const UserResume = () => {
       const newResumeId = response.data?.responseData?.id;
       if (!newResumeId) {
         console.error("No resume ID returned from server.");
-        alert("Lỗi: Không thể nhận ID hồ sơ mới từ máy chủ."); // Translated
+        alert("Lỗi: Không thể nhận ID hồ sơ mới từ máy chủ."); 
         setIsModalOpen(false); 
         return;
       }
 
-      // No need to set modal false, navigation will unmount component
       navigate(`/resume/edit/${newResumeId}`);
     } catch (error) {
       console.error("Error creating resume:", error);
-      console.log("API Endpoint used: POST", API_ENDPOINTS.CREATE_USER_CV);
-      alert("Tạo hồ sơ thất bại. Vui lòng thử lại."); // Translated
+      alert("Tạo hồ sơ thất bại. Vui lòng thử lại."); 
       setIsModalOpen(false);
     }
   };
 
-
-  // Handler for editing an existing resume
   const handleEdit = (id) => {
     navigate(`/resume/edit/${id}`);
   };
 
-  // Handler for deleting a resume
   const handleDelete = async (id) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa hồ sơ này không?")) { // Translated
+    if (window.confirm("Bạn có chắc chắn muốn xóa hồ sơ này không?")) { 
       try {
         await axios.delete(`${API_ENDPOINTS.DELETE_USER_CV(id)}`, {
           withCredentials: true,
         });
-
-        console.log("Deleted resume with ID:", id);
         setResumes(resumes.filter((resume) => resume.id !== id));
       } catch (error) {
         console.error("Error deleting resume:", error);
-        alert("Xóa hồ sơ thất bại. Vui lòng thử lại."); // Translated
+        alert("Xóa hồ sơ thất bại. Vui lòng thử lại."); 
       }
     }
   };
 
-  // Loading state
   if (loading) {
     return (
       <div id="user-resume-background">
         <UserNavbar />
         <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px" }}>
-          <p>Đang tải hồ sơ của bạn...</p> {/* Translated */}
+          <p>Đang tải hồ sơ của bạn...</p> 
         </div>
       </div>
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div id="user-resume-background">
         <UserNavbar />
         <div id="user-resume-dashboard" style={{ textAlign: "center", padding: "40px", color: "red" }}>
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Thử lại</button> {/* Translated */}
+          <button onClick={() => window.location.reload()}>Thử lại</button> 
         </div>
       </div>
     );
@@ -139,9 +138,9 @@ const UserResume = () => {
         <UserNavbar />
         <div id="user-resume-dashboard">
           <div id="dashboard-header">
-            <h1>CV của tôi</h1> {/* Translated */}
+            <h1>CV của tôi</h1> 
             <button id="create-resume-btn" onClick={handleCreateNew}>
-              Tạo CV mới {/* Translated */}
+              Tạo CV mới 
             </button>
           </div>
 
@@ -151,10 +150,10 @@ const UserResume = () => {
                 <div className="resume-card" key={resume.id}>
                   <div className="card-content">
                     <h3 className="resume-card-title">
-                      {resume.resumeTitle || "Hồ sơ chưa đặt tên"} {/* Translated */}
+                      {resume.resumeTitle || "Hồ sơ chưa đặt tên"} 
                     </h3>
                     <p className="resume-card-updated">
-                      Cập nhật lần cuối: {new Date(resume.updatedAt).toLocaleDateString()} {/* Translated */}
+                      Cập nhật lần cuối: {new Date(resume.updatedAt).toLocaleDateString()} 
                     </p>
                   </div>
                   <div className="resume-card-actions">
@@ -162,20 +161,20 @@ const UserResume = () => {
                       className="resume-action-btn edit"
                       onClick={() => handleEdit(resume.id)}
                     >
-                      Sửa {/* Translated */}
+                      Sửa 
                     </button>
                     <button
                       className="resume-action-btn delete"
                       onClick={() => handleDelete(resume.id)}
                     >
-                      Xóa {/* Translated */}
+                      Xóa 
                     </button>
                   </div>
                 </div>
               ))
             ) : (
               <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>
-                <p>Chưa có CV nào. Hãy tạo CV đầu tiên của bạn!</p> {/* Translated */}
+                <p>Chưa có CV nào. Hãy tạo CV đầu tiên của bạn!</p> 
               </div>
             )}
           </div>
@@ -186,22 +185,46 @@ const UserResume = () => {
       {isModalOpen && (
         <div id="create-resume-modal-backdrop" onClick={handleCloseModal}>
           <div id="create-resume-modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Tạo hồ sơ mới</h2> {/* Translated */}
-            <p>Vui lòng nhập tiêu đề cho hồ sơ mới của bạn.</p> {/* Translated */}
-            <input
-              type="text"
-              id="resume-title-input"
-              value={cvTitle}
-              onChange={(e) => setCvTitle(e.target.value)}
-              placeholder="Ví dụ: CV Ứng tuyển..." // Translated
-              autoFocus
-            />
+            <h2>Tạo hồ sơ mới</h2>
+            
+            <div id="modal-form-body">
+              <label className="modal-label">Tiêu đề hồ sơ</label>
+              <input
+                type="text"
+                id="resume-title-input"
+                value={cvTitle}
+                onChange={(e) => setCvTitle(e.target.value)}
+                placeholder="Ví dụ: CV Ứng tuyển..." 
+                autoFocus
+              />
+
+              <label className="modal-label">Chọn mẫu (Template)</label>
+              <div id="template-selection-grid">
+                {AVAILABLE_TEMPLATES.map((tmpl) => (
+                  <div 
+                    key={tmpl.id}
+                    className={`template-option-card ${selectedTemplate === tmpl.id ? 'selected' : ''} ${!tmpl.isAvailable ? 'disabled' : ''}`}
+                    onClick={() => tmpl.isAvailable && setSelectedTemplate(tmpl.id)}
+                  >
+                    <div className="template-preview-box">
+                       {/* Placeholder for template thumbnail */}
+                       <span style={{fontSize: '10px', color: '#888'}}>{tmpl.name} Preview</span>
+                    </div>
+                    <div className="template-info">
+                      <strong>{tmpl.name}</strong>
+                      <small>{tmpl.description}</small>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div id="modal-action-buttons">
               <button id="modal-cancel-btn" onClick={handleCloseModal}>
-                Hủy {/* Translated */}
+                Hủy 
               </button>
               <button id="modal-create-btn" onClick={handleSubmitNewResume}>
-                Tạo {/* Translated */}
+                Tạo 
               </button>
             </div>
           </div>
