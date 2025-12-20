@@ -68,7 +68,7 @@ export const API_ENDPOINTS = {
     CREATE_POSTS_FORUM: `${baseUrl}/api/forum/posts`,
     GET_CATEGORIES_FORUM: `${baseUrl}/api/forum/public/Category`,
     GET_CATEGORIES_BY_ID: (categoryId) => `${baseUrl}/api/forum/public/Category/${categoryId}`,
-    GET_POST_CONTENT: (postId) => `${baseUrl}/api/forum/public/posts/${postId}`,
+    GET_POST_CONTENT: (postId, requesterId) => `${baseUrl}/api/forum/public/posts/${postId}${requesterId ? `?requesterId=${requesterId}` : ''}`,
     CREATE_POST: `${baseUrl}/api/forum/posts`,
     DRAFT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}`,
     SUBMIT_POST: (postId) => `${baseUrl}/api/forum/posts/${postId}/submit`,

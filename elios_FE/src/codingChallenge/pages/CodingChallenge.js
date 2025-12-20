@@ -72,8 +72,7 @@ const CodingChallenge = () => {
             <option value="HARD">Khó</option> {/* Translated: Hard */}
           </select>
           {/* --- END: Difficulty Filter --- */}
-          <p style={{ marginTop: '20px' }}>Sắp có thêm bộ lọc.</p> {/* Translated: More filters coming soon. */}
-        </aside>
+          <p style={{ marginTop: '20px' }}></p>        </aside>
 
         {/* Main Content ID */}
         <section id="coding-challenge-middle">
@@ -133,7 +132,7 @@ const CodingChallenge = () => {
         {/* Right Sidebar ID */}
         <aside id="coding-challenge-right">
           <h3>Mẹo</h3> {/* Translated: Tips */}
-          <p>Khu vực dành cho bảng xếp hạng hoặc thông báo trong tương lai.</p> {/* Translated placeholder */}
+          <p>Cố gắng tận dụng tư duy của bản thân.</p> {/* Translated placeholder */}
         </aside>
       </main>
     </>

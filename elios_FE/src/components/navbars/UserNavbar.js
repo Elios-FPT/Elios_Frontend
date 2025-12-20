@@ -1,10 +1,10 @@
 // src/components/navbars/UserNavbar.js
-import React from "react"; // Removed unnecessary hooks like useState/useEffect
+import React from "react"; 
 import { Container, Row, Col, Nav, Navbar, Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../../styles/UserNavbar.css";
-import { useUserProfile } from "../../hooks/useUserProfile"; // <--- Import the hook
+import { useUserProfile } from "../../hooks/useUserProfile"; 
 
 const UserNavbar = () => {
   const navigate = useNavigate();
@@ -73,7 +73,9 @@ const UserNavbar = () => {
   const links = getRoleBasedLinks();
 
   const handleLogout = () => {
-    // Clear any leftover local data
+    // Explicitly remove the user object
+    localStorage.removeItem("user");
+    // Clear all local storage to be safe
     localStorage.clear();
     // Redirect to backend logout to kill the cookie
     window.location.href = API_ENDPOINTS.LOGOUT_PATH;

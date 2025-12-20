@@ -86,7 +86,11 @@ const LandingPage = () => {
   const navbarLinks = getNavbarLinks();
 
   const handleLogout = () => {
+    // Explicitly remove user data
+    localStorage.removeItem("user");
+    // Clear everything else
     localStorage.clear();
+    // Redirect
     window.location.href = API_ENDPOINTS.LOGOUT_PATH;
   };
 

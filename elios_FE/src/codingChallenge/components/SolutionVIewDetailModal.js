@@ -11,11 +11,11 @@ import { formatRelativeTime } from "../../forum/utils/formatTime";
 import SolutionCommentForm from "./SolutionCommentForm";
 import LoadingCircle1 from "../../components/loading/LoadingCircle1";
 import { AppContext } from "../../context/AppContext";
-import ReportPostModal from "../../forum/components/ReportPostModal"; // Import Report Modal
+import ReportPostModal from "../../forum/components/ReportPostModal"; 
 import 'highlight.js/styles/github-dark.css';
 import "../style/SolutionViewDetailModal.css";
 
-const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
+const SolutionViewDetailModal = ({ solutionId, show, onClose, onSolutionUpdate }) => {
     const { user } = useContext(AppContext);
     const [solution, setSolution] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -36,7 +36,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     const fetchSolutionDetails = async (id) => {
         setLoading(true);
         try {
-            const response = await axios.get(API_ENDPOINTS.GET_POST_CONTENT(id), {
+            const response = await axios.get(API_ENDPOINTS.GET_POST_CONTENT(id, user?.id), {
                 withCredentials: true,
                 headers: { "Content-Type": "application/json" },
             });
@@ -69,11 +69,19 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
         };
 
         setSolution(current => {
+            let updatedComments;
             if (!parentId) {
-                return { ...current, comments: [...current.comments, newComment] };
+                updatedComments = [...current.comments, newComment];
             } else {
-                return { ...current, comments: findAndAddReply(current.comments) };
+                updatedComments = findAndAddReply(current.comments);
             }
+
+            // Increment local comment count
+            return { 
+                ...current, 
+                comments: updatedComments,
+                commentCount: (current.commentCount || 0) + 1 
+            };
         });
     };
 
@@ -103,14 +111,26 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                     return c;
                 });
         };
-        setSolution(prev => ({ ...prev, comments: deleteRecursive(prev.comments || []) }));
+
+        setSolution(prev => {
+            const newCount = (prev.commentCount || 1) - 1;
+            // Sync with Parent (Optimistic Delete)
+            if (onSolutionUpdate) {
+                onSolutionUpdate(solutionId, { commentCount: newCount });
+            }
+            return { 
+                ...prev, 
+                commentCount: newCount,
+                comments: deleteRecursive(prev.comments || []) 
+            };
+        });
     };
 
     // --- Handlers ---
     const handleCommentSubmit = async (content, parentCommentId) => {
         if (!content.trim()) return;
 
-        let currentUserName = user ? `${user.firstName} ${user.lastName}`.trim() : "Bạn"; // Translated
+        let currentUserName = user ? `${user.firstName} ${user.lastName}`.trim() : "Bạn"; 
         let currentUserAvatar = user?.avatarUrl || "/default-avatar.png";
 
         const tempId = `temp-${Date.now()}`;
@@ -123,8 +143,15 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
             replies: [],
         };
 
+        // 1. Optimistic Update Local
         addCommentToState(tempComment, parentCommentId);
         setReplyingTo(null);
+
+        // 2. Optimistic Update Parent (SolutionView)
+        if (onSolutionUpdate) {
+            const newCount = (solution.commentCount || 0) + 1;
+            onSolutionUpdate(solutionId, { commentCount: newCount });
+        }
 
         try {
             const body = { postId: solutionId, parentCommentId: parentCommentId || null, content };
@@ -133,30 +160,94 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                 headers: { "Content-Type": "application/json" },
             });
             
+            // 3. Server Sync (if needed)
             if (response.data.responseData && response.data.responseData.comments) {
-                setSolution(response.data.responseData);
+                const newData = response.data.responseData;
+                setSolution(newData);
+
+                // Confirm sync with Parent using server data
+                if (onSolutionUpdate && newData.commentCount !== undefined) {
+                    onSolutionUpdate(solutionId, { commentCount: newData.commentCount });
+                }
             }
         } catch (error) {
-            alert("Lỗi khi gửi bình luận. Vui lòng thử lại."); // Translated
+            alert("Lỗi khi gửi bình luận. Vui lòng thử lại."); 
             console.error("Error submitting comment:", error);
+            // Optional: Revert optimistic update here if desired
         }
     };
 
     const handleUpvote = async () => {
-        setSolution(prev => ({ ...prev, upvoteCount: prev.upvoteCount + 1 }));
+        const originalSolution = { ...solution };
+        
+        let newUp = originalSolution.upvoteCount;
+        let newDown = originalSolution.downvoteCount;
+        let newType = originalSolution.userVoteType;
+
+        if (newType === "Upvote") {
+            newUp--; newType = null;
+        } else if (newType === "Downvote") {
+            newDown--; newUp++; newType = "Upvote";
+        } else {
+            newUp++; newType = "Upvote";
+        }
+
+        const updates = { upvoteCount: newUp, downvoteCount: newDown, userVoteType: newType };
+        
+        // Update Local
+        setSolution(current => ({ ...current, ...updates }));
+        
+        // Update Parent
+        if (onSolutionUpdate) onSolutionUpdate(solutionId, updates);
+
         try {
             await axios.post(API_ENDPOINTS.UPVOTE_POST(solutionId), {}, { withCredentials: true });
         } catch (error) {
-            setSolution(prev => ({ ...prev, upvoteCount: prev.upvoteCount - 1 }));
+            setSolution(originalSolution);
+            if (onSolutionUpdate) {
+                onSolutionUpdate(solutionId, {
+                    upvoteCount: originalSolution.upvoteCount,
+                    downvoteCount: originalSolution.downvoteCount,
+                    userVoteType: originalSolution.userVoteType
+                });
+            }
         }
     };
 
     const handleDownvote = async () => {
-        setSolution(prev => ({ ...prev, downvoteCount: prev.downvoteCount + 1 }));
+        const originalSolution = { ...solution };
+        
+        let newUp = originalSolution.upvoteCount;
+        let newDown = originalSolution.downvoteCount;
+        let newType = originalSolution.userVoteType;
+
+        if (newType === "Downvote") {
+            newDown--; newType = null;
+        } else if (newType === "Upvote") {
+            newUp--; newDown++; newType = "Downvote";
+        } else {
+            newDown++; newType = "Downvote";
+        }
+
+        const updates = { upvoteCount: newUp, downvoteCount: newDown, userVoteType: newType };
+
+        // Update Local
+        setSolution(current => ({ ...current, ...updates }));
+
+        // Update Parent
+        if (onSolutionUpdate) onSolutionUpdate(solutionId, updates);
+
         try {
             await axios.post(API_ENDPOINTS.DOWNVOTE_POST(solutionId), {}, { withCredentials: true });
         } catch (error) {
-            setSolution(prev => ({ ...prev, downvoteCount: prev.downvoteCount - 1 }));
+            setSolution(originalSolution);
+            if (onSolutionUpdate) {
+                onSolutionUpdate(solutionId, {
+                    upvoteCount: originalSolution.upvoteCount,
+                    downvoteCount: originalSolution.downvoteCount,
+                    userVoteType: originalSolution.userVoteType
+                });
+            }
         }
     };
 
@@ -178,8 +269,8 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
     };
 
     const handleDeleteClick = async (commentId) => {
-        if (!window.confirm("Bạn có chắc chắn muốn xóa bình luận này?")) return; // Translated
-        deleteCommentFromState(commentId);
+        if (!window.confirm("Bạn có chắc chắn muốn xóa bình luận này?")) return; 
+        deleteCommentFromState(commentId); 
         try {
             await axios.delete(API_ENDPOINTS.DELETE_COMMENT(commentId), { withCredentials: true });
         } catch (error) {
@@ -200,12 +291,11 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                 { targetType, targetId, reason, details: details ? details.trim() : "" },
                 { withCredentials: true, headers: { "Content-Type": "application/json" } }
             );
-            // Translated
             const translatedTarget = targetType === "Post" ? "Bài viết" : "Bình luận";
             alert(`${translatedTarget} đã được báo cáo thành công!`);
         } catch (error) {
             console.error(`Error reporting ${targetType}:`, error);
-            const msg = error.response?.data?.message || "Hành động thất bại."; // Translated
+            const msg = error.response?.data?.message || "Hành động thất bại."; 
             alert(msg);
         }
     };
@@ -248,12 +338,12 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                                     <Dropdown.Menu align="end" variant="dark">
                                         {isAuthor ? (
                                             <>
-                                                <Dropdown.Item onClick={() => handleStartEdit(comment)}><FaEdit className="me-2" /> Sửa</Dropdown.Item> {/* Translated */}
-                                                <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger"><FaTrash className="me-2" /> Xóa</Dropdown.Item> {/* Translated */}
+                                                <Dropdown.Item onClick={() => handleStartEdit(comment)}><FaEdit className="me-2" /> Sửa</Dropdown.Item> 
+                                                <Dropdown.Item onClick={() => handleDeleteClick(comment.commentId)} className="text-danger"><FaTrash className="me-2" /> Xóa</Dropdown.Item> 
                                             </>
                                         ) : (
                                             <Dropdown.Item onClick={() => handleShowCommentReportModal(comment.commentId)}>
-                                                <FaFlag className="me-2" /> Báo cáo {/* Translated */}
+                                                <FaFlag className="me-2" /> Báo cáo 
                                             </Dropdown.Item>
                                         )}
                                     </Dropdown.Menu>
@@ -268,8 +358,8 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                                         className="mb-2 bg-dark text-white border-secondary"
                                     />
                                     <div className="d-flex gap-2">
-                                        <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}><FaSave className="me-1" /> Lưu</Button> {/* Translated */}
-                                        <Button size="sm" variant="secondary" onClick={() => setEditingCommentId(null)}><FaTimes className="me-1" /> Hủy</Button> {/* Translated */}
+                                        <Button size="sm" variant="success" onClick={() => handleSaveEdit(comment.commentId)}><FaSave className="me-1" /> Lưu</Button> 
+                                        <Button size="sm" variant="secondary" onClick={() => setEditingCommentId(null)}><FaTimes className="me-1" /> Hủy</Button> 
                                     </div>
                                 </div>
                             ) : (
@@ -279,7 +369,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                             {!isEditing && (
                                 <div className="mt-1">
                                     <Button variant="link" size="sm" className="p-0 text-decoration-none text-gray" onClick={() => setReplyingTo({ id: comment.commentId, author: comment.authorFullName })}>
-                                        Phản hồi {/* Translated */}
+                                        Phản hồi 
                                     </Button>
                                 </div>
                             )}
@@ -304,7 +394,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
         >
             <Modal.Header closeButton closeVariant="white" >
                 {loading || !solution ? (
-                    <Modal.Title>Đang tải...</Modal.Title> // Translated
+                    <Modal.Title>Đang tải...</Modal.Title> 
                 ) : (
                     <div className="d-flex align-items-center gap-3" >
                         <img src={solution.authorAvatarUrl || "/default-avatar.png"} alt="avatar" className="solution-modal-avatar" />
@@ -327,7 +417,7 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                             </ReactMarkdown>
                         </div>
                         <hr className="border-secondary" />
-                        <h5 className="text-white mb-3">Bình luận</h5> {/* Translated */}
+                        <h5 className="text-white mb-3">Bình luận</h5> 
                         <div className="solution-comments-list">
                             {renderComments(solution.comments || [])}
                         </div>
@@ -336,7 +426,8 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                                 postStats={{
                                     upvoteCount: solution.upvoteCount || 0,
                                     downvoteCount: solution.downvoteCount || 0,
-                                    commentCount: solution.comments?.length || 0
+                                    commentCount: solution.commentCount || 0,
+                                    userVoteType: solution.userVoteType 
                                 }}
                                 onSubmit={handleCommentSubmit}
                                 replyingTo={replyingTo}
@@ -348,11 +439,10 @@ const SolutionViewDetailModal = ({ solutionId, show, onClose }) => {
                         </div>
                     </>
                 ) : (
-                    <p className="text-center text-gray">Không thể tải giải pháp.</p> // Translated
+                    <p className="text-center text-gray">Không thể tải giải pháp.</p> 
                 )}
             </Modal.Body>
 
-            {/* Modal specifically for reporting comments */}
             <ReportPostModal
                 show={showCommentReportModal}
                 handleClose={handleCloseCommentReportModal}

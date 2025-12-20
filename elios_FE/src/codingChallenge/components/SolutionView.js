@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { FaThumbsUp, FaThumbsDown, FaCommentAlt } from "react-icons/fa"; 
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import { formatRelativeTime } from "../../forum/utils/formatTime";
 import "../style/SolutionView.css";
@@ -62,36 +62,19 @@ const SolutionView = ({ problemId }) => {
         setSelectedSolutionId(null);
     };
 
-    const handleUpvote = async (solutionId, index, e) => {
-        e.stopPropagation(); // Prevent modal opening
-        // Optimistic update
-        const updatedSolutions = [...solutions];
-        updatedSolutions[index].upvoteCount += 1;
-        setSolutions(updatedSolutions);
-
-        try {
-            await axios.post(API_ENDPOINTS.UPVOTE_POST(solutionId), {}, { withCredentials: true });
-        } catch (error) {
-            console.error("Error upvoting:", error);
-            updatedSolutions[index].upvoteCount -= 1;
-            setSolutions(updatedSolutions);
-        }
-    };
-
-    const handleDownvote = async (solutionId, index, e) => {
-        e.stopPropagation(); // Prevent modal opening
-        // Optimistic update
-        const updatedSolutions = [...solutions];
-        updatedSolutions[index].downvoteCount += 1;
-        setSolutions(updatedSolutions);
-
-        try {
-            await axios.post(API_ENDPOINTS.DOWNVOTE_POST(solutionId), {}, { withCredentials: true });
-        } catch (error) {
-            console.error("Error downvoting:", error);
-            updatedSolutions[index].downvoteCount -= 1;
-            setSolutions(updatedSolutions);
-        }
+    // Generic callback to update any field of a specific solution in the list
+    const handleSolutionUpdate = (solutionId, updatedFields) => {
+        setSolutions(prevSolutions => 
+            prevSolutions.map(sol => {
+                if (sol.postId === solutionId) {
+                    return {
+                        ...sol,
+                        ...updatedFields
+                    };
+                }
+                return sol;
+            })
+        );
     };
 
     return (
@@ -105,7 +88,7 @@ const SolutionView = ({ problemId }) => {
 
             {!loading && !error && solutions.length > 0 && (
                 <div id="solution-list">
-                    {solutions.map((sol, index) => (
+                    {solutions.map((sol) => (
                         <div key={sol.postId} className="solution-card">
                             <div className="solution-header">
                                 <div className="solution-user-info">
@@ -135,12 +118,32 @@ const SolutionView = ({ problemId }) => {
                             </div>
 
                             <div className="solution-footer">
-                                {/* <span className="solution-stat-item up" onClick={(e) => handleUpvote(sol.postId, index, e)}>
+                                {/* Likes/Dislikes (View Only - Always Gray) */}
+                                <span 
+                                    className="solution-stat-item up" 
+                                    style={{ 
+                                        cursor: 'default', 
+                                        color: '#6c757d' // Always gray
+                                    }}
+                                >
                                     <FaThumbsUp /> {sol.upvoteCount}
                                 </span>
-                                <span className="solution-stat-item down" onClick={(e) => handleDownvote(sol.postId, index, e)}>
+                                <span 
+                                    className="solution-stat-item down" 
+                                    style={{ 
+                                        cursor: 'default', 
+                                        color: '#6c757d' // Always gray
+                                    }}
+                                >
                                     <FaThumbsDown /> {sol.downvoteCount}
-                                </span> */}
+                                </span>
+                                {/* Comment Count */}
+                                <span 
+                                    className="solution-stat-item comment"
+                                    style={{ cursor: 'default', color: '#6c757d' }}
+                                >
+                                    <FaCommentAlt /> {sol.commentCount}
+                                </span>
                             </div>
                         </div>
                     ))}
@@ -152,6 +155,7 @@ const SolutionView = ({ problemId }) => {
                     solutionId={selectedSolutionId} 
                     show={!!selectedSolutionId}
                     onClose={handleCloseModal}
+                    onSolutionUpdate={handleSolutionUpdate} // Pass the generic callback
                 />
             )}
         </div>

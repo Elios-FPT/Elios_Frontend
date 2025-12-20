@@ -9,6 +9,9 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
     const [content, setContent] = useState('');
     const [showReportModal, setShowReportModal] = useState(false);
     const textareaRef = useRef(null);
+    
+    // Extract userVoteType from postStats (passed from PostDetail)
+    const { userVoteType } = postStats;
 
     const handleCloseReportModal = () => setShowReportModal(false);
     const handleShowReportModal = () => setShowReportModal(true);
@@ -53,16 +56,26 @@ const CommentForm = ({ postStats, onSubmit, replyingTo, onCancelReply, onUpvote,
                 {/* These classNames are left as-is because they are repeating or have no CSS */}
                 <div className="user-forum-post-stats">
                     <span
-                        className="upvote-stat-item up"
+                        className={`upvote-stat-item up ${userVoteType === 'Upvote' ? 'active-vote' : ''}`}
                         onClick={onUpvote}
                         title="Thích" // Translated
+                        style={{ 
+                            cursor: 'pointer',
+                            // Highlight color if upvoted (Bright Blue)
+                            color: userVoteType === 'Upvote' ? '#087d24' : 'inherit'
+                        }}
                     >
                         <FaThumbsUp /> {postStats.upvoteCount}
                     </span>
                     <span
-                        className="downvote-stat-item down"
+                        className={`downvote-stat-item down ${userVoteType === 'Downvote' ? 'active-vote' : ''}`}
                         onClick={onDownvote}
                         title="Không thích" // Translated
+                        style={{ 
+                            cursor: 'pointer',
+                            // Highlight color if downvoted (Bright Red)
+                            color: userVoteType === 'Downvote' ? '#4e0303' : 'inherit' 
+                        }}
                     >
                         <FaThumbsDown /> {postStats.downvoteCount}
                     </span>
