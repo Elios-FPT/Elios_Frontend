@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../api/apiConfig';
 import '../style/InterviewHistory.css';
+import UserNavbar from '../../components/navbars/UserNavbar';
 
 function InterviewHistory() {
     const [interviews, setInterviews] = useState([]);
@@ -269,7 +270,7 @@ function InterviewHistory() {
                                     </div>
                                 )}
                             </div>
-                            
+
                             {/* ... Feedback Lists ... */}
                             {feedback.strengths?.length > 0 && (
                                 <div className="InterviewHistory-modal-section">
@@ -301,6 +302,9 @@ function InterviewHistory() {
     // ==================== DANH SÁCH LỊCH SỬ ====================
     return (
         <div id="InterviewHistory-page">
+            <header>
+                <UserNavbar />
+            </header>
             <div id="InterviewHistory-header">
                 <h1 id="InterviewHistory-page-title">Lịch sử phỏng vấn</h1>
                 <p id="InterviewHistory-page-subtitle">Xem lại các buổi phỏng vấn bạn đã thực hiện</p>

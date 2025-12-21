@@ -113,7 +113,7 @@ const PromptAnalytics = () => {
                 <div className="project-card" style={{ textAlign: 'center', padding: '1.5rem' }}>
                   <h3 style={{ margin: '0 0 0.5rem', color: '#3b82f6' }}>Success Rate</h3>
                   <p style={{ fontSize: '2.5rem', fontWeight: 'bold', margin: 0, color: data.success_rate === 1 ? '#10b981' : '#ef4444' }}>
-                    {(data.success_rate * 100).toFixed(0)}%
+                    {((data.success_rate ?? 0) * 100).toFixed(0)}%
                   </p>
                 </div>
                 <div className="project-card" style={{ textAlign: 'center', padding: '1.5rem' }}>
@@ -173,16 +173,16 @@ const PromptAnalytics = () => {
                 <h2 style={{ marginBottom: '1.5rem' }}>Detailed Metrics</h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
                   <div>
-                    <strong>Avg Prompt Tokens:</strong> {data.avg_prompt_tokens.toFixed(1)}
+                    <strong>Avg Prompt Tokens:</strong> {(data.avg_prompt_tokens ?? 0).toFixed(1)}
                   </div>
                   <div>
-                    <strong>Avg Completion Tokens:</strong> {data.avg_completion_tokens.toFixed(1)}
+                    <strong>Avg Completion Tokens:</strong> {(data.avg_completion_tokens ?? 0).toFixed(1)}
                   </div>
                   <div>
-                    <strong>Avg Latency:</strong> {(data.avg_latency_ms / 1000).toFixed(2)}s
+                    <strong>Avg Latency:</strong> {((data.avg_latency_ms ?? 0) / 1000).toFixed(2)}s
                   </div>
                   <div>
-                    <strong>Estimated Total Cost:</strong> ${data.estimated_cost_usd.toFixed(5)}
+                    <strong>Estimated Total Cost:</strong> ${(data.estimated_cost_usd ?? 0).toFixed(5)}
                   </div>
                 </div>
               </div>

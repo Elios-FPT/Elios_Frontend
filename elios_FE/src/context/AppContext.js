@@ -23,6 +23,7 @@ export const AppContextProvider = ({ children }) => {
                 setUser(userData); 
                 
                 localStorage.setItem("user", JSON.stringify(userData));
+                localStorage.setItem("userId", userData.id);
 
             } catch (error) {
                 console.error("Error fetching current user:", error);
