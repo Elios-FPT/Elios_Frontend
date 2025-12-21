@@ -1,7 +1,7 @@
 // file: elios_FE/src/forum/pages/UserPostStorage.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Nav } from "react-bootstrap"; // Import Nav for Tabs
+import { Nav } from "react-bootstrap"; 
 import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import UserPostStorageCard from "../components/UserPostStorageCard";
@@ -196,6 +196,7 @@ const UserPostStorage = () => {
                                         <UserPostStorageCard
                                             key={post.postId}
                                             post={post}
+                                            isSolution={activeTab === 'Solution'} // <-- Pass the solution flag
                                             onDelete={handleDeletePost}
                                         />
                                     ))
