@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
-import "../style/SubmissionsView.css"; // <-- NEW CSS FILE
-import EditAndShareSolution from "./EditAndShareSolution"; // <-- IMPORT NEW COMPONENT
+import "../style/SubmissionsView.css"; 
+import EditAndShareSolution from "./EditAndShareSolution"; 
 
 const SubmissionsView = ({ problemId }) => {
   const [submissions, setSubmissions] = useState([]);
@@ -68,16 +68,20 @@ const SubmissionsView = ({ problemId }) => {
 
   const getStatusStyle = (submission) => {
     if (submission.status === "COMPLETED") {
-      return submission.failedTestCaseId ? "status-failed" : "status-passed";
+      return "status-passed";
+    } else if (submission.status === "FAILED") {
+      return "status-failed";
     }
     return "status-pending";
   };
 
   const getStatusText = (submission) => {
     if (submission.status === "COMPLETED") {
-      return submission.failedTestCaseId ? "Thất bại" : "Chấp nhận"; // Translated
+      return "Hoàn thành"; // Translated
+    } else if (submission.status === "FAILED") {
+      return "Thất bại"; // Translated
     }
-    return "Đang xử lý"; // Translated
+    return "Trạng thái lạ"; 
   };
 
   return (
