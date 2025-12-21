@@ -10,6 +10,7 @@ const CodeOutput = ({ output, error, isLoading, testResults }) => {
       {isLoading && <pre id="code-output-loading"> Running your code...</pre>}
       {error && <pre id="code-output-error">❌ {error}</pre>}
       
+      {/* CASE 1: Structured Test Results Available (Show Table Only) */}
       {!isLoading && !error && testResults && (
         <>
           <p id="output-status-message">
@@ -54,10 +55,11 @@ const CodeOutput = ({ output, error, isLoading, testResults }) => {
               ))}
             </tbody>
           </table>
-          <pre id="code-output-result">{output}</pre>
+          {/* REMOVED: <pre id="code-output-result">{output}</pre> to prevent duplicate display */}
         </>
       )}
 
+      {/* CASE 2: No Structured Results (Fallback to raw text output) */}
       {!isLoading && !error && !testResults && (
         <pre id="code-output-result">{output}</pre>
       )}
