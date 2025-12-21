@@ -1,5 +1,5 @@
 // file: elios_FE/src/forum/components/UserPostStorageCard.js
-import React, { useState, useRef } from "react"; // ✅ Added useRef
+import React, { useState, useRef } from "react"; 
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
@@ -12,11 +12,10 @@ import {
 } from "react-icons/fa";
 import "../style/UserPostStorageCard.css";
 
-const UserPostStorageCard = ({ post, onDelete }) => {
+const UserPostStorageCard = ({ post, onDelete, isSolution }) => { // <-- Accept isSolution prop
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   
-  // --- NEW ---
   // Use a ref to store the timer ID
   const hideTimerRef = useRef(null);
   // Set the delay (in milliseconds)
@@ -105,9 +104,12 @@ const UserPostStorageCard = ({ post, onDelete }) => {
       {/* Bottom section: Controls and buttons */}
       <div id="user-post-card-controls">
         <div id="user-post-card-buttons">
-          <button id="user-post-card-btn-edit" onClick={handleEdit}>
-            Sửa bài viết
-          </button>
+          {/* Only show Edit button if it is NOT a solution */}
+          {!isSolution && (
+            <button id="user-post-card-btn-edit" onClick={handleEdit}>
+              Sửa bài viết
+            </button>
+          )}
         </div>
 
         <div

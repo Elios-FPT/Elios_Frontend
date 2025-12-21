@@ -132,9 +132,9 @@ const UserNavbar = () => {
                     <Dropdown.Item as={Link} to="/user/profile">
                       Hồ sơ
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/settings">
+                    {/* <Dropdown.Item as={Link} to="/settings">
                       Cài đặt
-                    </Dropdown.Item>
+                    </Dropdown.Item> */}
                     <Dropdown.Item onClick={handleLogout}>
                       Đăng xuất
                     </Dropdown.Item>
@@ -142,19 +142,19 @@ const UserNavbar = () => {
                   </>
                 )}
 
-                <Dropdown.Item onClick={() => navigate("/help")}>
+                {/* <Dropdown.Item onClick={() => navigate("/help")}>
                   Trợ giúp
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => navigate("/terms")}>
                   Điều khoản dịch vụ
-                </Dropdown.Item>
+                </Dropdown.Item> */}
 
-                {role && (
+                {/* {role && (
                   <>
                     <Dropdown.Divider />
                     <Dropdown.Item disabled>Role: {role}</Dropdown.Item>
                   </>
-                )}
+                )} */}
               </Dropdown.Menu>
             </Dropdown>
           </Col>
