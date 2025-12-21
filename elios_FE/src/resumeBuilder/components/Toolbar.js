@@ -1,7 +1,7 @@
 // file: elios_FE/src/resumeBuilder/components/Toolbar.js
 import React from 'react';
 import PropTypes from 'prop-types';
-import exportToPdf from '../utils/exportPdf';
+import { useReactToPrint } from 'react-to-print'; // <--- Import the hook
 import '../styles/Toolbar.css';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
@@ -11,6 +11,13 @@ const Toolbar = ({ resumeData, onReset, isSaving }) => {
   const resumeName = resumeData?.personalInfo?.firstName
     ? `${resumeData.personalInfo.firstName}'s Resume`
     : "Untitled Resume";
+
+  // This handles the printing process, targeting the specific ID
+  const handlePrint = useReactToPrint({
+    contentRef: { current: document.getElementById('resume-preview') },
+    documentTitle: resumeName,
+    onAfterPrint: () => console.log('Print successful'),
+  });
 
   return (
     <div id="resume-builder-toolbar">
@@ -38,8 +45,9 @@ const Toolbar = ({ resumeData, onReset, isSaving }) => {
       <div className="toolbar-right">
         <button className="toolbar-btn-secondary" onClick={onReset}>Reset</button>
 
-        <button className="toolbar-btn-download" onClick={() => exportToPdf('resume-preview')}>
-          Download
+        {/* UPDATED BUTTON: Calls handlePrint instead of exportToPdf */}
+        <button className="toolbar-btn-download" onClick={handlePrint}>
+          Download PDF
         </button>
       </div>
     </div>
@@ -52,7 +60,6 @@ Toolbar.propTypes = {
   isSaving: PropTypes.bool,
 };
 
-// Default props in case isSaving is not passed immediately
 Toolbar.defaultProps = {
   isSaving: false,
 };

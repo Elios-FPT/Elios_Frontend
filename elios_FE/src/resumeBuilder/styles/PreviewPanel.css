@@ -138,3 +138,56 @@
 .skill-subset span {
     line-height: 1.5;
 }
+
+
+
+
+/* -------------------------------------------------
+   PRINT SPECIFIC STYLES
+   This fixes the "text stuck to left" issue and hides the UI
+   ------------------------------------------------- */
+@media print {
+    /* 1. Set physical paper size and margins */
+    @page {
+        size: auto;   /* Auto allows user to select A4/Letter */
+        margin: 15mm; /* IMPORTANT: This creates the white border around the page */
+    }
+
+    /* 2. Hide everything in the app (Sidebar, Toolbar, etc.) */
+    body * {
+        visibility: hidden;
+    }
+    
+    /* 3. Make ONLY the resume preview visible */
+    #resume-preview, #resume-preview * {
+        visibility: visible;
+    }
+
+    /* 4. Position the resume at the top-left of the print area */
+    #resume-preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0; /* Reset element margin since @page handles the border */
+        padding: 0;
+        background: white;
+    }
+
+    /* Optional: Ensure text is purely black for better printing */
+    #resume-preview h1, 
+    #resume-preview h2, 
+    #resume-preview h4, 
+    #resume-preview p,
+    #resume-preview span,
+    #resume-preview a {
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    /* Remove link underlines/colors if desired for print */
+    #resume-preview a {
+        text-decoration: none;
+        color: #000 !important;
+    }
+}
