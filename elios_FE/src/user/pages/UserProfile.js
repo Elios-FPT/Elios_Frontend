@@ -4,28 +4,32 @@ import axios from 'axios';
 import { API_ENDPOINTS } from '../../api/apiConfig';
 import LoadingCircle1 from '../../components/loading/LoadingCircle1';
 import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
   BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  RadialBarChart,
-  RadialBar,
   RadarChart,
-  Radar,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
+  Radar,
 } from 'recharts';
-import { FiArrowLeft, FiCheckCircle, FiXCircle, FiClock, FiAlertCircle, FiEdit3 } from 'react-icons/fi';
+import { FiArrowLeft, FiCheckCircle, FiXCircle, FiAlertCircle, FiEdit3 } from 'react-icons/fi';
 import '../styles/UserProfile.css';
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
+  const [mockSubStats, setMockSubStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
   const [orders, setOrders] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
@@ -49,6 +53,7 @@ const UserProfile = () => {
     { value: 1000000, label: '1M', bonus: '' },
   ];
 
+  // Load profile chính
   useEffect(() => {
     const loadProfile = async () => {
       try {
@@ -60,7 +65,7 @@ const UserProfile = () => {
           firstName: data.data.firstName || '',
           lastName: data.data.lastName || '',
           gender: data.data.gender || '',
-          dateOfBirth: data.data.dateOfBirth ? data.data.dateOfBirth.split('T')[0] : ''
+          dateOfBirth: data.data.dateOfBirth ? data.data.dateOfBirth.split('T')[0] : '',
         });
       } catch (err) {
         console.error('Failed to load profile:', err);
@@ -70,6 +75,26 @@ const UserProfile = () => {
     };
     loadProfile();
   }, []);
+
+  useEffect(() => {
+    const loadMockSubStats = async () => {
+      if (activeTab !== 'profile') return;
+      setStatsLoading(true);
+      try {
+        const { data } = await axios.get(
+          API_ENDPOINTS.GET_SUBMISSIONS_STATISTICS_CURRENT,
+          { withCredentials: true }
+        );
+        setMockSubStats(data.responseData);
+      } catch (err) {
+        console.error('Failed to load mock submission stats:', err);
+        setMockSubStats(null);
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+    loadMockSubStats();
+  }, [activeTab]);
 
   const loadOrders = async () => {
     setOrderLoading(true);
@@ -211,26 +236,50 @@ const UserProfile = () => {
     );
   }
 
-  const mock = profile.mockProjectsStatistics?.responseData || {};
-  const sub = profile.submissionsStatistics?.responseData || {};
-  const interview = profile.interviewStatistics || {};
   const practice = profile.practiceStatistics || {};
+  const interview = profile.interviewStatistics || {};
 
-  const languageData = Object.entries(mock.languageCounts || {}).map(([lang, cnt]) => ({ name: lang, value: cnt }));
-  const difficultyData = Object.entries(mock.difficultyCounts || {}).map(([lvl, cnt]) => ({
-    name: lvl,
-    value: cnt,
-    fill: lvl === 'Easy' ? '#0f8a57' : lvl === 'Medium' ? '#ffd700' : '#ff6b6b',
-  }));
-  const statusData = Object.entries(sub.statusCounts || {}).map(([st, cnt]) => ({
-    name: st,
-    value: cnt,
-    fill: st === 'Approved' ? '#0f8a57' : st === 'Pending' ? '#ffd700' : '#ff6b6b',
-  }));
-  const radarData = [
-    { name: 'Theory', score: interview.avgTheoreticalScore || 0 },
-    { name: 'Speaking', score: interview.avgSpeakingScore || 0 },
-    { name: 'Overall', score: interview.avgOverallScore || 0 },
+  // Dữ liệu từ API mới
+  const sub = mockSubStats || {
+    totalSubmissions: 0,
+    totalApproved: 0,
+    totalPending: 0,
+    totalRejected: 0,
+    averageFinalGrade: 0,
+  };
+
+  // Pie Chart data
+  const statusData = [
+    { name: 'Approved', value: sub.totalApproved || 0, fill: '#0f8a57' },
+    { name: 'Pending', value: sub.totalPending || 0, fill: '#ffd700' },
+    { name: 'Rejected', value: sub.totalRejected || 0, fill: '#ff6b6b' },
+  ].filter(item => item.value > 0);
+
+  // Practice Bar Chart data
+  const practiceBarData = [
+    { name: 'Easy', value: practice.problemsSolvedEasy || 0 },
+    { name: 'Medium', value: practice.problemsSolvedMedium || 0 },
+    { name: 'Hard', value: practice.problemsSolvedHard || 0 },
+    { name: 'Total Solved', value: practice.problemsSolvedTotal || 0 },
+  ];
+
+  // Interview Radar Chart data
+  const interviewRadarData = [
+    {
+      subject: 'Theoretical',
+      value: Math.round(interview.avgTheoreticalScore || 0),
+      fullMark: 100,
+    },
+    {
+      subject: 'Speaking',
+      value: Math.round(interview.avgSpeakingScore || 0),
+      fullMark: 100,
+    },
+    {
+      subject: 'Overall',
+      value: Math.round(interview.avgOverallScore || 0),
+      fullMark: 100,
+    },
   ];
 
   return (
@@ -288,7 +337,7 @@ const UserProfile = () => {
 
                   <div className="token-section">
                     <div className="token-display">
-                      <span className="token-icon">Diamond</span>
+                      <span className="token-icon">💎</span>
                       <span className="token-value">
                         {(profile.token || 0).toLocaleString()} Tokens
                       </span>
@@ -377,92 +426,138 @@ const UserProfile = () => {
               </div>
 
               <div className="stat-card">
-                <h3 className="stat-title">Mock Projects</h3>
+                <h3 className="stat-title">Mock Project Submissions</h3>
                 <div className="metrics-grid">
                   <div className="metric-item">
-                    <div className="metric-value">{mock.totalProjects || 0}</div>
-                    <div className="metric-label">Projects</div>
-                  </div>
-                  <div className="metric-item">
-                    <div className="metric-value">{mock.totalSubmissions || 0}</div>
+                    <div className="metric-value">{sub.totalSubmissions || 0}</div>
                     <div className="metric-label">Submissions</div>
                   </div>
-                </div>
-              </div>
-
-              <div className="stat-card">
-                <h3 className="stat-title">Submission Status</h3>
-                <div className="status-metrics">
-                  <div className="status-item approved">
-                    <div className="status-value">{sub.totalApproved || 0}</div>
-                    <div className="status-label">Approved</div>
-                  </div>
-                  <div className="status-item pending">
-                    <div className="status-value">{sub.totalPending || 0}</div>
-                    <div className="status-label">Pending</div>
-                  </div>
-                  <div className="status-item rejected">
-                    <div className="status-value">{sub.totalRejected || 0}</div>
-                    <div className="status-label">Rejected</div>
+                  <div className="metric-item">
+                    <div className="metric-value">{(sub.averageFinalGrade || 0).toFixed(0)}</div>
+                    <div className="metric-label">Avg Grade</div>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="charts-grid">
+              {/* Practice Statistics - Bar Chart */}
               <div className="chart-card">
-                <h3 className="chart-title">Languages</h3>
-                <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={languageData}>
+                <h3 className="chart-title">Practice Problems by Difficulty</h3>
+                <ResponsiveContainer width="100%" height={320}>
+                  <BarChart data={practiceBarData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                    <XAxis dataKey="name" stroke="#bbb" />
-                    <YAxis stroke="#bbb" />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#0f8a57" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="chart-card">
-                <h3 className="chart-title">Difficulty</h3>
-                <ResponsiveContainer width="100%" height={280}>
-                  <RadialBarChart cx="50%" cy="50%" innerRadius="20%" outerRadius="80%" data={difficultyData}>
-                    <RadialBar dataKey="value" background />
-                    <Tooltip />
-                  </RadialBarChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="chart-card full-span">
-                <h3 className="chart-title">Submission Status</h3>
-                <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={statusData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                    <XAxis dataKey="name" stroke="#bbb" />
-                    <YAxis stroke="#bbb" />
-                    <Tooltip />
-                    <Bar dataKey="value" fill={d => d.fill} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="chart-card full-span">
-                <h3 className="chart-title">Interview Performance</h3>
-                <ResponsiveContainer width="100%" height={280}>
-                  <RadarChart data={radarData}>
-                    <PolarGrid stroke="#444" />
-                    <PolarAngleAxis dataKey="name" stroke="#bbb" />
-                    <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#bbb" />
-                    <Radar
-                      name="Score"
-                      dataKey="score"
-                      stroke="#0f8a57"
-                      fill="#0f8a57"
-                      fillOpacity={0.4}
+                    <XAxis dataKey="name" stroke="#bbbbbb" />
+                    <YAxis stroke="#bbbbbb" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#23272f',
+                        border: '1px solid #00ff88',
+                        borderRadius: '12px',
+                        boxShadow: '0 0 20px rgba(0, 255, 136, 0.3)',
+                      }}
+                      labelStyle={{ color: '#ffd700' }}
+                      itemStyle={{ color: '#00ff88' }}
                     />
-                    <Tooltip />
-                  </RadarChart>
+                    <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                      {practiceBarData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={
+                            index === 3
+                              ? '#ffd700' // Total Solved: gold
+                              : ['#00ff88', '#ffd700', '#ff6b6b'][index] // Easy: green, Medium: gold, Hard: red
+                          }
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
                 </ResponsiveContainer>
+              </div>
+
+              {/* Interview Statistics - Radar Chart */}
+              <div className="chart-card">
+                <h3 className="chart-title">Interview Score Breakdown</h3>
+                {interview.interviewsAttempted > 0 ? (
+                  <ResponsiveContainer width="100%" height={320}>
+                    <RadarChart data={interviewRadarData}>
+                      <PolarGrid stroke="#444" />
+                      <PolarAngleAxis dataKey="subject" stroke="#bbbbbb" />
+                      <PolarRadiusAxis angle={90} domain={[0, 100]} stroke="#bbbbbb" tick={{ fill: '#bbbbbb' }} />
+                      <Radar
+                        name="Score"
+                        dataKey="value"
+                        stroke="#00ff88"
+                        fill="#00ff88"
+                        fillOpacity={0.6}
+                        strokeWidth={3}
+                        dot={{ fill: '#ffd700', r: 6 }}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#23272f',
+                          border: '1px solid #00ff88',
+                          borderRadius: '12px',
+                          boxShadow: '0 0 20px rgba(0, 255, 136, 0.3)',
+                        }}
+                        labelStyle={{ color: '#ffd700' }}
+                      />
+                      <Legend />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <p style={{ textAlign: 'center', color: '#888', padding: '4rem', fontSize: '1.1rem' }}>
+                    Chưa tham gia interview nào
+                  </p>
+                )}
+              </div>
+
+              {/* Existing Mock Project Pie Chart */}
+              <div className="chart-card full-span">
+                <h3 className="chart-title">Mock Project Submission Status</h3>
+                {statsLoading ? (
+                  <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <LoadingCircle1 size={50} />
+                  </div>
+                ) : statusData.length === 0 ? (
+                  <p style={{ textAlign: 'center', color: '#888', padding: '4rem', fontSize: '1.1rem' }}>
+                    Chưa có submission nào để hiển thị
+                  </p>
+                ) : (
+                  <ResponsiveContainer width="100%" height={320}>
+                    <PieChart>
+                      <Pie
+                        data={statusData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={120}
+                        paddingAngle={5}
+                        dataKey="value"
+                        label={({ name, value }) => `${name}: ${value}`}
+                        labelStyle={{ fill: '#fff', fontSize: '14px', fontWeight: '600' }}
+                      >
+                        {statusData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#23272f',
+                          border: '1px solid #444',
+                          borderRadius: '12px',
+                          padding: '10px',
+                        }}
+                        labelStyle={{ color: '#ffd700' }}
+                      />
+                      <Legend
+                        verticalAlign="bottom"
+                        height={36}
+                        iconType="circle"
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </div>
           </>

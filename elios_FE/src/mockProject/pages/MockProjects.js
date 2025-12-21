@@ -211,9 +211,20 @@ const MockProjects = () => {
                             ))}
                           </Pie>
                           <Tooltip
-                            contentStyle={{ background: '#1e1e1e', border: '1px solid #50fa7b', borderRadius: '8px' }}
-                            labelStyle={{ color: '#50fa7b' }}
+                            contentStyle={{
+                              background: '#1e1e1e',
+                              border: '1px solid #50fa7b',
+                              borderRadius: '8px',
+                              color: '#b0b0b0',
+                            }}
+                            labelStyle={{
+                              color: '#9e9e9e',
+                            }}
+                            itemStyle={{
+                              color: '#b0b0b0',
+                            }}
                           />
+
                           <Legend />
                         </PieChart>
                       </ResponsiveContainer>

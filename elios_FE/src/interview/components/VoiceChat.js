@@ -9,7 +9,7 @@ import toast from '../utils/toast';
 import '../style/VoiceChat.css';
 
 function VoiceChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
-  const { setMessages } = useInterview();
+  const { messages, setMessages, setIsAiThinking } = useInterview();
   const [isRecording, setIsRecording] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
   const [connectionStatus, setConnectionStatus] = useState(websocketService.getConnectionStatus());
@@ -130,6 +130,10 @@ function VoiceChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
   };
 
   const handleQuestionMessage = (message) => {
+    // Xóa placeholder trước khi thêm câu hỏi mới
+    setMessages(prev => prev.filter(msg => msg.id !== 'thinking-placeholder'));
+    setIsAiThinking(false);
+
     const aiMessage = {
       id: Date.now(),
       text: message.text,
@@ -146,19 +150,18 @@ function VoiceChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
 
     setMessages(prev => [...prev, aiMessage]);
 
-    // Track current question ID in shared service
     websocketService.setCurrentQuestionId(message.question_id);
 
-    // Play audio if available
     if (message.audio_data) {
-      audioService.playBase64Audio(message.audio_data).catch((error) => {
-        // Silent fail - audio playback errors shouldn't break the UI
-        console.error('Failed to play question audio:', error);
-      });
+      audioService.playBase64Audio(message.audio_data).catch(err => console.error(err));
     }
   };
 
   const handleFollowUpQuestionMessage = (message) => {
+    // Xóa placeholder
+    setMessages(prev => prev.filter(msg => msg.id !== 'thinking-placeholder'));
+    setIsAiThinking(false);
+
     const aiMessage = {
       id: Date.now(),
       text: message.text,
@@ -177,15 +180,10 @@ function VoiceChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
 
     setMessages(prev => [...prev, aiMessage]);
 
-    // Update current question ID to the follow-up question in shared service
     websocketService.setCurrentQuestionId(message.question_id);
 
-    // Play audio if available
     if (message.audio_data) {
-      audioService.playBase64Audio(message.audio_data).catch((error) => {
-        // Silent fail - audio playback errors shouldn't break the UI
-        console.error('Failed to play follow-up question audio:', error);
-      });
+      audioService.playBase64Audio(message.audio_data).catch(err => console.error(err));
     }
   };
 
@@ -347,7 +345,6 @@ function VoiceChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
       setIsRecording(false);
       setIsProcessing(true);
 
-      // Stop recording and get audio blob
       const audioBlob = await audioRecordingService.stopRecording();
 
       if (!audioBlob) {
@@ -356,16 +353,24 @@ function VoiceChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
         return;
       }
 
-      // Convert to WAV/PCM 16kHz mono
       const audioBytes = await audioRecordingService.convertToWavPCM(audioBlob);
-
-      // Reset audio level
       setAudioLevel(0);
 
-      // Get current question ID from shared service
       const currentQuestionId = websocketService.getCurrentQuestionId();
       if (currentQuestionId) {
         websocketService.sendUserAudioAnswer(currentQuestionId, audioBytes, 'en-US');
+
+        const placeholderMessage = {
+          id: 'thinking-placeholder',
+          text: 'AI đang phân tích',
+          sender: 'ai',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          type: 'text',
+          isPlaceholder: true,
+        };
+        setMessages(prev => [...prev, placeholderMessage]);
+
+        setIsAiThinking(true);
       } else {
         setIsProcessing(false);
         toast.warning('No active question to answer');

@@ -19,6 +19,7 @@ export function InterviewProvider({ children }) {
   const [cvAnalysisId, setCvAnalysisId] = useState(null);
   const [candidateId, setCandidateId] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [isAiThinking, setIsAiThinking] = useState(false);
 
   const navigate = useNavigate();
 
@@ -93,6 +94,7 @@ export function InterviewProvider({ children }) {
     cvAnalysisId,
     candidateId,
     messages,
+    isAiThinking,
 
     // Setters
     setActiveTab,
@@ -104,6 +106,7 @@ export function InterviewProvider({ children }) {
     setCvAnalysisId,
     setCandidateId,
     setMessages,
+    setIsAiThinking,
 
     // Handlers
     handleTabSwitch,

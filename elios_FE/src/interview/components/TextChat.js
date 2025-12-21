@@ -8,7 +8,7 @@ import toast from '../utils/toast';
 import '../style/TextChat.css';
 
 function TextChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
-  const { messages, setMessages } = useInterview();
+  const { messages, setMessages, setIsAiThinking } = useInterview();
   const [inputText, setInputText] = useState('');
   const [connectionStatus, setConnectionStatus] = useState(websocketService.getConnectionStatus());
   const messagesEndRef = useRef(null);
@@ -114,6 +114,10 @@ function TextChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
   };
 
   const handleQuestionMessage = (message) => {
+    // Xóa placeholder trước khi thêm câu hỏi mới
+    setMessages(prev => prev.filter(msg => msg.id !== 'thinking-placeholder'));
+    setIsAiThinking(false);
+
     const aiMessage = {
       id: Date.now(),
       text: message.text,
@@ -130,19 +134,18 @@ function TextChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
 
     setMessages(prev => [...prev, aiMessage]);
 
-    // Track current question ID in shared service
     websocketService.setCurrentQuestionId(message.question_id);
 
-    // Play audio if available
     if (message.audio_data) {
-      audioService.playBase64Audio(message.audio_data).catch((error) => {
-        // Silent fail - audio playback errors shouldn't break the UI
-        console.error('Failed to play question audio:', error);
-      });
+      audioService.playBase64Audio(message.audio_data).catch(err => console.error(err));
     }
   };
 
   const handleFollowUpQuestionMessage = (message) => {
+    // Xóa placeholder
+    setMessages(prev => prev.filter(msg => msg.id !== 'thinking-placeholder'));
+    setIsAiThinking(false);
+
     const aiMessage = {
       id: Date.now(),
       text: message.text,
@@ -161,18 +164,12 @@ function TextChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
 
     setMessages(prev => [...prev, aiMessage]);
 
-    // Update current question ID to the follow-up question in shared service
     websocketService.setCurrentQuestionId(message.question_id);
 
-    // Play audio if available
     if (message.audio_data) {
-      audioService.playBase64Audio(message.audio_data).catch((error) => {
-        // Silent fail - audio playback errors shouldn't break the UI
-        console.error('Failed to play follow-up question audio:', error);
-      });
+      audioService.playBase64Audio(message.audio_data).catch(err => console.error(err));
     }
   };
-
   const handleInterviewCompleteMessage = (message) => {
     // Show toast notification
     toast.info('Interview completed! Viewing your feedback...');
@@ -197,33 +194,42 @@ function TextChat({ interviewId, wsUrl, onDetailedFeedbackReceived }) {
   const handleSendMessage = () => {
     if (!inputText.trim()) return;
 
-    // Check connection
     if (connectionStatus !== CONNECTION_STATUS.CONNECTED) {
       toast.warning('Not connected to interview service');
       return;
     }
 
     try {
-      // Get current question ID from shared service
       const currentQuestionId = websocketService.getCurrentQuestionId();
       if (!currentQuestionId) {
         toast.warning('No active question to answer');
         return;
       }
 
-      // Add user message to UI
-      const newMessage = {
+      const userMessage = {
         id: Date.now(),
         text: inputText,
         sender: 'user',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         type: 'text',
       };
-      setMessages(prev => [...prev, newMessage]);
+      setMessages(prev => [...prev, userMessage]);
+
+      const placeholderMessage = {
+        id: 'thinking-placeholder',
+        text: 'AI đang phân tích',
+        sender: 'ai',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        type: 'text',
+        isPlaceholder: true,
+      };
+      setMessages(prev => [...prev, placeholderMessage]);
+
+      setIsAiThinking(true);
+
       const answerText = inputText;
       setInputText('');
 
-      // Send via WebSocket
       websocketService.sendUserAnswer(currentQuestionId, answerText);
     } catch (error) {
       toast.error('Failed to send message');

@@ -105,180 +105,184 @@ function MyReviews() {
     // ==================== CHI TIẾT BUỔI ĐÃ CHIA SẺ ====================
     if (selectedInterview) {
         return (
-            <div id="MyReviews-detail-page">
-                <div id="MyReviews-detail-container">
-                    {/* Header */}
-                    <button onClick={() => setSelectedInterview(null)} id="MyReviews-back-btn">
-                        <span className="material-icons">arrow_back</span>
-                        Quay lại danh sách
-                    </button>
+            <div>
+                <header>
+                    <UserNavbar />
+                </header>
+                <div id="MyReviews-detail-page">
+                    <div id="MyReviews-detail-container">
+                        {/* Header */}
+                        <button onClick={() => setSelectedInterview(null)} id="MyReviews-back-btn">
+                            <span className="material-icons">arrow_back</span>
+                            Quay lại danh sách
+                        </button>
 
-                    <div id="MyReviews-detail-header-card">
-                        <h1 id="MyReviews-detail-title">{selectedInterview.title}</h1>
-                        <p className="MyReviews-detail-meta">
-                            <strong>{selectedInterview.questionCount}</strong> câu hỏi •
-                            <strong>{selectedInterview.currentReviewerCount}</strong> người đã review •
-                            {getStatusBadge(selectedInterview.status)}
-                        </p>
-                        <p className="shared-date" style={{ color: '#888' }}>
-                            Chia sẻ lúc: {formatDate(selectedInterview.createdAt)}
-                        </p>
-                    </div>
+                        <div id="MyReviews-detail-header-card">
+                            <h1 id="MyReviews-detail-title">{selectedInterview.title}</h1>
+                            <p className="MyReviews-detail-meta">
+                                <strong>{selectedInterview.questionCount}</strong> câu hỏi •
+                                <strong>{selectedInterview.currentReviewerCount}</strong> người đã review •
+                                {getStatusBadge(selectedInterview.status)}
+                            </p>
+                            <p className="shared-date" style={{ color: '#888' }}>
+                                Chia sẻ lúc: {formatDate(selectedInterview.createdAt)}
+                            </p>
+                        </div>
 
-                    {/* Transcript */}
-                    <div id="MyReviews-transcript-container">
-                        <h2 id="MyReviews-transcript-title">Nội dung buổi phỏng vấn</h2>
-                        <div className="MyReviews-messages-list">
-                            {messages.length === 0 ? (
-                                <p className="MyReviews-empty-state">Không có tin nhắn</p>
-                            ) : (
-                                messages.map((msg, i) => {
-                                    const isQuestion = msg.type === 'question' || msg.type === 'followup';
-                                    return (
-                                        <div
-                                            key={i}
-                                            className={`MyReviews-message-row ${isQuestion ? 'ai' : 'user'}`}
-                                            style={{ alignSelf: isQuestion ? 'flex-start' : 'flex-end' }}
-                                        >
+                        {/* Transcript */}
+                        <div id="MyReviews-transcript-container">
+                            <h2 id="MyReviews-transcript-title">Nội dung buổi phỏng vấn</h2>
+                            <div className="MyReviews-messages-list">
+                                {messages.length === 0 ? (
+                                    <p className="MyReviews-empty-state">Không có tin nhắn</p>
+                                ) : (
+                                    messages.map((msg, i) => {
+                                        const isQuestion = msg.type === 'question' || msg.type === 'followup';
+                                        return (
                                             <div
-                                                className="MyReviews-message-bubble"
-                                                style={{
-                                                    // === THEME UPDATE: Dark Bubble Colors ===
-                                                    background: isQuestion
-                                                        ? '#2c313a' // Dark Gray for AI
-                                                        : '#0f8a57', // Green for User
-                                                    color: '#fff',
-                                                    borderRadius: isQuestion
-                                                        ? '20px 20px 20px 4px'
-                                                        : '20px 20px 4px 20px',
-                                                    boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                                                }}
+                                                key={i}
+                                                className={`MyReviews-message-row ${isQuestion ? 'ai' : 'user'}`}
+                                                style={{ alignSelf: isQuestion ? 'flex-start' : 'flex-end' }}
                                             >
-                                                {isQuestion && (
-                                                    <div style={{
-                                                        fontSize: '13px',
-                                                        fontWeight: 600,
-                                                        color: '#19c37d',
-                                                        marginBottom: '8px',
-                                                        textTransform: 'uppercase'
-                                                    }}>
-                                                        {msg.type === 'followup' ? 'Follow-up' : 'Câu hỏi'}
+                                                <div
+                                                    className="MyReviews-message-bubble"
+                                                    style={{
+                                                        // === THEME UPDATE: Dark Bubble Colors ===
+                                                        background: isQuestion
+                                                            ? '#2c313a' // Dark Gray for AI
+                                                            : '#0f8a57', // Green for User
+                                                        color: '#fff',
+                                                        borderRadius: isQuestion
+                                                            ? '20px 20px 20px 4px'
+                                                            : '20px 20px 4px 20px',
+                                                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                                                    }}
+                                                >
+                                                    {isQuestion && (
+                                                        <div style={{
+                                                            fontSize: '13px',
+                                                            fontWeight: 600,
+                                                            color: '#19c37d',
+                                                            marginBottom: '8px',
+                                                            textTransform: 'uppercase'
+                                                        }}>
+                                                            {msg.type === 'followup' ? 'Follow-up' : 'Câu hỏi'}
+                                                        </div>
+                                                    )}
+                                                    <div className="MyReviews-message-content">{msg.text || '(Không có nội dung)'}</div>
+
+                                                    {/* Audio */}
+                                                    {msg.metadata?.audioData && (
+                                                        <audio controls className="MyReviews-audio-player">
+                                                            <source src={`data:audio/wav;base64,${msg.metadata.audioData}`} />
+                                                        </audio>
+                                                    )}
+                                                    {msg.is_voice && msg.audio_path && (
+                                                        <audio controls className="MyReviews-audio-player" style={{ width: 240 }}>
+                                                            <source src={msg.audio_path} />
+                                                        </audio>
+                                                    )}
+
+                                                    <div className="MyReviews-message-timestamp">
+                                                        {new Date(msg.timestamp || Date.now()).toLocaleTimeString('vi-VN', {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit'
+                                                        })}
                                                     </div>
-                                                )}
-                                                <div className="MyReviews-message-content">{msg.text || '(Không có nội dung)'}</div>
-
-                                                {/* Audio */}
-                                                {msg.metadata?.audioData && (
-                                                    <audio controls className="MyReviews-audio-player">
-                                                        <source src={`data:audio/wav;base64,${msg.metadata.audioData}`} />
-                                                    </audio>
-                                                )}
-                                                {msg.is_voice && msg.audio_path && (
-                                                    <audio controls className="MyReviews-audio-player" style={{ width: 240 }}>
-                                                        <source src={msg.audio_path} />
-                                                    </audio>
-                                                )}
-
-                                                <div className="MyReviews-message-timestamp">
-                                                    {new Date(msg.timestamp || Date.now()).toLocaleTimeString('vi-VN', {
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })}
                                                 </div>
                                             </div>
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Đánh giá nhận được */}
+                        <div id="MyReviews-reviews-section">
+                            <h2 id="MyReviews-reviews-title">
+                                Đánh giá từ cộng đồng ({reviews.length} người)
+                            </h2>
+                            {reviews.length === 0 ? (
+                                <div className="MyReviews-empty-state">
+                                    <span className="material-icons MyReviews-empty-icon">rate_review</span>
+                                    <p>Chưa có ai review buổi này</p>
+                                </div>
+                            ) : (
+                                <div className="MyReviews-reviews-grid">
+                                    {reviews.map((sub) => (
+                                        <div key={sub.submissionId} className="MyReviews-review-card">
+                                            <div className="MyReviews-reviewer-header">
+                                                <div className="MyReviews-reviewer-avatar">{sub.reviewerName.charAt(0)}</div>
+                                                <div>
+                                                    <h4 className="MyReviews-reviewer-name">{sub.reviewerName}</h4>
+                                                    <p className="MyReviews-review-time">{formatDate(sub.submittedAt)}</p>
+                                                </div>
+                                            </div>
+                                            <div className="MyReviews-rating-group">
+                                                {sub.reviews.map((r, i) => (
+                                                    <div key={i} className="MyReviews-rating-item">
+                                                        <div className="MyReviews-question-label">
+                                                            Câu {i + 1}
+                                                        </div>
+
+                                                        {/* Technical Skill Rating */}
+                                                        <div className="MyReviews-star-row">
+                                                            <span className="MyReviews-rating-label">Technical:</span>
+                                                            <div className="MyReviews-stars-container">
+                                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                                    <span
+                                                                        key={star}
+                                                                        className="MyReviews-star-icon"
+                                                                        style={{
+                                                                            color: star <= r.skillRating ? '#ffd700' : '#444',
+                                                                            fontSize: '20px'
+                                                                        }}
+                                                                    >
+                                                                        ★
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                            <span className="MyReviews-rating-value">{r.skillRating}/5</span>
+                                                        </div>
+
+                                                        {/* Soft Skill Rating */}
+                                                        <div className="MyReviews-star-row">
+                                                            <span className="MyReviews-rating-label">Soft Skill:</span>
+                                                            <div className="MyReviews-stars-container">
+                                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                                    <span
+                                                                        key={star}
+                                                                        className="MyReviews-star-icon"
+                                                                        style={{
+                                                                            color: star <= r.softSkillRating ? '#19c37d' : '#444',
+                                                                            fontSize: '20px'
+                                                                        }}
+                                                                    >
+                                                                        ★
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                            <span className="MyReviews-rating-value">{r.softSkillRating}/5</span>
+                                                        </div>
+
+                                                        {/* Comment */}
+                                                        {r.comment && (
+                                                            <div className="MyReviews-comment-box">
+                                                                <span className="MyReviews-quote-icon">“</span>
+                                                                {r.comment}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                    );
-                                })
+                                    ))}
+                                </div>
                             )}
                         </div>
                     </div>
-
-                    {/* Đánh giá nhận được */}
-                    <div id="MyReviews-reviews-section">
-                        <h2 id="MyReviews-reviews-title">
-                            Đánh giá từ cộng đồng ({reviews.length} người)
-                        </h2>
-                        {reviews.length === 0 ? (
-                            <div className="MyReviews-empty-state">
-                                <span className="material-icons MyReviews-empty-icon">rate_review</span>
-                                <p>Chưa có ai review buổi này</p>
-                            </div>
-                        ) : (
-                            <div className="MyReviews-reviews-grid">
-                                {reviews.map((sub) => (
-                                    <div key={sub.submissionId} className="MyReviews-review-card">
-                                        <div className="MyReviews-reviewer-header">
-                                            <div className="MyReviews-reviewer-avatar">{sub.reviewerName.charAt(0)}</div>
-                                            <div>
-                                                <h4 className="MyReviews-reviewer-name">{sub.reviewerName}</h4>
-                                                <p className="MyReviews-review-time">{formatDate(sub.submittedAt)}</p>
-                                            </div>
-                                        </div>
-                                        <div className="MyReviews-rating-group">
-                                            {sub.reviews.map((r, i) => (
-                                                <div key={i} className="MyReviews-rating-item">
-                                                    <div className="MyReviews-question-label">
-                                                        Câu {i + 1}
-                                                    </div>
-
-                                                    {/* Technical Skill Rating */}
-                                                    <div className="MyReviews-star-row">
-                                                        <span className="MyReviews-rating-label">Technical:</span>
-                                                        <div className="MyReviews-stars-container">
-                                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                                <span
-                                                                    key={star}
-                                                                    className="MyReviews-star-icon"
-                                                                    style={{
-                                                                        color: star <= r.skillRating ? '#ffd700' : '#444',
-                                                                        fontSize: '20px'
-                                                                    }}
-                                                                >
-                                                                    ★
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                        <span className="MyReviews-rating-value">{r.skillRating}/5</span>
-                                                    </div>
-
-                                                    {/* Soft Skill Rating */}
-                                                    <div className="MyReviews-star-row">
-                                                        <span className="MyReviews-rating-label">Soft Skill:</span>
-                                                        <div className="MyReviews-stars-container">
-                                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                                <span
-                                                                    key={star}
-                                                                    className="MyReviews-star-icon"
-                                                                    style={{
-                                                                        color: star <= r.softSkillRating ? '#19c37d' : '#444',
-                                                                        fontSize: '20px'
-                                                                    }}
-                                                                >
-                                                                    ★
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                        <span className="MyReviews-rating-value">{r.softSkillRating}/5</span>
-                                                    </div>
-
-                                                    {/* Comment */}
-                                                    {r.comment && (
-                                                        <div className="MyReviews-comment-box">
-                                                            <span className="MyReviews-quote-icon">“</span>
-                                                            {r.comment}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
                 </div>
-            </div>
-        );
+            </div>);
     }
 
     // ==================== DANH SÁCH BUỔI ĐÃ CHIA SẺ ====================
