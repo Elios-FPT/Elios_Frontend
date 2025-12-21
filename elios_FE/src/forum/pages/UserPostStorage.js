@@ -1,6 +1,7 @@
 // file: elios_FE/src/forum/pages/UserPostStorage.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Nav } from "react-bootstrap"; // Import Nav for Tabs
 import axios from "axios";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import UserPostStorageCard from "../components/UserPostStorageCard";
@@ -14,20 +15,23 @@ const UserPostStorage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [banInfo, setBanInfo] = useState(null);
+    
+    // Tab State: 'Post' or 'Solution'
+    const [activeTab, setActiveTab] = useState("Post");
 
     // Hardcoded values
     const CATEGORY_ID = "8cf071b9-ea2e-4a19-865e-28ec04a26ba7";
-    const POST_TYPE = "Post";
     const TITLE = "Tiêu đề bài viết"; // Translated
     const CONTENT = "Nội dung bài viết của bạn..."; // Translated
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true); // Ensure loading state is reset when tab changes
             try {
                 // Fetch posts and ban status in parallel
                 const [postsResponse, banResponse] = await Promise.all([
                     axios.get(API_ENDPOINTS.GET_MY_POSTS, {
-                        params: { PostType: POST_TYPE },
+                        params: { PostType: activeTab }, // Use activeTab ('Post' or 'Solution')
                         withCredentials: true,
                         headers: { "Content-Type": "application/json" }
                     }),
@@ -51,7 +55,7 @@ const UserPostStorage = () => {
         };
 
         fetchData();
-    }, []);
+    }, [activeTab]); // Re-run when activeTab changes
 
     const handleCreateNewPost = async (e) => {
         e.preventDefault();
@@ -68,7 +72,7 @@ const UserPostStorage = () => {
             categoryId: CATEGORY_ID,
             title: TITLE,
             content: CONTENT,
-            postType: POST_TYPE,
+            postType: "Post", // Always create generic posts from here
             referenceId: null,
             tags: null,
             submitForReview: false
@@ -107,7 +111,7 @@ const UserPostStorage = () => {
     const renderBanNotification = () => {
         if (!banInfo || !banInfo.isBanned) return null;
 
-        const banDate = new Date(banInfo.banUntil).toLocaleString("vi-VN"); // Added locale
+        const banDate = new Date(banInfo.banUntil).toLocaleString("vi-VN"); 
         const message = banInfo.isPermanent 
             ? "Bạn đã bị cấm đăng bài vĩnh viễn." // Translated
             : `Bạn bị cấm đăng bài cho đến ${banDate}.`; // Translated
@@ -118,7 +122,7 @@ const UserPostStorage = () => {
                 <div id="ban-notification-content">
                     <strong>Tài khoản bị tạm khóa</strong> {/* Translated */}
                     <span>{message}</span>
-                    {banInfo.reason && <span className="ban-reason">Lý do: {banInfo.reason}</span>} {/* Translated */}
+                    {banInfo.reason && <span className="ban-reason">Lý do: {banInfo.reason}</span>} 
                 </div>
             </div>
         );
@@ -134,16 +138,45 @@ const UserPostStorage = () => {
 
                     <div id="user-post-storage-header">
                         <h1 id="user-post-storage-title">Kho Bài Viết Của Bạn</h1> {/* Translated */}
-                        <button
-                            id="user-post-storage-create-btn"
-                            onClick={handleCreateNewPost}
-                            disabled={banInfo?.isBanned}
-                            title={banInfo?.isBanned ? "Bạn đang bị cấm tạo bài viết" : "Tạo bài viết mới"} // Translated
-                            style={banInfo?.isBanned ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: '#555' } : {}}
-                        >
-                            Tạo bài viết mới {/* Translated */}
-                        </button>
+                        
+                        {/* Only show "Create" button if on "Post" tab. Solutions are created in IDE. */}
+                        {activeTab === 'Post' && (
+                            <button
+                                id="user-post-storage-create-btn"
+                                onClick={handleCreateNewPost}
+                                disabled={banInfo?.isBanned}
+                                title={banInfo?.isBanned ? "Bạn đang bị cấm tạo bài viết" : "Tạo bài viết mới"} 
+                                style={banInfo?.isBanned ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: '#555' } : {}}
+                            >
+                                Tạo bài viết mới {/* Translated */}
+                            </button>
+                        )}
                     </div>
+
+                    {/* Navigation Tabs */}
+                    <Nav 
+                        variant="tabs" 
+                        activeKey={activeTab} 
+                        onSelect={(selectedKey) => setActiveTab(selectedKey)}
+                        className="mb-4 user-post-storage-tabs border-bottom-0"
+                    >
+                        <Nav.Item>
+                            <Nav.Link 
+                                eventKey="Post" 
+                                className={`user-storage-tab ${activeTab === 'Post' ? 'active-tab' : ''}`}
+                            >
+                                Bài Viết {/* Translated: Posts */}
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link 
+                                eventKey="Solution" 
+                                className={`user-storage-tab ${activeTab === 'Solution' ? 'active-tab' : ''}`}
+                            >
+                                Bài Giải
+                            </Nav.Link>
+                        </Nav.Item>
+                    </Nav>
 
                     {error && <p className="user-post-storage-error">{error}</p>}
 
@@ -153,13 +186,21 @@ const UserPostStorage = () => {
                                 <LoadingCircle1 />
                             </div>
                         ) : (
-                            userPosts.map((post) => (
-                                <UserPostStorageCard
-                                    key={post.postId}
-                                    post={post}
-                                    onDelete={handleDeletePost}
-                                />
-                            ))
+                            <>
+                                {userPosts.length === 0 ? (
+                                    <div className="text-center text-muted w-100 py-5" style={{ gridColumn: '1 / -1' }}>
+                                        <p>Bạn chưa có {activeTab === 'Post' ? 'bài viết' : 'Bài Giải'} nào.</p> {/* Translated */}
+                                    </div>
+                                ) : (
+                                    userPosts.map((post) => (
+                                        <UserPostStorageCard
+                                            key={post.postId}
+                                            post={post}
+                                            onDelete={handleDeletePost}
+                                        />
+                                    ))
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

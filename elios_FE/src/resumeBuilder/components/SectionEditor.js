@@ -4,6 +4,38 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import FieldRow from './FieldRow';
 
+// 1. DEFINE THE ORDER YOU WANT HERE
+const FIELD_ORDER = {
+  projects: [
+    'projectName', 
+    'role', 
+    'start', 
+    'end', 
+    'techStack', 
+    'description', 
+    'achievements', 
+    'githubUrl', 
+    'liveUrl'
+  ],
+  experience: [
+    'employer',
+    'jobTitle',
+    'location',
+    'start',
+    'end',
+    'description'
+  ],
+  education: [
+    'institution',
+    'degreeType',
+    'fieldOfStudy',
+    'location',
+    'start',
+    'grad',
+    'gpa'
+  ]
+};
+
 const SectionEditor = ({ section, path, onFieldChange, onAddItem, onRemoveItem }) => {
   const { id: sectionId, title } = section;
   // Personal Info section is open by default, others are closed.
@@ -80,34 +112,46 @@ const SectionEditor = ({ section, path, onFieldChange, onAddItem, onRemoveItem }
     if (Array.isArray(section.items)) {
       return (
         <div>
-          {section.items.map((item) => (
-            <div key={item.id} className="section-item-container">
-              {Object.keys(item).filter(key => key !== 'id').map(field => {
-                // Determine if the field should be a textarea
-                const isTextarea = field === 'description' || field === 'achievements';
-                return (
-                    <FieldRow
-                      key={field}
-                      id={`${path}-${item.id}-${field}`}
-                      label={field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                      type={isTextarea ? 'textarea' : 'text'}
-                      value={item[field]}
-                      onChange={(e) => onFieldChange(path, field, e.target.value, item.id)}
-                    />
-                );
-              })}
-              {/* Changed Remove button to simple text link without underline */}
-              <div style={{ textAlign: 'right', marginTop: '5px' }}>
-                <span 
-                  className="remove-item-text" 
-                  onClick={() => onRemoveItem(path, item.id)}
-                  style={{ cursor: 'pointer', color: 'red' }}
-                >
-                  Remove
-                </span>
+          {section.items.map((item) => {
+            // 2. DETERMINE FIELDS TO RENDER
+            // Use our explicit order if it exists for this path (e.g., 'projects'), 
+            // otherwise fall back to the old way (Object.keys) for things like Links/Skills
+            const fieldsToRender = FIELD_ORDER[path] || Object.keys(item).filter(key => key !== 'id');
+
+            return (
+              <div key={item.id} className="section-item-container">
+                {fieldsToRender.map(field => {
+                  // Determine if the field should be a textarea
+                  const isTextarea = field === 'description' || field === 'achievements';
+                  
+                  // Safety: Ensure we don't crash if the item doesn't have the key yet
+                  // (e.g. if we added a new field in frontend config that backend doesn't send yet)
+                  const fieldValue = item[field] !== undefined ? item[field] : '';
+
+                  return (
+                      <FieldRow
+                        key={field}
+                        id={`${path}-${item.id}-${field}`}
+                        label={field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                        type={isTextarea ? 'textarea' : 'text'}
+                        value={fieldValue}
+                        onChange={(e) => onFieldChange(path, field, e.target.value, item.id)}
+                      />
+                  );
+                })}
+                {/* Changed Remove button to simple text link without underline */}
+                <div style={{ textAlign: 'right', marginTop: '5px' }}>
+                  <span 
+                    className="remove-item-text" 
+                    onClick={() => onRemoveItem(path, item.id)}
+                    style={{ cursor: 'pointer', color: 'red' }}
+                  >
+                    Remove
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           <button className="add-btn" onClick={() => onAddItem(path)}>+ Add {title}</button>
         </div>
       );

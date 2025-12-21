@@ -8,9 +8,24 @@ import '../styles/UserResume.css';
 
 // Define available templates
 const AVAILABLE_TEMPLATES = [
-  { id: 'basic', name: 'Basic', description: 'Clean, simple, and professional.', isAvailable: true },
-  { id: 'modern', name: 'Modern', description: 'Coming soon.', isAvailable: false },
-  { id: 'creative', name: 'Creative', description: 'Coming soon.', isAvailable: false },
+  { 
+    id: 'basic', 
+    name: 'Cơ bản', 
+    description: 'Đơn giản, chuyên nghiệp.', 
+    isAvailable: true 
+  },
+  { 
+    id: 'modern', 
+    name: 'Hiện đại', 
+    description: 'Coming soon.', 
+    isAvailable: false 
+  },
+  { 
+    id: 'creative', 
+    name: 'Sáng tạo', 
+    description: 'Coming soon.', 
+    isAvailable: false 
+  },
 ];
 
 const UserResume = () => {
@@ -108,6 +123,25 @@ const UserResume = () => {
       }
     }
   };
+  
+  // Helper to render preview content
+  const renderTemplatePreview = (templateId) => {
+      if (templateId === 'basic') {
+          return (
+            <div className="mini-cv-preview basic-preview">
+                <div className="mini-header"></div>
+                <div className="mini-body">
+                    <div className="mini-line long"></div>
+                    <div className="mini-line short"></div>
+                    <div className="mini-section"></div>
+                    <div className="mini-line medium"></div>
+                    <div className="mini-line long"></div>
+                </div>
+            </div>
+          );
+      }
+      return <span style={{fontSize: '10px', color: '#888'}}>Coming Soon</span>;
+  };
 
   if (loading) {
     return (
@@ -200,15 +234,14 @@ const UserResume = () => {
 
               <label className="modal-label">Chọn mẫu (Template)</label>
               <div id="template-selection-grid">
-                {AVAILABLE_TEMPLATES.map((tmpl) => (
+                {AVAILABLE_TEMPLATES.filter(t => t.isAvailable).map((tmpl) => (
                   <div 
                     key={tmpl.id}
-                    className={`template-option-card ${selectedTemplate === tmpl.id ? 'selected' : ''} ${!tmpl.isAvailable ? 'disabled' : ''}`}
-                    onClick={() => tmpl.isAvailable && setSelectedTemplate(tmpl.id)}
+                    className={`template-option-card ${selectedTemplate === tmpl.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedTemplate(tmpl.id)}
                   >
                     <div className="template-preview-box">
-                       {/* Placeholder for template thumbnail */}
-                       <span style={{fontSize: '10px', color: '#888'}}>{tmpl.name} Preview</span>
+                       {renderTemplatePreview(tmpl.id)}
                     </div>
                     <div className="template-info">
                       <strong>{tmpl.name}</strong>
