@@ -27,7 +27,7 @@ export const CodingChallengeProvider = ({ children }) => {
 
   // Pagination state (based on note.json response)
   const [page, setPage] = useState(0); // API is 0-indexed
-  const [size, setSize] = useState(20);
+  const [size, setSize] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
 
