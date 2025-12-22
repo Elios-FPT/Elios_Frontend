@@ -6,7 +6,7 @@ import UserNavbar from '../../components/navbars/UserNavbar';
 
 // Import CSS
 import '../style/InterviewHistory.css';
-import '../style/MyReviews.css'; 
+import '../style/MyReviews.css';
 
 function InterviewHistory({ defaultTab = 'history' }) {
     // === TAB STATE ===
@@ -139,7 +139,7 @@ function InterviewHistory({ defaultTab = 'history' }) {
     const [selectedReview, setSelectedReview] = useState(null);
     const [reviewMessages, setReviewMessages] = useState([]); // Transcript for review view
     const [peerReviews, setPeerReviews] = useState([]); // The actual reviews
-    
+
     // Owner Rating Modal State
     const [ratingModalOpen, setRatingModalOpen] = useState(false);
     const [currentSubmission, setCurrentSubmission] = useState(null);
@@ -172,8 +172,6 @@ function InterviewHistory({ defaultTab = 'history' }) {
     // View Review Detail
     const viewReviewDetail = async (item) => {
         try {
-            // We use a separate loading state or just rely on main loading if needed. 
-            // For now, simple transition.
             setSelectedReview(item);
             setReviewMessages([]);
             setPeerReviews([]);
@@ -185,7 +183,7 @@ function InterviewHistory({ defaultTab = 'history' }) {
             );
             setReviewMessages(convRes.data?.messages || []);
 
-            // 2. Get Reviews
+            // 2. Get Reviews + Enrich reviewer name bằng GET_USER_BY_ID
             const reviewRes = await axios.get(
                 API_ENDPOINTS.PEER_GET_REVIEWS_RECEIVED(item.id),
                 { withCredentials: true }
@@ -193,16 +191,38 @@ function InterviewHistory({ defaultTab = 'history' }) {
 
             if (reviewRes.data.status === 200) {
                 const rawSubmissions = reviewRes.data.responseData.submissions || [];
+
                 const enrichedSubmissions = await Promise.all(
                     rawSubmissions.map(async (sub) => {
-                        const reviewerName = sub.reviewer?.name || 'Người dùng ẩn danh';
+                        let reviewerName = 'Người dùng ẩn danh';
+
+                        const reviewerId = sub.reviewer?.id || sub.reviewerId; // tùy cấu trúc API
+                        if (reviewerId) {
+                            try {
+                                const userRes = await axios.get(
+                                    API_ENDPOINTS.GET_USER_BY_ID(reviewerId),
+                                    { withCredentials: true }
+                                );
+                                const firstName = userRes.data?.data?.firstName || '';
+                                const lastName = userRes.data?.data?.lastName || '';
+                                reviewerName = `${firstName} ${lastName}`.trim() || 'Người dùng ẩn danh';
+                            } catch (err) {
+                                console.error('Error fetching reviewer name:', err);
+                                reviewerName = 'Người dùng ẩn danh';
+                            }
+                        }
+
                         return { ...sub, reviewerName };
                     })
                 );
+
                 setPeerReviews(enrichedSubmissions);
+            } else {
+                setPeerReviews([]);
             }
         } catch (err) {
-            console.error(err);
+            console.error('Error loading review detail:', err);
+            setPeerReviews([]);
         }
     };
 
@@ -232,24 +252,42 @@ function InterviewHistory({ defaultTab = 'history' }) {
             };
             const res = await axios.post(API_ENDPOINTS.PEER_OWNER_RATING, payload, { withCredentials: true });
             if (res.data.status === 200 || res.data.status === 201) {
-                // Refresh reviews
                 const reviewRes = await axios.get(
                     API_ENDPOINTS.PEER_GET_REVIEWS_RECEIVED(selectedReview.id),
                     { withCredentials: true }
                 );
                 if (reviewRes.data.status === 200) {
                     const rawSubmissions = reviewRes.data.responseData.submissions || [];
+
                     const enriched = await Promise.all(
-                        rawSubmissions.map(async (sub) => ({
-                            ...sub,
-                            reviewerName: sub.reviewer?.name || 'Người dùng ẩn danh'
-                        }))
+                        rawSubmissions.map(async (sub) => {
+                            let reviewerName = 'Người dùng ẩn danh';
+
+                            const reviewerId = sub.reviewer?.id || sub.reviewerId;
+                            if (reviewerId) {
+                                try {
+                                    const userRes = await axios.get(
+                                        API_ENDPOINTS.GET_USER_BY_ID(reviewerId),
+                                        { withCredentials: true }
+                                    );
+                                    const firstName = userRes.data?.data?.firstName || '';
+                                    const lastName = userRes.data?.data?.lastName || '';
+                                    reviewerName = `${firstName} ${lastName}`.trim() || 'Người dùng ẩn danh';
+                                } catch (err) {
+                                    reviewerName = 'Người dùng ẩn danh';
+                                }
+                            }
+
+                            return { ...sub, reviewerName };
+                        })
                     );
+
                     setPeerReviews(enriched);
                 }
                 closeRatingModal();
             }
         } catch (err) {
+            console.error(err);
             alert('Không thể gửi đánh giá. Vui lòng thử lại.');
         } finally {
             setSubmittingRating(false);
@@ -277,20 +315,20 @@ function InterviewHistory({ defaultTab = 'history' }) {
 
     const renderMessages = (msgs) => {
         if (msgs.length === 0) return <p className="InterviewHistory-empty-text">Không có tin nhắn</p>;
-        
+
         return msgs.map((msg, i) => {
             const isQuestion = msg.type === 'question' || msg.type === 'followup';
             // Use styles from InterviewHistory CSS for messages
             return (
                 <div key={i} className={`InterviewHistory-message-row ${isQuestion ? 'ai' : 'user'}`}
-                     style={{ alignSelf: isQuestion ? 'flex-start' : 'flex-end', maxWidth: '85%' }}>
+                    style={{ alignSelf: isQuestion ? 'flex-start' : 'flex-end', maxWidth: '85%' }}>
                     <div className="InterviewHistory-message-bubble"
-                         style={{
-                             background: isQuestion ? '#2c313a' : '#0f8a57',
-                             color: '#fff',
-                             borderRadius: isQuestion ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
-                             boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                         }}>
+                        style={{
+                            background: isQuestion ? '#2c313a' : '#0f8a57',
+                            color: '#fff',
+                            borderRadius: isQuestion ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                        }}>
                         {isQuestion && (
                             <div style={{ fontSize: '13px', fontWeight: 600, color: '#19c37d', marginBottom: '8px', textTransform: 'uppercase' }}>
                                 {msg.type === 'followup' ? 'Follow-up' : 'Câu hỏi'}
@@ -319,7 +357,7 @@ function InterviewHistory({ defaultTab = 'history' }) {
     // ==========================================
     // RENDER
     // ==========================================
-    
+
     // 1. RENDER HISTORY DETAIL
     if (activeTab === 'history' && selectedHistory) {
         return (
@@ -422,8 +460,8 @@ function InterviewHistory({ defaultTab = 'history' }) {
                         <div id="MyReviews-detail-header-card">
                             <h1 id="MyReviews-detail-title">{selectedReview.title}</h1>
                             <p className="MyReviews-detail-meta">
-                                <strong>{selectedReview.questionCount}</strong> câu hỏi • 
-                                <strong>{selectedReview.currentReviewerCount}</strong> người đã review • 
+                                <strong>{selectedReview.questionCount}</strong> câu hỏi •
+                                <strong>{selectedReview.currentReviewerCount}</strong> người đã review •
                                 {getReviewStatusBadge(selectedReview.status)}
                             </p>
                             <p className="shared-date" style={{ color: '#888' }}>
@@ -472,6 +510,20 @@ function InterviewHistory({ defaultTab = 'history' }) {
                                                     </button>
                                                 )}
                                             </div>
+
+                                            {sub.myRating?.comment && (
+                                                <div style={{
+                                                    marginTop: '16px',
+                                                    padding: '12px',
+                                                    background: '#1e1e1e',
+                                                    borderRadius: '8px',
+                                                    borderLeft: '4px solid #19c37d',
+                                                    fontSize: '14px',
+                                                    marginBottom: '20px'
+                                                }}>
+                                                    <strong>Bình luận:</strong> {sub.myRating.comment}
+                                                </div>
+                                            )}
 
                                             {/* Review Content */}
                                             <div className="MyReviews-rating-group">
@@ -551,13 +603,13 @@ function InterviewHistory({ defaultTab = 'history' }) {
 
             {/* TAB NAVIGATION */}
             <div className="ih-tabs-container">
-                <button 
+                <button
                     className={`ih-tab-btn ${activeTab === 'history' ? 'active' : ''}`}
                     onClick={() => setActiveTab('history')}
                 >
                     Lịch sử phỏng vấn
                 </button>
-                <button 
+                <button
                     className={`ih-tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
                     onClick={() => setActiveTab('reviews')}
                 >
@@ -610,7 +662,7 @@ function InterviewHistory({ defaultTab = 'history' }) {
                     <div id="MyReviews-container">
                         {reviewsLoading ? (
                             <div id="MyReviews-loading-state">
-                                <span className="material-icons spin" style={{fontSize: 64, color: '#19c37d'}}>hourglass_empty</span>
+                                <span className="material-icons spin" style={{ fontSize: 64, color: '#19c37d' }}>hourglass_empty</span>
                                 <p>Đang tải...</p>
                             </div>
                         ) : sharedInterviews.length === 0 ? (

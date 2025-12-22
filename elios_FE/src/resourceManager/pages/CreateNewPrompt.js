@@ -202,19 +202,6 @@ const CreateNewPrompt = () => {
                   style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: '#2a2a2a', color: '#e5e5e5', border: '1px solid #3a3a3a', marginTop: '0.5rem' }}
                 />
               </div>
-
-              <div>
-                <label>Output Parser</label>
-                <select
-                  value={formData.output_parser_type}
-                  onChange={e => handleChange('output_parser_type', e.target.value)}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: '#2a2a2a', color: '#e5e5e5', border: '1px solid #3a3a3a', marginTop: '0.5rem' }}
-                >
-                  <option value="json_output_parser">JSON Parser</option>
-                  <option value="pydantic">Pydantic</option>
-                  <option value="none">None</option>
-                </select>
-              </div>
             </div>
 
             {/* Action Buttons */}
