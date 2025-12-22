@@ -10,6 +10,7 @@ import websocketService from '../utils/websocketService';
 import toast from '../utils/toast';
 import '../style/InterviewPage.css';
 import { useNavigate } from "react-router-dom";
+import UserNavbar from '../../components/navbars/UserNavbar';
 
 function InterviewPage() {
   const {
@@ -50,7 +51,7 @@ function InterviewPage() {
   const [conversationMessages, setConversationMessages] = useState([]);
   const [savingQuestionId, setSavingQuestionId] = useState(null);
   const [isProgressLoading, setIsProgressLoading] = useState(false);
-  
+
 
   useEffect(() => {
     if (activeSection === 'review-others') {
@@ -503,6 +504,9 @@ function InterviewPage() {
 
   return (
     <div id="interview-page">
+      <header>
+        <UserNavbar />
+      </header>
       <div id="interview-container">
         <div className="header">
           <div className="header-left">
@@ -719,7 +723,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
           background: isSaved ? '#10b981' : '#f59e0b',
         }}
       >
-        {isSaved ? 'Đã lưu' : 'Chưa lưu'}
+        {hasAnswer? (isSaved ? 'Đã lưu' : 'Chưa lưu') : 'Chưa trả lời'}
       </div>
 
       {item.isFollowUp && (
@@ -791,7 +795,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
             type="number"
             min="1"
             max="5"
-            value={skillRating}
+            value={hasAnswer? skillRating : 1}
             onChange={(e) => setSkillRating(e.target.value)}
             style={{
               width: 90,
@@ -815,7 +819,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
             type="number"
             min="1"
             max="5"
-            value={softSkillRating}
+            value={hasAnswer? softSkillRating: 1}
             onChange={(e) => setSoftSkillRating(e.target.value)}
             style={{
               width: 90,

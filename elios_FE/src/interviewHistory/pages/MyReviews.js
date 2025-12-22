@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../api/apiConfig';
 import '../style/MyReviews.css';
+import UserNavbar from '../../components/navbars/UserNavbar';
 
 function MyReviews() {
     const [sharedInterviews, setSharedInterviews] = useState([]);
@@ -119,7 +120,7 @@ function MyReviews() {
                             <strong>{selectedInterview.currentReviewerCount}</strong> người đã review •
                             {getStatusBadge(selectedInterview.status)}
                         </p>
-                        <p className="shared-date" style={{color: '#888'}}>
+                        <p className="shared-date" style={{ color: '#888' }}>
                             Chia sẻ lúc: {formatDate(selectedInterview.createdAt)}
                         </p>
                     </div>
@@ -282,50 +283,56 @@ function MyReviews() {
 
     // ==================== DANH SÁCH BUỔI ĐÃ CHIA SẺ ====================
     return (
-        <div id="MyReviews-page">
-            <div id="MyReviews-page-header">
-                <h1 id="MyReviews-main-title">Buổi phỏng vấn tôi đã chia sẻ</h1>
-                <p id="MyReviews-sub-title">Xem transcript và đánh giá từ cộng đồng</p>
-            </div>
+        <div>
+            <header>
+                <UserNavbar />
+            </header>
+            <div id="MyReviews-page">
 
-            <div id="MyReviews-container">
-                {loading ? (
-                    <div id="MyReviews-loading-state">
-                        <span className="material-icons spin">hourglass_empty</span>
-                        <p>Đang tải...</p>
-                    </div>
-                ) : sharedInterviews.length === 0 ? (
-                    <div className="MyReviews-empty-state">
-                        <span className="material-icons MyReviews-empty-icon">share</span>
-                        <h3>Chưa chia sẻ buổi nào</h3>
-                        <p>Vào Lịch sử → bấm "Chia sẻ để nhận review"</p>
-                    </div>
-                ) : (
-                    <div id="MyReviews-grid">
-                        {sharedInterviews.map((item) => (
-                            <div
-                                key={item.id}
-                                className="MyReviews-shared-card"
-                                onClick={() => viewSharedInterview(item)}
-                            >
-                                <div className="MyReviews-card-header">
-                                    <h3>{item.title}</h3>
-                                    {getStatusBadge(item.status)}
+                <div id="MyReviews-page-header">
+                    <h1 id="MyReviews-main-title">Buổi phỏng vấn tôi đã chia sẻ</h1>
+                    <p id="MyReviews-sub-title">Xem transcript và đánh giá từ cộng đồng</p>
+                </div>
+
+                <div id="MyReviews-container">
+                    {loading ? (
+                        <div id="MyReviews-loading-state">
+                            <span className="material-icons spin">hourglass_empty</span>
+                            <p>Đang tải...</p>
+                        </div>
+                    ) : sharedInterviews.length === 0 ? (
+                        <div className="MyReviews-empty-state">
+                            <span className="material-icons MyReviews-empty-icon">share</span>
+                            <h3>Chưa chia sẻ buổi nào</h3>
+                            <p>Vào Lịch sử → bấm "Chia sẻ để nhận review"</p>
+                        </div>
+                    ) : (
+                        <div id="MyReviews-grid">
+                            {sharedInterviews.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="MyReviews-shared-card"
+                                    onClick={() => viewSharedInterview(item)}
+                                >
+                                    <div className="MyReviews-card-header">
+                                        <h3>{item.title}</h3>
+                                        {getStatusBadge(item.status)}
+                                    </div>
+                                    <div className="MyReviews-card-body">
+                                        <p><strong>Kỹ năng:</strong> {item.skills}</p>
+                                        <p><strong>Số câu hỏi:</strong> {item.questionCount}</p>
+                                        <p><strong>Đã review:</strong> {item.currentReviewerCount} người</p>
+                                        <p><strong>Chia sẻ:</strong> {formatDate(item.createdAt)}</p>
+                                    </div>
+                                    <div className="MyReviews-card-action">
+                                        Xem buổi + đánh giá
+                                        <span className="material-icons">chevron_right</span>
+                                    </div>
                                 </div>
-                                <div className="MyReviews-card-body">
-                                    <p><strong>Kỹ năng:</strong> {item.skills}</p>
-                                    <p><strong>Số câu hỏi:</strong> {item.questionCount}</p>
-                                    <p><strong>Đã review:</strong> {item.currentReviewerCount} người</p>
-                                    <p><strong>Chia sẻ:</strong> {formatDate(item.createdAt)}</p>
-                                </div>
-                                <div className="MyReviews-card-action">
-                                    Xem buổi + đánh giá
-                                    <span className="material-icons">chevron_right</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

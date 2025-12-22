@@ -22,14 +22,14 @@ const Toolbar = ({ resumeData, onReset, isSaving }) => {
   return (
     <div id="resume-builder-toolbar">
       <div className="toolbar-left">
-        <button
+        {/* <button
           type="button"
           className="breadcrumbs-btn"
           onClick={() => navigate(-1)} 
           aria-label="Go back to previous page"
         >
            Resumes / Resume Builder
-        </button>
+        </button> */}
         <div className="resume-title-container">
           <h2 className="resume-title">{resumeName}</h2>
           {isSaving ? (

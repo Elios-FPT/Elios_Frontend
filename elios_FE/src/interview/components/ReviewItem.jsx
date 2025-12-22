@@ -61,7 +61,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
           background: isSaved ? '#10b981' : '#f59e0b',
         }}
       >
-        {isSaved ? 'Đã lưu' : 'Chưa lưu'}
+        {hasAnswer ? 'Chưa trả lời' : isSaved ? 'Đã lưu' : 'Chưa lưu'}
       </div>
 
       {/* Badge Follow-up góc trái */}
@@ -151,7 +151,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
             type="number"
             min="1"
             max="5"
-            value={skillRating}
+            value={hasAnswer ? 1 : skillRating}
             onChange={(e) => setSkillRating(e.target.value)}
             style={{
               width: 90,
@@ -183,7 +183,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
             type="number"
             min="1"
             max="5"
-            value={softSkillRating}
+            value={hasAnswer ? 1 : softSkillRating}
             onChange={(e) => setSoftSkillRating(e.target.value)}
             style={{
               width: 90,

@@ -1,10 +1,10 @@
 // src/components/navbars/UserNavbar.js
-import React from "react"; 
+import React from "react";
 import { Container, Row, Col, Nav, Navbar, Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../../styles/UserNavbar.css";
-import { useUserProfile } from "../../hooks/useUserProfile"; 
+import { useUserProfile } from "../../hooks/useUserProfile";
 
 const UserNavbar = () => {
   const navigate = useNavigate();
@@ -24,12 +24,12 @@ const UserNavbar = () => {
 
     // 2. Private User Links (Only for logged-in Users)
     const userPrivateLinks = [
-      { to: "/mock-projects", label: "Thử Thách Dự Án" },
-      { to: "/resume-builder", label: "Tạo CV" },
-      { to: "/user/profile", label: "Profile" },
       { to: "/interview", label: "Phỏng Vấn" },
-      { to: "/interview/history", label: "Interview History" },
-      { to: "/interview/my-reviews", label: "My Reviews"}
+      { to: "/interview/history", label: "Lịch sử phỏng vấn" },
+      { to: "/interview/my-reviews", label: "Đánh giá của tôi" },
+      { to: "/resume-builder", label: "Tạo CV" },
+      { to: "/mock-projects", label: "Dự Án Thực Hành" },
+      { to: "/user/profile", label: "Hồ Sơ" }
     ];
 
     let linksToShow = [];
@@ -51,7 +51,6 @@ const UserNavbar = () => {
         { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
         { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
         { to: "/manage-interviews", label: "Quản lý Phỏng vấn" },
-        { to: "/manage-prompts", label: "Quản lý Prompt" }
       );
     }
 
@@ -64,6 +63,7 @@ const UserNavbar = () => {
         { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
         { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
         { to: "/content-moderator", label: "Quản lý Diễn đàn" },
+        { to: "/manage-prompts", label: "Quản lý Prompt" }
       );
     }
 
@@ -132,9 +132,9 @@ const UserNavbar = () => {
                     <Dropdown.Item as={Link} to="/user/profile">
                       Hồ sơ
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} to="/settings">
+                    {/* <Dropdown.Item as={Link} to="/settings">
                       Cài đặt
-                    </Dropdown.Item>
+                    </Dropdown.Item> */}
                     <Dropdown.Item onClick={handleLogout}>
                       Đăng xuất
                     </Dropdown.Item>
@@ -142,19 +142,19 @@ const UserNavbar = () => {
                   </>
                 )}
 
-                <Dropdown.Item onClick={() => navigate("/help")}>
+                {/* <Dropdown.Item onClick={() => navigate("/help")}>
                   Trợ giúp
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => navigate("/terms")}>
                   Điều khoản dịch vụ
-                </Dropdown.Item>
+                </Dropdown.Item> */}
 
-                {role && (
+                {/* {role && (
                   <>
                     <Dropdown.Divider />
                     <Dropdown.Item disabled>Role: {role}</Dropdown.Item>
                   </>
-                )}
+                )} */}
               </Dropdown.Menu>
             </Dropdown>
           </Col>

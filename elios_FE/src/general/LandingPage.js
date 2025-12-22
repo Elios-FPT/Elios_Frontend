@@ -2,7 +2,7 @@
 import React from "react";
 import { Container, Row, Col, Button, Navbar, Nav, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserProfile } from "../hooks/useUserProfile"; 
+import { useUserProfile } from "../hooks/useUserProfile";
 import {
   BsChatSquareDots,
   BsCodeSlash,
@@ -44,6 +44,9 @@ const LandingPage = () => {
     const standardLinks = [
       { to: "/forum", label: "Diễn Đàn" },
       { to: "/codingchallenge", label: "Thử Thách Lập Trình" },
+      { to: "/interview", label: "Phỏng Vấn" },
+      { to: "/interview/history", label: "Lịch sử phỏng vấn" },
+      { to: "/interview/my-reviews", label: "Đánh giá của tôi" }
     ];
 
     // Only show "Create CV" and "Projects" if actually logged in as a User
@@ -62,7 +65,6 @@ const LandingPage = () => {
         { to: "/manage-coding-bank", label: "Q.Lý Code" },
         { to: "/manage-project-bank", label: "Q.Lý Dự Án" },
         { to: "/manage-interviews", label: "Q.Lý Phỏng Vấn" },
-        { to: "/manage-prompts", label: "Q.Lý Prompt" }
       );
     }
 
@@ -75,6 +77,7 @@ const LandingPage = () => {
       managerLinks.push(
         { to: "/manage-coding-bank", label: "Quản Lý Code" },
         { to: "/content-moderator", label: "Quản Lý Diễn Đàn" },
+        { to: "/manage-prompts", label: "Q.Lý Prompt" }
       );
     }
 
@@ -125,15 +128,16 @@ const LandingPage = () => {
                     {link.label}
                   </Nav.Link>
                 ))}
-                
+
                 {/* Always show Profile for logged in users */}
                 <Nav.Link as={Link} to="/user/profile">
                   Hồ Sơ
                 </Nav.Link>
-                
+
                 <Nav.Link onClick={handleLogout} style={{ cursor: "pointer" }}>
                   Đăng xuất
                 </Nav.Link>
+
               </>
             )}
           </Nav>

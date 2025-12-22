@@ -38,7 +38,7 @@ const SubmissionsView = ({ problemId }) => {
     };
 
     fetchSubmissions();
-  }, [problemId]); // Only depends on problemId
+  }, [problemId]); 
 
   // Fetches details for a single selected submission
   const fetchSubmissionDetails = async (submissionId) => {
@@ -84,23 +84,39 @@ const SubmissionsView = ({ problemId }) => {
     return "Trạng thái lạ"; 
   };
 
+  const getDisplayedResults = () => {
+    if (!submissionDetails || !submissionDetails.evaluationResults) return [];
+
+    const { failedTestCaseId } = submissionDetails.submission;
+    
+    if (failedTestCaseId) {
+      return submissionDetails.evaluationResults.filter(
+        (result) => result.testCaseId === failedTestCaseId
+      );
+    }
+
+    return submissionDetails.evaluationResults;
+  };
+
+  const displayedResults = getDisplayedResults();
+
   return (
     <>
       <div>
-        {submissionLoading && <div id="loading-message">Đang tải danh sách bài nộp...</div>} {/* Translated */}
+        {submissionLoading && <div id="loading-message">Đang tải danh sách bài nộp...</div>} 
         {submissionError && <div id="error-message">{submissionError}</div>}
         {!submissionLoading && !submissionError && submissions.length === 0 && (
-          <p>Không tìm thấy bài nộp nào cho vấn đề này.</p> // Translated
+          <p>Không tìm thấy bài nộp nào cho vấn đề này.</p> 
         )}
         {!submissionLoading && submissions.length > 0 && (
           <table id="submission-table">
             <thead>
               <tr>
-                <th>Thời gian nộp</th> {/* Translated */}
-                <th>Trạng thái</th> {/* Translated */}
-                <th>Ngôn ngữ</th> {/* Translated */}
-                <th>Thời gian chạy</th> {/* Translated */}
-                <th>Bộ nhớ</th> {/* Translated */}
+                <th>Thời gian nộp</th> 
+                <th>Trạng thái</th> 
+                <th>Ngôn ngữ</th> 
+                <th>Thời gian chạy</th> 
+                <th>Bộ nhớ</th> 
               </tr>
             </thead>
             <tbody>
@@ -124,7 +140,7 @@ const SubmissionsView = ({ problemId }) => {
           <div id="modal-content">
             <div id="modal-header">
               <h3 id="modal-title">
-                Chi tiết bài nộp - {new Date(selectedSubmission.submittedAt).toLocaleString()} {/* Translated */}
+                Chi tiết bài nộp - {new Date(selectedSubmission.submittedAt).toLocaleString()} 
               </h3>
               <button id="modal-close-button" onClick={closeModal}>✕</button>
             </div>
@@ -132,13 +148,13 @@ const SubmissionsView = ({ problemId }) => {
               <>
                 <div id="modal-section">
                   <div id="modal-code-header">
-                    <h4>Mã nguồn</h4> {/* Translated */}
+                    <h4>Mã nguồn</h4> 
                     {/* Share Solution Button */}
                     <button 
                       id="share-solution-button" 
                       onClick={() => setIsSharingSolution(true)}
                     >
-                      Chia sẻ giải pháp {/* Translated */}
+                      Chia sẻ giải pháp 
                     </button>
                   </div>
                   <pre className="code-block">
@@ -146,27 +162,30 @@ const SubmissionsView = ({ problemId }) => {
                   </pre>
                 </div>
                 <div id="modal-section">
-                  <h4>Tổng quan</h4> {/* Translated */}
+                  <h4>Tổng quan</h4> 
                   <p>Trạng thái: <span className={submissionDetails.summary.overallStatus === "PASSED" ? "status-passed" : "status-failed"}>{submissionDetails.summary.overallStatus}</span></p>
-                  <p>Tổng số Test Case: {submissionDetails.summary.totalTestCases}</p> {/* Translated */}
-                  <p>Đã qua: {submissionDetails.summary.passedTestCases}</p> {/* Translated */}
+                  <p>Tổng số Test Case: {submissionDetails.summary.totalTestCases}</p> 
+                  <p>Đã qua: {submissionDetails.summary.passedTestCases}</p> 
                 </div>
                 <div id="modal-section">
-                  <h4>Kết quả kiểm thử</h4> {/* Translated */}
+                  {/* Updated Title to reflect filtering */}
+                  <h4>{submissionDetails.submission.failedTestCaseId ? "Test Case Thất Bại" : "Kết quả kiểm thử"}</h4> 
                   <table id="modal-table">
                     <thead>
                       <tr>
-                        <th>Trạng thái</th> {/* Translated */}
-                        <th>Đầu ra</th> {/* Translated */}
-                        <th>Thời gian chạy</th> {/* Translated */}
-                        <th>Bộ nhớ</th> {/* Translated */}
+                        <th>Trạng thái</th> 
+                        <th>Đầu ra / Lỗi</th> {/* Updated Header */}
+                        <th>Thời gian chạy</th> 
+                        <th>Bộ nhớ</th> 
                       </tr>
                     </thead>
                     <tbody>
-                      {submissionDetails.evaluationResults.map((result) => (
+                      {/* Use the filtered results variable */}
+                      {displayedResults.map((result) => (
                         <tr key={result.id}>
                           <td className={result.status === "PASSED" ? "status-passed" : "status-failed"}>{result.status}</td>
-                          <td><pre>{result.actualOutput || "N/A"}</pre></td>
+                          {/* UPDATED: Show errorMessage if actualOutput is missing (common in failures) */}
+                          <td><pre>{result.actualOutput || result.errorMessage || "N/A"}</pre></td>
                           <td>{result.executionTime} ms</td>
                           <td>{(result.memoryUsage / 1024).toFixed(2)} MB</td>
                         </tr>
@@ -178,7 +197,7 @@ const SubmissionsView = ({ problemId }) => {
             ) : submissionError ? (
               <div id="error-message">{submissionError}</div>
             ) : (
-              <div id="loading-message">Đang tải chi tiết bài nộp...</div> // Translated
+              <div id="loading-message">Đang tải chi tiết bài nộp...</div> 
             )}
           </div>
         </div>
