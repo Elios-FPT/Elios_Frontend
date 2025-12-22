@@ -12,7 +12,13 @@ function MyReviews() {
     const [loading, setLoading] = useState(true);
     const [loadingDetail, setLoadingDetail] = useState(false);
 
-    // ... (logic remains the same) ...
+    // Modal states cho owner rating
+    const [ratingModalOpen, setRatingModalOpen] = useState(false);
+    const [currentSubmission, setCurrentSubmission] = useState(null);
+    const [qualityRating, setQualityRating] = useState(5);
+    const [ownerComment, setOwnerComment] = useState('');
+    const [submittingRating, setSubmittingRating] = useState(false);
+
     useEffect(() => {
         const fetchShared = async () => {
             try {
@@ -25,6 +31,7 @@ function MyReviews() {
                     setSharedInterviews(res.data.responseData || []);
                 }
             } catch (err) {
+                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -45,42 +52,31 @@ function MyReviews() {
             );
             setMessages(convRes.data?.messages || []);
 
-            try {
-                const reviewRes = await axios.get(
-                    API_ENDPOINTS.PEER_GET_REVIEWS_RECEIVED(item.id),
-                    { withCredentials: true }
+            const reviewRes = await axios.get(
+                API_ENDPOINTS.PEER_GET_REVIEWS_RECEIVED(item.id),
+                { withCredentials: true }
+            );
+
+            if (reviewRes.data.status === 200) {
+                const rawSubmissions = reviewRes.data.responseData.submissions || [];
+
+                const enrichedSubmissions = await Promise.all(
+                    rawSubmissions.map(async (sub) => {
+                        const reviewerName = sub.reviewer?.name || 'Người dùng ẩn danh';
+                        return {
+                            ...sub,
+                            reviewerName,
+                            // myRating đã có sẵn từ backend → dùng luôn
+                        };
+                    })
                 );
-                if (reviewRes.data.status === 200) {
-                    const rawSubmissions = reviewRes.data.responseData.submissions || [];
-                    const enrichedSubmissions = await Promise.all(
-                        rawSubmissions.map(async (sub) => {
-                            const reviewerId = sub.reviewer?.id || sub.reviewerId;
-                            let reviewerName = 'Đang tải...';
-                            if (reviewerId) {
-                                try {
-                                    const userRes = await axios.get(
-                                        API_ENDPOINTS.GET_USER_BY_ID(reviewerId),
-                                        { withCredentials: true }
-                                    );
-                                    reviewerName = (userRes.data?.data.firstName + userRes.data?.data.lastName) || 'Người dùng ẩn danh';
-                                } catch (err) {
-                                    reviewerName = 'Người dùng ẩn danh';
-                                }
-                            } else {
-                                reviewerName = 'Người dùng ẩn danh';
-                            }
-                            return { ...sub, reviewerName };
-                        })
-                    );
-                    setReviews(enrichedSubmissions);
-                } else {
-                    setReviews([]);
-                }
-            } catch (e) {
+
+                setReviews(enrichedSubmissions);
+            } else {
                 setReviews([]);
             }
-
         } catch (err) {
+            console.error(err);
         } finally {
             setLoadingDetail(false);
         }
@@ -102,7 +98,67 @@ function MyReviews() {
         return <span className="MyReviews-status-badge" style={{ background: s.bg }}>{s.text}</span>;
     };
 
-    // ==================== CHI TIẾT BUỔI ĐÃ CHIA SẺ ====================
+    // ==================== OWNER RATING MODAL ====================
+    const openRatingModal = (submission) => {
+        setCurrentSubmission(submission);
+        setQualityRating(submission.myRating?.qualityRating || 5);
+        setOwnerComment(submission.myRating?.comment || '');
+        setRatingModalOpen(true);
+    };
+
+    const closeRatingModal = () => {
+        setRatingModalOpen(false);
+        setCurrentSubmission(null);
+        setQualityRating(5);
+        setOwnerComment('');
+    };
+
+    const submitOwnerRating = async () => {
+        if (!currentSubmission || submittingRating) return;
+
+        try {
+            setSubmittingRating(true);
+
+            const payload = {
+                ReviewSubmissionId: currentSubmission.submissionId,
+                QualityRating: qualityRating,
+                Comment: ownerComment.trim() || null
+            };
+
+            const res = await axios.post(API_ENDPOINTS.PEER_OWNER_RATING, payload, {
+                withCredentials: true
+            });
+
+            // Nếu thành công, cập nhật lại danh sách reviews (tải lại chi tiết để lấy myRating mới)
+            if (res.data.status === 200 || res.data.status === 201) {
+                // Tải lại reviews để có dữ liệu mới nhất từ backend
+                const reviewRes = await axios.get(
+                    API_ENDPOINTS.PEER_GET_REVIEWS_RECEIVED(selectedInterview.id),
+                    { withCredentials: true }
+                );
+
+                if (reviewRes.data.status === 200) {
+                    const rawSubmissions = reviewRes.data.responseData.submissions || [];
+                    const enriched = await Promise.all(
+                        rawSubmissions.map(async (sub) => ({
+                            ...sub,
+                            reviewerName: sub.reviewer?.name || 'Người dùng ẩn danh'
+                        }))
+                    );
+                    setReviews(enriched);
+                }
+
+                closeRatingModal();
+            }
+        } catch (err) {
+            console.error('Error submitting owner rating:', err);
+            alert('Không thể gửi đánh giá. Vui lòng thử lại.');
+        } finally {
+            setSubmittingRating(false);
+        }
+    };
+
+    // ==================== CHI TIẾT BUỔI PHỎNG VẤN ====================
     if (selectedInterview) {
         return (
             <div>
@@ -111,7 +167,6 @@ function MyReviews() {
                 </header>
                 <div id="MyReviews-detail-page">
                     <div id="MyReviews-detail-container">
-                        {/* Header */}
                         <button onClick={() => setSelectedInterview(null)} id="MyReviews-back-btn">
                             <span className="material-icons">arrow_back</span>
                             Quay lại danh sách
@@ -139,39 +194,21 @@ function MyReviews() {
                                     messages.map((msg, i) => {
                                         const isQuestion = msg.type === 'question' || msg.type === 'followup';
                                         return (
-                                            <div
-                                                key={i}
-                                                className={`MyReviews-message-row ${isQuestion ? 'ai' : 'user'}`}
-                                                style={{ alignSelf: isQuestion ? 'flex-start' : 'flex-end' }}
-                                            >
-                                                <div
-                                                    className="MyReviews-message-bubble"
+                                            <div key={i} className={`MyReviews-message-row ${isQuestion ? 'ai' : 'user'}`}>
+                                                <div className="MyReviews-message-bubble"
                                                     style={{
-                                                        // === THEME UPDATE: Dark Bubble Colors ===
-                                                        background: isQuestion
-                                                            ? '#2c313a' // Dark Gray for AI
-                                                            : '#0f8a57', // Green for User
+                                                        background: isQuestion ? '#2c313a' : '#0f8a57',
                                                         color: '#fff',
-                                                        borderRadius: isQuestion
-                                                            ? '20px 20px 20px 4px'
-                                                            : '20px 20px 4px 20px',
+                                                        borderRadius: isQuestion ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
                                                         boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
-                                                    }}
-                                                >
+                                                    }}>
                                                     {isQuestion && (
-                                                        <div style={{
-                                                            fontSize: '13px',
-                                                            fontWeight: 600,
-                                                            color: '#19c37d',
-                                                            marginBottom: '8px',
-                                                            textTransform: 'uppercase'
-                                                        }}>
+                                                        <div style={{ fontSize: '13px', fontWeight: 600, color: '#19c37d', marginBottom: '8px', textTransform: 'uppercase' }}>
                                                             {msg.type === 'followup' ? 'Follow-up' : 'Câu hỏi'}
                                                         </div>
                                                     )}
                                                     <div className="MyReviews-message-content">{msg.text || '(Không có nội dung)'}</div>
 
-                                                    {/* Audio */}
                                                     {msg.metadata?.audioData && (
                                                         <audio controls className="MyReviews-audio-player">
                                                             <source src={`data:audio/wav;base64,${msg.metadata.audioData}`} />
@@ -184,10 +221,7 @@ function MyReviews() {
                                                     )}
 
                                                     <div className="MyReviews-message-timestamp">
-                                                        {new Date(msg.timestamp || Date.now()).toLocaleTimeString('vi-VN', {
-                                                            hour: '2-digit',
-                                                            minute: '2-digit'
-                                                        })}
+                                                        {new Date(msg.timestamp || Date.now()).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
                                                     </div>
                                                 </div>
                                             </div>
@@ -197,11 +231,12 @@ function MyReviews() {
                             </div>
                         </div>
 
-                        {/* Đánh giá nhận được */}
+                        {/* Đánh giá từ cộng đồng */}
                         <div id="MyReviews-reviews-section">
                             <h2 id="MyReviews-reviews-title">
                                 Đánh giá từ cộng đồng ({reviews.length} người)
                             </h2>
+
                             {reviews.length === 0 ? (
                                 <div className="MyReviews-empty-state">
                                     <span className="material-icons MyReviews-empty-icon">rate_review</span>
@@ -212,32 +247,57 @@ function MyReviews() {
                                     {reviews.map((sub) => (
                                         <div key={sub.submissionId} className="MyReviews-review-card">
                                             <div className="MyReviews-reviewer-header">
-                                                <div className="MyReviews-reviewer-avatar">{sub.reviewerName.charAt(0)}</div>
+                                                <div className="MyReviews-reviewer-avatar">
+                                                    {sub.reviewerName.charAt(0).toUpperCase()}
+                                                </div>
                                                 <div>
                                                     <h4 className="MyReviews-reviewer-name">{sub.reviewerName}</h4>
                                                     <p className="MyReviews-review-time">{formatDate(sub.submittedAt)}</p>
                                                 </div>
                                             </div>
+
+                                            {/* Nút hoặc trạng thái đánh giá review */}
+                                            <div style={{ textAlign: 'right', margin: '12px 0' }}>
+                                                {sub.myRating ? (
+                                                    <div style={{ color: '#19c37d', fontWeight: '600' }}>
+                                                        Bạn đã đánh giá: {sub.myRating.qualityRating} ⭐
+                                                        {sub.myRating.comment && ' (với bình luận)'}
+                                                    </div>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => openRatingModal(sub)}
+                                                        className="MyReviews-rate-review-btn"
+                                                    >
+                                                        Đánh giá chất lượng review này
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {sub.myRating?.comment && (
+                                                <div style={{
+                                                    marginTop: '16px',
+                                                    padding: '12px',
+                                                    background: '#1e1e1e',
+                                                    borderRadius: '8px',
+                                                    borderLeft: '4px solid #19c37d',
+                                                    fontSize: '14px',
+                                                    marginBottom: '20px'
+                                                }}>
+                                                    <strong>Bình luận:</strong> {sub.myRating.comment}
+                                                </div>
+                                            )}
+
                                             <div className="MyReviews-rating-group">
                                                 {sub.reviews.map((r, i) => (
-                                                    <div key={i} className="MyReviews-rating-item">
-                                                        <div className="MyReviews-question-label">
-                                                            Câu {i + 1}
-                                                        </div>
+                                                    <div key={r.id} className="MyReviews-rating-item">
+                                                        <div className="MyReviews-question-label">Câu {i + 1}</div>
 
-                                                        {/* Technical Skill Rating */}
                                                         <div className="MyReviews-star-row">
                                                             <span className="MyReviews-rating-label">Technical:</span>
                                                             <div className="MyReviews-stars-container">
-                                                                {[1, 2, 3, 4, 5].map((star) => (
-                                                                    <span
-                                                                        key={star}
-                                                                        className="MyReviews-star-icon"
-                                                                        style={{
-                                                                            color: star <= r.skillRating ? '#ffd700' : '#444',
-                                                                            fontSize: '20px'
-                                                                        }}
-                                                                    >
+                                                                {[1, 2, 3, 4, 5].map(star => (
+                                                                    <span key={star} className="MyReviews-star-icon"
+                                                                        style={{ color: star <= r.skillRating ? '#ffd700' : '#444', fontSize: '20px' }}>
                                                                         ★
                                                                     </span>
                                                                 ))}
@@ -245,19 +305,12 @@ function MyReviews() {
                                                             <span className="MyReviews-rating-value">{r.skillRating}/5</span>
                                                         </div>
 
-                                                        {/* Soft Skill Rating */}
                                                         <div className="MyReviews-star-row">
                                                             <span className="MyReviews-rating-label">Soft Skill:</span>
                                                             <div className="MyReviews-stars-container">
-                                                                {[1, 2, 3, 4, 5].map((star) => (
-                                                                    <span
-                                                                        key={star}
-                                                                        className="MyReviews-star-icon"
-                                                                        style={{
-                                                                            color: star <= r.softSkillRating ? '#19c37d' : '#444',
-                                                                            fontSize: '20px'
-                                                                        }}
-                                                                    >
+                                                                {[1, 2, 3, 4, 5].map(star => (
+                                                                    <span key={star} className="MyReviews-star-icon"
+                                                                        style={{ color: star <= r.softSkillRating ? '#19c37d' : '#444', fontSize: '20px' }}>
                                                                         ★
                                                                     </span>
                                                                 ))}
@@ -265,7 +318,6 @@ function MyReviews() {
                                                             <span className="MyReviews-rating-value">{r.softSkillRating}/5</span>
                                                         </div>
 
-                                                        {/* Comment */}
                                                         {r.comment && (
                                                             <div className="MyReviews-comment-box">
                                                                 <span className="MyReviews-quote-icon">“</span>
@@ -282,7 +334,85 @@ function MyReviews() {
                         </div>
                     </div>
                 </div>
-            </div>);
+
+                {/* Modal đánh giá chất lượng review */}
+                {ratingModalOpen && currentSubmission && (
+                    <div className="MyReviews-modal-overlay" onClick={closeRatingModal}>
+                        <div className="MyReviews-modal-content" onClick={e => e.stopPropagation()}>
+                            <h3>Đánh giá chất lượng review</h3>
+                            <p><strong>Người review:</strong> {currentSubmission.reviewerName}</p>
+
+                            <div style={{ margin: '24px 0' }}>
+                                <label style={{ display: 'block', marginBottom: '12px', fontWeight: '600' }}>
+                                    Chất lượng review (1-5 sao)
+                                </label>
+                                <div style={{ fontSize: '36px' }}>
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <span
+                                            key={star}
+                                            onClick={() => setQualityRating(star)}
+                                            style={{
+                                                cursor: 'pointer',
+                                                color: star <= qualityRating ? '#ffd700' : '#ccc',
+                                                marginRight: '8px'
+                                            }}
+                                        >
+                                            ★
+                                        </span>
+                                    ))}
+                                </div>
+                                <div style={{ marginTop: '8px', fontSize: '18px', color: '#666' }}>
+                                    {qualityRating} sao
+                                </div>
+                            </div>
+
+                            <div style={{ marginBottom: '24px' }}>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
+                                    Bình luận (tùy chọn)
+                                </label>
+                                <textarea
+                                    value={ownerComment}
+                                    onChange={(e) => setOwnerComment(e.target.value)}
+                                    placeholder="Ví dụ: Review rất chi tiết, hữu ích! / Chỉ đánh 1 sao mà không giải thích..."
+                                    rows={4}
+                                    style={{
+                                        width: '100%',
+                                        padding: '12px',
+                                        borderRadius: '8px',
+                                        border: '1px solid #ccc',
+                                        fontSize: '14px'
+                                    }}
+                                />
+                            </div>
+
+                            <div style={{ textAlign: 'right' }}>
+                                <button
+                                    onClick={closeRatingModal}
+                                    disabled={submittingRating}
+                                    style={{ marginRight: '12px', padding: '8px 16px' }}
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    onClick={submitOwnerRating}
+                                    disabled={submittingRating}
+                                    style={{
+                                        background: '#0f8a57',
+                                        color: '#fff',
+                                        padding: '8px 20px',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        fontWeight: '600'
+                                    }}
+                                >
+                                    {submittingRating ? 'Đang gửi...' : 'Gửi đánh giá'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
     }
 
     // ==================== DANH SÁCH BUỔI ĐÃ CHIA SẺ ====================
@@ -292,7 +422,6 @@ function MyReviews() {
                 <UserNavbar />
             </header>
             <div id="MyReviews-page">
-
                 <div id="MyReviews-page-header">
                     <h1 id="MyReviews-main-title">Buổi phỏng vấn tôi đã chia sẻ</h1>
                     <p id="MyReviews-sub-title">Xem transcript và đánh giá từ cộng đồng</p>

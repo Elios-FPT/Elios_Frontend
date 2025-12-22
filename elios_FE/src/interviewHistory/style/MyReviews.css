@@ -380,3 +380,194 @@
   margin-bottom: 20px;
   color: #666;
 }
+
+/* ==================== NEW: Owner Rating Features ==================== */
+
+/* Nút đánh giá chất lượng review */
+.MyReviews-rate-review-btn {
+  padding: 8px 16px;
+  background: transparent;
+  color: #19c37d;
+  border: 1px solid #19c37d;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.MyReviews-rate-review-btn:hover {
+  background: #19c37d;
+  color: #fff;
+}
+
+/* Trạng thái đã đánh giá */
+.MyReviews-owner-rating-status {
+  font-size: 14px;
+  color: #19c37d;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Phản hồi (comment) của owner hiển thị dưới review card */
+.MyReviews-owner-comment {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #1a2e22, #16281e);
+  border-radius: 10px;
+  border-left: 4px solid #19c37d;
+  font-size: 15px;
+  color: #ddd;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.MyReviews-owner-comment strong {
+  color: #19c37d;
+}
+
+/* ==================== Modal Đánh Giá Review ==================== */
+.MyReviews-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.MyReviews-modal-content {
+  background: #23272f;
+  border-radius: 16px;
+  padding: 32px;
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid #444;
+  animation: slideUp 0.3s ease;
+  color: #eee;
+}
+
+.MyReviews-modal-content h3 {
+  font-size: 24px;
+  color: #ffd700;
+  margin: 0 0 16px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.MyReviews-modal-content p {
+  margin: 0 0 24px;
+  text-align: center;
+  color: #bbb;
+  font-size: 16px;
+}
+
+.MyReviews-modal-content label {
+  font-weight: 600;
+  color: #eee;
+}
+
+/* Sao chọn trong modal */
+.MyReviews-modal-content .star-selector {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.MyReviews-modal-content .star-selector span {
+  font-size: 42px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.MyReviews-modal-content .star-selector span:hover {
+  transform: scale(1.15);
+}
+
+/* Textarea trong modal */
+.MyReviews-modal-content textarea {
+  background: #1e1e1e;
+  color: #eee;
+  border: 1px solid #444;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.MyReviews-modal-content textarea::placeholder {
+  color: #777;
+}
+
+/* Nút trong modal */
+.MyReviews-modal-content button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.MyReviews-modal-content button:first-of-type {
+  background: transparent;
+  color: #bbb;
+  border: 1px solid #555;
+}
+
+.MyReviews-modal-content button:first-of-type:hover {
+  background: #333;
+  color: #fff;
+}
+
+.MyReviews-modal-content button:last-of-type {
+  background: #19c37d;
+  color: #fff;
+}
+
+.MyReviews-modal-content button:last-of-type:hover {
+  background: #0f8a57;
+  transform: translateY(-2px);
+}
+
+.MyReviews-modal-content button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive cho modal trên mobile */
+@media (max-width: 600px) {
+  .MyReviews-modal-content {
+    padding: 24px;
+    margin: 20px;
+  }
+
+  .MyReviews-modal-content .star-selector span {
+    font-size: 36px;
+  }
+}
