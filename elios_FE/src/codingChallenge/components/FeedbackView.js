@@ -31,7 +31,7 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
         entity_id: problemId,
         input_type: "CODE",
         feedback_input: JSON.stringify({
-          language: currentLanguage || "javascript",
+          language: currentLanguage || "java",
           user_code_solution: currentCode,
           problem_description: problemDescription || "No description provided",
         }),

@@ -10,7 +10,6 @@ const CodeIDE = ({ onRun, onSubmit, onCodeChange, templates }) => {
 
   const languageMap = {
     JAVA: "java",
-    JAVASCRIPT: "javascript",
     CSHARP: "csharp",
   };
 
@@ -64,8 +63,6 @@ const CodeIDE = ({ onRun, onSubmit, onCodeChange, templates }) => {
         >
           <option value="JAVA">Java</option>
           <option value="CSHARP">C#</option>
-          {/* Added Javascript option since mapped in languageMap */}
-          <option value="JAVASCRIPT">JavaScript</option> 
         </select>
 
         <div id="codeIDE-button-group">

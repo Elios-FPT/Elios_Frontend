@@ -24,7 +24,7 @@ const OnlineIDE = () => {
   
   // NEW STATE: Track code and language for AI Feedback
   const [currentCode, setCurrentCode] = useState("");
-  const [currentLanguage, setCurrentLanguage] = useState("javascript"); 
+  const [currentLanguage, setCurrentLanguage] = useState("java"); 
 
   // Problem Data State
   const [problem, setProblem] = useState(null);
