@@ -26,12 +26,12 @@ const UserPostStorage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true); // Ensure loading state is reset when tab changes
+            setLoading(true); 
             try {
                 // Fetch posts and ban status in parallel
                 const [postsResponse, banResponse] = await Promise.all([
                     axios.get(API_ENDPOINTS.GET_MY_POSTS, {
-                        params: { PostType: activeTab }, // Use activeTab ('Post' or 'Solution')
+                        params: { PostType: activeTab }, 
                         withCredentials: true,
                         headers: { "Content-Type": "application/json" }
                     }),
@@ -48,21 +48,20 @@ const UserPostStorage = () => {
 
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setError("Không thể tải dữ liệu."); // Translated
+                setError("Không thể tải dữ liệu."); 
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [activeTab]); // Re-run when activeTab changes
+    }, [activeTab]); 
 
     const handleCreateNewPost = async (e) => {
         e.preventDefault();
         
-        // Prevent creation if banned
         if (banInfo && banInfo.isBanned) {
-            alert("Bạn không thể tạo bài viết khi đang bị cấm."); // Translated
+            alert("Bạn không thể tạo bài viết khi đang bị cấm."); 
             return;
         }
 
@@ -72,7 +71,7 @@ const UserPostStorage = () => {
             categoryId: CATEGORY_ID,
             title: TITLE,
             content: CONTENT,
-            postType: "Post", // Always create generic posts from here
+            postType: "Post", 
             referenceId: null,
             tags: null,
             submitForReview: false
@@ -88,7 +87,7 @@ const UserPostStorage = () => {
 
         } catch (error) {
             console.error("Error creating new post:", error.response || error);
-            setError("Không thể tạo bài viết mới. Vui lòng thử lại."); // Translated
+            setError("Không thể tạo bài viết mới. Vui lòng thử lại."); 
         }
     };
 
@@ -113,14 +112,14 @@ const UserPostStorage = () => {
 
         const banDate = new Date(banInfo.banUntil).toLocaleString("vi-VN"); 
         const message = banInfo.isPermanent 
-            ? "Bạn đã bị cấm đăng bài vĩnh viễn." // Translated
-            : `Bạn bị cấm đăng bài cho đến ${banDate}.`; // Translated
+            ? "Bạn đã bị cấm đăng bài vĩnh viễn." 
+            : `Bạn bị cấm đăng bài cho đến ${banDate}.`; 
 
         return (
             <div id="user-post-storage-ban-notification">
                 <div id="ban-notification-icon">⚠️</div>
                 <div id="ban-notification-content">
-                    <strong>Tài khoản bị tạm khóa</strong> {/* Translated */}
+                    <strong>Tài khoản bị tạm khóa</strong> 
                     <span>{message}</span>
                     {banInfo.reason && <span className="ban-reason">Lý do: {banInfo.reason}</span>} 
                 </div>
@@ -137,9 +136,8 @@ const UserPostStorage = () => {
                     {renderBanNotification()}
 
                     <div id="user-post-storage-header">
-                        <h1 id="user-post-storage-title">Kho Bài Viết Của Bạn</h1> {/* Translated */}
+                        <h1 id="user-post-storage-title">Kho Bài Viết Của Bạn</h1> 
                         
-                        {/* Only show "Create" button if on "Post" tab. Solutions are created in IDE. */}
                         {activeTab === 'Post' && (
                             <button
                                 id="user-post-storage-create-btn"
@@ -148,12 +146,11 @@ const UserPostStorage = () => {
                                 title={banInfo?.isBanned ? "Bạn đang bị cấm tạo bài viết" : "Tạo bài viết mới"} 
                                 style={banInfo?.isBanned ? { opacity: 0.5, cursor: 'not-allowed', backgroundColor: '#555' } : {}}
                             >
-                                Tạo bài viết mới {/* Translated */}
+                                Tạo bài viết mới 
                             </button>
                         )}
                     </div>
 
-                    {/* Navigation Tabs */}
                     <Nav 
                         variant="tabs" 
                         activeKey={activeTab} 
@@ -165,7 +162,7 @@ const UserPostStorage = () => {
                                 eventKey="Post" 
                                 className={`user-storage-tab ${activeTab === 'Post' ? 'active-tab' : ''}`}
                             >
-                                Bài Viết {/* Translated: Posts */}
+                                Bài Viết 
                             </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
@@ -188,15 +185,16 @@ const UserPostStorage = () => {
                         ) : (
                             <>
                                 {userPosts.length === 0 ? (
-                                    <div className="text-center text-muted w-100 py-5" style={{ gridColumn: '1 / -1' }}>
-                                        <p>Bạn chưa có {activeTab === 'Post' ? 'bài viết' : 'Bài Giải'} nào.</p> {/* Translated */}
+                                    /* MODIFIED: Use unique ID instead of generic Bootstrap classes */
+                                    <div id="user-post-storage-empty">
+                                        <p>Bạn chưa có {activeTab === 'Post' ? 'bài viết' : 'Bài Giải'} nào.</p>
                                     </div>
                                 ) : (
                                     userPosts.map((post) => (
                                         <UserPostStorageCard
                                             key={post.postId}
                                             post={post}
-                                            isSolution={activeTab === 'Solution'} // <-- Pass the solution flag
+                                            isSolution={activeTab === 'Solution'} 
                                             onDelete={handleDeletePost}
                                         />
                                     ))
