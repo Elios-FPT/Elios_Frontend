@@ -23,7 +23,7 @@
   color: var(--text-primary);
   border-color: var(--accent-green);
   background: rgba(80, 250, 123, 0.08);
-  box-shadow: 
+  box-shadow:
     0 6px 20px var(--shadow-accent),
     0 0 20px rgba(80, 250, 123, 0.15);
   transform: translateY(-2px);
@@ -38,7 +38,7 @@
 /* Focus (keyboard navigation) */
 .btn-secondary:focus-visible {
   outline: none;
-  box-shadow: 
+  box-shadow:
     0 0 0 3px var(--shadow-accent),
     0 6px 20px var(--shadow-accent-hover);
 }
@@ -150,12 +150,101 @@
     padding: 0 1.5rem 1.5rem;
     flex-direction: column;
   }
+
   .action-bar button {
     width: 100%;
   }
+
   .current-active-card,
   .versions-section {
     margin: 1.5rem;
     padding: 1.5rem;
+  }
+}
+
+.active-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem 2rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meta-label {
+  color: var(--accent-green);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-value {
+  color: white;
+  word-break: break-word;
+  white-space: normal;
+}
+
+/* Dành riêng cho prompt dài */
+.prompt-value {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(80, 250, 123, 0.2);
+  font-family: var(--font-mono, 'Courier New', monospace);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  /* Giữ line break nhưng wrap dài */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-green) rgba(0, 0, 0, 0.5);
+}
+
+/* Prompt chiếm full width */
+.full-width {
+  grid-column: 1 / -1;
+  /* Chiếm toàn bộ dòng trong grid */
+}
+
+/* Scrollbar đẹp hơn cho Chrome/Edge */
+.prompt-value::-webkit-scrollbar {
+  width: 8px;
+}
+
+.prompt-value::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+.prompt-value::-webkit-scrollbar-thumb {
+  background: var(--accent-green);
+  border-radius: 10px;
+}
+
+.prompt-value::-webkit-scrollbar-thumb:hover {
+  background: #64f589;
+}
+
+/* Responsive nhỏ hơn */
+@media (max-width: 768px) {
+  .active-meta {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  .prompt-value {
+    padding: 0.8rem;
+    font-size: 0.88rem;
   }
 }

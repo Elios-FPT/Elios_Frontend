@@ -98,10 +98,30 @@ const PromptDetail = () => {
             <div className="current-active-card">
               <h2>Currently Active Version</h2>
               <div className="active-meta">
-                <div><strong>Version:</strong> v{activePrompt.version}</div>
-                <div><strong>Temperature:</strong> {activePrompt.temperature}</div>
-                <div><strong>Max Tokens:</strong> {activePrompt.max_tokens}</div>
-                <div><strong>Created:</strong> {new Date(activePrompt.created_at).toLocaleDateString()}</div>
+                <div className="meta-item">
+                  <strong className="meta-label">Version:</strong>
+                  <span className="meta-value">v{activePrompt.version}</span>
+                </div>
+                <div className="meta-item">
+                  <strong className="meta-label">Temperature:</strong>
+                  <span className="meta-value">{activePrompt.temperature}</span>
+                </div>
+                <div className="meta-item">
+                  <strong className="meta-label">Max Tokens:</strong>
+                  <span className="meta-value">{activePrompt.max_tokens}</span>
+                </div>
+                <div className="meta-item">
+                  <strong className="meta-label">Created:</strong>
+                  <span className="meta-value">{new Date(activePrompt.created_at).toLocaleDateString()}</span>
+                </div>
+                <div className="meta-item full-width">
+                  <strong className="meta-label">System Prompt:</strong>
+                  <pre className="meta-value prompt-value">{activePrompt.system_prompt}</pre>
+                </div>
+                <div className="meta-item full-width">
+                  <strong className="meta-label">User Template:</strong>
+                  <pre className="meta-value prompt-value">{activePrompt.user_template}</pre>
+                </div>
               </div>
             </div>
           )}

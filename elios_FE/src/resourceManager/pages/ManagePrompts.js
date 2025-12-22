@@ -167,9 +167,6 @@ const ManagePrompts = () => {
                     <button onClick={() => navigate(`/manage-prompts/${group.name}`)} className="btn-success">
                       View Details
                     </button>
-                    <button onClick={() => navigate(`/manage-prompts/new-version/${group.name}`)} className="btn-edit">
-                      New Version
-                    </button>
                     {!group.latest.deleted_at && (
                       <button onClick={() => handleDelete(group.name)} className="btn-danger">
                         Delete
