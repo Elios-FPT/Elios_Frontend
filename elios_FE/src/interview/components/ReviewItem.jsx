@@ -1,4 +1,4 @@
-// src/interview/components/interview/ReviewItem.jsx
+// file: src/interview/components/interview/ReviewItem.jsx
 import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 
@@ -34,6 +34,55 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
   const isSaved = !!item.review?.skillRating && !!item.review?.softSkillRating;
   const hasAnswer = !!item.answer;
 
+  // Helper function to render Radio Buttons (1-5)
+  const renderRadioGroup = (label, value, setValue, groupName) => (
+    <div>
+      <label
+        style={{
+          display: 'block',
+          marginBottom: 12,
+          fontWeight: 600,
+          color: '#1e40af',
+          fontSize: 16,
+        }}
+      >
+        {label}
+      </label>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'flex', gap: 16 }}>
+          {[1, 2, 3, 4, 5].map((num) => (
+            <label
+              key={num}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: hasAnswer ? 'pointer' : 'not-allowed',
+                opacity: hasAnswer ? 1 : 0.6,
+              }}
+            >
+              <input
+                type="radio"
+                name={`${groupName}-${questionId}`} // Unique name per question
+                value={num}
+                checked={value === num}
+                onChange={() => setValue(num)}
+                disabled={!hasAnswer}
+                style={{ width: 20, height: 20, accentColor: '#2563eb', cursor: 'pointer', marginBottom: 4 }}
+              />
+              <span style={{ fontSize: 14, fontWeight: value === num ? '700' : '400', color: '#334155' }}>
+                {num}
+              </span>
+            </label>
+          ))}
+        </div>
+        <span style={{ fontSize: 18, fontWeight: 700, color: '#1e40af', minWidth: 40 }}>
+          {value ? `${value}/5` : ''}
+        </span>
+      </div>
+    </div>
+  );
+
   return (
     <div
       className="review-item"
@@ -61,7 +110,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
           background: isSaved ? '#10b981' : '#f59e0b',
         }}
       >
-        {hasAnswer ? 'Chưa trả lời' : isSaved ? 'Đã lưu' : 'Chưa lưu'}
+        {hasAnswer ? (isSaved ? 'Đã lưu' : 'Chưa lưu') : 'Chưa trả lời'}
       </div>
 
       {/* Badge Follow-up góc trái */}
@@ -133,79 +182,21 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
         )}
       </div>
 
-      {/* Điểm số */}
+      {/* Điểm số (Radio Buttons) */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, margin: '28px 0' }}>
-        <div>
-          <label
-            style={{
-              display: 'block',
-              marginBottom: 10,
-              fontWeight: 600,
-              color: '#1e40af',
-              fontSize: 16,
-            }}
-          >
-            Kỹ năng kỹ thuật (Technical Skill)
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="5"
-            value={hasAnswer ? 1 : skillRating}
-            onChange={(e) => setSkillRating(e.target.value)}
-            style={{
-              width: 90,
-              padding: '12px 14px',
-              fontSize: 18,
-              borderRadius: 10,
-              border: '2px solid #cbd5e1',
-              textAlign: 'center',
-            }}
-          />
-          <span style={{ marginLeft: 16, fontSize: 22, fontWeight: 600, color: '#1e40af' }}>
-            {skillRating ? `${skillRating}/5` : '–/5'}
-          </span>
-        </div>
-
-        <div>
-          <label
-            style={{
-              display: 'block',
-              marginBottom: 10,
-              fontWeight: 600,
-              color: '#1e40af',
-              fontSize: 16,
-            }}
-          >
-            Giao tiếp & Trình bày
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="5"
-            value={hasAnswer ? 1 : softSkillRating}
-            onChange={(e) => setSoftSkillRating(e.target.value)}
-            style={{
-              width: 90,
-              padding: '12px 14px',
-              fontSize: 18,
-              borderRadius: 10,
-              border: '2px solid #cbd5e1',
-              textAlign: 'center',
-            }}
-          />
-          <span style={{ marginLeft: 16, fontSize: 22, fontWeight: 600, color: '#1e40af' }}>
-            {softSkillRating ? `${softSkillRating}/5` : '–/5'}
-          </span>
-        </div>
+        {renderRadioGroup('Kỹ năng kỹ thuật (Technical)', skillRating, setSkillRating, 'tech')}
+        {renderRadioGroup('Giao tiếp & Trình bày', softSkillRating, setSoftSkillRating, 'soft')}
       </div>
 
       {/* Nhận xét */}
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        placeholder="Nhận xét chi tiết – rất hữu ích cho ứng viên... (khuyến khích)"
+        placeholder={hasAnswer 
+            ? "Nhận xét chi tiết – rất hữu ích cho ứng viên... (khuyến khích)" 
+            : "Không cần nhận xét vì ứng viên chưa trả lời"}
         rows={6}
+        disabled={!hasAnswer}
         style={{
           width: '100%',
           padding: 16,
@@ -215,6 +206,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
           fontSize: 15.5,
           fontFamily: 'inherit',
           resize: 'vertical',
+          backgroundColor: !hasAnswer ? '#f1f5f9' : '#fff'
         }}
       />
 
@@ -222,7 +214,8 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
       <div style={{ marginTop: 20, textAlign: 'right' }}>
         <button
           onClick={handleSave}
-          disabled={!isDirty || isSaving || !skillRating || !softSkillRating}
+          disabled={!hasAnswer || !isDirty || isSaving || !skillRating || !softSkillRating}
+          title={!hasAnswer ? "Không cần chấm điểm cho câu chưa trả lời" : ""}
           style={{
             padding: '12px 32px',
             fontSize: 16,
