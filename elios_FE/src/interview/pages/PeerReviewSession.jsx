@@ -27,7 +27,6 @@ export default function PeerReviewSession() {
   const [isProgressLoading, setIsProgressLoading] = useState(false);
   const [savingQuestionId, setSavingQuestionId] = useState(null);
 
-  // ==================== FETCH CONVERSATION ====================
   const fetchInterviewConversation = async (sessionId) => {
     try {
       const response = await axios.get(
@@ -45,7 +44,6 @@ export default function PeerReviewSession() {
     }
   };
 
-  // ==================== FETCH PUBLIC INTERVIEWS (khi cần) ====================
   const fetchPublicInterviews = async () => {
     try {
       const response = await axios.get(API_ENDPOINTS.PEER_BROWSE_PUBLIC_POOL, { withCredentials: true });
@@ -57,7 +55,6 @@ export default function PeerReviewSession() {
     }
   };
 
-  // ==================== LOAD DATA KHI VÀO REVIEW ====================
   useEffect(() => {
     if (interviewSessionId) {
       const loadReviewData = async () => {
@@ -112,7 +109,6 @@ export default function PeerReviewSession() {
     }
   }, [interviewSessionId]);
 
-  // ==================== FETCH PROGRESS ====================
   const fetchReviewProgress = async (subId) => {
     if (!subId) return;
     setIsProgressLoading(true);
@@ -128,7 +124,6 @@ export default function PeerReviewSession() {
     }
   };
 
-  // ==================== SAVE DRAFT ====================
   const handleSaveDraftReview = async (questionId, skillRating, softSkillRating, comment) => {
     if (!submissionId || !questionId) return;
 
@@ -193,7 +188,6 @@ export default function PeerReviewSession() {
     navigate('/interview');
   };
 
-  // ==================== BUILD REVIEW ITEMS ====================
   const buildReviewableItems = () => {
     if (!conversationMessages.length || !reviewProgress) return [];
 
@@ -257,7 +251,6 @@ export default function PeerReviewSession() {
 
   const reviewableItems = buildReviewableItems();
 
-  // ==================== RENDER ====================
   if (!reviewProgress) {
     return <div style={{ textAlign: 'center', padding: '60px', color: '#64748b' }}>Đang tải dữ liệu review...</div>;
   }
