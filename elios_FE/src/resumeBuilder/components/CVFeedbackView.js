@@ -9,7 +9,7 @@ import {
   FaExclamationCircle,
   FaRobot,
   FaCoins,
-  FaHourglassHalf // <--- Import Hourglass icon
+  FaHourglassHalf 
 } from 'react-icons/fa';
 import { Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -22,20 +22,30 @@ const CVFeedbackView = ({ resumeData, resumeId }) => {
   const [feedbackData, setFeedbackData] = useState(null);
   const [error, setError] = useState(null);
   const [isOutOfTokens, setIsOutOfTokens] = useState(false);
-  const [isTimeout, setIsTimeout] = useState(false); // <--- New State for Timeout
+  const [isTimeout, setIsTimeout] = useState(false);
 
   const handleAnalyze = async () => {
     setLoading(true);
     setError(null);
     setFeedbackData(null);
     setIsOutOfTokens(false);
-    setIsTimeout(false); // <--- Reset timeout state
+    setIsTimeout(false); 
 
     try {
+      // --- PRIVACY MODIFICATION START ---
+      // Create a shallow copy of the resume data
+      const sanitizedData = { ...resumeData };
+      
+      // Remove Personal Info (Name, Email, Phone, etc.) from the payload
+      if (sanitizedData.personalInfo) {
+        delete sanitizedData.personalInfo;
+      }
+      // --- PRIVACY MODIFICATION END ---
+
       const payload = {
         entity_id: resumeId,
         input_type: "CV",
-        feedback_input: JSON.stringify(resumeData),
+        feedback_input: JSON.stringify(sanitizedData), // Send the sanitized data
       };
 
       const response = await axios.post(
@@ -154,15 +164,6 @@ const CVFeedbackView = ({ resumeData, resumeId }) => {
       {/* Results State */}
       {feedbackData && (
         <div className="feedback-results fade-in">
-          <div className="feedback-header-card">
-            <div className="score-circle">
-              <span className="score-value">{feedbackData.overall_score || 0}</span>
-              <span className="score-label">ĐIỂM</span>
-            </div>
-            <div className="score-text">
-              <h4>Hoàn tất phân tích AI</h4>
-            </div>
-          </div>
 
           <div className="feedback-markdown-content">
             <ReactMarkdown

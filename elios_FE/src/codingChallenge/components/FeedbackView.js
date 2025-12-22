@@ -5,12 +5,15 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../style/FeedbackView.css";
+import { useNavigate } from "react-router-dom"; // <--- Import useNavigate
+import { FaCoins } from "react-icons/fa"; // <--- Import FaCoins icon
 
-// UPDATED: Added problemDescription to props
 const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescription }) => {
+  const navigate = useNavigate(); // <--- Initialize hook
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [feedbackData, setFeedbackData] = useState(null);
+  const [isOutOfTokens, setIsOutOfTokens] = useState(false); // <--- New State
 
   const handleAnalyze = async () => {
     if (!currentCode || !currentCode.trim()) {
@@ -20,6 +23,7 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
 
     setLoading(true);
     setError("");
+    setIsOutOfTokens(false); // Reset token state
     setFeedbackData(null);
 
     try {
@@ -29,7 +33,7 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
         feedback_input: JSON.stringify({
           language: currentLanguage || "javascript",
           user_code_solution: currentCode,
-          problem_description: problemDescription || "No description provided", // UPDATED: Use prop here
+          problem_description: problemDescription || "No description provided",
         }),
       };
 
@@ -46,10 +50,18 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
       }
     } catch (err) {
       console.error("Error analyzing code:", err);
-      if (err.response?.status === 401 || err.response?.status === 403) {
+      
+      const errorDetail = err.response?.data?.detail || "";
+
+      // --- SPECIFIC ERROR HANDLING ---
+      // Check for "insufficient balance" in the error detail (works for status 400 or 500)
+      if (errorDetail.toLowerCase().includes("insufficient balance")) {
+        setIsOutOfTokens(true);
+      } 
+      else if (err.response?.status === 401 || err.response?.status === 403) {
         setError("Bạn không có quyền thực hiện hành động này.");
       } else {
-        setError(err.response?.data?.detail || "Đã xảy ra lỗi khi kết nối với AI.");
+        setError(errorDetail || "Đã xảy ra lỗi khi kết nối với AI.");
       }
     } finally {
       setLoading(false);
@@ -60,28 +72,83 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
     return feedbackData?.result?.overall_assessment?.overall_score ?? "N/A";
   };
 
+  const handleGoToProfile = () => {
+    navigate('/user/profile');
+  };
+
   return (
     <div id="feedback-view-container">
       <div id="feedback-header">
-        {/* <h3 id="feedback-title">Phân tích AI</h3> */}
         <p id="feedback-subtitle">
           Nhận phản hồi về code của bạn từ AI.
         </p>
       </div>
 
-      <div id="feedback-actions">
-        <button 
-          id="analyze-btn" 
-          onClick={handleAnalyze} 
-          disabled={loading || !currentCode}
-        >
-          {loading ? "Đang phân tích..." : "Phân tích mã hiện tại"}
-        </button>
-      </div>
+      {/* --- OUT OF TOKENS NOTIFICATION --- */}
+      {isOutOfTokens ? (
+        <div className="feedback-error-state" style={{ 
+            backgroundColor: '#fff3cd', 
+            border: '1px solid #ffeeba', 
+            borderRadius: '8px', 
+            padding: '20px', 
+            textAlign: 'center', 
+            marginBottom: '20px',
+            color: '#856404'
+        }}>
+          <div style={{ marginBottom: '10px' }}>
+             <FaCoins style={{ fontSize: '40px', color: '#ffc107' }} />
+          </div>
+          <h4 style={{ color: '#d39e00', margin: '10px 0', fontWeight: 'bold' }}>Hết Token</h4>
+          <p style={{ marginBottom: '15px' }}>
+            Bạn không đủ token để thực hiện phân tích này (phí 1000 token). 
+            Vui lòng nạp thêm để tiếp tục.
+          </p>
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+            <button 
+                onClick={handleGoToProfile} 
+                style={{ 
+                    backgroundColor: '#ffc107', 
+                    color: '#000', 
+                    border: 'none', 
+                    padding: '8px 16px', 
+                    borderRadius: '4px', 
+                    fontWeight: 'bold', 
+                    cursor: 'pointer' 
+                }}
+            >
+               Nạp ngay
+            </button>
+            <button 
+                onClick={() => setIsOutOfTokens(false)} 
+                style={{ 
+                    backgroundColor: 'transparent', 
+                    color: '#856404', 
+                    border: '1px solid #856404', 
+                    padding: '8px 16px', 
+                    borderRadius: '4px', 
+                    fontWeight: 'bold', 
+                    cursor: 'pointer' 
+                }}
+            >
+               Hủy
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div id="feedback-actions">
+            <button 
+            id="analyze-btn" 
+            onClick={handleAnalyze} 
+            disabled={loading || !currentCode}
+            >
+            {loading ? "Đang phân tích..." : "Phân tích mã hiện tại"}
+            </button>
+        </div>
+      )}
 
-      {error && <div id="feedback-error">{error}</div>}
+      {error && !isOutOfTokens && <div id="feedback-error">{error}</div>}
 
-      {feedbackData && (
+      {feedbackData && !isOutOfTokens && (
         <div id="feedback-result">
           <div id="feedback-score-card">
             <span id="score-label">Điểm đánh giá:</span>
@@ -103,7 +170,7 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
         </div>
       )}
       
-      {!feedbackData && !loading && !error && (
+      {!feedbackData && !loading && !error && !isOutOfTokens && (
         <div id="feedback-empty-state">
             Nhấn nút phía trên để bắt đầu. Sẽ tiêu hao <span style={{ color: "#07a865", fontWeight: "bold" }}>1000 tokens</span>
         </div>
