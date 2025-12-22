@@ -613,7 +613,7 @@ function InterviewHistory({ defaultTab = 'history' }) {
                     className={`ih-tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
                     onClick={() => setActiveTab('reviews')}
                 >
-                    Đánh giá cộng đồng của tôi
+                    Phỏng vấn đã chia sẻ
                 </button>
             </div>
 

@@ -186,14 +186,14 @@ const Forum = () => {
                 <Card id="user-forum-sidebar-card">
                   <Card.Body>
                     <div className="user-forum-sidebar-banner mb-3">
-                      <Button
+                      {/* <Button
                         variant="outline-light"
                         size="sm"
                         className="w-100 mb-2"
                         id="user-forum-btn-outline-light"
                       >
                         Thông báo
-                      </Button>
+                      </Button> */}
                     </div>
 
                     {/* Added: Check if user exists before showing this section */}
