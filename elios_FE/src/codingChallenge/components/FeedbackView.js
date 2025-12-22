@@ -6,15 +6,15 @@ import remarkGfm from "remark-gfm";
 import { API_ENDPOINTS } from "../../api/apiConfig";
 import "../style/FeedbackView.css";
 
-const FeedbackView = ({ problemId, currentCode, currentLanguage }) => {
+// UPDATED: Added problemDescription to props
+const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescription }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // Renamed to feedbackData to indicate it holds the full response object
   const [feedbackData, setFeedbackData] = useState(null);
 
   const handleAnalyze = async () => {
     if (!currentCode || !currentCode.trim()) {
-      setError("Vui lòng nhập mã trước khi yêu cầu phân tích."); // Translated: Please enter code...
+      setError("Vui lòng nhập mã trước khi yêu cầu phân tích."); 
       return;
     }
 
@@ -27,8 +27,9 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage }) => {
         entity_id: problemId,
         input_type: "CODE",
         feedback_input: JSON.stringify({
-          code: currentCode,
-          language: currentLanguage || "javascript"
+          language: currentLanguage || "javascript",
+          user_code_solution: currentCode,
+          problem_description: problemDescription || "No description provided", // UPDATED: Use prop here
         }),
       };
 
@@ -39,7 +40,6 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage }) => {
       );
 
       if (response.data && response.data.status === "SUCCESS") {
-        // Store the FULL response data to access 'result' and 'result_markdown'
         setFeedbackData(response.data);
       } else {
         setError("Không thể phân tích mã. Vui lòng thử lại."); 
@@ -56,7 +56,6 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage }) => {
     }
   };
 
-  // Helper to safely extract the score from the new nested structure
   const getOverallScore = () => {
     return feedbackData?.result?.overall_assessment?.overall_score ?? "N/A";
   };
@@ -86,19 +85,16 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage }) => {
         <div id="feedback-result">
           <div id="feedback-score-card">
             <span id="score-label">Điểm đánh giá:</span>
-            {/* Updated to use the helper function for the nested score */}
             <span id="score-value">{getOverallScore()}/100</span>
           </div>
           
           <div id="feedback-content">
-            {/* Prioritize rendering result_markdown provided by backend */}
             {feedbackData.result_markdown ? (
                <ReactMarkdown 
                 children={feedbackData.result_markdown} 
                 remarkPlugins={[remarkGfm]} 
                />
             ) : (
-                // Fallback: Dump the result JSON if markdown is missing
                 <div className="feedback-json-fallback">
                     <pre>{JSON.stringify(feedbackData.result, null, 2)}</pre>
                 </div>
@@ -110,8 +106,6 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage }) => {
       {!feedbackData && !loading && !error && (
         <div id="feedback-empty-state">
             Nhấn nút phía trên để bắt đầu phân tích mã của bạn.
-            <br/>
-            <small>(Quá trình này có thể mất 3-8 giây)</small>
         </div>
       )}
     </div>

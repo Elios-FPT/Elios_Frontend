@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import DescriptionView from "./DescriptionView"; 
 import SubmissionsView from "./SubmissionsView"; 
 import SolutionView from "./SolutionView";
-import FeedbackView from "./FeedbackView"; // <--- Import
+import FeedbackView from "./FeedbackView"; 
 import "../style/ProblemDescription.css"; 
 
-// Added props: currentCode, currentLanguage
 const ProblemDescription = ({ problemId, problemData, loading, error, currentCode, currentLanguage }) => {
   const [activeTab, setActiveTab] = useState("description");
 
@@ -32,7 +31,6 @@ const ProblemDescription = ({ problemId, problemData, loading, error, currentCod
         >
           Giải pháp {/* Translated */}
         </button>
-        {/* NEW TAB */}
         <button
           id={activeTab === "feedback" ? "tab-button-active" : "tab-button"}
           onClick={() => setActiveTab("feedback")}
@@ -53,12 +51,12 @@ const ProblemDescription = ({ problemId, problemData, loading, error, currentCod
         {activeTab === "submissions" && <SubmissionsView problemId={problemId} />}
         {activeTab === "solution" && <SolutionView problemId={problemId} />}
         
-        {/* NEW VIEW */}
         {activeTab === "feedback" && (
             <FeedbackView 
                 problemId={problemId}
                 currentCode={currentCode}
                 currentLanguage={currentLanguage}
+                problemDescription={problemData?.description || ""} 
             />
         )}
       </div>
