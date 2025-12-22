@@ -519,3 +519,122 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+
+
+/* --- Disclaimer Modal Styles --- */
+.disclaimer-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.disclaimer-modal {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.disclaimer-title {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #b91c1c; /* Đỏ đậm cảnh báo */
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.warning-icon {
+  margin-right: 10px;
+  color: #ef4444;
+  font-size: 28px;
+}
+
+.disclaimer-text {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.disclaimer-text strong {
+  color: #1e40af;
+}
+
+.disclaimer-checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 30px;
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.disclaimer-checkbox-container input {
+  margin-top: 3px;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.disclaimer-checkbox-container span {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.disclaimer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.disclaimer-actions button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-cancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.btn-cancel:hover {
+  background: #d1d5db;
+}
+
+.btn-continue {
+  background: #6366f1; /* Primary color của trang */
+  color: white;
+}
+
+.btn-continue:hover {
+  background: #4f46e5;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}

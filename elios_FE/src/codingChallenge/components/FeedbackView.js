@@ -63,9 +63,9 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
   return (
     <div id="feedback-view-container">
       <div id="feedback-header">
-        <h3 id="feedback-title">Phân tích AI</h3>
+        {/* <h3 id="feedback-title">Phân tích AI</h3> */}
         <p id="feedback-subtitle">
-          Nhận phản hồi chi tiết về mã nguồn của bạn từ AI.
+          Nhận phản hồi về code của bạn từ AI.
         </p>
       </div>
 
@@ -105,7 +105,7 @@ const FeedbackView = ({ problemId, currentCode, currentLanguage, problemDescript
       
       {!feedbackData && !loading && !error && (
         <div id="feedback-empty-state">
-            Nhấn nút phía trên để bắt đầu phân tích mã của bạn.
+            Nhấn nút phía trên để bắt đầu. Sẽ tiêu hao <span style={{ color: "#07a865", fontWeight: "bold" }}>1000 tokens</span>
         </div>
       )}
     </div>

@@ -222,32 +222,6 @@ const LandingPage = () => {
         </div>
       )}
 
-      {/* Creators Section */}
-      <div id="creator-section-landingPage" className="py-5 bg-light">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md={12} className="text-center mb-5">
-              <h4 id="creator-title-landingPage">Những người tạo ra Elios</h4>
-              <p className="text-muted">Kiến tạo bằng cả niềm đam mê bởi đội ngũ Elios</p>
-            </Col>
-          </Row>
-
-          <Row className="justify-content-center" id="creator-card-row">
-            {creators.map((dev, index) => (
-              <Col key={index} lg={2} md={4} sm={6} xs={12} className="mb-4">
-                <div className="creator-card">
-                  <div
-                    className="creator-avatar"
-                    style={{ backgroundImage: `url(${dev.img})` }}
-                  ></div>
-                  <h5 className="creator-name">{dev.name}</h5>
-                  <p className="creator-role">{dev.quote}</p>
-                </div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </div>
     </div>
   );
 };
