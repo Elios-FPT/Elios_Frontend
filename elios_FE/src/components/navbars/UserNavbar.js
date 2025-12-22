@@ -21,7 +21,6 @@ const UserNavbar = () => {
     const userPrivateLinks = [
       { to: "/interview", label: "Phỏng Vấn" },
       { to: "/interview/history", label: "Lịch sử phỏng vấn" },
-      { to: "/interview/my-reviews", label: "Đánh giá của tôi" },
       { to: "/resume-builder", label: "Tạo CV" },
       { to: "/mock-projects", label: "Dự Án Thực Hành" },
       { to: "/user/profile", label: "Hồ Sơ" }

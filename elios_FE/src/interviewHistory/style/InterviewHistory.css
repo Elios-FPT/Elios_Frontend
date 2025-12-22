@@ -1,5 +1,55 @@
 /* InterviewHistory.css */
 
+/* --- Add these TAB styles to the top of InterviewHistory.css --- */
+
+/* Tabs Container */
+.ih-tabs-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding-top: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0;
+}
+
+.ih-tab-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.ih-tab-btn:hover {
+    color: #eee;
+}
+
+.ih-tab-btn.active {
+    color: #ffd700; /* Theme Gold */
+    border-bottom: 3px solid #ffd700;
+}
+
+/* Ensure wrappers don't force full height unnecessarily when inside tabs */
+#InterviewHistory-page, #MyReviews-page {
+    min-height: auto !important; 
+    background: transparent !important;
+    padding-top: 10px !important;
+}
+
+/* Global Page Wrapper to maintain dark background */
+.merged-history-page-wrapper {
+    min-height: 100vh;
+    background: #181a1b;
+    color: #eee;
+}
+
+/* ... Keep all your existing InterviewHistory CSS below ... */
+
 /* --- Page Containers & Layout (IDs) --- */
 #InterviewHistory-page {
     min-height: 100vh;

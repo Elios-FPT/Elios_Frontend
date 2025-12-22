@@ -1,3 +1,4 @@
+// file: elios_FE/src/interview/pages/InterviewPage.js
 import React, { useState, useRef, useEffect } from 'react';
 import TextChat from '../components/TextChat';
 import VoiceChat from '../components/VoiceChat';
@@ -42,8 +43,12 @@ function InterviewPage() {
   const [isEndingSession, setIsEndingSession] = useState(false);
   const [isPlanning, setIsPlanning] = useState(false);
   const fileInputRef = useRef(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  
+  // --- DISCLAIMER MODAL STATE ---
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
 
+  // --- EXISTING STATES ---
   const [publicInterviews, setPublicInterviews] = useState([]);
   const [isLoadingPublic, setIsLoadingPublic] = useState(false);
   const [submissionId, setSubmissionId] = useState(null);
@@ -54,7 +59,6 @@ function InterviewPage() {
   const [savingQuestionId, setSavingQuestionId] = useState(null);
   const [isProgressLoading, setIsProgressLoading] = useState(false);
 
-
   useEffect(() => {
     if (activeSection === 'review-others') {
       fetchPublicInterviews();
@@ -63,6 +67,8 @@ function InterviewPage() {
       if (wsUrl) websocketService.disconnect();
     };
   }, [activeSection, wsUrl]);
+
+  // ... (Giữ nguyên các hàm fetchPublicInterviews, handleEndSessionWithLoading, fetchInterviewConversation, handleStartReview, fetchReviewProgress, handleSaveDraftReview, handleSubmitReview, handleDeleteDraft, resetReviewState) ...
 
   const fetchPublicInterviews = async () => {
     setIsLoadingPublic(true);
@@ -284,6 +290,30 @@ function InterviewPage() {
     setInterviewSessionId(null);
   };
 
+  // --- UPLOAD HANDLERS ---
+
+  // 1. Triggered when user clicks the upload box
+  const handleUploadClick = () => {
+    const skipDisclaimer = localStorage.getItem('interview_disclaimer_acknowledged');
+    if (skipDisclaimer === 'true') {
+      fileInputRef.current?.click();
+    } else {
+      setShowDisclaimer(true);
+    }
+  };
+
+  // 2. Triggered when user clicks "Tiếp Tục" in modal
+  const handleDisclaimerContinue = () => {
+    if (dontShowAgain) {
+      localStorage.setItem('interview_disclaimer_acknowledged', 'true');
+    }
+    setShowDisclaimer(false);
+    // Open file dialog after modal closes
+    setTimeout(() => {
+        fileInputRef.current?.click();
+    }, 100);
+  };
+
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -360,6 +390,7 @@ function InterviewPage() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  // ... (Giữ nguyên buildReviewableItems và render logic) ...
   const buildReviewableItems = () => {
     if (!conversationMessages.length || !reviewProgress) return [];
 
@@ -427,7 +458,7 @@ function InterviewPage() {
   const reviewableItems = buildReviewableItems();
   const answerableCount = reviewableItems.filter(item => item.answer !== null).length;
   const reviewedCount = reviewProgress?.reviewedCount || 0;
-  const totalQuestionCount = reviewProgress?.questionCount || reviewableItems.length;
+  
   if (interviewId || isReviewing || showFeedback) {
     return (
       <div id="interview-page">
@@ -435,6 +466,7 @@ function InterviewPage() {
           <UserNavbar />
         </header>
         <div id="interview-container">
+          {/* ... (Giữ nguyên phần nội dung khi đang phỏng vấn/review) ... */}
           <div className="header">
             <div className="header-left">
               <h1 className="header-title">
@@ -446,6 +478,7 @@ function InterviewPage() {
           <div className="main-content">
             {isReviewing ? (
               <div className="review-container">
+                {/* ... (Nội dung review container - giữ nguyên) ... */}
                 {reviewProgress ? (
                   <>
                     <div style={{ marginBottom: 24, textAlign: 'left' }}>
@@ -612,7 +645,8 @@ function InterviewPage() {
                     </button>
                   </div>
                 ) : (
-                  <div className="upload-prompt" onClick={() => fileInputRef.current?.click()}>
+                  // CHANGE: Use handleUploadClick instead of direct click
+                  <div className="upload-prompt" onClick={handleUploadClick}>
                     {isUploading ? (
                       <>
                         <span className="material-icons spin">autorenew</span>
@@ -646,6 +680,7 @@ function InterviewPage() {
               </button>
             </div>
           ) : (
+            // ... (Giữ nguyên phần Review Others) ...
             <div className="start-interview-card compact" style={{ maxWidth: 800 }}>
               <h2 style={{ margin: '0 0 24px', color: '#1e40af' }}>
                 Danh sách Interview đang mở để Review
@@ -725,221 +760,250 @@ function InterviewPage() {
           )}
         </div>
       </div>
+
+      {showDisclaimer && (
+        <div className="disclaimer-modal-overlay">
+          <div className="disclaimer-modal">
+            <h3 className="disclaimer-title">
+              <span className="material-icons warning-icon">warning</span> Lưu ý quan trọng
+            </h3>
+            <p className="disclaimer-text">
+              Buổi phỏng vấn với AI này chỉ mang tích chất học hỏi, nó sẽ không thay thế các phỏng vấn thật, 
+              và mỗi lần sử dụng tính năng này sẽ tốn <strong>2000 token</strong>.
+            </p>
+            
+            <label className="disclaimer-checkbox-container">
+              <input 
+                type="checkbox" 
+                checked={dontShowAgain} 
+                onChange={(e) => setDontShowAgain(e.target.checked)} 
+              />
+              <span>Tôi hiểu và không lặp lại thông báo này cho tới lần đăng nhập tiếp theo</span>
+            </label>
+
+            <div className="disclaimer-actions">
+              <button className="btn-cancel" onClick={() => setShowDisclaimer(false)}>Hủy</button>
+              <button className="btn-continue" onClick={handleDisclaimerContinue}>Tiếp Tục</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 const ReviewItem = ({ item, isSaving, onSave }) => {
-  const [skillRating, setSkillRating] = useState(item.review?.skillRating || '');
-  const [softSkillRating, setSoftSkillRating] = useState(item.review?.softSkillRating || '');
-  const [comment, setComment] = useState(item.review?.comment || '');
-  const [isDirty, setIsDirty] = useState(false);
-
-  const questionId = item.reviewId.startsWith('unanswered-')
-    ? item.reviewId.substring(11)
-    : item.reviewId;
-
-  useEffect(() => {
-    const hasChanged =
-      skillRating !== (item.review?.skillRating || '') ||
-      softSkillRating !== (item.review?.softSkillRating || '') ||
-      comment !== (item.review?.comment || '');
-
-    setIsDirty(hasChanged);
-  }, [skillRating, softSkillRating, comment, item.review]);
-
-  const handleSave = () => {
-    if (!skillRating || !softSkillRating) {
-      toast.warning('Vui lòng chấm cả 2 điểm số trước khi lưu!');
-      return;
-    }
-    onSave(questionId, skillRating, softSkillRating, comment);
-  };
-
-  const isSaved = !!item.review?.skillRating && !!item.review?.softSkillRating;
-  const hasAnswer = !!item.answer;
-
-  return (
-    <div
-      className="review-item"
-      style={{
-        border: '1px solid #e2e8f0',
-        borderRadius: 16,
-        padding: 28,
-        marginBottom: 32,
-        background: '#ffffff',
-        boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
-        position: 'relative',
-      }}
-    >
+    const [skillRating, setSkillRating] = useState(item.review?.skillRating || '');
+    const [softSkillRating, setSoftSkillRating] = useState(item.review?.softSkillRating || '');
+    const [comment, setComment] = useState(item.review?.comment || '');
+    const [isDirty, setIsDirty] = useState(false);
+  
+    const questionId = item.reviewId.startsWith('unanswered-')
+      ? item.reviewId.substring(11)
+      : item.reviewId;
+  
+    useEffect(() => {
+      const hasChanged =
+        skillRating !== (item.review?.skillRating || '') ||
+        softSkillRating !== (item.review?.softSkillRating || '') ||
+        comment !== (item.review?.comment || '');
+  
+      setIsDirty(hasChanged);
+    }, [skillRating, softSkillRating, comment, item.review]);
+  
+    const handleSave = () => {
+      if (!skillRating || !softSkillRating) {
+        toast.warning('Vui lòng chấm cả 2 điểm số trước khi lưu!');
+        return;
+      }
+      onSave(questionId, skillRating, softSkillRating, comment);
+    };
+  
+    const isSaved = !!item.review?.skillRating && !!item.review?.softSkillRating;
+    const hasAnswer = !!item.answer;
+  
+    return (
       <div
+        className="review-item"
         style={{
-          position: 'absolute',
-          top: 16,
-          right: 20,
-          padding: '6px 12px',
-          borderRadius: 20,
-          fontSize: 13,
-          fontWeight: 600,
-          color: 'white',
-          background: isSaved ? '#10b981' : '#f59e0b',
+          border: '1px solid #e2e8f0',
+          borderRadius: 16,
+          padding: 28,
+          marginBottom: 32,
+          background: '#ffffff',
+          boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+          position: 'relative',
         }}
       >
-        {hasAnswer ? (isSaved ? 'Đã lưu' : 'Chưa lưu') : 'Chưa trả lời'}
-      </div>
-
-      {item.isFollowUp && (
         <div
           style={{
             position: 'absolute',
             top: 16,
-            left: 20,
-            background: '#7c3aed',
-            color: 'white',
-            padding: '4px 10px',
-            borderRadius: 12,
-            fontSize: 12,
+            right: 20,
+            padding: '6px 12px',
+            borderRadius: 20,
+            fontSize: 13,
             fontWeight: 600,
+            color: 'white',
+            background: isSaved ? '#10b981' : '#f59e0b',
           }}
         >
-          FOLLOW-UP
+          {hasAnswer ? (isSaved ? 'Đã lưu' : 'Chưa lưu') : 'Chưa trả lời'}
         </div>
-      )}
-
-      <h3 style={item.isFollowUp ? { margin: '0 0 16px', color: '#1e293b', fontSize: 19, fontWeight: 600, marginTop: 20 } : { margin: '0 0 16px', color: '#1e293b', fontSize: 19, fontWeight: 600 }}>
-        Câu hỏi: {item.question.text}
-      </h3>
-
-      <div
-        style={{
-          background: hasAnswer ? '#f8fafc' : '#fee2e2',
-          padding: 18,
-          borderRadius: 12,
-          margin: '20px 0',
-          borderLeft: hasAnswer ? '6px solid #3b82f6' : '6px solid #ef4444',
-          fontSize: 15.5,
-          lineHeight: 1.6,
-        }}
-      >
-        <strong style={{ color: hasAnswer ? '#1e40af' : '#991b1b' }}>
-          Trả lời:
-        </strong>{' '}
-        {hasAnswer ? (
-          item.answer.is_voice ? (
-            <div style={{ marginTop: 10 }}>
-              <audio
-                controls
-                src={item.answer.audio_path}
-                style={{ width: '100%', maxWidth: 500 }}
-              >
-                Trình duyệt không hỗ trợ audio.
-              </audio>
-              <p style={{ fontStyle: 'italic', color: '#64748b', marginTop: 8 }}>
-                (Giọng nói – vui lòng nghe để đánh giá)
-              </p>
-            </div>
-          ) : (
-            <span>{item.answer.text || '(Không có nội dung)'}</span>
-          )
-        ) : (
-          <span style={{ color: '#991b1b', fontWeight: 600 }}>
-            Ứng viên chưa trả lời câu này
-          </span>
+  
+        {item.isFollowUp && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 16,
+              left: 20,
+              background: '#7c3aed',
+              color: 'white',
+              padding: '4px 10px',
+              borderRadius: 12,
+              fontSize: 12,
+              fontWeight: 600,
+            }}
+          >
+            FOLLOW-UP
+          </div>
         )}
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, margin: '28px 0' }}>
-        <div>
-          <label style={{ display: 'block', marginBottom: 10, fontWeight: 600, color: '#1e40af', fontSize: 16 }}>
-            Kỹ năng kỹ thuật (Technical Skill)
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="5"
-            value={hasAnswer ? skillRating : 1}
-            onChange={(e) => setSkillRating(e.target.value)}
-            style={{
-              width: 90,
-              padding: '12px 14px',
-              fontSize: 18,
-              borderRadius: 10,
-              border: '2px solid #cbd5e1',
-              textAlign: 'center',
-            }}
-          />
-          <span style={{ marginLeft: 16, fontSize: 22, fontWeight: 600, color: '#1e40af' }}>
-            {skillRating ? `${skillRating}/5` : '–/5'}
-          </span>
-        </div>
-
-        <div>
-          <label style={{ display: 'block', marginBottom: 10, fontWeight: 600, color: '#1e40af', fontSize: 16 }}>
-            Giao tiếp & Trình bày
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="5"
-            value={hasAnswer ? softSkillRating : 1}
-            onChange={(e) => setSoftSkillRating(e.target.value)}
-            style={{
-              width: 90,
-              padding: '12px 14px',
-              fontSize: 18,
-              borderRadius: 10,
-              border: '2px solid #cbd5e1',
-              textAlign: 'center',
-            }}
-          />
-          <span style={{ marginLeft: 16, fontSize: 22, fontWeight: 600, color: '#1e40af' }}>
-            {softSkillRating ? `${softSkillRating}/5` : '–/5'}
-          </span>
-        </div>
-      </div>
-
-      <textarea
-        value={hasAnswer ? comment : ''}
-        onChange={(e) => hasAnswer && setComment(e.target.value)}
-        placeholder={hasAnswer
-          ? "Nhận xét chi tiết – rất hữu ích cho ứng viên... (khuyến khích)"
-          : "Không cần nhận xét vì ứng viên chưa trả lời"}
-        rows={6}
-        disabled={!hasAnswer}
-        style={{
-          width: '100%',
-          padding: 16,
-          borderRadius: 12,
-          border: '2px solid #cbd5e1',
-          marginTop: 8,
-          fontSize: 15.5,
-          fontFamily: 'inherit',
-          resize: 'vertical',
-        }}
-      />
-
-      <div style={{ marginTop: 20, textAlign: 'right' }}>
-        <button
-          onClick={handleSave}
-          disabled={!hasAnswer || !isDirty || isSaving || !skillRating || !softSkillRating}
-          title={!hasAnswer ? "Không cần chấm điểm cho câu chưa trả lời" : ""}
+  
+        <h3 style={item.isFollowUp ? { margin: '0 0 16px', color: '#1e293b', fontSize: 19, fontWeight: 600, marginTop: 20 } : { margin: '0 0 16px', color: '#1e293b', fontSize: 19, fontWeight: 600 }}>
+          Câu hỏi: {item.question.text}
+        </h3>
+  
+        <div
           style={{
-            padding: '12px 32px',
-            fontSize: 16,
-            fontWeight: 600,
-            border: 'none',
+            background: hasAnswer ? '#f8fafc' : '#fee2e2',
+            padding: 18,
             borderRadius: 12,
-            background: isDirty && skillRating && softSkillRating ? '#6366f1' : '#94a3b8',
-            color: 'white',
-            cursor: isDirty && skillRating && softSkillRating ? 'pointer' : 'not-allowed',
-            minWidth: 140,
-            opacity: isSaving ? 0.7 : 1,
+            margin: '20px 0',
+            borderLeft: hasAnswer ? '6px solid #3b82f6' : '6px solid #ef4444',
+            fontSize: 15.5,
+            lineHeight: 1.6,
           }}
         >
-          {isSaving ? 'Đang lưu...' : hasAnswer ? 'Lưu đánh giá' : 'Không cần lưu'}
-        </button>
+          <strong style={{ color: hasAnswer ? '#1e40af' : '#991b1b' }}>
+            Trả lời:
+          </strong>{' '}
+          {hasAnswer ? (
+            item.answer.is_voice ? (
+              <div style={{ marginTop: 10 }}>
+                <audio
+                  controls
+                  src={item.answer.audio_path}
+                  style={{ width: '100%', maxWidth: 500 }}
+                >
+                  Trình duyệt không hỗ trợ audio.
+                </audio>
+                <p style={{ fontStyle: 'italic', color: '#64748b', marginTop: 8 }}>
+                  (Giọng nói – vui lòng nghe để đánh giá)
+                </p>
+              </div>
+            ) : (
+              <span>{item.answer.text || '(Không có nội dung)'}</span>
+            )
+          ) : (
+            <span style={{ color: '#991b1b', fontWeight: 600 }}>
+              Ứng viên chưa trả lời câu này
+            </span>
+          )}
+        </div>
+  
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, margin: '28px 0' }}>
+          <div>
+            <label style={{ display: 'block', marginBottom: 10, fontWeight: 600, color: '#1e40af', fontSize: 16 }}>
+              Kỹ năng kỹ thuật (Technical Skill)
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="5"
+              value={hasAnswer ? skillRating : 1}
+              onChange={(e) => setSkillRating(e.target.value)}
+              style={{
+                width: 90,
+                padding: '12px 14px',
+                fontSize: 18,
+                borderRadius: 10,
+                border: '2px solid #cbd5e1',
+                textAlign: 'center',
+              }}
+            />
+            <span style={{ marginLeft: 16, fontSize: 22, fontWeight: 600, color: '#1e40af' }}>
+              {skillRating ? `${skillRating}/5` : '–/5'}
+            </span>
+          </div>
+  
+          <div>
+            <label style={{ display: 'block', marginBottom: 10, fontWeight: 600, color: '#1e40af', fontSize: 16 }}>
+              Giao tiếp & Trình bày
+            </label>
+            <input
+              type="number"
+              min="1"
+              max="5"
+              value={hasAnswer ? softSkillRating : 1}
+              onChange={(e) => setSoftSkillRating(e.target.value)}
+              style={{
+                width: 90,
+                padding: '12px 14px',
+                fontSize: 18,
+                borderRadius: 10,
+                border: '2px solid #cbd5e1',
+                textAlign: 'center',
+              }}
+            />
+            <span style={{ marginLeft: 16, fontSize: 22, fontWeight: 600, color: '#1e40af' }}>
+              {softSkillRating ? `${softSkillRating}/5` : '–/5'}
+            </span>
+          </div>
+        </div>
+  
+        <textarea
+          value={hasAnswer ? comment : ''}
+          onChange={(e) => hasAnswer && setComment(e.target.value)}
+          placeholder={hasAnswer
+            ? "Nhận xét chi tiết – rất hữu ích cho ứng viên... (khuyến khích)"
+            : "Không cần nhận xét vì ứng viên chưa trả lời"}
+          rows={6}
+          disabled={!hasAnswer}
+          style={{
+            width: '100%',
+            padding: 16,
+            borderRadius: 12,
+            border: '2px solid #cbd5e1',
+            marginTop: 8,
+            fontSize: 15.5,
+            fontFamily: 'inherit',
+            resize: 'vertical',
+          }}
+        />
+  
+        <div style={{ marginTop: 20, textAlign: 'right' }}>
+          <button
+            onClick={handleSave}
+            disabled={!hasAnswer || !isDirty || isSaving || !skillRating || !softSkillRating}
+            title={!hasAnswer ? "Không cần chấm điểm cho câu chưa trả lời" : ""}
+            style={{
+              padding: '12px 32px',
+              fontSize: 16,
+              fontWeight: 600,
+              border: 'none',
+              borderRadius: 12,
+              background: isDirty && skillRating && softSkillRating ? '#6366f1' : '#94a3b8',
+              color: 'white',
+              cursor: isDirty && skillRating && softSkillRating ? 'pointer' : 'not-allowed',
+              minWidth: 140,
+              opacity: isSaving ? 0.7 : 1,
+            }}
+          >
+            {isSaving ? 'Đang lưu...' : hasAnswer ? 'Lưu đánh giá' : 'Không cần lưu'}
+          </button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 export default InterviewPage;
