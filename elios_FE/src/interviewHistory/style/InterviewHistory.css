@@ -140,7 +140,8 @@
     margin: 0;
     font-size: 19px;
     font-weight: 600;
-    color: #ffd700; /* Theme Gold */
+    color: #ffd700;
+    margin-right: 12px;
 }
 
 .InterviewHistory-status-badge {
@@ -149,7 +150,10 @@
     font-size: 12px;
     font-weight: 600;
     color: #fff;
-    /* BG is set inline in JS, handled there */
+    white-space: nowrap;  
+    flex-shrink: 0;       
+    display: inline-block; 
+    line-height: 1.4;      
 }
 
 .InterviewHistory-card-body {
