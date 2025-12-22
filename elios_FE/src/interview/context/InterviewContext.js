@@ -75,7 +75,7 @@ export function InterviewProvider({ children }) {
 
   const handleCloseFeedback = () => {
     setShowFeedback(false);
-    navigate("/interview");
+    window.location.reload();
   };
 
   const handleDetailedFeedbackReceived = (feedback) => {
