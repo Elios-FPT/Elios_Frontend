@@ -9,20 +9,15 @@ import { useUserProfile } from "../../hooks/useUserProfile";
 const UserNavbar = () => {
   const navigate = useNavigate();
 
-  // Get user data directly from the Global Auth Context
   const { user } = useUserProfile();
-  const role = user?.role; // Safely access the role
+  const role = user?.role;
 
-
-  // Define links based on the role from Context
   const getRoleBasedLinks = () => {
-    // 1. Public Links (Visible to Guests and Users)
     const publicLinks = [
       { to: "/forum", label: "Diễn đàn" },
       { to: "/codingChallenge", label: "Thử Thách Lập Trình" },
     ];
 
-    // 2. Private User Links (Only for logged-in Users)
     const userPrivateLinks = [
       { to: "/interview", label: "Phỏng Vấn" },
       { to: "/interview/history", label: "Lịch sử phỏng vấn" },
@@ -35,17 +30,13 @@ const UserNavbar = () => {
     let linksToShow = [];
 
     if (!user) {
-      // Guest
       linksToShow = publicLinks;
     } else if (role === "User") {
-      // Standard User
       linksToShow = [...publicLinks, ...userPrivateLinks];
     } else {
-      // Admins/Managers start empty (or add publicLinks if you want them to see Forum)
       linksToShow = [];
     }
 
-    // Role-specific Management Links
     if (role === "Resource Manager") {
       linksToShow.push(
         { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
@@ -64,7 +55,13 @@ const UserNavbar = () => {
         { to: "/manage-coding-bank", label: "Quản Lý Code" },
         { to: "/content-moderator", label: "Quản Lý Diễn Đàn" },
         { to: "/manage-prompts", label: "Q.Lý Prompt" },
-        { to: "/user/profile", label: "Hồ Sơ" }
+        { to: "/user/profile", label: "Hồ Sơ" },
+        { 
+          external: true,
+          href: "http://auth.elios.com/admin/elios/console",
+          label: "Q.Lý người dùng",
+          target: "_blank"
+        }
       );
     }
 
@@ -74,11 +71,8 @@ const UserNavbar = () => {
   const links = getRoleBasedLinks();
 
   const handleLogout = () => {
-    // Explicitly remove the user object
     localStorage.removeItem("user");
-    // Clear all local storage to be safe
     localStorage.clear();
-    // Redirect to backend logout to kill the cookie
     window.location.href = API_ENDPOINTS.LOGOUT_PATH;
   };
 
@@ -86,7 +80,6 @@ const UserNavbar = () => {
     <nav className="user-navbar">
       <Container fluid>
         <Row className="align-items-center">
-          {/* Logo */}
           <Col xs="auto" className="user-navbar-navbar-logo">
             <Link to="/">
               <img
@@ -97,12 +90,18 @@ const UserNavbar = () => {
             </Link>
           </Col>
 
-          {/* Middle Links */}
           {links.length > 0 && (
             <Col>
               <Nav className="user-navbar-navbar-links">
                 {links.map((link, idx) => (
-                  <Nav.Link key={idx} as={Link} to={link.to}>
+                  <Nav.Link
+                    key={idx}
+                    as={link.external ? "a" : Link}
+                    to={link.external ? undefined : link.to}
+                    href={link.external ? link.href : undefined}
+                    target={link.external ? link.target : undefined}
+                    rel={link.external ? "noopener noreferrer" : undefined}
+                  >
                     {link.label}
                   </Nav.Link>
                 ))}
@@ -110,7 +109,6 @@ const UserNavbar = () => {
             </Col>
           )}
 
-          {/* Right side actions */}
           <Col xs="auto" className="user-navbar-navbar-actions">
             <Dropdown align="end">
               <Dropdown.Toggle variant="outline-light" size="sm" id="dropdown-basic">
@@ -133,29 +131,12 @@ const UserNavbar = () => {
                     <Dropdown.Item as={Link} to="/user/profile">
                       Hồ sơ
                     </Dropdown.Item>
-                    {/* <Dropdown.Item as={Link} to="/settings">
-                      Cài đặt
-                    </Dropdown.Item> */}
                     <Dropdown.Item onClick={handleLogout}>
                       Đăng xuất
                     </Dropdown.Item>
                     <Dropdown.Divider />
                   </>
                 )}
-
-                {/* <Dropdown.Item onClick={() => navigate("/help")}>
-                  Trợ giúp
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => navigate("/terms")}>
-                  Điều khoản dịch vụ
-                </Dropdown.Item> */}
-
-                {/* {role && (
-                  <>
-                    <Dropdown.Divider />
-                    <Dropdown.Item disabled>Role: {role}</Dropdown.Item>
-                  </>
-                )} */}
               </Dropdown.Menu>
             </Dropdown>
           </Col>

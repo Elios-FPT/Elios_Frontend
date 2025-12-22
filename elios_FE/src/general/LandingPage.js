@@ -22,7 +22,6 @@ const LandingPage = () => {
     { name: "Nguyễn Tiến Hưng", quote: "Tôi chỉ cần nói một câu là gọi được vốn của nhà nước ngay", img: "https://via.placeholder.com/150" },
   ];
 
-  // 1. Helper to determine where the "Get Started" button points to
   const getDashboardRoute = (role) => {
     switch (role) {
       case "Resource Manager":
@@ -30,17 +29,14 @@ const LandingPage = () => {
       case "Content Moderator":
         return "/content-moderator";
       case "Admin":
-        return "/manage-coding-bank"; // Or your specific Admin dashboard
+        return "/manage-coding-bank";
       case "User":
       default:
         return "/mock-projects";
     }
   };
 
-  // 2. Logic to build navbar links based on specific roles
   const getNavbarLinks = () => {
-    // Links for Guests or standard Users
-    const isStandardUser = !user || user.role === "User";
     const standardLinks = [
       { to: "/forum", label: "Diễn Đàn" },
       { to: "/codingchallenge", label: "Thử Thách Lập Trình" },
@@ -49,7 +45,6 @@ const LandingPage = () => {
       { to: "/interview/my-reviews", label: "Đánh giá của tôi" }
     ];
 
-    // Only show "Create CV" and "Projects" if actually logged in as a User
     if (user?.role === "User") {
       standardLinks.push(
         { to: "/resume-builder", label: "Tạo CV" },
@@ -57,19 +52,17 @@ const LandingPage = () => {
       );
     }
 
-    // Role-Specific Links
     const managerLinks = [];
 
     if (user?.role === "Resource Manager") {
       managerLinks.push(
         { to: "/manage-coding-bank", label: "Q.Lý Code" },
         { to: "/manage-project-bank", label: "Q.Lý Dự Án" },
-        { to: "/manage-interviews", label: "Q.Lý Phỏng Vấn" },
+        { to: "/manage-interviews", label: "Q.Lý Phỏng Vấn" }
       );
     }
 
     if (user?.role === "Content Moderator") {
-      // Points to the Layout route defined in App.js
       managerLinks.push({ to: "/content-moderator", label: "Kiểm Duyệt Diễn Đàn" });
     }
 
@@ -77,29 +70,29 @@ const LandingPage = () => {
       managerLinks.push(
         { to: "/manage-coding-bank", label: "Quản Lý Code" },
         { to: "/content-moderator", label: "Quản Lý Diễn Đàn" },
-        { to: "/manage-prompts", label: "Q.Lý Prompt" }
+        { to: "/manage-prompts", label: "Q.Lý Prompt" },
+        {
+          external: true,
+          href: "https://auth.elios.com/admin/elios/console",
+          label: "Q.Lý người dùng",
+          target: "_blank"
+        }
       );
     }
 
-    // If it's a manager, show manager links. If User/Guest, show standard links.
-    // You can combine them if you want Managers to see Forum links too.
     return user && user.role !== "User" ? managerLinks : standardLinks;
   };
 
   const navbarLinks = getNavbarLinks();
 
   const handleLogout = () => {
-    // Explicitly remove user data
     localStorage.removeItem("user");
-    // Clear everything else
     localStorage.clear();
-    // Redirect
     window.location.href = API_ENDPOINTS.LOGOUT_PATH;
   };
 
   return (
     <div id="landing-bg-landingPage">
-      {/* Header Section */}
       <div id="header-section-landingPage">
         <Navbar expand="lg" id="navbar-custom-landingPage">
           <Navbar.Brand href="#">
@@ -112,24 +105,31 @@ const LandingPage = () => {
                 <Spinner animation="border" size="sm" /> Đang tải...
               </Nav.Link>
             ) : !user ? (
-              // --- GUEST VIEW ---
               <>
                 <Nav.Link as={Link} to="/forum">Diễn Đàn</Nav.Link>
-                <Nav.Link as={Link} to="/codingChallenge">Thử Thách Lập Trình</Nav.Link>
-                <Nav.Link onClick={() => (window.location.href = API_ENDPOINTS.LOGIN_PATH)} style={{ cursor: "pointer" }}>
+                <Nav.Link as={Link} to="/codingchallenge">Thử Thách Lập Trình</Nav.Link>
+                <Nav.Link
+                  onClick={() => (window.location.href = API_ENDPOINTS.LOGIN_PATH)}
+                  style={{ cursor: "pointer" }}
+                >
                   Đăng nhập
                 </Nav.Link>
               </>
             ) : (
-              // --- LOGGED IN VIEW (All Roles) ---
               <>
                 {navbarLinks.map((link, idx) => (
-                  <Nav.Link key={idx} as={Link} to={link.to}>
+                  <Nav.Link
+                    key={idx}
+                    as={link.external ? "a" : Link}
+                    to={link.external ? undefined : link.to}
+                    href={link.external ? link.href : undefined}
+                    target={link.external ? link.target : undefined}
+                    rel={link.external ? "noopener noreferrer" : undefined}
+                  >
                     {link.label}
                   </Nav.Link>
                 ))}
 
-                {/* Always show Profile for logged in users */}
                 <Nav.Link as={Link} to="/user/profile">
                   Hồ Sơ
                 </Nav.Link>
@@ -137,7 +137,6 @@ const LandingPage = () => {
                 <Nav.Link onClick={handleLogout} style={{ cursor: "pointer" }}>
                   Đăng xuất
                 </Nav.Link>
-
               </>
             )}
           </Nav>
@@ -154,9 +153,10 @@ const LandingPage = () => {
             </Col>
             <Col md={6} id="text-section-landingPage">
               <h1 id="main-title-landingPage">Một cách học hoàn toàn mới</h1>
-              <p id="main-desc-landingPage">Eliso là nền tảng tốt nhất giúp bạn nâng cao kỹ năng, mở rộng kiến thức và chuẩn bị cho các buổi phỏng vấn kỹ thuật.</p>
+              <p id="main-desc-landingPage">
+                Eliso là nền tảng tốt nhất giúp bạn nâng cao kỹ năng, mở rộng kiến thức và chuẩn bị cho các buổi phỏng vấn kỹ thuật.
+              </p>
 
-              {/* Call to Action Button */}
               {profileLoading ? (
                 <Button variant="success" disabled>
                   <Spinner animation="border" size="sm" /> Loading...
@@ -184,7 +184,6 @@ const LandingPage = () => {
         </Container>
       </div>
 
-      {/* Explore Section – Only show for Standard Users or Guests */}
       {(!user || user.role === "User") && (
         <div id="lower-section-landingPage">
           <Container>
@@ -213,7 +212,7 @@ const LandingPage = () => {
                   <BsCodeSlash id="challenge-icon" />
                   <h4 id="challenge-title">Thử thách lập trình</h4>
                   <p id="challenge-desc">Hàng trăm bài tập thực tế, từ cơ bản đến nâng cao, giúp bạn rèn luyện tư duy thuật toán và sẵn sàng cho mọi buổi phỏng vấn.</p>
-                  <Link to="/codingChallenge" id="challenge-link">
+                  <Link to="/codingchallenge" id="challenge-link">
                     Thử thách bản thân &gt;
                   </Link>
                 </div>
@@ -229,7 +228,7 @@ const LandingPage = () => {
           <Row className="justify-content-center">
             <Col md={12} className="text-center mb-5">
               <h4 id="creator-title-landingPage">Những người tạo ra Elios</h4>
-              <p className="text-muted">Kiến tạo bằng cả niểm đam mê bởi đội ngũ Elios</p>
+              <p className="text-muted">Kiến tạo bằng cả niềm đam mê bởi đội ngũ Elios</p>
             </Col>
           </Row>
 

@@ -163,6 +163,7 @@ export const API_ENDPOINTS = {
     UPDATE_SUBMISSIONS_CLASS: (classId) => `${baseUrl}/api/mockproject/submissions/classes/${classId}`,
     DELETE_SUBMISSIONS_CLASS: (classId) => `${baseUrl}/api/mockproject/submissions/classes/${classId}`,
 
+    PEER_OWNER_RATING: `${baseUrl}/api/peerreview/OwnerRatings`,
     PEER_BROWSE_PUBLIC_POOL: `${baseUrl}/api/peerreview/SharedInterviews?status=open`,
     PEER_SHARE_INTERVIEW: `${baseUrl}/api/peerreview/SharedInterviews`,
     PEER_GET_MY_SHARED_INTERVIEWS: `${baseUrl}/api/peerreview/SharedInterviews/mine`,
