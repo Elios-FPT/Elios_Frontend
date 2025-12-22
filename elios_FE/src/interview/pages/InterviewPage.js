@@ -12,6 +12,7 @@ import toast from '../utils/toast';
 import '../style/InterviewPage.css';
 import { useNavigate } from "react-router-dom";
 import UserNavbar from '../../components/navbars/UserNavbar';
+import { FaCoins } from 'react-icons/fa'; // <--- Import FaCoins
 
 function InterviewPage() {
   const {
@@ -48,6 +49,9 @@ function InterviewPage() {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
+  // --- OUT OF TOKENS STATE ---
+  const [isOutOfTokens, setIsOutOfTokens] = useState(false); // <--- New State
+
   // --- EXISTING STATES ---
   const [publicInterviews, setPublicInterviews] = useState([]);
   const [isLoadingPublic, setIsLoadingPublic] = useState(false);
@@ -68,8 +72,8 @@ function InterviewPage() {
     };
   }, [activeSection, wsUrl]);
 
-  // ... (Giữ nguyên các hàm fetchPublicInterviews, handleEndSessionWithLoading, fetchInterviewConversation, handleStartReview, fetchReviewProgress, handleSaveDraftReview, handleSubmitReview, handleDeleteDraft, resetReviewState) ...
-
+  // ... (Keep existing fetchPublicInterviews, handleEndSessionWithLoading, fetchInterviewConversation, handleStartReview, fetchReviewProgress, handleSaveDraftReview, handleSubmitReview, handleDeleteDraft, resetReviewState) ...
+  
   const fetchPublicInterviews = async () => {
     setIsLoadingPublic(true);
     try {
@@ -292,8 +296,8 @@ function InterviewPage() {
 
   // --- UPLOAD HANDLERS ---
 
-  // 1. Triggered when user clicks the upload box
   const handleUploadClick = () => {
+    setIsOutOfTokens(false); // Reset token error on new attempt
     const skipDisclaimer = localStorage.getItem('interview_disclaimer_acknowledged');
     if (skipDisclaimer === 'true') {
       fileInputRef.current?.click();
@@ -302,13 +306,11 @@ function InterviewPage() {
     }
   };
 
-  // 2. Triggered when user clicks "Tiếp Tục" in modal
   const handleDisclaimerContinue = () => {
     if (dontShowAgain) {
       localStorage.setItem('interview_disclaimer_acknowledged', 'true');
     }
     setShowDisclaimer(false);
-    // Open file dialog after modal closes
     setTimeout(() => {
         fileInputRef.current?.click();
     }, 100);
@@ -325,6 +327,7 @@ function InterviewPage() {
     setSelectedFile(file);
     setIsUploading(true);
     setIsUploadSuccess(false);
+    setIsOutOfTokens(false); // Reset state
 
     try {
       const formData = new FormData();
@@ -343,7 +346,14 @@ function InterviewPage() {
         throw new Error('Server response không đúng định dạng');
       }
     } catch (err) {
-      toast.error('Tải CV thất bại. Vui lòng thử lại.');
+      console.error("Upload Error:", err);
+      // --- SPECIFIC ERROR HANDLING FOR BALANCE ---
+      const errorDetail = err.response?.data?.detail || err.response?.data?.message || "";
+      if (errorDetail.toLowerCase().includes("insufficient balance")) {
+          setIsOutOfTokens(true);
+      } else {
+          toast.error('Tải CV thất bại. Vui lòng thử lại.');
+      }
       setSelectedFile(null);
       setIsUploadSuccess(false);
       event.target.value = '';
@@ -387,10 +397,11 @@ function InterviewPage() {
     setIsUploadSuccess(false);
     setCvAnalysisId(null);
     setCandidateId(null);
+    setIsOutOfTokens(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  // ... (Giữ nguyên buildReviewableItems và render logic) ...
+  // ... (Keep buildReviewableItems and derived stats) ...
   const buildReviewableItems = () => {
     if (!conversationMessages.length || !reviewProgress) return [];
 
@@ -466,7 +477,6 @@ function InterviewPage() {
           <UserNavbar />
         </header>
         <div id="interview-container">
-          {/* ... (Giữ nguyên phần nội dung khi đang phỏng vấn/review) ... */}
           <div className="header">
             <div className="header-left">
               <h1 className="header-title">
@@ -478,7 +488,6 @@ function InterviewPage() {
           <div className="main-content">
             {isReviewing ? (
               <div className="review-container">
-                {/* ... (Nội dung review container - giữ nguyên) ... */}
                 {reviewProgress ? (
                   <>
                     <div style={{ marginBottom: 24, textAlign: 'left' }}>
@@ -626,61 +635,77 @@ function InterviewPage() {
         <div className="main-content">
           {activeSection === 'my-interview' ? (
             <div className="start-interview-card compact">
-              <div className="upload-area">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf"
-                  onChange={handleFileChange}
-                  style={{ display: 'none' }}
-                />
-                {isUploadSuccess && selectedFile ? (
-                  <div className="upload-success">
-                    <span className="material-icons">check_circle</span>
-                    <div>
-                      <strong>Đã tải lên:</strong> {selectedFile.name}
+              {/* --- OUT OF TOKENS CHECK --- */}
+              {isOutOfTokens ? (
+                <div className="token-error-container">
+                    <div className="token-icon-wrapper">
+                        <FaCoins className="token-icon" />
                     </div>
-                    <button className="change-cv-btn" onClick={handleChangeCV}>
-                      Thay đổi
-                    </button>
+                    <h3>Hết Token</h3>
+                    <p>Bạn không đủ token để thực hiện tải CV (phí 2000 token).<br/>Vui lòng nạp thêm để tiếp tục.</p>
+                    <div className="token-actions">
+                        <button className="btn-topup" onClick={() => navigate('/user/profile')}>Nạp ngay</button>
+                        <button className="btn-cancel" onClick={() => setIsOutOfTokens(false)}>Hủy</button>
+                    </div>
+                </div>
+              ) : (
+                <>
+                  <div className="upload-area">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileChange}
+                      style={{ display: 'none' }}
+                    />
+                    {isUploadSuccess && selectedFile ? (
+                      <div className="upload-success">
+                        <span className="material-icons">check_circle</span>
+                        <div>
+                          <strong>Đã tải lên:</strong> {selectedFile.name}
+                        </div>
+                        <button className="change-cv-btn" onClick={handleChangeCV}>
+                          Thay đổi
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="upload-prompt" onClick={handleUploadClick}>
+                        {isUploading ? (
+                          <>
+                            <span className="material-icons spin">autorenew</span>
+                            <p>Đang tải CV lên...</p>
+                          </>
+                        ) : (
+                          <>
+                            <span className="material-icons large">cloud_upload</span>
+                            <p>Click để tải CV lên (chỉ hỗ trợ PDF)</p>
+                            {selectedFile && <small>Đã chọn: {selectedFile.name}</small>}
+                          </>
+                        )}
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  // CHANGE: Use handleUploadClick instead of direct click
-                  <div className="upload-prompt" onClick={handleUploadClick}>
-                    {isUploading ? (
+
+                  <button
+                    className="start-interview-button large"
+                    onClick={handleStartInterview}
+                    disabled={!isUploadSuccess || isPlanning}
+                  >
+                    {isPlanning ? (
                       <>
-                        <span className="material-icons spin">autorenew</span>
-                        <p>Đang tải CV lên...</p>
+                        <span className="material-icons spin">hourglass_empty</span> Đang chuẩn bị...
                       </>
                     ) : (
                       <>
-                        <span className="material-icons large">cloud_upload</span>
-                        <p>Click để tải CV lên (chỉ hỗ trợ PDF)</p>
-                        {selectedFile && <small>Đã chọn: {selectedFile.name}</small>}
+                        <span className="material-icons">play_arrow</span> Bắt đầu phỏng vấn
                       </>
                     )}
-                  </div>
-                )}
-              </div>
-
-              <button
-                className="start-interview-button large"
-                onClick={handleStartInterview}
-                disabled={!isUploadSuccess || isPlanning}
-              >
-                {isPlanning ? (
-                  <>
-                    <span className="material-icons spin">hourglass_empty</span> Đang chuẩn bị...
-                  </>
-                ) : (
-                  <>
-                    <span className="material-icons">play_arrow</span> Bắt đầu phỏng vấn
-                  </>
-                )}
-              </button>
+                  </button>
+                </>
+              )}
             </div>
           ) : (
-            // ... (Giữ nguyên phần Review Others) ...
+            // ... (Review Others Content) ...
             <div className="start-interview-card compact" style={{ maxWidth: 800 }}>
               <h2 style={{ margin: '0 0 24px', color: '#1e40af' }}>
                 Danh sách Interview đang mở để Review
@@ -769,7 +794,7 @@ function InterviewPage() {
             </h3>
             <p className="disclaimer-text">
               Buổi phỏng vấn với AI này chỉ mang tích chất học hỏi, nó sẽ không thay thế các phỏng vấn thật, 
-              và mỗi lần sử dụng tính năng này sẽ tốn <strong>2000 token</strong>.
+              và mỗi lần sử dụng tính năng này sẽ tốn <strong>3000 token</strong>.
             </p>
             
             <label className="disclaimer-checkbox-container">
@@ -792,7 +817,9 @@ function InterviewPage() {
   );
 }
 
+// ... (Keep ReviewItem component as is) ...
 const ReviewItem = ({ item, isSaving, onSave }) => {
+    // ... (Keep existing ReviewItem content) ...
     const [skillRating, setSkillRating] = useState(item.review?.skillRating || '');
     const [softSkillRating, setSoftSkillRating] = useState(item.review?.softSkillRating || '');
     const [comment, setComment] = useState(item.review?.comment || '');
