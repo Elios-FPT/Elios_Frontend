@@ -125,22 +125,6 @@ export const PromptForm = ({
                   borderRadius: '6px'
                 }}
               />
-
-              <select
-                value={formData.output_parser_type}
-                onChange={e => setFormData(p => ({ ...p, output_parser_type: e.target.value }))}
-                style={{
-                  background: '#2a2a2a',
-                  color: '#e5e5e5',
-                  border: '1px solid #3a3a3a',
-                  padding: '0.75rem',
-                  borderRadius: '6px'
-                }}
-              >
-                <option value="json_output_parser">JSON Parser</option>
-                <option value="pydantic">Pydantic</option>
-                <option value="none">None</option>
-              </select>
             </div>
 
             {/* Action buttons */}

@@ -110,9 +110,6 @@ const PromptDetail = () => {
             <button className="btn-success" onClick={() => navigate(`/manage-prompts/create/${prompt_name}/-1`)}>
               + New Version
             </button>
-            <button className="btn-edit" onClick={() => navigate(`/manage-prompts/analytics/${prompt_name}`)}>
-              View Analytics
-            </button>
             <button className="btn-cancel" onClick={() => navigate(`/manage-prompts/audit/${prompt_name}`)}>
               Audit Trail
             </button>
