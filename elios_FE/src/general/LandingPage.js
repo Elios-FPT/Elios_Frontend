@@ -153,7 +153,7 @@ const LandingPage = () => {
             <Col md={6} id="text-section-landingPage">
               <h1 id="main-title-landingPage">Một cách học hoàn toàn mới</h1>
               <p id="main-desc-landingPage">
-                Eliso là nền tảng tốt nhất giúp bạn nâng cao kỹ năng, mở rộng kiến thức và chuẩn bị cho các buổi phỏng vấn kỹ thuật.
+                Elios là nền tảng tốt nhất giúp bạn nâng cao kỹ năng, mở rộng kiến thức và chuẩn bị cho các buổi phỏng vấn kỹ thuật.
               </p>
 
               {profileLoading ? (
