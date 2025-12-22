@@ -6,7 +6,7 @@
   justify-content: center;
   background: white;
   border: 1px solid #e0e0e0;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
   border-radius: 35px;
   padding: 10px 10px;
   max-width: fit-content;
@@ -67,7 +67,7 @@
 /* Hover effects */
 #interview-tab-controls .control-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 #interview-tab-controls .active-prominent:hover {
@@ -79,6 +79,46 @@
 #interview-tab-controls .end-button:hover {
   background: #f8f9fa;
   border-color: #ccc;
+}
+
+#interview-tab-controls .control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+
+#interview-tab-controls .active-prominent:disabled {
+  background: #a0a0a0 !important;
+  color: #e0e0e0;
+}
+
+#interview-tab-controls .mic-button-icon:disabled,
+#interview-tab-controls .write-button-icon:disabled {
+  background: #f0f0f0;
+  color: #aaa;
+}
+
+#interview-tab-controls .end-button:disabled {
+  background: #ff4444;
+  color: white;
+  opacity: 0.8;
+}
+
+#interview-tab-controls .end-button:disabled .material-icons.spin {
+  animation: spin 1.5s linear infinite;
+  font-size: 18px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive */

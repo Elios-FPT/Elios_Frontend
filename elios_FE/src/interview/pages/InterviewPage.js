@@ -39,8 +39,10 @@ function InterviewPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadSuccess, setIsUploadSuccess] = useState(false);
+  const [isEndingSession, setIsEndingSession] = useState(false);
   const [isPlanning, setIsPlanning] = useState(false);
   const fileInputRef = useRef(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const [publicInterviews, setPublicInterviews] = useState([]);
   const [isLoadingPublic, setIsLoadingPublic] = useState(false);
@@ -75,6 +77,20 @@ function InterviewPage() {
       toast.error('Lỗi khi tải danh sách.');
     } finally {
       setIsLoadingPublic(false);
+    }
+  };
+
+  const handleEndSessionWithLoading = async () => {
+    if (isEndingSession) return;
+
+    setIsEndingSession(true);
+    try {
+      await handleEndSession();
+    } catch (error) {
+      console.error('Error ending session:', error);
+      toast.error('Lỗi khi kết thúc phiên. Vui lòng thử lại.');
+    } finally {
+      setIsEndingSession(false);
     }
   };
 
@@ -181,7 +197,7 @@ function InterviewPage() {
       );
 
       if (res.data.status === 200 || res.data.status === 201) {
-        await fetchReviewProgress(submissionId); // cập nhật tiến độ
+        await fetchReviewProgress(submissionId);
         toast.success('Đã lưu câu này!', { duration: 2000 });
       }
     } catch (err) {
@@ -193,20 +209,58 @@ function InterviewPage() {
   };
 
   const handleSubmitReview = async () => {
-    if (!submissionId) return;
+    if (!submissionId || !reviewProgress) return;
+
+    if (reviewedCount < answerableCount) {
+      toast.warning('Vui lòng lưu đánh giá cho tất cả các câu có trả lời trước khi submit!');
+      return;
+    }
+
+    toast.info('Đang hoàn tất đánh giá tự động cho các câu chưa trả lời...');
+
     try {
+      const allQuestionIds = reviewableItems.map(item =>
+        item.reviewId.startsWith('unanswered-')
+          ? item.reviewId.substring(11)
+          : item.reviewId
+      );
+
+      const reviewedIds = new Set((reviewProgress.reviews || []).map(r => r.questionId));
+
+      const missingIds = allQuestionIds.filter(id => !reviewedIds.has(id));
+
+      if (missingIds.length > 0) {
+        for (const qId of missingIds) {
+          await axios.put(
+            API_ENDPOINTS.PEER_SAVE_DRAFT_REVIEW,
+            {
+              submissionId,
+              questionId: qId,
+              skillRating: 1,
+              softSkillRating: 1,
+              comment: null,
+            },
+            { withCredentials: true }
+          );
+        }
+
+        await fetchReviewProgress(submissionId);
+      }
+
       const response = await axios.post(
         API_ENDPOINTS.PEER_SUBMIT_REVIEW(submissionId),
         {},
         { withCredentials: true }
       );
+
       if (response.data.status === 200) {
-        toast.success('Submit review thành công! Cảm ơn bạn!');
+        toast.success('Submit review thành công! Cảm ơn bạn đã góp ý!');
         resetReviewState();
         fetchPublicInterviews();
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Lỗi submit review');
+      console.error('Submit review error:', err);
+      toast.error(err.response?.data?.message || 'Lỗi khi submit review. Vui lòng thử lại.');
     }
   };
 
@@ -371,9 +425,15 @@ function InterviewPage() {
   };
 
   const reviewableItems = buildReviewableItems();
+  const answerableCount = reviewableItems.filter(item => item.answer !== null).length;
+  const reviewedCount = reviewProgress?.reviewedCount || 0;
+  const totalQuestionCount = reviewProgress?.questionCount || reviewableItems.length;
   if (interviewId || isReviewing || showFeedback) {
     return (
       <div id="interview-page">
+        <header>
+          <UserNavbar />
+        </header>
         <div id="interview-container">
           <div className="header">
             <div className="header-left">
@@ -418,7 +478,7 @@ function InterviewPage() {
                         <span style={{ color: '#6366f1' }}>Đang cập nhật...</span>
                       ) : (
                         <>
-                          <strong>{reviewProgress.reviewedCount}</strong>/{reviewProgress.questionCount} câu hỏi đã chấm
+                          <strong>{reviewedCount}</strong>/{answerableCount} câu hỏi đã chấm
                         </>
                       )}
                     </h2>
@@ -435,7 +495,7 @@ function InterviewPage() {
                     <div style={{ marginTop: 40, textAlign: 'center' }}>
                       <button
                         onClick={handleSubmitReview}
-                        disabled={reviewProgress.reviewedCount < reviewProgress.questionCount}
+                        disabled={reviewedCount < answerableCount}
                         style={{
                           padding: '14px 36px',
                           fontSize: 18,
@@ -443,14 +503,14 @@ function InterviewPage() {
                           border: 'none',
                           borderRadius: 12,
                           marginRight: 16,
-                          background: reviewProgress.reviewedCount === reviewProgress.questionCount ? '#10b981' : '#94a3b8',
+                          background: reviewedCount >= answerableCount ? '#10b981' : '#94a3b8',
                           color: 'white',
-                          cursor: reviewProgress.reviewedCount === reviewProgress.questionCount ? 'pointer' : 'not-allowed',
+                          cursor: reviewedCount >= answerableCount ? 'pointer' : 'not-allowed',
                         }}
                       >
-                        {reviewProgress.reviewedCount === reviewProgress.questionCount
+                        {reviewedCount >= answerableCount
                           ? 'Submit Review Hoàn Chỉnh'
-                          : `Còn thiếu ${reviewProgress.questionCount - reviewProgress.reviewedCount} câu`}
+                          : `Còn thiếu ${answerableCount - reviewedCount} câu`}
                       </button>
 
                       <button
@@ -490,7 +550,8 @@ function InterviewPage() {
             <TabControls
               activeTab={activeTab}
               onTabSwitch={handleTabSwitch}
-              onEndSession={handleEndSession}
+              onEndSession={handleEndSessionWithLoading}
+              isEndingSession={isEndingSession}
             />
           )}
         </div>
@@ -723,7 +784,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
           background: isSaved ? '#10b981' : '#f59e0b',
         }}
       >
-        {hasAnswer? (isSaved ? 'Đã lưu' : 'Chưa lưu') : 'Chưa trả lời'}
+        {hasAnswer ? (isSaved ? 'Đã lưu' : 'Chưa lưu') : 'Chưa trả lời'}
       </div>
 
       {item.isFollowUp && (
@@ -795,7 +856,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
             type="number"
             min="1"
             max="5"
-            value={hasAnswer? skillRating : 1}
+            value={hasAnswer ? skillRating : 1}
             onChange={(e) => setSkillRating(e.target.value)}
             style={{
               width: 90,
@@ -819,7 +880,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
             type="number"
             min="1"
             max="5"
-            value={hasAnswer? softSkillRating: 1}
+            value={hasAnswer ? softSkillRating : 1}
             onChange={(e) => setSoftSkillRating(e.target.value)}
             style={{
               width: 90,
@@ -837,10 +898,13 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
       </div>
 
       <textarea
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        placeholder="Nhận xét chi tiết – rất hữu ích cho ứng viên... (khuyến khích)"
+        value={hasAnswer ? comment : ''}
+        onChange={(e) => hasAnswer && setComment(e.target.value)}
+        placeholder={hasAnswer
+          ? "Nhận xét chi tiết – rất hữu ích cho ứng viên... (khuyến khích)"
+          : "Không cần nhận xét vì ứng viên chưa trả lời"}
         rows={6}
+        disabled={!hasAnswer}
         style={{
           width: '100%',
           padding: 16,
@@ -856,7 +920,8 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
       <div style={{ marginTop: 20, textAlign: 'right' }}>
         <button
           onClick={handleSave}
-          disabled={!isDirty || isSaving || !skillRating || !softSkillRating}
+          disabled={!hasAnswer || !isDirty || isSaving || !skillRating || !softSkillRating}
+          title={!hasAnswer ? "Không cần chấm điểm cho câu chưa trả lời" : ""}
           style={{
             padding: '12px 32px',
             fontSize: 16,
@@ -870,7 +935,7 @@ const ReviewItem = ({ item, isSaving, onSave }) => {
             opacity: isSaving ? 0.7 : 1,
           }}
         >
-          {isSaving ? 'Đang lưu...' : 'Lưu đánh giá'}
+          {isSaving ? 'Đang lưu...' : hasAnswer ? 'Lưu đánh giá' : 'Không cần lưu'}
         </button>
       </div>
     </div>

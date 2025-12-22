@@ -44,7 +44,7 @@ const ProjectDetailPage = () => {
         const overview = {
           id: 'overview',
           stepNumber: 0,
-          stepGuiding: 'Project Overview',
+          stepGuiding: 'Tổng quan dự án',
           baseClassCode: null,
           isOverview: true,
         };
@@ -64,7 +64,7 @@ const ProjectDetailPage = () => {
         setLoading(false);
       } catch (err) {
         console.error('Error loading project:', err);
-        setError('Failed to load project details.');
+        setError('Không thể tải chi tiết dự án.');
         setLoading(false);
       }
     };
@@ -136,7 +136,7 @@ const ProjectDetailPage = () => {
         currentSubmissionId = res.data.responseData;
         setSubmissionId(currentSubmissionId);
       } catch (e) {
-        alert('Could not create submission. Please try again.');
+        alert('Không thể tạo bài nộp mới. Vui lòng thử lại.');
         return;
       }
     }
@@ -158,11 +158,11 @@ const ProjectDetailPage = () => {
 
       await Promise.all(promises.filter(Boolean));
       setSubmitSuccess(true);
-      alert('Submission successful! Waiting for grading...');
+      alert('Nộp bài thành công! Đang chờ chấm điểm...');
       await fetchSubmissionClassesBySubmission(currentSubmissionId); 
     } catch (e) {
       console.error(e);
-      alert('Error while submitting code. Please check your inputs.');
+      alert('Lỗi khi nộp code. Vui lòng kiểm tra lại.');
     } finally {
       setSubmitting(false);
     }
@@ -201,7 +201,7 @@ const ProjectDetailPage = () => {
               }}
             />
             <p style={{ margin: 0, fontSize: '1.1rem', color: '#ccc' }}>
-              Loading project...
+              Đang tải dự án...
             </p>
           </>
         ) : (
@@ -213,8 +213,8 @@ const ProjectDetailPage = () => {
     );
   }
 
-  const overviewStep = { id: 'overview', stepNumber: 0, stepGuiding: 'Project Overview', isOverview: true };
-  const submitStep = { id: 'submit', stepNumber: -1, stepGuiding: 'Submit Project', isSubmit: true };
+  const overviewStep = { id: 'overview', stepNumber: 0, stepGuiding: 'Tổng quan dự án', isOverview: true };
+  const submitStep = { id: 'submit', stepNumber: -1, stepGuiding: 'Nộp dự án', isSubmit: true };
 
   const allSteps = [overviewStep, ...processes, submitStep];
   const isOverview = selectedStep?.isOverview;
@@ -228,7 +228,7 @@ const ProjectDetailPage = () => {
       <main className="project-detail-container">
         {}
         <aside className="steps-sidebar">
-          <h3>Navigation</h3>
+          <h3>Điều hướng</h3>
           <ul className="steps-list">
             {allSteps.map(step => (
               <li
@@ -237,17 +237,17 @@ const ProjectDetailPage = () => {
                 onClick={() => handleStepClick(step)}
               >
                 <span className="step-number">
-                  {step.isOverview ? 'Overview' : step.isSubmit ? 'Submit' : `Step ${step.stepNumber}`}
+                  {step.isOverview ? 'Tổng quan' : step.isSubmit ? 'Nộp bài' : `Bước ${step.stepNumber}`}
                 </span>
                 <span className="step-title">
                   {step.isOverview
-                    ? 'Introduction & Download'
+                    ? 'Giới thiệu & Tải về'
                     : step.isSubmit
-                      ? 'Submit Your Project'
-                      : `Guiding Step ${step.stepNumber}`}
+                      ? 'Nộp dự án của bạn'
+                      : `Hướng dẫn bước ${step.stepNumber}`}
                 </span>
                 {submissionClasses[step.id] && !step.isSubmit && (
-                  <span className="submitted-badge">Submitted</span>
+                  <span className="submitted-badge">Đã nộp</span>
                 )}
               </li>
             ))}
@@ -260,18 +260,18 @@ const ProjectDetailPage = () => {
             <>
               <div className="content-header">
                 <h2>
-                  {isOverview ? 'Project Overview' :
-                    isSubmit ? 'Submit Project' :
-                      `Step ${selectedStep.stepNumber}`}
+                  {isOverview ? 'Tổng quan dự án' :
+                    isSubmit ? 'Nộp dự án' :
+                      `Bước ${selectedStep.stepNumber}`}
                 </h2>
                 <div className="header-actions">
                   {isOverview && project?.baseProjectUrl && (
                     <button className="download-btn" onClick={handleDownload}>
-                      Download Project (.zip)
+                      Tải dự án (.zip)
                     </button>
                   )}
                   <button className="back-btn" onClick={() => navigate(-1)}>
-                    Back to Projects
+                    Quay lại danh sách dự án
                   </button>
                 </div>
               </div>
@@ -283,13 +283,13 @@ const ProjectDetailPage = () => {
                     className={`tab ${activeTab === 'guiding' ? 'active' : ''}`}
                     onClick={() => setActiveTab('guiding')}
                   >
-                    Guiding
+                    Hướng dẫn
                   </button>
                   <button
                     className={`tab ${activeTab === 'basecode' ? 'active' : ''}`}
                     onClick={() => setActiveTab('basecode')}
                   >
-                    Example Code
+                    Mã mẫu
                   </button>
                 </div>
               )}
@@ -299,10 +299,10 @@ const ProjectDetailPage = () => {
                 {}
                 {isOverview && (
                   <div className="overview-content">
-                    <h4>Description</h4>
+                    <h4>Mô tả</h4>
                     <ReactMarkdown>{project.description}</ReactMarkdown>
                     <div className="download-hint">
-                      <strong>Start by downloading the base project above.</strong>
+                      <strong>Hãy bắt đầu bằng việc tải dự án cơ sở ở trên.</strong>
                     </div>
                   </div>
                 )}
@@ -310,7 +310,7 @@ const ProjectDetailPage = () => {
                 {}
                 {isRegularStep && activeTab === 'guiding' && (
                   <div className="guiding-content">
-                    <h4>Instructions</h4>
+                    <h4>Hướng dẫn</h4>
                     <ReactMarkdown>{selectedStep.stepGuiding}</ReactMarkdown>
                   </div>
                 )}
@@ -326,10 +326,10 @@ const ProjectDetailPage = () => {
                 {isSubmit && (
                   <div className="submission-section">
                     <h4 style={{ color: '#50fa7b', marginBottom: '16px' }}>
-                      Submit Your Solution
+                      Nộp giải pháp của bạn
                     </h4>
                     <p style={{ color: '#ccc', marginBottom: '20px', fontSize: '0.95rem' }}>
-                      Paste the <strong>complete code</strong> for each step below. The system will auto-grade after submission.
+                      Dán <strong>toàn bộ mã nguồn</strong> của từng bước vào ô bên dưới. Hệ thống sẽ tự động chấm điểm sau khi nộp.
                     </p>
 
                     {processes.map(proc => {
@@ -349,10 +349,10 @@ const ProjectDetailPage = () => {
                           }}
                         >
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                            <strong style={{ color: '#50fa7b' }}>Step {proc.stepNumber}</strong>
+                            <strong style={{ color: '#50fa7b' }}>Bước {proc.stepNumber}</strong>
                             {isSubmitted && (
                               <span style={{ color: '#50fa7b', fontSize: '0.9rem' }}>
-                                Submitted • Grade: {subClass.grade ?? 'Pending'}
+                                Đã nộp • Điểm: {subClass.grade ?? 'Đang chờ'}
                               </span>
                             )}
                           </div>
@@ -360,7 +360,7 @@ const ProjectDetailPage = () => {
                           <textarea
                             value={code}
                             onChange={e => handleCodeChange(proc.id, e.target.value)}
-                            placeholder={`Paste code for Step ${proc.stepNumber} here...`}
+                            placeholder={`Dán mã nguồn cho Bước ${proc.stepNumber} vào đây...`}
                             disabled={isSubmitted}
                             style={{
                               width: '100%',
@@ -385,7 +385,7 @@ const ProjectDetailPage = () => {
                               fontSize: '0.9rem',
                               color: '#ff79c6',
                             }}>
-                              <strong>Assessment:</strong> {subClass.assessment}
+                              <strong>Nhận xét:</strong> {subClass.assessment}
                             </div>
                           )}
                         </div>
@@ -426,10 +426,10 @@ const ProjectDetailPage = () => {
                           }}
                         >
                           {submitting
-                            ? 'Submitting...'
+                            ? 'Đang nộp...'
                             : allSubmitted
-                              ? 'Submitted Successfully!'
-                              : 'Submit All Steps'}
+                              ? 'Đã nộp thành công!'
+                              : 'Nộp tất cả các bước'}
                         </button>
                       );
                     })()}
