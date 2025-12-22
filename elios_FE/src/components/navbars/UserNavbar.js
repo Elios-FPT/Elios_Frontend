@@ -51,6 +51,7 @@ const UserNavbar = () => {
         { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
         { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
         { to: "/manage-interviews", label: "Quản lý Phỏng vấn" },
+        { to: "/user/profile", label: "Hồ Sơ" }
       );
     }
 
@@ -60,10 +61,10 @@ const UserNavbar = () => {
 
     if (role === "Admin") {
       linksToShow.push(
-        { to: "/manage-coding-bank", label: "Quản lý Ngân hàng Đề Code" },
-        { to: "/manage-project-bank", label: "Quản lý Ngân hàng Dự án" },
-        { to: "/content-moderator", label: "Quản lý Diễn đàn" },
-        { to: "/manage-prompts", label: "Quản lý Prompt" }
+        { to: "/manage-coding-bank", label: "Quản Lý Code" },
+        { to: "/content-moderator", label: "Quản Lý Diễn Đàn" },
+        { to: "/manage-prompts", label: "Q.Lý Prompt" },
+        { to: "/user/profile", label: "Hồ Sơ" }
       );
     }
 
