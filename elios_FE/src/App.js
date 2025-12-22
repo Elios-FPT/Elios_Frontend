@@ -10,7 +10,6 @@ import LandingPage from "./general/LandingPage";
 import UserProfile from "./user/pages/UserProfile";
 import Footer from "./components/footers/Footer";
 import InterviewHistory from "./interviewHistory/pages/InterviewHistory";
-import MyReviews from "./interviewHistory/pages/MyReviews";
 
 // --- Forum (Public) ---
 import Forum from "./forum/pages/Forum";
@@ -92,7 +91,6 @@ function App() {
                   </InterviewProvider>
                 } />
               <Route path="/interview/history" element={<InterviewHistory />} />
-              <Route path="/interview/my-reviews" element={<MyReviews />} />
             </Route>
 
             {/* --- CONTENT MODERATOR ROUTES --- */}

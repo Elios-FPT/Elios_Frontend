@@ -42,7 +42,6 @@ const LandingPage = () => {
       { to: "/codingchallenge", label: "Thử Thách Lập Trình" },
       { to: "/interview", label: "Phỏng Vấn" },
       { to: "/interview/history", label: "Lịch sử phỏng vấn" },
-      { to: "/interview/my-reviews", label: "Đánh giá của tôi" }
     ];
 
     if (user?.role === "User") {
